@@ -1,0 +1,64 @@
+{
+    "name": "CodeForge Database Studio",
+    "slug": "hkdevs-codeforge-database-studio",
+    "description": "A comprehensive database management suite for FilamentPHP with schema design, migration management, health monitoring, and automated resource generation.",
+    "version": "1.0.0-alpha.1",
+    "author": {
+        "name": "HkDevs",
+        "email": "contact@hardikkanajariya.in",
+        "website": "https://hardikkanajariya.in"
+    },
+    "license": "commercial",
+    "pricing": {
+        "single": {
+            "price": 79.00,
+            "currency": "EUR",
+            "description": "Single Project License"
+        },
+        "multiple": {
+            "price": 129.00,
+            "currency": "EUR",
+            "description": "Multiple Project License"
+        },
+        "unlimited": {
+            "price": 199.00,
+            "currency": "EUR",
+            "description": "Unlimited License"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/hardik-kanajariya/codeforge.git"
+    },
+    "homepage": "https://codeforge.hardikkanajariya.in",
+    "documentation": "https://codeforge.hardikkanajariya.in/docs",
+    "support": "support@hardikkanajariya.in",
+    "categories": [
+        "developer-tool",
+        "panel-builder",
+        "analytics",
+        "form-builder"
+    ],
+    "keywords": [
+        "filament",
+        "laravel",
+        "database",
+        "schema",
+        "migration",
+        "code-generation",
+        "admin-panel"
+    ],
+    "requirements": {
+        "php": "^8.1",
+        "filament/filament": "^3.0"
+    },
+    "features": [
+        "Visual Schema Designer",
+        "Migration Management",
+        "Database Health Monitoring",
+        "Automated Code Generation",
+        "Documentation Generator",
+        "Smart Seeding",
+        "Multi-Database Support"
+    ]
+}

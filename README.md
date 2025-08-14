@@ -10,6 +10,31 @@ A comprehensive database management and code generation suite for Laravel applic
 [![Commercial License](https://img.shields.io/badge/License-Commercial-blue.svg?style=flat-square)](https://codeforge.hardikkanajariya.in/license)
 [![Professional Support](https://img.shields.io/badge/Support-Professional-green.svg?style=flat-square)](mailto:contact@hardikkanajariya.in)
 
+## 💰 Purchase & Licensing
+
+**Commercial Plugin** - Choose the license that fits your needs:
+
+- **🏠 Single Project License** - €79.00
+  - Use on one Laravel project
+  - 1 year of updates
+  - Email support
+  - [Purchase on Anystack.sh](https://anystack.sh/products/hkdevs-codeforge-database-studio/single)
+
+- **🏢 Multiple Project License** - €129.00  
+  - Use on up to 5 Laravel projects
+  - Priority email support
+  - 1 year of updates
+  - [Purchase on Anystack.sh](https://anystack.sh/products/hkdevs-codeforge-database-studio/multiple)
+
+- **🌐 Unlimited License** - €199.00
+  - Unlimited Laravel projects
+  - Priority support (24h response)
+  - Lifetime updates
+  - Private Discord access
+  - [Purchase on Anystack.sh](https://anystack.sh/products/hkdevs-codeforge-database-studio/unlimited)
+
+> **Note**: Update the Anystack URLs above with your actual product URLs once your Anystack listing is live.
+
 ## 🚀 Key Features
 
 ### 📊 Database Overview & Analytics
