@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Test Documentation</title>
+        <style>
+            body {
+                text-rendering: optimizeLegibility;
+                font-family: Source SansSerif Pro, Arial, sans-serif;
+                font-variant-ligatures: common-ligatures;
+                font-kerning: normal;
+                margin-left: 2rem;
+                background-color: #fff;
+                color: #000;
+            }
+
+            body > ul > li {
+                font-size: larger;
+            }
+
+            h2 {
+                font-size: larger;
+                text-decoration-line: underline;
+                text-decoration-thickness: 2px;
+                margin: 0;
+                padding: 0.5rem 0;
+            }
+
+            ul {
+                list-style: none;
+                margin: 0 0 2rem;
+                padding: 0 0 0 1rem;
+                text-indent: -1rem;
+            }
+
+            .success:before {
+                color: #4e9a06;
+                content: '✓';
+                padding-right: 0.5rem;
+            }
+
+            .defect {
+                color: #a40000;
+            }
+
+            .defect:before {
+                color: #a40000;
+                content: '✗';
+                padding-right: 0.5rem;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Basic (HkDevs\CodeForgeStudio\Tests\Unit\Basic)</h2>
+        <ul>
+            <li class="success">Basic assertion</li>
+            <li class="success">Php version</li>
+            <li class="success">String operations</li>
+        </ul>
+        <h2>Code Forge Studio Plugin (HkDevs\CodeForgeStudio\Tests\Unit\CodeForgeStudioPlugin)</h2>
+        <ul>
+            <li class="success">Plugin implements plugin interface</li>
+            <li class="success">Plugin has correct id</li>
+            <li class="success">Plugin can be created via make method</li>
+            <li class="success">Default feature states</li>
+            <li class="success">Enable schema designer method</li>
+            <li class="success">Enable migration manager method</li>
+            <li class="success">Enable health monitoring method</li>
+            <li class="success">Enable smart seeding method</li>
+            <li class="success">Enable documentation generator method</li>
+            <li class="success">Register method with all features enabled</li>
+            <li class="success">Register method with all features disabled</li>
+            <li class="success">Register method with only schema designer enabled</li>
+            <li class="success">Boot method exists and can be called</li>
+            <li class="success">Fluent interface chaining</li>
+            <li class="success">Page classes exist</li>
+            <li class="success">Resource classes exist</li>
+            <li class="success">Always includes database overview page</li>
+            <li class="success">Migration manager controls generator pages</li>
+            <li class="success">Health monitoring controls related pages and resources</li>
+            <li class="success">Smart seeding controls related pages and resources</li>
+            <li class="success">Documentation generator controls related pages and resources</li>
+        </ul>
+        <h2>Code Forge Studio Plugin Simple (HkDevs\CodeForgeStudio\Tests\Unit\CodeForgeStudioPluginSimple)</h2>
+        <ul>
+            <li class="success">Plugin implements plugin interface</li>
+            <li class="success">Plugin has correct id</li>
+            <li class="success">Plugin can be created via make method</li>
+            <li class="success">Default feature states</li>
+            <li class="success">Enable schema designer method</li>
+            <li class="success">Enable migration manager method</li>
+            <li class="success">Enable health monitoring method</li>
+            <li class="success">Enable smart seeding method</li>
+            <li class="success">Enable documentation generator method</li>
+            <li class="success">Enable code generation method</li>
+            <li class="success">Fluent interface chaining</li>
+            <li class="success">Page classes exist</li>
+            <li class="success">Resource classes exist</li>
+            <li class="success">Feature state changes are persistent</li>
+            <li class="success">Plugin configuration is chainable</li>
+            <li class="success">All feature toggles work correctly</li>
+            <li class="success">Plugin has all required public methods</li>
+        </ul>
+        <h2>Code Forge Studio Service Provider (HkDevs\CodeForgeStudio\Tests\Unit\CodeForgeStudioServiceProvider)</h2>
+        <ul>
+            <li class="success">Service provider can be instantiated</li>
+            <li class="success">Config is merged correctly</li>
+            <li class="success">All services are registered as singletons</li>
+            <li class="success">Services can be resolved</li>
+            <li class="success">Migrations are loaded</li>
+            <li class="success">Views are loaded</li>
+            <li class="success">Routes are loaded</li>
+            <li class="success">Commands are registered in console</li>
+            <li class="success">Event listeners are registered</li>
+            <li class="success">Livewire components are registered</li>
+            <li class="success">Publishable assets are configured</li>
+            <li class="success">Package dependencies are available</li>
+            <li class="success">Configuration structure</li>
+            <li class="success">Service provider boots without errors</li>
+            <li class="success">Service provider registers without errors</li>
+            <li class="success">Widget classes exist</li>
+            <li class="success">Command classes exist</li>
+            <li class="success">Service classes exist</li>
+        </ul>
+        <h2>Configuration Validation (HkDevs\CodeForgeStudio\Tests\Unit\Environment\ConfigurationValidation)</h2>
+        <ul>
+            <li class="success">Configuration file structure</li>
+            <li class="success">Features configuration</li>
+            <li class="success">Navigation configuration</li>
+            <li class="success">Database configuration</li>
+            <li class="success">Logging configuration</li>
+            <li class="success">Cache configuration</li>
+            <li class="success">Security configuration</li>
+            <li class="success">Configuration modification</li>
+            <li class="success">Configuration validation for required keys</li>
+            <li class="success">Configuration default values</li>
+            <li class="success">Configuration environment override</li>
+            <li class="success">Configuration caching</li>
+            <li class="success">Configuration merge behavior</li>
+            <li class="success">Configuration type validation</li>
+            <li class="success">Configuration completeness</li>
+        </ul>
+        <h2>Database Migrations (HkDevs\CodeForgeStudio\Tests\Unit\Environment\DatabaseMigrations)</h2>
+        <ul>
+            <li class="success">Migration files exist</li>
+            <li class="success">Database manager logs table creation</li>
+            <li class="success">Migration histories table creation</li>
+            <li class="success">Query performance logs table creation</li>
+            <li class="success">Database health metrics table creation</li>
+            <li class="success">Data seeders table creation</li>
+            <li class="success">Seeder execution logs table creation</li>
+            <li class="success">Data generation templates table creation</li>
+            <li class="defect">Table constraints and indexes</li>
+            <li class="success">Migration rollback capability</li>
+            <li class="defect">Foreign key constraints</li>
+            <li class="success">Database connection compatibility</li>
+            <li class="defect">Table data insertion</li>
+        </ul>
+        <h2>Dependency Management (HkDevs\CodeForgeStudio\Tests\Unit\Core\DependencyManagement)</h2>
+        <ul>
+            <li class="success">Service provider auto discovery</li>
+            <li class="success">Required dependencies available</li>
+            <li class="success">Laravel framework compatibility</li>
+            <li class="success">Package configuration publishing</li>
+            <li class="success">Package migration publishing</li>
+            <li class="success">Package commands registration</li>
+            <li class="success">No dependency conflicts</li>
+            <li class="success">Package namespace isolation</li>
+            <li class="success">Autoloader functionality</li>
+            <li class="success">Composer json structure</li>
+            <li class="success">Version constraints</li>
+            <li class="success">Development dependencies</li>
+            <li class="success">Package discovery configuration</li>
+            <li class="success">Package stability preference</li>
+        </ul>
+        <h2>Environment Requirements (HkDevs\CodeForgeStudio\Tests\Unit\Environment\EnvironmentRequirements)</h2>
+        <ul>
+            <li class="success">Php version compatibility</li>
+            <li class="success">Required php extensions</li>
+            <li class="success">Laravel framework availability</li>
+            <li class="success">Filament framework availability</li>
+            <li class="success">Doctrine dbal availability</li>
+            <li class="success">Database drivers availability</li>
+            <li class="success">Memory limit requirements</li>
+            <li class="success">Execution time limits</li>
+        </ul>
+        <h2>Install Command (HkDevs\CodeForgeStudio\Tests\Unit\Commands\InstallCommand)</h2>
+        <ul>
+            <li class="success">Install command exists</li>
+            <li class="success">Install command signature</li>
+            <li class="success">Install command description</li>
+            <li class="success">Install command executes successfully</li>
+            <li class="success">Install command output contains success message</li>
+            <li class="success">Install command publishes config</li>
+            <li class="success">Install command checks migrations</li>
+            <li class="success">Install command runs migrations</li>
+            <li class="success">Install command with force flag</li>
+            <li class="success">Install command force flag shows warning</li>
+            <li class="success">Migration file names are correct</li>
+            <li class="success">Table names correspond to migration files</li>
+            <li class="success">Install command handles existing tables gracefully</li>
+            <li class="success">Install command without force shows appropriate message</li>
+            <li class="success">Install command creates expected database tables</li>
+            <li class="success">Install command output formatting</li>
+            <li class="success">Install command return type</li>
+            <li class="success">Config publishing tag exists</li>
+            <li class="success">Migration publishing tag exists</li>
+            <li class="success">Install command handles migration errors gracefully</li>
+            <li class="success">Install command provides helpful next steps</li>
+        </ul>
+        <h2>Install Command Mock (HkDevs\CodeForgeStudio\Tests\Unit\Commands\InstallCommandMock)</h2>
+        <ul>
+            <li class="success">Command has correct properties</li>
+            <li class="success">Handle method returns success</li>
+            <li class="success">Migration files array is complete</li>
+            <li class="success">Table names array is complete</li>
+            <li class="success">Migration files correspond to table names</li>
+            <li class="success">Command calls vendor publish for config</li>
+            <li class="success">Command calls vendor publish for migrations</li>
+            <li class="success">Command calls migrate with correct parameters</li>
+            <li class="success">Force option is passed to vendor publish</li>
+            <li class="success">Schema has table checks</li>
+            <li class="success">File exists checks</li>
+            <li class="success">Database path helper usage</li>
+            <li class="success">Info and line output methods</li>
+            <li class="success">Warning output for force flag</li>
+            <li class="success">Exception handling in migration runner</li>
+            <li class="success">Step migration parameter</li>
+            <li class="success">Migration path parameter</li>
+            <li class="success">Command structure and flow</li>
+        </ul>
+        <h2>Install Command Simple (HkDevs\CodeForgeStudio\Tests\Unit\Commands\InstallCommandSimple)</h2>
+        <ul>
+            <li class="success">Command class exists</li>
+            <li class="success">Command has correct signature</li>
+            <li class="success">Command has correct name</li>
+            <li class="success">Command has correct description</li>
+            <li class="success">Command has force option</li>
+            <li class="success">Migration file names are properly defined</li>
+            <li class="success">Table names follow laravel conventions</li>
+            <li class="success">Migration files correspond to tables</li>
+            <li class="success">Command can be instantiated</li>
+            <li class="success">Command signature format</li>
+            <li class="success">Command namespace and naming</li>
+            <li class="success">Migration files are numbered sequentially</li>
+            <li class="success">Command protected methods exist</li>
+            <li class="success">Command extends correct base class</li>
+            <li class="success">Migration files have unique timestamps</li>
+        </ul>
+        <h2>Installation Process (HkDevs\CodeForgeStudio\Tests\Unit\Environment\InstallationProcess)</h2>
+        <ul>
+            <li class="success">Service provider is registered</li>
+            <li class="success">Package auto discovery</li>
+            <li class="success">Install command registration</li>
+            <li class="success">Configuration publishing</li>
+            <li class="success">Migration publishing</li>
+            <li class="success">Install command execution</li>
+            <li class="success">Install command with force flag</li>
+            <li class="success">Database migrations are available</li>
+            <li class="success">Configuration defaults</li>
+            <li class="success">Installation idempotency</li>
+            <li class="success">Installation with existing config</li>
+            <li class="success">Installation error handling</li>
+            <li class="success">Post installation verification</li>
+        </ul>
+        <h2>Intelligent Suggestion Service (HkDevs\CodeForgeStudio\Tests\Unit\IntelligentSuggestionService)</h2>
+        <ul>
+            <li class="success">Fallback suggestions when table does not exist</li>
+            <li class="success">User model suggestions</li>
+            <li class="defect">Product model with relationships</li>
+            <li class="success">Casting suggestions intelligence</li>
+            <li class="success">Pattern based suggestions</li>
+            <li class="success">Hidden field detection</li>
+            <li class="defect">Trait suggestions based on table structure</li>
+        </ul>
+        <h2>Plugin Registration (HkDevs\CodeForgeStudio\Tests\Unit\Environment\PluginRegistration)</h2>
+        <ul>
+            <li class="success">Plugin instantiation</li>
+            <li class="success">Plugin id</li>
+            <li class="success">Plugin default configuration</li>
+            <li class="success">Plugin feature toggles</li>
+            <li class="success">Plugin navigation configuration</li>
+            <li class="success">Plugin registration with panel</li>
+            <li class="success">Plugin with all features enabled</li>
+            <li class="success">Plugin with selective features</li>
+            <li class="success">Plugin navigation group customization</li>
+            <li class="success">Plugin navigation sort customization</li>
+            <li class="success">Plugin method chaining</li>
+            <li class="success">Plugin configuration persistence</li>
+            <li class="success">Plugin with minimal configuration</li>
+            <li class="success">Plugin registration multiple times</li>
+        </ul>
+        <h2>Seeder Discovery Service (HkDevs\CodeForgeStudio\Tests\Unit\Services\SeederDiscoveryService)</h2>
+        <ul>
+            <li class="success">It can discover seeders</li>
+            <li class="success">It can get seeder options for filament</li>
+            <li class="success">It can get seeder file path by class name</li>
+            <li class="success">It returns null for non existent seeder class</li>
+            <li class="success">It validates seeder file patterns</li>
+            <li class="success">It extracts class name correctly</li>
+            <li class="success">It extracts namespace correctly</li>
+            <li class="success">It handles files without namespace</li>
+            <li class="success">It deduplicates seeders correctly</li>
+        </ul>
+        <h2>Widget Functionality (HkDevs\CodeForgeStudio\Tests\Unit\WidgetFunctionality)</h2>
+        <ul>
+            <li class="success">Database stats widget functionality</li>
+            <li class="success">Migration stats widget functionality</li>
+            <li class="success">Database health widget functionality</li>
+            <li class="success">Database health metrics widget functionality</li>
+            <li class="success">Widget responsive design</li>
+            <li class="success">Widget data refresh</li>
+            <li class="success">Widget error handling</li>
+        </ul>
+    </body>
+</html>
