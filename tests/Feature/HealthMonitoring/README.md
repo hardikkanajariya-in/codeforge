@@ -322,7 +322,7 @@ For questions about these test cases:
 - **Documentation**: See `COMPREHENSIVE_TEST_CASES_FOR_USER.md`
 - **Issues**: Report bugs with test reproduction steps
 - **Features**: Request new test coverage in issues
-- **Support**: contact hardikkanajariya@yahoo.com
+- **Support**: contact contact@hardikkanajariya.in
 
 ## 📄 License
 

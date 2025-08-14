@@ -113,5 +113,5 @@ The documentation button is implemented directly in the Blade view with configur
 ## Support
 
 For issues or questions regarding developer documentation configuration:
-- Email: hardikkanajariya@yahoo.com
-- Documentation: https://hardikkanajariya.in/codeforge-database-studio
+- Email: contact@hardikkanajariya.in
+- Documentation: https://codeforge.hardikkanajariya.in/codeforge-database-studio

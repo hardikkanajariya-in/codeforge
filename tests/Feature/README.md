@@ -335,9 +335,9 @@ Aim for minimum code coverage targets:
 
 For commercial support and advanced configurations:
 
-- **Email**: hardikkanajariya@yahoo.com
-- **Website**: https://hardikkanajariya.in
-- **Documentation**: https://hardikkanajariya.in/codeforge-database-studio
+- **Email**: contact@hardikkanajariya.in
+- **Website**: https://codeforge.hardikkanajariya.in
+- **Documentation**: https://codeforge.hardikkanajariya.in/codeforge-database-studio
 
 ### Community Support
 
@@ -356,7 +356,7 @@ This test suite is part of the HkDevs CodeForge Database Studio plugin.
 - Multiple Project License: €129.00  
 - Unlimited License: €199.00
 
-For licensing inquiries: hardikkanajariya@yahoo.com
+For licensing inquiries: contact@hardikkanajariya.in
 
 ---
 

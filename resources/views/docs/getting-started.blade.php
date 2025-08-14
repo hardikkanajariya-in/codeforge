@@ -261,20 +261,20 @@
                         <h4 class="text-lg font-semibold text-gray-900 mb-3">Step 3: Register the Plugin</h4>
                         <p class="text-gray-600 mb-3">Add the plugin to your Filament panel provider:</p>
                         <pre class="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-php">&lt;?php
-    // app/Providers/Filament/AdminPanelProvider.php
+        // app/Providers/Filament/AdminPanelProvider.php
 
-    use HkDevs\CodeForgeStudio\CodeForgeStudioPlugin;
+        use HkDevs\CodeForgeStudio\CodeForgeStudioPlugin;
 
-    public function panel(Panel $panel): Panel
-    {
-        return $panel
-            // ... other configurations
-            ->plugins([
-                CodeForgeStudioPlugin::make()
-                    ->enableSchemaDesigner()
-                    ->enableCodeGeneration(),
-            ]);
-    }</code></pre>
+        public function panel(Panel $panel): Panel
+        {
+            return $panel
+                // ... other configurations
+                ->plugins([
+                    CodeForgeStudioPlugin::make()
+                        ->enableSchemaDesigner()
+                        ->enableCodeGeneration(),
+                ]);
+        }</code></pre>
                     </div>
                 </div>
             </div>
@@ -444,7 +444,7 @@
                         </svg>
                         Troubleshooting Guide
                     </a>
-                    <a href="mailto:hardikkanajariya@yahoo.com"
+                    <a href="mailto:contact@hardikkanajariya.in"
                         class="inline-flex items-center px-6 py-3 bg-white text-primary-600 font-medium rounded-lg border border-primary-600 hover:bg-primary-50 transition-colors">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

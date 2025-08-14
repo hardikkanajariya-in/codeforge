@@ -379,7 +379,7 @@ For issues related to migration tracking:
 1. Check Laravel logs: `storage/logs/laravel.log`
 2. Verify migrations table: `php artisan migrate:status`
 3. Run sync command: `php artisan codeforge:sync-migration-history --cleanup`
-4. Contact support: hardikkanajariya@yahoo.com
+4. Contact support: contact@hardikkanajariya.in
 
 ---
 

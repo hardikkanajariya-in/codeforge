@@ -74,8 +74,8 @@
 name: HkDevs
 slug: hardikkanajariya
 github_url: https://github.com/hardikkanajariya
-website_url: https://hardikkanajariya.in
-support_url: mailto:hardikkanajariya@yahoo.com
+website_url: https://codeforge.hardikkanajariya.in
+support_url: mailto:contact@hardikkanajariya.in
 ---
 
 Professional Laravel and FilamentPHP developer specializing in 

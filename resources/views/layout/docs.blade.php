@@ -259,7 +259,7 @@
                         <span class="px-2 py-1 bg-primary-100 text-primary-800 rounded-full">v1.0</span>
                     </div>
                     <div class="space-y-1">
-                        <p>&copy; 2024-2025 <a href="https://hardikkanajariya.in"
+                        <p>&copy; 2024-2025 <a href="https://codeforge.hardikkanajariya.in"
                                 class="text-primary-600 hover:text-primary-700">HkDevs</a></p>
                         <p>Commercial License</p>
                     </div>
@@ -301,7 +301,7 @@
                     </div>
 
                     <!-- External Links -->
-                    <a href="https://hardikkanajariya.in" target="_blank"
+                    <a href="https://codeforge.hardikkanajariya.in" target="_blank"
                         class="text-sm text-gray-500 hover:text-primary-600 flex items-center space-x-1">
                         <span>Visit HkDevs</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -355,7 +355,7 @@
                                     class="block text-sm text-gray-600 hover:text-primary-600">
                                     📚 API Reference
                                 </a> --}}
-                                <a href="mailto:hardikkanajariya@yahoo.com"
+                                <a href="mailto:contact@hardikkanajariya.in"
                                     class="block text-sm text-gray-600 hover:text-primary-600">
                                     💬 Get Support
                                 </a>

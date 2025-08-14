@@ -2,11 +2,11 @@
     "name": "hkdevs/codeforge-database-studio",
     "description": "Premium Database Schema Manager Plugin for FilamentPHP",
     "type": "library",
-    "license": "Commercial",
+    "license": "proprietary",
     "authors": [
         {
             "name": "HkDevs",
-            "email": "hardikkanajariya@yahoo.com"
+            "email": "contact@hardikkanajariya.in"
         }
     ],
     "require": {
@@ -38,6 +38,6 @@
             ]
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "alpha",
     "prefer-stable": true
 }

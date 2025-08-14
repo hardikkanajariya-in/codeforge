@@ -11,10 +11,10 @@ return [
     |
     */
 
-    'name' => 'Filament Database Manager',
-    'short_name' => 'Database Manager',
-    'version' => '1.0.0',
-    'description' => 'A comprehensive database management solution for FilamentPHP applications',
+    'name' => 'CodeForge Database Studio',
+    'short_name' => 'Database Studio',
+    'version' => '1.0.0-alpha.1',
+    'description' => 'A comprehensive database management and code generation suite for Laravel applications using FilamentPHP',
 
     /*
     |--------------------------------------------------------------------------
@@ -23,10 +23,10 @@ return [
     */
 
     'author' => [
-        'name' => 'Your Name',
-        'email' => 'your-email@example.com',
-        'website' => 'https://your-website.com',
-        'company' => 'Your Company Name',
+        'name' => 'HkDevs',
+        'email' => 'contact@hardikkanajariya.in',
+        'website' => 'https://codeforge.hardikkanajariya.in',
+        'company' => 'HkDevs',
     ],
 
     /*
@@ -37,7 +37,7 @@ return [
 
     'type' => 'premium', // premium, free, commercial
     'license' => 'Commercial License',
-    'license_url' => 'https://your-website.com/license',
+    'license_url' => 'https://codeforge.hardikkanajariya.in/license',
 
     /*
     |--------------------------------------------------------------------------
@@ -46,11 +46,11 @@ return [
     */
 
     'support' => [
-        'email' => 'support@your-website.com',
-        'documentation' => 'https://your-website.com/docs',
-        'website' => 'https://your-website.com',
-        'purchase_url' => 'https://your-website.com/purchase',
-        'changelog' => 'https://your-website.com/changelog',
+        'email' => 'support@hardikkanajariya.in',
+        'documentation' => 'https://codeforge.hardikkanajariya.in/docs',
+        'website' => 'https://codeforge.hardikkanajariya.in',
+        'purchase_url' => 'https://codeforge.hardikkanajariya.in/purchase',
+        'changelog' => 'https://codeforge.hardikkanajariya.in/changelog',
     ],
 
     /*

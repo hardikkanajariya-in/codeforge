@@ -108,8 +108,8 @@ echo.
 echo 📊 Test execution completed!
 echo.
 echo 💡 Tip: Use '--verbose' for detailed output or '--help' for more options
-echo 🌐 Professional Support: hardikkanajariya@yahoo.com
-echo 📚 Documentation: https://hardikkanajariya.in/codeforge-database-studio
+echo 🌐 Professional Support: contact@hardikkanajariya.in
+echo 📚 Documentation: https://codeforge.hardikkanajariya.in/codeforge-database-studio
 echo.
 pause
 exit /b 0

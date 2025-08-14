@@ -2,8 +2,8 @@
 name: Hardik Kanajariya
 slug: hardikkanajariya
 github_url: https://github.com/hardikkanajariya
-website_url: https://hardikkanajariya.in
-support_url: mailto:hardikkanajariya@yahoo.com
+website_url: https://codeforge.hardikkanajariya.in
+support_url: mailto:contact@hardikkanajariya.in
 linkedin_url: https://www.linkedin.com/in/hardik-kanajariya/
 avatar_url: https://www.hardikkanajariya.in/assets/images/profile/profile.jpg
 location: India
@@ -114,8 +114,8 @@ A comprehensive database management and code generation suite featuring:
 ## Contact & Support
 
 ### 📧 **Professional Contact**
-- **Website:** [hardikkanajariya.in](https://hardikkanajariya.in)
-- **Business Inquiries:** [hardikkanajariya@yahoo.com](mailto:hardikkanajariya@yahoo.com)
+- **Website:** [hardikkanajariya.in](https://codeforge.hardikkanajariya.in)
+- **Business Inquiries:** [contact@hardikkanajariya.in](mailto:contact@hardikkanajariya.in)
 
 ### 🌐 **Social & Professional Networks**
 - **GitHub:** [@hardikkanajariya](https://github.com/hardikkanajariya)

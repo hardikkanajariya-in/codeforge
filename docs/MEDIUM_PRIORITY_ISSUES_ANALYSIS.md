@@ -123,8 +123,8 @@ categories: [developer-tool, panel-builder, analytics, widget]
 
 3. **URL Issues:**
    ```markdown
-   [![Premium Plugin](...)](https://hardikkanajariya.in/filament-database-manager)
-   [![Commercial License](...)](https://hardikkanajariya.in/license)
+   [![Premium Plugin](...)](https://codeforge.hardikkanajariya.in/filament-database-manager)
+   [![Commercial License](...)](https://codeforge.hardikkanajariya.in/license)
    ```
    These URLs may not exist yet
 

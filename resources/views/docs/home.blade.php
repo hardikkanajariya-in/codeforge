@@ -358,7 +358,7 @@
                         </svg>
                         Troubleshooting
                     </a>
-                    <a href="mailto:hardikkanajariya@yahoo.com"
+                    <a href="mailto:contact@hardikkanajariya.in"
                         class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -367,7 +367,7 @@
                         </svg>
                         Contact Support
                     </a>
-                    <a href="https://hardikkanajariya.in" target="_blank"
+                    <a href="https://codeforge.hardikkanajariya.in" target="_blank"
                         class="inline-flex items-center px-6 py-3 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

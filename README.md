@@ -1,12 +1,14 @@
-# HkDevs CodeForge Database Studio
+# HkDevs CodeForge Database Studio (Alpha Prerelease)
 
 A comprehensive database management and code generation suite for Laravel applications using FilamentPHP. This plugin provides advanced database management capabilities including schema visualization, migration management, health monitoring, smart seeding, automated documentation, and intelligent code generation.
 
+**⚠️ Prerelease Notice**: This is an alpha prerelease version (v1.0.0-alpha.1) intended for early testing and feedback. Please report any issues to help us improve the plugin before the stable release.
+
 **Navigation**: The plugin automatically organizes features into logical navigation groups (Database Overview, Database Tools, Database Management, etc.) for optimal user experience.
 
-[![Premium Plugin](https://img.shields.io/badge/Plugin-Premium-gold.svg?style=flat-square)](https://hardikkanajariya.in/codeforge-database-studio)
-[![Commercial License](https://img.shields.io/badge/License-Commercial-blue.svg?style=flat-square)](https://hardikkanajariya.in/license)
-[![Professional Support](https://img.shields.io/badge/Support-Professional-green.svg?style=flat-square)](mailto:hardikkanajariya@yahoo.com)
+[![Prerelease](https://img.shields.io/badge/Version-1.0.0--alpha.1-orange.svg?style=flat-square)](https://codeforge.hardikkanajariya.in/codeforge-database-studio)
+[![Commercial License](https://img.shields.io/badge/License-Commercial-blue.svg?style=flat-square)](https://codeforge.hardikkanajariya.in/license)
+[![Professional Support](https://img.shields.io/badge/Support-Professional-green.svg?style=flat-square)](mailto:contact@hardikkanajariya.in)
 
 ## 🚀 Key Features
 
@@ -64,13 +66,21 @@ A comprehensive database management and code generation suite for Laravel applic
 - **FilamentPHP**: 3.x
 - **Database**: MySQL 5.7+, PostgreSQL 11+, SQLite 3.8+, or SQL Server 2017+
 
-## 🛠️ Installation
+## 🛠️ Installation (Alpha Prerelease)
 
-### 1. Install via Composer
+### 1. Install via Composer (Prerelease)
 
+**For Alpha Testing:**
 ```bash
-composer require hkdevs/codeforge-database-studio
+composer require hkdevs/codeforge-database-studio:1.0.0-alpha.1
 ```
+
+**Or to allow any prerelease:**
+```bash
+composer require hkdevs/codeforge-database-studio --with-prereleases
+```
+
+⚠️ **Note**: This is a prerelease version. Use `--stability=alpha` flag if needed for your composer configuration.
 
 ### 2. Run Installation Command
 
@@ -875,12 +885,12 @@ LOG_LEVEL=debug
 
 1. **Documentation**: Check `/docs` route in your application for detailed documentation
 2. **Community Support**: Join our community forum for peer assistance
-3. **Professional Support**: Contact [hardikkanajariya@yahoo.com](mailto:hardikkanajariya@yahoo.com) for priority assistance
+3. **Professional Support**: Contact [contact@hardikkanajariya.in](mailto:contact@hardikkanajariya.in) for priority assistance
 4. **Bug Reports**: Submit issues through our support portal with detailed reproduction steps
 
 ## 📝 License
 
-This plugin is a commercial product licensed under the HkDevs Commercial License. Usage requires a valid license purchased from [HkDevs](https://hardikkanajariya.in). See [License Terms](https://hardikkanajariya.in/license) for complete details.
+This plugin is a commercial product licensed under the HkDevs Commercial License. Usage requires a valid license purchased from [HkDevs](https://codeforge.hardikkanajariya.in). See [License Terms](https://codeforge.hardikkanajariya.in/license) for complete details.
 
 ### License Features
 - **Production Use**: Licensed for production environments
@@ -890,7 +900,7 @@ This plugin is a commercial product licensed under the HkDevs Commercial License
 
 ## 👥 Credits
 
-- **Development**: [HkDevs](https://hardikkanajariya.in) - Professional Laravel Developer
+- **Development**: [HkDevs](https://codeforge.hardikkanajariya.in) - Professional Laravel Developer
 - **Framework**: Built on [FilamentPHP](https://filamentphp.com) - The elegant admin panel framework
 - **Testing**: Comprehensive test coverage with PHPUnit
 - **Quality Assurance**: Code review and quality assurance by senior developers
@@ -934,4 +944,4 @@ This plugin is a commercial product licensed under the HkDevs Commercial License
 
 **Professional Database Management Plugin by HkDevs - Elevate Your Laravel Development Experience**
 
-*For technical support, feature requests, or partnership inquiries, contact us at [hardikkanajariya@yahoo.com](mailto:hardikkanajariya@yahoo.com)*
+*For technical support, feature requests, or partnership inquiries, contact us at [contact@hardikkanajariya.in](mailto:contact@hardikkanajariya.in)*

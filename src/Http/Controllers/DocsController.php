@@ -17,7 +17,7 @@ use Illuminate\Http\JsonResponse;
  * - Development guidelines and best practices
  * 
  * @package HkDevs\CodeForgeStudio\Http\Controllers
- * @author HkDevs <hardikkanajariya@yahoo.com>
+ * @author HkDevs <contact@hardikkanajariya.in>
  * @version 1.0
  * @since 1.0
  */

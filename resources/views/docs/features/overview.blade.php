@@ -200,13 +200,13 @@
             <p class="text-gray-600 mb-6">All features can be individually configured in your <code
                     class="bg-gray-100 px-2 py-1 rounded">config/codeforge-database-studio.php</code> file:</p>
             <pre class="bg-gray-800 text-white p-4 rounded-md overflow-x-auto"><code>'features' => [
-            'health_monitoring' => true,
-            'schema_designer' => true,
-            'data_seeding' => true,
-            'code_generation' => true,
-            'migration_management' => true,
-            'documentation_generator' => true,
-        ],</code></pre>
+                'health_monitoring' => true,
+                'schema_designer' => true,
+                'data_seeding' => true,
+                'code_generation' => true,
+                'migration_management' => true,
+                'documentation_generator' => true,
+            ],</code></pre>
         </div>
 
         <!-- Support -->
@@ -214,8 +214,8 @@
             <h3 class="text-lg font-semibold text-yellow-900 mb-2">Professional Support</h3>
             <p class="text-yellow-800">
                 CodeForge Database Studio includes professional support with your commercial license.
-                Contact us at <a href="mailto:hardikkanajariya@yahoo.com"
-                    class="text-yellow-600 hover:text-yellow-700 font-medium">hardikkanajariya@yahoo.com</a>
+                Contact us at <a href="mailto:contact@hardikkanajariya.in"
+                    class="text-yellow-600 hover:text-yellow-700 font-medium">contact@hardikkanajariya.in</a>
                 for assistance with implementation, customization, or troubleshooting.
             </p>
         </div>

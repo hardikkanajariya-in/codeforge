@@ -8,7 +8,7 @@
  * for Visual Schema Designer and Intelligent Data Seeding functionality.
  * 
  * @package   HkDevs\CodeForgeStudio
- * @author    Hardik Kanajariya <hardikkanajariya@yahoo.com>
+ * @author    Hardik Kanajariya <contact@hardikkanajariya.in>
  * @copyright 2024 HkDevs (hardikkanajariya.in)
  * @license   Commercial License
  * @version   1.0.0

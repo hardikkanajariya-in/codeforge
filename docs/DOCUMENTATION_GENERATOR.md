@@ -299,7 +299,7 @@ foreach ($changes['added_tables'] as $table) {
 The Documentation Generator is part of the HkDevs Filament Database Manager premium package.
 
 ### Getting Support
-- **Professional Support**: Contact [hardikkanajariya@yahoo.com](mailto:hardikkanajariya@yahoo.com)
+- **Professional Support**: Contact [contact@hardikkanajariya.in](mailto:contact@hardikkanajariya.in)
 - **Priority Response**: Licensed customers receive priority support
 - **Documentation**: Comprehensive documentation available in your admin panel
 
@@ -311,4 +311,4 @@ The Documentation Generator is part of the HkDevs Filament Database Manager prem
 
 ---
 
-**Premium Plugin by HkDevs** - Professional support available at [hardikkanajariya@yahoo.com](mailto:hardikkanajariya@yahoo.com)
+**Premium Plugin by HkDevs** - Professional support available at [contact@hardikkanajariya.in](mailto:contact@hardikkanajariya.in)
