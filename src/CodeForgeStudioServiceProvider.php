@@ -28,6 +28,7 @@ use HkDevs\CodeForgeStudio\Services\SeederExecutionService;
 use HkDevs\CodeForgeStudio\Services\DataGenerationService;
 use HkDevs\CodeForgeStudio\Services\SchemaDocumentationService;
 use HkDevs\CodeForgeStudio\Services\MigrationGeneratorService;
+use HkDevs\CodeForgeStudio\Services\LicenseValidationService;
 use HkDevs\CodeForgeStudio\Services\ModelGeneratorService;
 use HkDevs\CodeForgeStudio\Services\CodeGenerationService;
 use HkDevs\CodeForgeStudio\Services\FilamentResourceGeneratorService;
@@ -77,6 +78,7 @@ class CodeForgeStudioServiceProvider extends ServiceProvider
         $this->app->singleton(SeederDiscoveryService::class);
         $this->app->singleton(DatabaseHealthService::class);
         $this->app->singleton(MigrationTrackingService::class);
+        $this->app->singleton(LicenseValidationService::class);
     }
 
     public function boot(): void

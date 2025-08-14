@@ -91,23 +91,49 @@ A comprehensive database management and code generation suite for Laravel applic
 - **FilamentPHP**: 3.x
 - **Database**: MySQL 5.7+, PostgreSQL 11+, SQLite 3.8+, or SQL Server 2017+
 
-## 🛠️ Installation (Alpha Prerelease)
+## 🛠️ Installation
 
-### 1. Install via Composer (Prerelease)
+### 1. Purchase License
 
-**For Alpha Testing:**
-```bash
-composer require hkdevs/codeforge-database-studio:1.0.0-alpha.1
+First, purchase a license from Anystack:
+- [Single Project License (€79)](https://anystack.sh/products/hkdevs-codeforge-database-studio/single)
+- [Multiple Project License (€129)](https://anystack.sh/products/hkdevs-codeforge-database-studio/multiple)  
+- [Unlimited License (€199)](https://anystack.sh/products/hkdevs-codeforge-database-studio/unlimited)
+
+### 2. Add Private Repository
+
+Add the Anystack private repository to your `composer.json`:
+
+```json
+{
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://9f9d2843-f44a-4d2a-ad42-c65ac7728bb1.composer.sh"
+    }
+  ]
+}
 ```
 
-**Or to allow any prerelease:**
+### 3. Install via Composer
+
 ```bash
-composer require hkdevs/codeforge-database-studio --with-prereleases
+composer require hkdevs/codeforge-database-studio
 ```
 
-⚠️ **Note**: This is a prerelease version. Use `--stability=alpha` flag if needed for your composer configuration.
+When prompted for authentication:
+- **Username**: Your email address (used for purchase)
+- **Password**: Your license key (provided after purchase)
 
-### 2. Run Installation Command
+Example:
+```
+Loading composer repositories with package information
+Authentication required (9f9d2843-f44a-4d2a-ad42-c65ac7728bb1.composer.sh):
+Username: your-email@example.com
+Password: 8c21df8f-6273-4932-b4ba-8bcc723ef500
+```
+
+### 4. Run Installation Command
 
 ```bash
 php artisan codeforge-database-studio:install
@@ -124,7 +150,7 @@ Use `--force` flag to overwrite existing configuration:
 php artisan codeforge-database-studio:install --force
 ```
 
-### 3. Register the Plugin
+### 5. Register the Plugin
 
 Add the plugin to your Filament panel provider:
 
@@ -142,6 +168,19 @@ public function panel(Panel $panel): Panel
         ]);
 }
 ```
+
+---
+
+## 🧪 Alpha Testing (Free Access)
+
+**For Alpha Testing Only** - Use this temporary access for testing purposes:
+
+```bash
+# Add to composer.json temporarily
+composer require hkdevs/codeforge-database-studio:1.0.0-alpha.2 --with-prereleases
+```
+
+⚠️ **Note**: Alpha access is temporary and will be removed once stable release is available.
 
 ### 4. Configure Features (Optional)
 

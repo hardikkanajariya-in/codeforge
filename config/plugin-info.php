@@ -13,7 +13,7 @@ return [
 
     'name' => 'CodeForge Database Studio',
     'short_name' => 'Database Studio',
-    'version' => '1.0.0-alpha.1',
+    'version' => '1.0.0-alpha.2',
     'description' => 'A comprehensive database management and code generation suite for Laravel applications using FilamentPHP',
 
     /*

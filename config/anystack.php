@@ -12,7 +12,7 @@ return [
 
     'enabled' => env('ANYSTACK_ENABLED', true),
 
-    'product_id' => env('ANYSTACK_PRODUCT_ID', 'YOUR_ANYSTACK_PRODUCT_ID'),
+    'product_id' => env('ANYSTACK_PRODUCT_ID', '9f9d2843-f44a-4d2a-ad42-c65ac7728bb1'),
 
     'webhook_secret' => env('ANYSTACK_WEBHOOK_SECRET'),
 
