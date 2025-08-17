@@ -1197,7 +1197,7 @@ This comprehensive test suite covers all aspects of the CodeForge Database Studi
 - **Security & Permissions**: Access control and data protection
 
 ### **Quality Assurance**:
-- **500+ Test Cases**: Covering all functionality with edge cases
+- **200+ Test Cases**: Covering all functionality with edge cases
 - **Multi-Environment Testing**: Development, staging, and production scenarios
 - **Cross-Platform Compatibility**: Multiple databases, browsers, and operating systems
 - **Performance & Load Testing**: Scalability validation with large datasets

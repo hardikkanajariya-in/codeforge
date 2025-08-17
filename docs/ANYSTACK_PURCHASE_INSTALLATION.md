@@ -127,7 +127,7 @@ php artisan codeforge-database-studio:install --force
 ### License Issues
 
 **Problem**: "License expired" or "License invalid"
-**Solution**: Contact support at [support@hardikkanajariya.in](mailto:support@hardikkanajariya.in)
+**Solution**: Contact support at [contact@hardikkanajariya.in](mailto:contact@hardikkanajariya.in)
 
 ### Installation Issues
 
@@ -139,7 +139,7 @@ php artisan codeforge-database-studio:install --force
 
 ## 📞 Support
 
-- **Email**: [support@hardikkanajariya.in](mailto:support@hardikkanajariya.in)
+- **Email**: [contact@hardikkanajariya.in](mailto:contact@hardikkanajariya.in)
 - **Documentation**: [https://codeforge.hardikkanajariya.in/docs](https://codeforge.hardikkanajariya.in/docs)
 - **Website**: [https://hardikkanajariya.in](https://hardikkanajariya.in)
 

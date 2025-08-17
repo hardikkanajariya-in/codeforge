@@ -10,7 +10,7 @@ class LicenseValidationService
 {
     private const ANYSTACK_API_URL = 'https://api.anystack.sh/v1';
     private const CACHE_TTL = 3600; // 1 hour
-    
+
     public function __construct(
         private string $productId = '9f9d2843-f44a-4d2a-ad42-c65ac7728bb1'
     ) {}
@@ -21,7 +21,7 @@ class LicenseValidationService
     public function validateLicense(string $licenseKey, ?string $fingerprint = null): array
     {
         $cacheKey = "codeforge_license_" . md5($licenseKey . $fingerprint);
-        
+
         // Check cache first
         if ($cached = Cache::get($cacheKey)) {
             return $cached;
@@ -49,7 +49,6 @@ class LicenseValidationService
             }
 
             return $result;
-
         } catch (\Exception $e) {
             Log::error('CodeForge License Validation Failed', [
                 'error' => $e->getMessage(),
@@ -72,7 +71,7 @@ class LicenseValidationService
     public function hasValidLicense(): bool
     {
         $licenseKey = config('codeforge-database-studio.license_key');
-        
+
         if (!$licenseKey) {
             return false;
         }
@@ -87,7 +86,7 @@ class LicenseValidationService
     public function getLicenseInfo(): array
     {
         $licenseKey = config('codeforge-database-studio.license_key');
-        
+
         if (!$licenseKey) {
             return ['valid' => false, 'message' => 'No license key configured'];
         }
@@ -102,7 +101,7 @@ class LicenseValidationService
     {
         // Use domain or configured fingerprint
         $fingerprint = config('codeforge-database-studio.fingerprint');
-        
+
         if ($fingerprint) {
             return $fingerprint;
         }
@@ -140,7 +139,6 @@ class LicenseValidationService
             }
 
             return $result;
-
         } catch (\Exception $e) {
             Log::error('CodeForge License Activation Failed', [
                 'error' => $e->getMessage(),
@@ -167,7 +165,7 @@ class LicenseValidationService
             if ($response->successful()) {
                 $releases = $response->json('releases', []);
                 $currentVersion = config('codeforge-database-studio.version', '1.0.0');
-                
+
                 $latestRelease = collect($releases)
                     ->sortByDesc('created_at')
                     ->first();
@@ -181,7 +179,6 @@ class LicenseValidationService
             }
 
             return ['has_update' => false, 'message' => 'Unable to check for updates'];
-
         } catch (\Exception $e) {
             Log::error('CodeForge Update Check Failed', ['error' => $e->getMessage()]);
             return ['has_update' => false, 'message' => 'Update service unavailable'];

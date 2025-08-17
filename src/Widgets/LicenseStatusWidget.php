@@ -8,9 +8,9 @@ use HkDevs\CodeForgeStudio\Services\LicenseValidationService;
 class LicenseStatusWidget extends Widget
 {
     protected static string $view = 'codeforge-database-studio::widgets.license-status';
-    
+
     protected int | string | array $columnSpan = 'full';
-    
+
     protected static ?int $sort = -1; // Show at top
 
     public function __construct(
@@ -29,7 +29,7 @@ class LicenseStatusWidget extends Widget
         }
 
         $licenseInfo = $this->licenseService->getLicenseInfo();
-        
+
         if (!$licenseInfo['valid']) {
             return [
                 'status' => 'invalid',

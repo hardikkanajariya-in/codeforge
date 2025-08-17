@@ -1001,7 +1001,7 @@ This plugin is a commercial product licensed under the HkDevs Commercial License
 - **📊 Resources**: 9 Filament resources for data management
 - **📄 Pages**: 12 specialized management pages
 - **🗃️ Migrations**: 10 database tables for plugin functionality
-- **🧪 Tests**: 500+ test cases with comprehensive coverage
+- **🧪 Tests**: 200+ test cases with comprehensive coverage
 - **📝 Configuration**: 50+ customizable configuration options
 
 ---

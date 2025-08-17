@@ -328,7 +328,7 @@
                 <div class="text-gray-600 font-medium">Core Features</div>
             </div>
             <div class="text-center">
-                <div class="text-4xl font-bold text-green-600 mb-2">500+</div>
+                <div class="text-4xl font-bold text-green-600 mb-2">200+</div>
                 <div class="text-gray-600 font-medium">Test Cases</div>
             </div>
             <div class="text-center">

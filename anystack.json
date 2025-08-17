@@ -2,7 +2,7 @@
     "name": "CodeForge Database Studio",
     "slug": "hkdevs-codeforge-database-studio",
     "description": "A comprehensive database management suite for FilamentPHP with schema design, migration management, health monitoring, and automated resource generation.",
-    "version": "1.0.0-alpha.2",
+    "version": "1.0.0-alpha.3",
     "author": {
         "name": "HkDevs",
         "email": "contact@hardikkanajariya.in",
@@ -32,7 +32,7 @@
     },
     "homepage": "https://codeforge.hardikkanajariya.in",
     "documentation": "https://codeforge.hardikkanajariya.in/docs",
-    "support": "support@hardikkanajariya.in",
+    "support": "contact@hardikkanajariya.in",
     "categories": [
         "developer-tool",
         "panel-builder",

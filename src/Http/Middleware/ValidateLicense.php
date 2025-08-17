@@ -32,12 +32,12 @@ class ValidateLicense
 
         if (!$licenseInfo['valid']) {
             $this->showLicenseWarning($licenseInfo['message']);
-            
+
             // In development, allow access but show warning
             if (app()->environment('local', 'development')) {
                 return $next($request);
             }
-            
+
             // In production, block access
             return redirect()
                 ->route('filament.admin.pages.dashboard')
@@ -48,7 +48,7 @@ class ValidateLicense
         if (isset($licenseInfo['expires_at'])) {
             $expiresAt = \Carbon\Carbon::parse($licenseInfo['expires_at']);
             $daysUntilExpiry = now()->diffInDays($expiresAt, false);
-            
+
             if ($daysUntilExpiry <= 30 && $daysUntilExpiry > 0) {
                 $this->showExpirationWarning($daysUntilExpiry);
             }
@@ -60,19 +60,19 @@ class ValidateLicense
     private function isCodeForgeRoute(Request $request): bool
     {
         $path = $request->path();
-        
-        return str_contains($path, 'codeforge') || 
-               str_contains($path, 'database-studio') ||
-               str_contains($path, 'schema-designer') ||
-               str_contains($path, 'migration-manager') ||
-               str_contains($path, 'health-monitoring');
+
+        return str_contains($path, 'codeforge') ||
+            str_contains($path, 'database-studio') ||
+            str_contains($path, 'schema-designer') ||
+            str_contains($path, 'migration-manager') ||
+            str_contains($path, 'health-monitoring');
     }
 
     private function showLicenseWarning(string $message): void
     {
         Notification::make()
             ->title('License Issue')
-            ->body($message . ' Please contact support@hardikkanajariya.in')
+            ->body($message . ' Please contact contact@hardikkanajariya.in')
             ->warning()
             ->persistent()
             ->send();

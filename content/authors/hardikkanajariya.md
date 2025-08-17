@@ -1,7 +1,7 @@
 ---
 name: Hardik Kanajariya
 slug: hardikkanajariya
-github_url: https://github.com/hardikkanajariya
+github_url: https://github.com/hardik-kanajariya
 website_url: https://codeforge.hardikkanajariya.in
 support_url: mailto:contact@hardikkanajariya.in
 linkedin_url: https://www.linkedin.com/in/hardik-kanajariya/
@@ -49,7 +49,7 @@ At **HkDevs**, I believe in:
 ## Professional Standards
 
 ### 🏆 **Quality Assurance**
-- **Comprehensive Testing** - 500+ test cases for major projects
+- **Comprehensive Testing** - 200+ test cases for major projects
 - **Code Review Process** - Multi-stage review and quality validation
 - **Performance Optimization** - Benchmarking and continuous performance monitoring
 - **Security Best Practices** - Enterprise-grade security implementations
@@ -77,13 +77,13 @@ A comprehensive database management and code generation suite featuring:
 
 **Technologies:** Laravel 10+, FilamentPHP 3.x, PHP 8.1+  
 **License:** Commercial (€79 - €199)  
-**Repository:** [hardikkanajariya/codeforge-database-studio](https://github.com/hardikkanajariya/codeforge-database-studio)
+**Repository:** [hardik-kanajariya/codeforge](https://github.com/hardik-kanajariya/codeforge)
 
 ### 📊 **Statistics & Achievements**
 - **🔧 Services:** 17+ comprehensive service classes
 - **⚡ Commands:** 11+ powerful Artisan commands
 - **📊 Resources:** 9+ Filament resources
-- **🧪 Tests:** 500+ test cases with comprehensive coverage
+- **🧪 Tests:** 200+ test cases with comprehensive coverage
 - **📝 Documentation:** Professional-grade documentation and support
 
 ## Development Stack
@@ -118,8 +118,8 @@ A comprehensive database management and code generation suite featuring:
 - **Business Inquiries:** [contact@hardikkanajariya.in](mailto:contact@hardikkanajariya.in)
 
 ### 🌐 **Social & Professional Networks**
-- **GitHub:** [@hardikkanajariya](https://github.com/hardikkanajariya)
-- **Twitter:** [@hardikkanajariya](https://twitter.com/hardikkanajariya)
+- **GitHub:** [@hardikkanajariya](https://github.com/hardik-kanajariya)
+- **Twitter:** [@hardikkanajariya](https://twitter.com/hardik-kanajariya)
 - **LinkedIn:** [hardikkanajariya](https://linkedin.com/in/hardikkanajariya)
 
 ### 💬 **Support Channels**

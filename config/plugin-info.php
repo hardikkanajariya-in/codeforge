@@ -13,7 +13,7 @@ return [
 
     'name' => 'CodeForge Database Studio',
     'short_name' => 'Database Studio',
-    'version' => '1.0.0-alpha.2',
+    'version' => '1.0.0-alpha.3',
     'description' => 'A comprehensive database management and code generation suite for Laravel applications using FilamentPHP',
 
     /*
@@ -46,7 +46,7 @@ return [
     */
 
     'support' => [
-        'email' => 'support@hardikkanajariya.in',
+        'email' => 'contact@hardikkanajariya.in',
         'documentation' => 'https://codeforge.hardikkanajariya.in/docs',
         'website' => 'https://codeforge.hardikkanajariya.in',
         'purchase_url' => 'https://codeforge.hardikkanajariya.in/purchase',
