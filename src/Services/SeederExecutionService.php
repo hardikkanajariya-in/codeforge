@@ -128,71 +128,30 @@ class SeederExecutionService
             $executionTime = $endTime - $startTime;
 
             // Update log with success
-            if ($log->exists) {
-                $log->update([
-                    'status' => 'completed',
-                    'execution_time' => $executionTime,
-                    'output' => $output,
-                    'completed_at' => now(),
-                    'metadata' => array_merge($log->metadata ?? [], [
-                        'options' => $options,
-                        'memory_usage' => memory_get_peak_usage(true),
-                    ]),
-                ]);
-            } else {
-                // If log doesn't exist in database, update in memory
-                $log->fill([
-                    'status' => 'completed',
-                    'execution_time' => $executionTime,
-                    'output' => $output,
-                    'completed_at' => now(),
-                    'metadata' => array_merge($log->metadata ?? [], [
-                        'options' => $options,
-                        'memory_usage' => memory_get_peak_usage(true),
-                    ]),
-                ]);
-            }
+            $this->updateExecutionLog($log, [
+                'status' => 'completed',
+                'execution_time' => $executionTime,
+                'output' => $output,
+                'completed_at' => now(),
+                'metadata' => array_merge($log->metadata ?? [], [
+                    'options' => $options,
+                    'memory_usage' => memory_get_peak_usage(true),
+                ]),
+            ]);
         } catch (Throwable $e) {
-            if ($log->exists) {
-                $log->update([
-                    'status' => 'failed',
-                    'error_message' => $e->getMessage(),
-                    'completed_at' => now(),
-                    'metadata' => array_merge($log->metadata ?? [], [
-                        'error_trace' => $e->getTraceAsString(),
-                        'error_file' => $e->getFile(),
-                        'error_line' => $e->getLine(),
-                    ]),
-                ]);
-            } else {
-                // If log doesn't exist in database, update in memory
-                $log->fill([
-                    'status' => 'failed',
-                    'error_message' => $e->getMessage(),
-                    'completed_at' => now(),
-                    'metadata' => array_merge($log->metadata ?? [], [
-                        'error_trace' => $e->getTraceAsString(),
-                        'error_file' => $e->getFile(),
-                        'error_line' => $e->getLine(),
-                    ]),
-                ]);
-            }
-
-            // Don't re-throw the exception, just return the failed log
-            // The caller can check if the log failed using $log->isFailed()
+            $this->updateExecutionLog($log, [
+                'status' => 'failed',
+                'error_message' => $e->getMessage(),
+                'completed_at' => now(),
+                'metadata' => array_merge($log->metadata ?? [], [
+                    'error_trace' => $e->getTraceAsString(),
+                    'error_file' => $e->getFile(),
+                    'error_line' => $e->getLine(),
+                ]),
+            ]);
         }
 
-        // Return the log object - no need to refresh if it's not in database
-        if ($log->exists) {
-            try {
-                return $log->refresh();
-            } catch (\Exception $e) {
-                // If refresh fails, just return the current log object
-                return $log;
-            }
-        } else {
-            return $log;
-        }
+        return $log;
     }
 
     public function executeMultipleSeeders(array $seederIds, array $options = []): array
@@ -287,12 +246,35 @@ class SeederExecutionService
                     'creation_error' => $e->getMessage(),
                 ],
             ]);
-            
+
             // Set a fake ID to avoid issues
             $log->id = 0;
             $log->exists = false;
-            
+
             return $log;
+        }
+    }
+
+    /**
+     * Update execution log safely, handling both database and in-memory logs
+     * 
+     * @param SeederExecutionLog $log
+     * @param array $data
+     * @return void
+     */
+    protected function updateExecutionLog(SeederExecutionLog $log, array $data): void
+    {
+        try {
+            if ($log->exists && $log->id) {
+                // Try to update in database
+                $log->update($data);
+            } else {
+                // Update in memory only
+                $log->fill($data);
+            }
+        } catch (\Exception $e) {
+            // If database update fails, fall back to memory update
+            $log->fill($data);
         }
     }
 
