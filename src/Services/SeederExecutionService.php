@@ -128,34 +128,71 @@ class SeederExecutionService
             $executionTime = $endTime - $startTime;
 
             // Update log with success
-            $log->update([
-                'status' => 'completed',
-                'execution_time' => $executionTime,
-                'output' => $output,
-                'completed_at' => now(),
-                'metadata' => array_merge($log->metadata ?? [], [
-                    'options' => $options,
-                    'memory_usage' => memory_get_peak_usage(true),
-                ]),
-            ]);
+            if ($log->exists) {
+                $log->update([
+                    'status' => 'completed',
+                    'execution_time' => $executionTime,
+                    'output' => $output,
+                    'completed_at' => now(),
+                    'metadata' => array_merge($log->metadata ?? [], [
+                        'options' => $options,
+                        'memory_usage' => memory_get_peak_usage(true),
+                    ]),
+                ]);
+            } else {
+                // If log doesn't exist in database, update in memory
+                $log->fill([
+                    'status' => 'completed',
+                    'execution_time' => $executionTime,
+                    'output' => $output,
+                    'completed_at' => now(),
+                    'metadata' => array_merge($log->metadata ?? [], [
+                        'options' => $options,
+                        'memory_usage' => memory_get_peak_usage(true),
+                    ]),
+                ]);
+            }
         } catch (Throwable $e) {
-            $log->update([
-                'status' => 'failed',
-                'error_message' => $e->getMessage(),
-                'completed_at' => now(),
-                'metadata' => array_merge($log->metadata ?? [], [
-                    'error_trace' => $e->getTraceAsString(),
-                    'error_file' => $e->getFile(),
-                    'error_line' => $e->getLine(),
-                ]),
-            ]);
+            if ($log->exists) {
+                $log->update([
+                    'status' => 'failed',
+                    'error_message' => $e->getMessage(),
+                    'completed_at' => now(),
+                    'metadata' => array_merge($log->metadata ?? [], [
+                        'error_trace' => $e->getTraceAsString(),
+                        'error_file' => $e->getFile(),
+                        'error_line' => $e->getLine(),
+                    ]),
+                ]);
+            } else {
+                // If log doesn't exist in database, update in memory
+                $log->fill([
+                    'status' => 'failed',
+                    'error_message' => $e->getMessage(),
+                    'completed_at' => now(),
+                    'metadata' => array_merge($log->metadata ?? [], [
+                        'error_trace' => $e->getTraceAsString(),
+                        'error_file' => $e->getFile(),
+                        'error_line' => $e->getLine(),
+                    ]),
+                ]);
+            }
 
             // Don't re-throw the exception, just return the failed log
             // The caller can check if the log failed using $log->isFailed()
         }
 
-        // Reload the log to get the latest data
-        return $log->refresh();
+        // Return the log object - no need to refresh if it's not in database
+        if ($log->exists) {
+            try {
+                return $log->refresh();
+            } catch (\Exception $e) {
+                // If refresh fails, just return the current log object
+                return $log;
+            }
+        } else {
+            return $log;
+        }
     }
 
     public function executeMultipleSeeders(array $seederIds, array $options = []): array
@@ -222,18 +259,41 @@ class SeederExecutionService
 
     protected function createExecutionLog(DataSeeder $seeder): SeederExecutionLog
     {
-        return SeederExecutionLog::create([
-            'seeder_name' => $seeder->name,
-            'seeder_class' => $seeder->class_name,
-            'status' => 'started',
-            'executed_by' => Auth::check() ? Auth::user()->name ?? Auth::user()->email : 'Console',
-            'started_at' => now(),
-            'metadata' => [
-                'seeder_id' => $seeder->id,
-                'seeder_type' => $seeder->type,
-                'auto_run' => $seeder->auto_run,
-            ],
-        ]);
+        try {
+            return SeederExecutionLog::create([
+                'seeder_name' => $seeder->name,
+                'seeder_class' => $seeder->class_name,
+                'status' => 'started',
+                'executed_by' => Auth::check() ? Auth::user()->name ?? Auth::user()->email : 'Console',
+                'started_at' => now(),
+                'metadata' => [
+                    'seeder_id' => $seeder->id,
+                    'seeder_type' => $seeder->type,
+                    'auto_run' => $seeder->auto_run,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            // If creation fails, create a minimal log in memory
+            $log = new SeederExecutionLog([
+                'seeder_name' => $seeder->name,
+                'seeder_class' => $seeder->class_name,
+                'status' => 'failed',
+                'error_message' => 'Failed to create execution log: ' . $e->getMessage(),
+                'executed_by' => Auth::check() ? Auth::user()->name ?? Auth::user()->email : 'Console',
+                'started_at' => now(),
+                'completed_at' => now(),
+                'metadata' => [
+                    'seeder_id' => $seeder->id,
+                    'creation_error' => $e->getMessage(),
+                ],
+            ]);
+            
+            // Set a fake ID to avoid issues
+            $log->id = 0;
+            $log->exists = false;
+            
+            return $log;
+        }
     }
 
     protected function runSeeder(DataSeeder $seeder, array $options = []): string
