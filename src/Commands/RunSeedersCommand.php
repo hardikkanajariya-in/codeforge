@@ -241,8 +241,9 @@ class RunSeedersCommand extends Command
                 $this->info("✓ {$seederData->seeder_name}");
             } else {
                 $failed++;
-                $seederName = is_object($seederData) ? $seederData->seeder_name : $seederData['seeder']->name ?? 'Unknown';
-                $error = is_object($seederData) ? $seederData->error_message : $seederData['error'] ?? 'Unknown error';
+                // All results are now SeederExecutionLog objects
+                $seederName = is_object($seederData) ? $seederData->seeder_name : 'Unknown';
+                $error = is_object($seederData) ? $seederData->error_message : 'Unknown error';
                 $this->error("✗ {$seederName}: {$error}");
             }
         }

@@ -154,7 +154,8 @@ class SeederExecutionService
             // The caller can check if the log failed using $log->isFailed()
         }
 
-        return $log->fresh();
+        // Reload the log to get the latest data
+        return $log->refresh();
     }
 
     public function executeMultipleSeeders(array $seederIds, array $options = []): array
@@ -166,14 +167,9 @@ class SeederExecutionService
             ->get();
 
         foreach ($seeders as $seeder) {
-            try {
-                $results[$seeder->id] = $this->executeSeeder($seeder, $options);
-            } catch (Throwable $e) {
-                $results[$seeder->id] = [
-                    'error' => $e->getMessage(),
-                    'seeder' => $seeder,
-                ];
-            }
+            // Since executeSeeder now returns a log instead of throwing exceptions,
+            // we can directly store the result
+            $results[$seeder->id] = $this->executeSeeder($seeder, $options);
         }
 
         return $results;
