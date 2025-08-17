@@ -2,7 +2,18 @@
 
 ## HkDevs CodeForge Database Studio - Premium Plugin Review
 
-**Date:** August 15, 2025 (Updated)  
+**Date:** August 1💰 Regular License: $99.00
+   - Use on one (1) project
+   - Source code access and modification rights
+   - 6 months of updates and support
+   - Standard email support
+
+🎯 Extended License: $349.00
+   - Use on one (1) project  
+   - Source code access and modification rights
+   - 12 months of updates and support
+   - Priority email support
+   - Extended customer support and consultation
 **Plugin Name:** CodeForge Database Studio (formerly Filament Database Manager)  
 **Author:** HkDevs (hardikkanajariya.in)  
 **Type:** Premium Commercial Plugin  
@@ -101,9 +112,8 @@ versions: [1]
 publish_date: 2025-08-11
 anystack_id: 9f9d2843-f44a-4d2a-ad42-c65ac7728bb1
 license: commercial
-price_single: €79.00
-price_upto_5: €129.00
-price_unlimited: €199.00
+price_regular: $99.00
+price_extended: $349.00
 ---
 ```
 
@@ -112,14 +122,14 @@ price_unlimited: €199.00
 **Completed Steps:**
 1. **✅ Commercial License:**
    - ✅ Professional commercial license agreement created
-   - ✅ Three license tiers defined (Single, Multiple, Unlimited)
+   - ✅ Two license tiers defined (Regular, Extended)
    - ✅ Legal terms and restrictions properly documented
    - ✅ Contact information and support details included
 
 2. **✅ Anystack.sh Setup (COMPLETED):**
    - ✅ Anystack account created
    - ✅ Plugin uploaded with product ID: 9f9d2843-f44a-4d2a-ad42-c65ac7728bb1
-   - ✅ Product listing configured with three-tier pricing
+   - ✅ Product listing configured with two-tier pricing
    - ✅ Commercial license integration completed
    - 🔄 Enable "Advertising on Filament Website" (pending approval)
    - 🔄 Invite @danharrin (read-only access) for store review
@@ -267,7 +277,7 @@ Long-tail Keywords:
 
 2. **✅ Set up Anystack.sh (COMPLETED)**
    - ✅ Product listing created with ID: 9f9d2843-f44a-4d2a-ad42-c65ac7728bb1
-   - ✅ Three-tier pricing configured (€79/€129/€199)
+   - ✅ Two-tier pricing configured ($99/$349)
    - 🔄 Filament website advertising approval pending
 
 3. **✅ Create Author Profile (COMPLETED)**
@@ -426,7 +436,7 @@ Your **CodeForge Database Studio** plugin is **production-ready** and **95% read
 2. ✅ **High-quality codebase** with professional architecture
 3. ✅ **Updated branding** to hardikkanajariya.in
 4. ✅ **Strong documentation** foundation with comprehensive README
-5. ✅ **Clear pricing strategy** with three-tier structure
+5. ✅ **Clear pricing strategy** with two-tier structure
 6. ✅ **Anystack.sh Integration** - Product listing live with ID: 9f9d2843-f44a-4d2a-ad42-c65ac7728bb1
 7. ✅ **Author Profile** - Professional profile with complete branding
 8. ✅ **Plugin Submission File** - Ready for Filament Plugin Store submission

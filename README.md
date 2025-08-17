@@ -14,24 +14,19 @@ A comprehensive database management and code generation suite for Laravel applic
 
 **Commercial Plugin** - Choose the license that fits your needs:
 
-- **🏠 Single Project License** - €79.00
-  - Use on one Laravel project
-  - 1 year of updates
-  - Email support
-  - [Purchase on Anystack.sh](https://anystack.sh/products/hkdevs-codeforge-database-studio/single)
+- **💳 Regular License** - $99.00
+  - Use on one (1) project
+  - Source code access and modification rights  
+  - 6 months of updates and support
+  - Standard email support
+  - Installation and configuration guidance
 
-- **🏢 Multiple Project License** - €129.00  
-  - Use on up to 5 Laravel projects
+- **👑 Extended License** - $349.00  
+  - Use on one (1) project
+  - Source code access and modification rights
+  - 12 months of updates and support
   - Priority email support
-  - 1 year of updates
-  - [Purchase on Anystack.sh](https://anystack.sh/products/hkdevs-codeforge-database-studio/multiple)
-
-- **🌐 Unlimited License** - €199.00
-  - Unlimited Laravel projects
-  - Priority support (24h response)
-  - Lifetime updates
-  - Private Discord access
-  - [Purchase on Anystack.sh](https://anystack.sh/products/hkdevs-codeforge-database-studio/unlimited)
+  - Extended customer support and consultation
 
 > **Note**: Update the Anystack URLs above with your actual product URLs once your Anystack listing is live.
 
@@ -96,9 +91,8 @@ A comprehensive database management and code generation suite for Laravel applic
 ### 1. Purchase License
 
 First, purchase a license from Anystack:
-- [Single Project License (€79)](https://anystack.sh/products/hkdevs-codeforge-database-studio/single)
-- [Multiple Project License (€129)](https://anystack.sh/products/hkdevs-codeforge-database-studio/multiple)  
-- [Unlimited License (€199)](https://anystack.sh/products/hkdevs-codeforge-database-studio/unlimited)
+- [Regular License ($99)](https://anystack.sh/products/hkdevs-codeforge-database-studio/regular)
+- [Extended License ($349)](https://anystack.sh/products/hkdevs-codeforge-database-studio/extended)
 
 ### 2. Add Private Repository
 

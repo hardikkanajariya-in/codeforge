@@ -78,11 +78,10 @@ CodeForge Database Studio is the most comprehensive database management plugin f
 
 ## 💼 Commercial License
 
-This is a premium commercial plugin with three licensing tiers:
+This is a premium commercial plugin with two licensing tiers:
 
-- **Single Project License (€79.00):** Perfect for individual projects
-- **Multiple Project License (€129.00):** Ideal for agencies and consultants
-- **Unlimited License (€199.00):** Best value for larger organizations
+- **Regular License ($99.00):** Perfect for single project use
+- **Extended License ($349.00):** Enhanced support and extended customer service
 
 ## 🏆 Why Choose CodeForge Database Studio?
 

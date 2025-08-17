@@ -351,10 +351,9 @@ For commercial support and advanced configurations:
 
 This test suite is part of the HkDevs CodeForge Database Studio plugin.
 
-**Commercial License**: Available in three tiers
-- Single Project License: €79.00
-- Multiple Project License: €129.00  
-- Unlimited License: €199.00
+**Commercial License**: Available in two tiers
+- Regular License: $99.00
+- Extended License: $349.00
 
 For licensing inquiries: contact@hardikkanajariya.in
 

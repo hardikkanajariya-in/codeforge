@@ -1,6 +1,6 @@
 HkDevs CodeForge Database Studio - Commercial License Agreement
 
-Copyright (c) 2024-2025 HkDevs (https://codeforge.hardikkanajariya.in)
+Copyright (c) 2025-2026 HkDevs (https://codeforge.hardikkanajariya.in)
 All rights reserved.
 
 COMMERCIAL LICENSE AGREEMENT
@@ -14,43 +14,47 @@ BY PURCHASING, DOWNLOADING, INSTALLING, OR USING THE SOFTWARE, LICENSEE AGREES T
 Subject to the terms and conditions of this Agreement and upon payment of the applicable license fees, Licensor grants Licensee a non-exclusive, non-transferable license to:
 
 a) Use the Software in accordance with the purchased license tier
+
 b) Modify the Software source code for internal use
+
 c) Deploy the Software in production environments
+
 d) Create derivative works based on the Software for internal use
 
 2. LICENSE TIERS
 
-2.1 SINGLE PROJECT LICENSE
-- Use on one (1) commercial project
-- Unlimited development environments for the licensed project
+2.1 REGULAR LICENSE ($99)
+- Use on one (1) commercial project or personal project
+- Single end product for client or personal use
+- Source code access and modification rights
+- 6 months of updates and support
+- Documentation and installation support
+
+2.2 EXTENDED LICENSE ($349)
+- Use on Multiple commercial projects or personal project
+- Single end product for client or personal use
 - Source code access and modification rights
 - 12 months of updates and support
-
-2.2 MULTIPLE PROJECT LICENSE
-- Use on up to five (5) commercial projects
-- Unlimited development environments for licensed projects
-- Source code access and modification rights
-- 12 months of updates and support
-- Priority support channel access
-
-2.3 UNLIMITED LICENSE
-- Use on unlimited commercial projects
-- Unlimited development environments
-- Source code access and modification rights
-- Lifetime updates and support
-- Priority support and consultation
-- Early access to new features
+- Priority email support
+- Extended customer support
+- Future updates and feature additions
 
 3. RESTRICTIONS
 
 Licensee shall NOT:
 
 a) Redistribute, resell, or sublicense the Software or any portion thereof
+
 b) Make the Software available for download or use by third parties
+
 c) Remove or alter any proprietary notices, labels, or marks on the Software
+
 d) Reverse engineer, decompile, or disassemble the Software (except as permitted by law)
+
 e) Use the Software to create competing products or services
+
 f) Share login credentials or license keys with unauthorized users
+
 g) Use the Software in violation of applicable laws or regulations
 
 4. OWNERSHIP AND INTELLECTUAL PROPERTY
@@ -111,7 +115,9 @@ For questions regarding this license or to purchase additional licenses:
 
 HkDevs
 Email: contact@hardikkanajariya.in
+
 Website: https://codeforge.hardikkanajariya.in
+
 License Portal: https://codeforge.hardikkanajariya.in/license
 
 ACKNOWLEDGMENT

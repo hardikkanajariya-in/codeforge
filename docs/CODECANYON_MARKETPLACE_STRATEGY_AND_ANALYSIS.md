@@ -8,7 +8,7 @@
 **Marketplace:** CodeCanyon (Envato Market)  
 **Category:** PHP Scripts / Laravel / Database Tools  
 **License Type:** Extended Commercial License  
-**Target Price Range:** $49 - $89 USD  
+**Target Price Range:** $99 - $349 USD  
 
 ---
 
@@ -90,20 +90,20 @@
 
 #### **🥇 Premium Strategy (Recommended)**
 ```
-Regular License: $69 USD
+Regular License: $99 USD
 - Single end product use
 - Non-paying end users only
 - 6 months included support
 - Source code included
 - Documentation and installation guide
 
-Extended License: $345 USD (5x multiplier)
-- Multiple end products
+Extended License: $349 USD
+- Single end product use
 - Paying end users allowed
 - 12 months included support
 - Source code included
 - Priority support channel
-- White-label rights
+- Extended customer support
 ```
 
 #### **💡 Alternative Competitive Strategy**
@@ -121,22 +121,22 @@ Extended License: $275 USD
 ### **Revenue Projections (12 Months)**
 
 #### **Conservative Scenario (1.5% market share)**
-- **Regular License Sales:** 180 copies × $69 = $12,420
-- **Extended License Sales:** 12 copies × $345 = $4,140
-- **Total Revenue:** $16,560
-- **After Envato Fees (37.5%):** $10,350
+- **Regular License Sales:** 180 copies × $99 = $17,820
+- **Extended License Sales:** 12 copies × $349 = $4,188
+- **Total Revenue:** $22,008
+- **After Envato Fees (37.5%):** $13,755
 
 #### **Moderate Scenario (3.2% market share)**
-- **Regular License Sales:** 385 copies × $69 = $26,565
-- **Extended License Sales:** 28 copies × $345 = $9,660
-- **Total Revenue:** $36,225
-- **After Envato Fees (37.5%):** $22,641
+- **Regular License Sales:** 385 copies × $99 = $38,115
+- **Extended License Sales:** 28 copies × $349 = $9,772
+- **Total Revenue:** $47,887
+- **After Envato Fees (37.5%):** $29,929
 
 #### **Optimistic Scenario (5.8% market share)**
-- **Regular License Sales:** 695 copies × $69 = $47,955
-- **Extended License Sales:** 52 copies × $345 = $17,940
-- **Total Revenue:** $65,895
-- **After Envato Fees (37.5%):** $41,184
+- **Regular License Sales:** 695 copies × $99 = $68,805
+- **Extended License Sales:** 52 copies × $349 = $18,148
+- **Total Revenue:** $86,953
+- **After Envato Fees (37.5%):** $54,346
 
 ---
 
