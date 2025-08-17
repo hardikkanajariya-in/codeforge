@@ -282,6 +282,9 @@ class ModelGeneratorService
         $fillable = $this->generateFillableArray($modelData);
         $casts = $this->generateCastsArray($modelData);
         $relations = $this->generateRelations($modelData);
+        $scopes = $this->generateScopes($modelData);
+        $mutators = $this->generateMutators($modelData);
+        $accessors = $this->generateAccessors($modelData);
         $customMethods = $this->generateCustomMethods($modelData);
 
         $content = "<?php\n\nnamespace App\\Models;\n\n";
@@ -363,6 +366,21 @@ class ModelGeneratorService
         // Add relations
         if (!empty($relations)) {
             $content .= $relations . "\n";
+        }
+
+        // Add scopes
+        if (!empty($scopes)) {
+            $content .= $scopes . "\n";
+        }
+
+        // Add mutators
+        if (!empty($mutators)) {
+            $content .= $mutators . "\n";
+        }
+
+        // Add accessors
+        if (!empty($accessors)) {
+            $content .= $accessors . "\n";
         }
 
         // Add custom methods
@@ -569,6 +587,153 @@ class ModelGeneratorService
         }
 
         $methodStr .= "\n    {\n";
+
+        // Add body with proper indentation
+        $bodyLines = explode("\n", $body);
+        foreach ($bodyLines as $line) {
+            if (trim($line)) {
+                $methodStr .= "        {$line}\n";
+            } else {
+                $methodStr .= "\n";
+            }
+        }
+
+        $methodStr .= "    }\n";
+
+        return $methodStr;
+    }
+
+    /**
+     * Generate scopes
+     */
+    protected function generateScopes(array $modelData): string
+    {
+        if (empty($modelData['scopes'])) {
+            return '';
+        }
+
+        $scopes = "    // Query Scopes\n";
+
+        foreach ($modelData['scopes'] as $scope) {
+            $scopes .= $this->generateScopeMethod($scope) . "\n";
+        }
+
+        return $scopes;
+    }
+
+    /**
+     * Generate a single scope method
+     */
+    protected function generateScopeMethod(array $scope): string
+    {
+        $name = $scope['name'];
+        $parameters = $scope['parameters'] ?? [];
+        $body = $scope['body'] ?? '// Scope implementation';
+
+        $methodName = 'scope' . ucfirst($name);
+        $methodStr = "    public function {$methodName}(\$query";
+
+        // Add parameters
+        foreach ($parameters as $param) {
+            $methodStr .= ', ';
+            if (!empty($param['type'])) {
+                $methodStr .= $param['type'] . ' ';
+            }
+            $methodStr .= '$' . $param['name'];
+            if (!empty($param['default'])) {
+                $methodStr .= ' = ' . $param['default'];
+            }
+        }
+
+        $methodStr .= ")\n    {\n";
+
+        // Add body with proper indentation
+        $bodyLines = explode("\n", $body);
+        foreach ($bodyLines as $line) {
+            if (trim($line)) {
+                $methodStr .= "        {$line}\n";
+            } else {
+                $methodStr .= "\n";
+            }
+        }
+
+        $methodStr .= "    }\n";
+
+        return $methodStr;
+    }
+
+    /**
+     * Generate mutators
+     */
+    protected function generateMutators(array $modelData): string
+    {
+        if (empty($modelData['mutators'])) {
+            return '';
+        }
+
+        $mutators = "    // Mutators\n";
+
+        foreach ($modelData['mutators'] as $mutator) {
+            $mutators .= $this->generateMutatorMethod($mutator) . "\n";
+        }
+
+        return $mutators;
+    }
+
+    /**
+     * Generate a single mutator method
+     */
+    protected function generateMutatorMethod(array $mutator): string
+    {
+        $attribute = $mutator['attribute'];
+        $body = $mutator['body'] ?? 'return $value;';
+
+        $methodName = 'set' . Str::studly($attribute) . 'Attribute';
+        $methodStr = "    public function {$methodName}(\$value)\n    {\n";
+
+        // Add body with proper indentation
+        $bodyLines = explode("\n", $body);
+        foreach ($bodyLines as $line) {
+            if (trim($line)) {
+                $methodStr .= "        {$line}\n";
+            } else {
+                $methodStr .= "\n";
+            }
+        }
+
+        $methodStr .= "    }\n";
+
+        return $methodStr;
+    }
+
+    /**
+     * Generate accessors
+     */
+    protected function generateAccessors(array $modelData): string
+    {
+        if (empty($modelData['accessors'])) {
+            return '';
+        }
+
+        $accessors = "    // Accessors\n";
+
+        foreach ($modelData['accessors'] as $accessor) {
+            $accessors .= $this->generateAccessorMethod($accessor) . "\n";
+        }
+
+        return $accessors;
+    }
+
+    /**
+     * Generate a single accessor method
+     */
+    protected function generateAccessorMethod(array $accessor): string
+    {
+        $attribute = $accessor['attribute'];
+        $body = $accessor['body'] ?? 'return $value;';
+
+        $methodName = 'get' . Str::studly($attribute) . 'Attribute';
+        $methodStr = "    public function {$methodName}(\$value)\n    {\n";
 
         // Add body with proper indentation
         $bodyLines = explode("\n", $body);

@@ -358,10 +358,23 @@ class ModelGeneratorPage extends BaseGeneratorPage
                                         'private' => 'Private - Accessible only from this class',
                                     ])
                                     ->default('public'),
-                                Forms\Components\Textarea::make('parameters')
+                                Forms\Components\Repeater::make('parameters')
                                     ->label('Parameters')
-                                    ->helperText('Method parameters (e.g., "$param1, $param2 = null")')
-                                    ->placeholder('$param1, $param2 = null'),
+                                    ->helperText('Method parameters')
+                                    ->schema([
+                                        Forms\Components\TextInput::make('name')
+                                            ->label('Parameter Name')
+                                            ->required(),
+                                        Forms\Components\TextInput::make('type')
+                                            ->label('Type Hint')
+                                            ->placeholder('string, int, array, etc.'),
+                                        Forms\Components\TextInput::make('default')
+                                            ->label('Default Value')
+                                            ->placeholder('null, "", 0, etc.'),
+                                    ])
+                                    ->columns(3)
+                                    ->addActionLabel('Add Parameter')
+                                    ->defaultItems(0),
                                 Forms\Components\Textarea::make('body')
                                     ->label('Method Body')
                                     ->helperText('The PHP code inside the method')

@@ -14,7 +14,7 @@
                 <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Code Preview</h3>
 
-                    @if($previewData)
+                    @if($previewData && is_array($previewData))
                         @foreach($previewData as $fileType => $data)
                             <div class="mb-6">
                                 <div class="flex items-center justify-between mb-3">
@@ -25,6 +25,17 @@
                                     class="bg-gray-900 text-dark p-4 rounded-lg overflow-x-auto text-sm"><code>{{ $data['content'] }}</code></pre>
                             </div>
                         @endforeach
+                    @elseif($previewData)
+                        <div class="mb-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-medium text-gray-900">Preview Error</h4>
+                            </div>
+                            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                                <strong>Error:</strong> {{ $previewData }}
+                            </div>
+                        </div>
+                    @else
+                        <div class="text-gray-500">No preview data available.</div>
                     @endif
                 </div>
             </div>
