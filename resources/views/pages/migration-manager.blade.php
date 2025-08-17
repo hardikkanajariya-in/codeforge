@@ -152,32 +152,109 @@
                                             <div class="flex items-center gap-2">
                                                 @if($migration['status'] === 'pending' && $migration['file_exists'])
                                                     <x-filament::button color="success" icon="heroicon-o-play"
-                                                        wire:click="runMigration('{{ $migration['migration'] }}')"
-                                                        wire:confirm="Are you sure you want to run the migration '{{ $migration['display_name'] }}'?"
-                                                        wire:loading.attr="disabled" wire:target="runMigration('{{ $migration['migration'] }}')"
+                                                        x-on:click="$dispatch('open-modal', { 
+                                                            id: 'confirm-run-{{ $migration['migration'] }}' 
+                                                        })"
                                                         size="xs">
-                                                        <span wire:loading.remove wire:target="runMigration('{{ $migration['migration'] }}')">
-                                                            Run
-                                                        </span>
-                                                        <span wire:loading wire:target="runMigration('{{ $migration['migration'] }}')">
-                                                            Running...
-                                                        </span>
+                                                        Run
                                                     </x-filament::button>
+
+                                                    <x-filament::modal id="confirm-run-{{ $migration['migration'] }}" width="md">
+                                                        <x-slot name="heading">
+                                                            Confirm Migration Execution
+                                                        </x-slot>
+
+                                                        <div class="fi-mo-content">
+                                                            <p class="fi-modal-description">
+                                                                Are you sure you want to run the migration <strong>{{ $migration['display_name'] }}</strong>?
+                                                            </p>
+                                                            
+                                                            <x-filament::section class="fi-color-warning">
+                                                                <div class="flex items-start">
+                                                                    <x-filament::icon 
+                                                                        icon="heroicon-o-exclamation-triangle" 
+                                                                        class="fi-icon-size-md text-warning-500" 
+                                                                    />
+                                                                    <p class="fi-section-content-text">
+                                                                        This action will modify your database structure and cannot be undone.
+                                                                    </p>
+                                                                </div>
+                                                            </x-filament::section>
+                                                        </div>
+
+                                                        <x-slot name="footerActions">
+                                                            <x-filament::button color="gray" x-on:click="close">
+                                                                Cancel
+                                                            </x-filament::button>
+
+                                                            <x-filament::button 
+                                                                color="success" 
+                                                                wire:click="runMigration('{{ $migration['migration'] }}')"
+                                                                wire:loading.attr="disabled" 
+                                                                wire:target="runMigration('{{ $migration['migration'] }}')"
+                                                                x-on:click="close">
+                                                                <span wire:loading.remove wire:target="runMigration('{{ $migration['migration'] }}')">
+                                                                    Run Migration
+                                                                </span>
+                                                                <span wire:loading wire:target="runMigration('{{ $migration['migration'] }}')">
+                                                                    Running...
+                                                                </span>
+                                                            </x-filament::button>
+                                                        </x-slot>
+                                                    </x-filament::modal>
                                                 @elseif($migration['status'] === 'executed' && $migration['file_exists'])
                                                     @if($migration['can_rollback_individually'])
                                                         <x-filament::button color="danger" icon="heroicon-o-arrow-uturn-left"
-                                                            wire:click="rollbackMigration('{{ $migration['migration'] }}')"
-                                                            wire:confirm="Are you sure you want to rollback the migration '{{ $migration['display_name'] }}'? This action cannot be undone and may result in data loss."
-                                                            wire:loading.attr="disabled"
-                                                            wire:target="rollbackMigration('{{ $migration['migration'] }}')" size="xs">
-                                                            <span wire:loading.remove
-                                                                wire:target="rollbackMigration('{{ $migration['migration'] }}')">
-                                                                Rollback
-                                                            </span>
-                                                            <span wire:loading wire:target="rollbackMigration('{{ $migration['migration'] }}')">
-                                                                Rolling back...
-                                                            </span>
+                                                            x-on:click="$dispatch('open-modal', { 
+                                                                id: 'confirm-rollback-{{ $migration['migration'] }}' 
+                                                            })"
+                                                            size="xs">
+                                                            Rollback
                                                         </x-filament::button>
+
+                                                        <x-filament::modal id="confirm-rollback-{{ $migration['migration'] }}" width="md">
+                                                            <x-slot name="heading">
+                                                                Confirm Migration Rollback
+                                                            </x-slot>
+
+                                                            <div class="fi-mo-content">
+                                                                <p class="fi-modal-description">
+                                                                    Are you sure you want to rollback the migration <strong>{{ $migration['display_name'] }}</strong>?
+                                                                </p>
+                                                                
+                                                                <x-filament::section class="fi-color-danger">
+                                                                    <div class="flex items-start gap-3">
+                                                                        <x-filament::icon 
+                                                                            icon="heroicon-o-exclamation-triangle" 
+                                                                            class="fi-icon-size-md text-danger-500" 
+                                                                        />
+                                                                        <p class="fi-section-content-text">
+                                                                            This action cannot be undone and may result in data loss.
+                                                                        </p>
+                                                                    </div>
+                                                                </x-filament::section>
+                                                            </div>
+
+                                                            <x-slot name="footerActions">
+                                                                <x-filament::button color="gray" x-on:click="close">
+                                                                    Cancel
+                                                                </x-filament::button>
+
+                                                                <x-filament::button 
+                                                                    color="danger" 
+                                                                    wire:click="rollbackMigration('{{ $migration['migration'] }}')"
+                                                                    wire:loading.attr="disabled"
+                                                                    wire:target="rollbackMigration('{{ $migration['migration'] }}')"
+                                                                    x-on:click="close">
+                                                                    <span wire:loading.remove wire:target="rollbackMigration('{{ $migration['migration'] }}')">
+                                                                        Rollback Migration
+                                                                    </span>
+                                                                    <span wire:loading wire:target="rollbackMigration('{{ $migration['migration'] }}')">
+                                                                        Rolling back...
+                                                                    </span>
+                                                                </x-filament::button>
+                                                            </x-slot>
+                                                        </x-filament::modal>
                                                     @else
                                                         <x-filament::badge color="gray" class="text-xs">
                                                             Cannot rollback individually
