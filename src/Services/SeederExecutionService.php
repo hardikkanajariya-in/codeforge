@@ -118,10 +118,8 @@ class SeederExecutionService
         try {
             $startTime = microtime(true);
 
-            // Check if seeder can be executed
-            if (!$seeder->canExecute()) {
-                throw new \Exception("Seeder {$seeder->name} cannot be executed. Check if class exists and is active.");
-            }
+            // Enhanced pre-execution validation with detailed error messages
+            $this->validateSeederExecution($seeder);
 
             // Execute the seeder
             $output = $this->runSeeder($seeder, $options);
@@ -300,6 +298,50 @@ class SeederExecutionService
                 $reflection->implementsInterface(\Illuminate\Database\Seeder::class);
         } catch (Throwable $e) {
             return false;
+        }
+    }
+
+    /**
+     * Enhanced seeder validation with detailed error messages
+     * 
+     * @param DataSeeder $seeder
+     * @throws \Exception
+     */
+    protected function validateSeederExecution(DataSeeder $seeder): void
+    {
+        // Check if seeder is active
+        if ($seeder->status !== 'active') {
+            throw new \Exception("Seeder '{$seeder->name}' is not active. Current status: {$seeder->status}");
+        }
+
+        // Check if file exists
+        if (!$seeder->exists()) {
+            throw new \Exception("Seeder file not found at path: {$seeder->file_path}");
+        }
+
+        // Check if class exists and is loadable
+        if (!class_exists($seeder->class_name)) {
+            throw new \Exception("Seeder class '{$seeder->class_name}' not found. Check if the file has syntax errors or the class name is correct.");
+        }
+
+        // Check if it's a valid seeder class
+        try {
+            $reflection = new \ReflectionClass($seeder->class_name);
+            if (!$reflection->isSubclassOf(Seeder::class)) {
+                throw new \Exception("Class '{$seeder->class_name}' is not a valid seeder class. It must extend Illuminate\\Database\\Seeder.");
+            }
+        } catch (\ReflectionException $e) {
+            throw new \Exception("Cannot inspect seeder class '{$seeder->class_name}': {$e->getMessage()}");
+        }
+
+        // Check if class is instantiable
+        try {
+            $reflection = new \ReflectionClass($seeder->class_name);
+            if (!$reflection->isInstantiable()) {
+                throw new \Exception("Seeder class '{$seeder->class_name}' is not instantiable. Check if it's abstract or has missing dependencies.");
+            }
+        } catch (\ReflectionException $e) {
+            throw new \Exception("Cannot validate seeder class instantiation: {$e->getMessage()}");
         }
     }
 }

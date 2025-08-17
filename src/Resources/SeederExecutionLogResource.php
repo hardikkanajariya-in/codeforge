@@ -238,14 +238,11 @@ class SeederExecutionLogResource extends Resource
                 Tables\Actions\Action::make('view_output')
                     ->icon('heroicon-o-eye')
                     ->color('info')
+                    ->modalHeading(fn(SeederExecutionLog $record): string => 'Execution Output - ' . $record->seeder_name)
                     ->modalContent(function (SeederExecutionLog $record) {
-                        return view('filament::components.modal', [
-                            'heading' => 'Execution Output',
-                            'subheading' => $record->seeder_name,
-                            'content' => view('codeforge-database-studio::components.execution-output', [
-                                'output' => $record->output,
-                                'error' => $record->error_message,
-                            ]),
+                        return view('codeforge-database-studio::components.execution-output', [
+                            'output' => $record->output,
+                            'error' => $record->error_message,
                         ]);
                     })
                     ->modalSubmitAction(false)
