@@ -26,32 +26,100 @@ class ListDataSeeders extends ListRecords
                         $discovered = $service->discoverSeeders();
 
                         $count = 0;
+                        $updated = 0;
+
                         foreach ($discovered as $seederData) {
                             // Check if seeder already exists
-                            $exists = \HkDevs\CodeForgeStudio\Models\DataSeeder::where('class_name', $seederData['class_name'])->exists();
+                            $existingSeeder = \HkDevs\CodeForgeStudio\Models\DataSeeder::where('class_name', $seederData['class_name'])->first();
 
-                            if (!$exists) {
+                            if (!$existingSeeder) {
+                                // Create new seeder
                                 \HkDevs\CodeForgeStudio\Models\DataSeeder::create($seederData);
                                 $count++;
+                            } else {
+                                // Update existing seeder with correct file path if it's different
+                                if ($existingSeeder->file_path !== $seederData['file_path']) {
+                                    $existingSeeder->update([
+                                        'file_path' => $seederData['file_path'],
+                                        'type' => $seederData['type'],
+                                    ]);
+                                    $updated++;
+                                }
                             }
                         }
 
-                        if ($count > 0) {
+                        if ($count > 0 || $updated > 0) {
+                            $message = [];
+                            if ($count > 0) {
+                                $message[] = "{$count} new seeders registered";
+                            }
+                            if ($updated > 0) {
+                                $message[] = "{$updated} seeders updated with correct paths";
+                            }
+
                             Notification::make()
-                                ->title('Seeders Discovered')
-                                ->body("Found and registered {$count} new seeders")
+                                ->title('Seeders Discovery Complete')
+                                ->body(implode(', ', $message))
                                 ->success()
                                 ->send();
                         } else {
                             Notification::make()
-                                ->title('No New Seeders')
-                                ->body('All existing seeders are already registered')
+                                ->title('No Changes Needed')
+                                ->body('All existing seeders are already registered with correct paths')
                                 ->info()
                                 ->send();
                         }
                     } catch (\Exception $e) {
                         Notification::make()
                             ->title('Discovery Failed')
+                            ->body($e->getMessage())
+                            ->danger()
+                            ->send();
+                    }
+                }),
+
+            Actions\Action::make('cleanup_invalid_seeders')
+                ->label('Cleanup Invalid Seeders')
+                ->icon('heroicon-o-trash')
+                ->color('danger')
+                ->requiresConfirmation()
+                ->modalHeading('Cleanup Invalid Seeders')
+                ->modalDescription('This will remove seeders whose files no longer exist or classes cannot be loaded.')
+                ->action(function () {
+                    try {
+                        $invalidSeeders = collect();
+                        $allSeeders = \HkDevs\CodeForgeStudio\Models\DataSeeder::all();
+
+                        foreach ($allSeeders as $seeder) {
+                            if (!$seeder->exists() || !class_exists($seeder->class_name)) {
+                                $invalidSeeders->push($seeder);
+                            }
+                        }
+
+                        if ($invalidSeeders->isEmpty()) {
+                            Notification::make()
+                                ->title('No Invalid Seeders')
+                                ->body('All registered seeders are valid')
+                                ->info()
+                                ->send();
+                            return;
+                        }
+
+                        // Delete invalid seeders
+                        $deletedCount = 0;
+                        foreach ($invalidSeeders as $seeder) {
+                            $seeder->delete();
+                            $deletedCount++;
+                        }
+
+                        Notification::make()
+                            ->title('Cleanup Complete')
+                            ->body("Removed {$deletedCount} invalid seeders")
+                            ->success()
+                            ->send();
+                    } catch (\Exception $e) {
+                        Notification::make()
+                            ->title('Cleanup Failed')
                             ->body($e->getMessage())
                             ->danger()
                             ->send();

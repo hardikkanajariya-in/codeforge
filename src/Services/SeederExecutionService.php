@@ -150,7 +150,8 @@ class SeederExecutionService
                 ]),
             ]);
 
-            throw $e;
+            // Don't re-throw the exception, just return the failed log
+            // The caller can check if the log failed using $log->isFailed()
         }
 
         return $log->fresh();

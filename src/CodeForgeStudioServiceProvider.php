@@ -50,6 +50,8 @@ use HkDevs\CodeForgeStudio\Commands\GenerateDocumentationCommand;
 use HkDevs\CodeForgeStudio\Commands\CreateSchemaSnapshotCommand;
 use HkDevs\CodeForgeStudio\Commands\CleanupDocumentationCommand;
 use HkDevs\CodeForgeStudio\Commands\DiagnoseSeederCommand;
+use HkDevs\CodeForgeStudio\Commands\DebugSeederDiscoveryCommand;
+use HkDevs\CodeForgeStudio\Commands\FixSeederPathsCommand;
 use Livewire\Livewire;
 
 class CodeForgeStudioServiceProvider extends ServiceProvider
@@ -120,6 +122,8 @@ class CodeForgeStudioServiceProvider extends ServiceProvider
                 BatchMigrateCommand::class,
                 RunSeedersCommand::class,
                 DiagnoseSeederCommand::class,
+                DebugSeederDiscoveryCommand::class,
+                FixSeederPathsCommand::class,
                 GenerateDataCommand::class,
                 TestDataGenerationCommand::class,
                 SyncMigrationHistoryCommand::class,

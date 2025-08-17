@@ -105,7 +105,7 @@ class DiagnoseSeederCommand extends Command
             $this->warn("🔍 Analyzing failed execution: {$log->seeder_name}");
             $this->line("   Error: {$log->error_message}");
             $this->line("   Time: {$log->started_at}");
-            
+
             if ($log->seeder) {
                 $result = $this->performSeederDiagnostics($log->seeder, false);
                 if ($result !== 0) {
@@ -142,6 +142,12 @@ class DiagnoseSeederCommand extends Command
             $this->info('✅ All auto-run seeders are properly configured');
         } else {
             $this->error("❌ Found issues with {$issues} auto-run seeders");
+            $this->newLine();
+            $this->warn('💡 Suggested fixes:');
+            $this->line('   1. Run: php artisan codeforge:diagnose-seeders --failed (for detailed error info)');
+            $this->line('   2. In Filament Admin → Data Seeders → Click "Discover Seeders" (to fix file paths)');
+            $this->line('   3. In Filament Admin → Data Seeders → Click "Cleanup Invalid Seeders" (to remove broken ones)');
+            $this->line('   4. Check that seeder files exist in database/seeders/ directory');
         }
 
         return $issues > 0 ? 1 : 0;

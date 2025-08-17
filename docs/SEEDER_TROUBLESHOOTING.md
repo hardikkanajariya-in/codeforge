@@ -6,6 +6,37 @@ This guide helps diagnose and resolve common seeder execution problems in CodeFo
 
 This error indicates that one or more seeders failed to execute properly during the auto-seeder run. Here's how to diagnose and fix the issue.
 
+## Quick Fix for "Auto Seeders Completed with Issues"
+
+If you see "Auto Seeders Completed with Issues: 0 successful, 1 failed", follow these steps:
+
+### Step 1: Quick Diagnosis
+```bash
+# Check what's wrong with auto-run seeders
+php artisan codeforge:diagnose-seeders --auto
+```
+
+### Step 2: Fix Common Issues
+```bash
+# Fix incorrect file paths automatically
+php artisan codeforge:fix-seeder-paths --cleanup
+
+# Or preview what will be changed first
+php artisan codeforge:fix-seeder-paths --dry-run
+```
+
+### Step 3: Verify the Fix
+```bash
+# Check if issues are resolved
+php artisan codeforge:diagnose-seeders --auto
+```
+
+### Alternative: Using Filament UI
+1. Go to **Data Seeders** in Filament Admin
+2. Click **"Discover Seeders"** to fix file paths
+3. Click **"Cleanup Invalid Seeders"** to remove broken entries
+4. Try running auto-seeders again
+
 ## Quick Diagnostic Command
 
 Use the built-in diagnostic command to quickly identify issues:
@@ -295,6 +326,15 @@ If you continue to experience issues:
 ## Related Commands
 
 ```bash
+# Fix seeder paths and cleanup invalid entries
+php artisan codeforge:fix-seeder-paths --cleanup
+
+# Preview changes without applying them
+php artisan codeforge:fix-seeder-paths --dry-run
+
+# Debug discovery process
+php artisan codeforge:debug-discovery
+
 # Run specific seeder
 php artisan codeforge:run-seeders --seeder=YourSeeder
 
@@ -306,6 +346,12 @@ php artisan codeforge:run-seeders
 
 # Diagnose seeder issues
 php artisan codeforge:diagnose-seeders
+
+# Check failed seeders
+php artisan codeforge:diagnose-seeders --failed
+
+# Check auto-run seeders
+php artisan codeforge:diagnose-seeders --auto
 
 # Clean up old logs
 php artisan codeforge:cleanup-logs
