@@ -13,6 +13,7 @@ use Filament\Notifications\Notification;
 use Filament\Support\Enums\MaxWidth;
 use HkDevs\CodeForgeStudio\Services\SchemaAnalyzerService;
 use HkDevs\CodeForgeStudio\Services\SchemaVisualizationService;
+use HkDevs\CodeForgeStudio\Services\AssetService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
@@ -739,5 +740,29 @@ class SchemaDesigner extends Page
     public function openSettingsModal(): void
     {
         $this->dispatch('open-settings-modal');
+    }
+
+    /**
+     * Get asset URL with fallback to package directory
+     */
+    public function getAssetUrl(string $path): string
+    {
+        return AssetService::asset($path);
+    }
+
+    /**
+     * Get schema designer CSS URL
+     */
+    public function getSchemaDesignerCssUrl(): string
+    {
+        return $this->getAssetUrl('css/schema-designer-v2.css');
+    }
+
+    /**
+     * Get schema designer JS URL
+     */
+    public function getSchemaDesignerJsUrl(): string
+    {
+        return $this->getAssetUrl('js/schema-designer-v2.js');
     }
 }

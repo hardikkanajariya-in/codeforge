@@ -20,6 +20,7 @@ use HkDevs\CodeForgeStudio\Commands\GenerateDataCommand;
 use HkDevs\CodeForgeStudio\Commands\TestDataGenerationCommand;
 use HkDevs\CodeForgeStudio\Commands\SyncMigrationHistoryCommand;
 use HkDevs\CodeForgeStudio\Commands\ManageAssetsCommand;
+use HkDevs\CodeForgeStudio\Commands\AssetDebugCommand;
 use HkDevs\CodeForgeStudio\Commands\BatchMigrateCommand;
 use HkDevs\CodeForgeStudio\Listeners\QueryPerformanceListener;
 use HkDevs\CodeForgeStudio\Services\SchemaAnalyzerService;
@@ -40,6 +41,7 @@ use HkDevs\CodeForgeStudio\Services\SeederGeneratorService;
 use HkDevs\CodeForgeStudio\Services\SeederDiscoveryService;
 use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
 use HkDevs\CodeForgeStudio\Services\MigrationTrackingService;
+use HkDevs\CodeForgeStudio\Services\AssetService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Database\Events\QueryExecuted;
@@ -82,6 +84,7 @@ class CodeForgeStudioServiceProvider extends ServiceProvider
         $this->app->singleton(DatabaseHealthService::class);
         $this->app->singleton(MigrationTrackingService::class);
         $this->app->singleton(LicenseValidationService::class);
+        $this->app->singleton(AssetService::class);
     }
 
     public function boot(): void
@@ -128,6 +131,7 @@ class CodeForgeStudioServiceProvider extends ServiceProvider
                 TestDataGenerationCommand::class,
                 SyncMigrationHistoryCommand::class,
                 ManageAssetsCommand::class,
+                AssetDebugCommand::class,
             ]);
         }
 

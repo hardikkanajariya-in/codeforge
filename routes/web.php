@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use HkDevs\CodeForgeStudio\Http\Controllers\DocumentationDownloadController;
+use HkDevs\CodeForgeStudio\Services\AssetService;
+
+// Asset serving route with fallback to package directory
+Route::middleware('web')->get('/codeforge/assets/{path}', function ($path) {
+    return AssetService::serveAsset($path);
+})->where('path', '.*')->name('codeforge.asset');
 
 // Schema Export Download Route
 Route::middleware('web')->get('/schema/download/{file}', function ($file) {

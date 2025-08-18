@@ -1,6 +1,13 @@
 <x-filament-panels::page>
+    {{-- 
+        Asset Loading Strategy:
+        1. First tries to load from published assets in public/vendor/codeforge/
+        2. If not found, falls back to package directory via route
+        3. This ensures the package works out-of-the-box without requiring asset publishing
+        4. Use 'php artisan codeforge:asset-debug' to check asset status
+    --}}
     @push('styles')
-        <link rel="stylesheet" href="{{ asset('vendor/codeforge/css/schema-designer-v2.css') }}">
+        <link rel="stylesheet" href="{{ $this->getSchemaDesignerCssUrl() }}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -11,7 +18,22 @@
 
         <!-- Header Stats Panel -->
         <div class="stats-panel">
-            @php $stats = $this->schemaData['statistics'] ?? [] @endphp
+            @php 
+                $schemaData = $this->getSchemaData();
+                $stats = $schemaData['statistics'] ?? [
+                    'total_tables' => count($schemaData['tables'] ?? []),
+                    'total_relationships' => count($schemaData['relationships'] ?? []),
+                    'total_columns' => collect($schemaData['tables'] ?? [])->sum(function($table) {
+                        return count($table['columns'] ?? []);
+                    }),
+                    'total_rows' => collect($schemaData['tables'] ?? [])->sum('row_count'),
+                    'relationship_density' => 0,
+                    'average_columns_per_table' => count($schemaData['tables'] ?? []) > 0 
+                        ? collect($schemaData['tables'] ?? [])->avg(function($table) {
+                            return count($table['columns'] ?? []);
+                        }) : 0
+                ];
+            @endphp
 
             <div class="stat-card-grid">
                 <div class="stat-card primary">
@@ -355,6 +377,6 @@
             <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
             <!-- Custom Schema Designer -->
-            <script src="{{ asset('vendor/codeforge/js/schema-designer-v2.js') }}"></script>
+            <script src="{{ $this->getSchemaDesignerJsUrl() }}"></script>
         @endpush
 </x-filament-panels::page>
