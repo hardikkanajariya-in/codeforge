@@ -1,4 +1,24 @@
 <x-filament-panels::page>
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .syntax-highlight {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+        
+        .tab-button:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .tab-button.active {
+            background-color: white;
+            border-bottom-color: #3b82f6 !important;
+        }
+    </style>
+
     <div class="space-y-6">
         <!-- Progress Steps -->
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 2rem;">
@@ -658,62 +678,85 @@
 
         <!-- Step 3: Preview & Generate -->
         @if($currentStep === 'preview')
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Preview Panel -->
-                <div style="background: white; border-radius: 0.75rem; padding: 1.5rem; border: 1px solid #e5e7eb;">
-                    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: #1f2937;">Resource Preview</h3>
-                    
-                    @if($showPreview && $previewData)
-                        @php
-                            $resourcePreview = $this->getResourcePreviewData();
-                        @endphp
-                        <div style="background: #f8fafc; border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem;">
-                            <h4 style="font-weight: 600; margin-bottom: 0.5rem;">Resource Class: {{ $resourcePreview['resource_name'] }}</h4>
-                            <p style="color: #6b7280; font-size: 0.875rem;">Model: {{ $resourcePreview['model_class'] }}</p>
+            <div class="space-y-6">
+                <!-- Resource Preview with Tabs -->
+                @if($showPreview && $previewData)
+                    <div style="background: white; border-radius: 0.75rem; border: 1px solid #e5e7eb; overflow: hidden;">
+                        <div style="border-bottom: 1px solid #e5e7eb; padding: 1rem 1.5rem;">
+                            <h3 style="font-size: 1.25rem; font-weight: 700; color: #1f2937; margin: 0;">Generated Code Preview</h3>
+                            <p style="color: #6b7280; font-size: 0.875rem; margin: 0.5rem 0 0 0;">{{ count($previewData) }} file(s) will be generated</p>
                         </div>
                         
-                        <div class="space-y-4">
-                            <div style="border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1rem;">
-                                <h5 style="font-weight: 600; margin-bottom: 0.5rem;">Form Fields ({{ count($formConfiguration['fields']) }})</h5>
-                                <div class="grid grid-cols-2 gap-2">
-                                    @foreach($formConfiguration['fields'] as $field)
-                                        <div style="font-size: 0.875rem; color: #6b7280;">
-                                            {{ $field['name'] }} ({{ $field['type'] }})
-                                        </div>
-                                    @endforeach
-                                </div>
+                        <!-- Tabs Navigation -->
+                        <div style="border-bottom: 1px solid #e5e7eb; padding: 0 1.5rem; background: #f9fafb;">
+                            <div style="display: flex; gap: 0.5rem; overflow-x: auto;">
+                                @foreach($previewData as $index => $file)
+                                    <button 
+                                        wire:click="$set('activePreviewTab', {{ $index }})"
+                                        style="
+                                            padding: 0.75rem 1rem; 
+                                            border: none; 
+                                            background: {{ ($activePreviewTab ?? 0) === $index ? 'white' : 'transparent' }}; 
+                                            color: {{ ($activePreviewTab ?? 0) === $index ? '#1f2937' : '#6b7280' }};
+                                            border-bottom: 2px solid {{ ($activePreviewTab ?? 0) === $index ? '#3b82f6' : 'transparent' }};
+                                            cursor: pointer;
+                                            font-weight: 500;
+                                            font-size: 0.875rem;
+                                            white-space: nowrap;
+                                            transition: all 0.2s;
+                                        "
+                                    >
+                                        {{ $file['name'] }}
+                                    </button>
+                                @endforeach
                             </div>
-                            
-                            <div style="border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1rem;">
-                                <h5 style="font-weight: 600; margin-bottom: 0.5rem;">Table Columns ({{ count($tableConfiguration['columns']) }})</h5>
-                                <div class="grid grid-cols-2 gap-2">
-                                    @foreach($tableConfiguration['columns'] as $column)
-                                        <div style="font-size: 0.875rem; color: #6b7280;">
-                                            {{ $column['name'] }} ({{ $column['type'] }})
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                            
-                            @if(!empty($filterConfiguration['filters']))
-                                <div style="border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1rem;">
-                                    <h5 style="font-weight: 600; margin-bottom: 0.5rem;">Filters ({{ count($filterConfiguration['filters']) }})</h5>
-                                    <div class="grid grid-cols-2 gap-2">
-                                        @foreach($filterConfiguration['filters'] as $filter)
-                                            <div style="font-size: 0.875rem; color: #6b7280;">
-                                                {{ $filter['name'] }} ({{ $filter['type'] }})
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @endif
                         </div>
-                    @else
-                        <div style="text-align: center; padding: 2rem; color: #6b7280;">
+                        
+                        <!-- Tab Content -->
+                        <div style="padding: 1.5rem;">
+                            @foreach($previewData as $index => $file)
+                                @if(($activePreviewTab ?? 0) === $index)
+                                    <div>
+                                        <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1rem;">
+                                            <h4 style="font-weight: 600; color: #374151; margin: 0;">{{ $file['name'] }}</h4>
+                                            <button 
+                                                onclick="navigator.clipboard.writeText(document.getElementById('code-{{ $index }}').textContent)"
+                                                style="
+                                                    padding: 0.5rem; 
+                                                    background: #f3f4f6; 
+                                                    border: 1px solid #d1d5db; 
+                                                    border-radius: 0.375rem; 
+                                                    cursor: pointer;
+                                                    color: #6b7280;
+                                                    font-size: 0.875rem;
+                                                "
+                                                title="Copy to clipboard"
+                                            >
+                                                Copy
+                                            </button>
+                                        </div>
+                                        <pre id="code-{{ $index }}" style="
+                                            background: #1f2937; 
+                                            color: #f9fafb; 
+                                            padding: 1rem; 
+                                            border-radius: 0.5rem; 
+                                            overflow-x: auto; 
+                                            font-size: 0.875rem;
+                                            line-height: 1.5;
+                                            margin: 0;
+                                        "><code>{{ htmlspecialchars($file['content']) }}</code></pre>
+                                    </div>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                @else
+                    <div style="background: white; border-radius: 0.75rem; padding: 2rem; border: 1px solid #e5e7eb; text-align: center;">
+                        <div style="color: #6b7280; margin-bottom: 1rem;">
                             Click "Preview Resource" to see the generated code preview.
                         </div>
-                    @endif
-                </div>
+                    </div>
+                @endif
 
                 <!-- Generation Panel -->
                 <div style="background: white; border-radius: 0.75rem; padding: 1.5rem; border: 1px solid #e5e7eb;">

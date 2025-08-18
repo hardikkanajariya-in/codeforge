@@ -6,6 +6,8 @@ use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use HkDevs\CodeForgeStudio\Services\FilamentResourceGeneratorService;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 /**
  * FilamentResourceGeneratorPage
@@ -79,6 +81,7 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
     public array $availableModels = [];
     public array $availableMigrations = [];
     public string $iconSearch = '';
+    public int $activePreviewTab = 0;
 
     // Configuration arrays that the view expects
     public array $formConfiguration = ['fields' => []];
@@ -252,20 +255,149 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
 
     protected function autoConfigureFromModel(string $modelClass): void
     {
-        $modelName = class_basename($modelClass);
-        $this->generationConfig['model'] = $modelClass;
-        $this->generationConfig['class_name'] = $modelName . 'Resource';
-        $this->autoSuggestNames($this->generationConfig['class_name']);
+        try {
+            $modelName = class_basename($modelClass);
+            $this->generationConfig['model'] = $modelClass;
+            $this->generationConfig['class_name'] = $modelName . 'Resource';
+            $this->generationConfig['source_type'] = 'model'; // Mark as model-based generation
+
+            // Get the generator service to analyze the model
+            $generatorService = $this->getGeneratorService();
+            $modelConfig = $generatorService->generateConfigurationFromModel($modelClass);
+
+            // Set basic configuration
+            $this->generationConfig['navigation_label'] = Str::title(Str::plural($modelName));
+            $this->generationConfig['slug'] = Str::kebab(Str::plural($modelName));
+
+            // Convert suggested fields to page format
+            $this->generationConfig['form_fields'] = [];
+            foreach ($modelConfig['suggested_form_fields'] ?? [] as $field) {
+                $this->generationConfig['form_fields'][] = [
+                    'name' => $field['name'],
+                    'type' => $this->convertFormFieldType($field['type']),
+                    'label' => $field['label'] ?? str($field['name'])->title()->replace('_', ' '),
+                    'required' => $field['required'] ?? false,
+                    'disabled' => false,
+                    'placeholder' => $field['placeholder'] ?? '',
+                    'validation' => $this->generateValidationRules($field),
+                    'options' => '',
+                ];
+            }
+
+            // Convert suggested table columns to page format  
+            $this->generationConfig['table_columns'] = [];
+            foreach ($modelConfig['suggested_table_columns'] ?? [] as $column) {
+                $this->generationConfig['table_columns'][] = [
+                    'name' => $column['name'],
+                    'type' => $column['type'],
+                    'label' => $column['label'] ?? str($column['name'])->title()->replace('_', ' '),
+                    'sortable' => $column['sortable'] ?? false,
+                    'searchable' => $column['searchable'] ?? false,
+                    'toggleable' => in_array($column['name'], ['created_at', 'updated_at', 'deleted_at']),
+                    'options' => '',
+                ];
+            }
+
+            // Convert suggested filters to page format
+            $this->generationConfig['filters'] = [];
+            foreach ($modelConfig['suggested_filters'] ?? [] as $filter) {
+                $this->generationConfig['filters'][] = [
+                    'name' => $filter['name'],
+                    'type' => $filter['type'],
+                    'configuration' => '',
+                ];
+            }
+
+            // Sync the configuration arrays
+            $this->syncConfigurationArrays();
+        } catch (\Exception $e) {
+            // Fallback to basic auto-suggestion if model analysis fails
+            $modelName = class_basename($modelClass);
+            $this->generationConfig['model'] = $modelClass;
+            $this->generationConfig['class_name'] = $modelName . 'Resource';
+            $this->generationConfig['source_type'] = 'model'; // Mark as model-based generation
+            $this->autoSuggestNames($this->generationConfig['class_name']);
+        }
     }
 
     protected function autoConfigureFromMigration(string $migrationFile): void
     {
-        $tableName = $this->extractTableNameFromMigration(basename($migrationFile));
-        $modelName = str(str($tableName)->singular())->studly();
+        try {
+            $tableName = $this->extractTableNameFromMigration(basename($migrationFile));
+            $modelName = str(str($tableName)->singular())->studly();
+            $modelClass = 'App\\Models\\' . $modelName;
 
-        $this->generationConfig['model'] = 'App\\Models\\' . $modelName;
-        $this->generationConfig['class_name'] = $modelName . 'Resource';
-        $this->autoSuggestNames($this->generationConfig['class_name'], $tableName);
+            // Check if model already exists
+            if (class_exists($modelClass)) {
+                // Model exists, use it and configure like model selection
+                $this->autoConfigureFromModel($modelClass);
+                return;
+            }
+
+            // Model doesn't exist, we'll need to generate it
+            // Get the generator service to analyze the migration
+            $generatorService = $this->getGeneratorService();
+            $migrationConfig = $generatorService->generateConfigurationFromMigration(basename($migrationFile, '.php'));
+
+            $this->generationConfig['model'] = $modelClass;
+            $this->generationConfig['class_name'] = $modelName . 'Resource';
+            $this->generationConfig['source_type'] = 'migration'; // Mark as migration-based generation
+
+            // Set basic configuration
+            $this->generationConfig['navigation_label'] = Str::title(Str::plural($modelName));
+            $this->generationConfig['slug'] = Str::kebab(Str::plural($modelName));
+
+            // Convert suggested fields to page format
+            $this->generationConfig['form_fields'] = [];
+            foreach ($migrationConfig['suggested_form_fields'] ?? [] as $field) {
+                $this->generationConfig['form_fields'][] = [
+                    'name' => $field['name'],
+                    'type' => $this->convertFormFieldType($field['type']),
+                    'label' => $field['label'] ?? str($field['name'])->title()->replace('_', ' '),
+                    'required' => $field['required'] ?? false,
+                    'disabled' => false,
+                    'placeholder' => $field['placeholder'] ?? '',
+                    'validation' => $this->generateValidationRules($field),
+                    'options' => '',
+                ];
+            }
+
+            // Convert suggested table columns to page format  
+            $this->generationConfig['table_columns'] = [];
+            foreach ($migrationConfig['suggested_table_columns'] ?? [] as $column) {
+                $this->generationConfig['table_columns'][] = [
+                    'name' => $column['name'],
+                    'type' => $column['type'],
+                    'label' => $column['label'] ?? str($column['name'])->title()->replace('_', ' '),
+                    'sortable' => $column['sortable'] ?? false,
+                    'searchable' => $column['searchable'] ?? false,
+                    'toggleable' => in_array($column['name'], ['created_at', 'updated_at', 'deleted_at']),
+                    'options' => '',
+                ];
+            }
+
+            // Convert suggested filters to page format
+            $this->generationConfig['filters'] = [];
+            foreach ($migrationConfig['suggested_filters'] ?? [] as $filter) {
+                $this->generationConfig['filters'][] = [
+                    'name' => $filter['name'],
+                    'type' => $filter['type'],
+                    'configuration' => '',
+                ];
+            }
+
+            // Sync the configuration arrays
+            $this->syncConfigurationArrays();
+        } catch (\Exception $e) {
+            // Fallback to basic auto-suggestion if migration analysis fails
+            $tableName = $this->extractTableNameFromMigration(basename($migrationFile));
+            $modelName = str(str($tableName)->singular())->studly();
+
+            $this->generationConfig['model'] = 'App\\Models\\' . $modelName;
+            $this->generationConfig['class_name'] = $modelName . 'Resource';
+            $this->generationConfig['source_type'] = 'migration'; // Mark as migration-based generation
+            $this->autoSuggestNames($this->generationConfig['class_name'], $tableName);
+        }
     }
 
     public function setStep(string $step): void
@@ -275,12 +407,107 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
 
     public function previewResource(): void
     {
+        // Clean up configuration before preview
+        $this->cleanupConfiguration();
+
+        // Validate configuration
+        $errors = $this->validateConfiguration();
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                $this->addError('configuration', $error);
+            }
+            return;
+        }
+
         $this->currentStep = 'preview';
+        $this->activePreviewTab = 0; // Reset to first tab
         $this->generatePreview();
+    }
+
+    /**
+     * Override to update configuration before preview generation
+     */
+    public function generatePreview(): void
+    {
+        // Update the generation config with our form configuration
+        $this->updateGenerationConfigFromForm();
+
+        // Debug: Log the configuration being sent
+        Log::info('Generating preview with config:', [
+            'model' => $this->generationConfig['model'] ?? 'NOT SET',
+            'class_name' => $this->generationConfig['class_name'] ?? 'NOT SET',
+            'form_fields_count' => count($this->generationConfig['form_fields'] ?? []),
+            'table_columns_count' => count($this->generationConfig['table_columns'] ?? []),
+        ]);
+
+        // Call parent implementation
+        parent::generatePreview();
+
+        // Ensure showPreview is set to true after successful generation
+        if (!empty($this->previewData)) {
+            $this->showPreview = true;
+            Log::info('Preview generated successfully with ' . count($this->previewData) . ' files');
+        } else {
+            Log::error('Preview generation failed - no preview data generated');
+        }
+    }
+    /**
+     * Update generation config from form arrays
+     */
+    protected function updateGenerationConfigFromForm(): void
+    {
+        // Update form fields
+        $this->generationConfig['form_fields'] = $this->formConfiguration['fields'] ?? [];
+
+        // Update table columns
+        $this->generationConfig['table_columns'] = $this->tableConfiguration['columns'] ?? [];
+
+        // Update filters
+        $this->generationConfig['filters'] = $this->filterConfiguration['filters'] ?? [];
+
+        // Update page configuration
+        if (isset($this->pageConfiguration['navigation_icon'])) {
+            $this->generationConfig['navigation_icon'] = $this->pageConfiguration['navigation_icon'];
+        }
+        if (isset($this->pageConfiguration['navigation_group'])) {
+            $this->generationConfig['navigation_group'] = $this->pageConfiguration['navigation_group'] ?: null;
+        }
+        if (isset($this->pageConfiguration['navigation_sort'])) {
+            $this->generationConfig['navigation_sort'] = $this->pageConfiguration['navigation_sort'] ?: null;
+        }
+        if (isset($this->pageConfiguration['enable_view_page'])) {
+            $this->generationConfig['enable_view_page'] = $this->pageConfiguration['enable_view_page'];
+        }
+
+        // Update policy configuration
+        if (isset($this->policyConfiguration['generate_policy'])) {
+            $this->generationConfig['generate_policy'] = $this->policyConfiguration['generate_policy'];
+        }
+
+        // Ensure we have the model set
+        if ($this->selectedModel) {
+            $this->generationConfig['model'] = $this->selectedModel;
+            $this->generationConfig['class_name'] = class_basename($this->selectedModel) . 'Resource';
+        }
     }
 
     public function generateResource(): void
     {
+        // Clean up configuration before generation
+        $this->cleanupConfiguration();
+
+        // Validate configuration
+        $errors = $this->validateConfiguration();
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                $this->addError('configuration', $error);
+            }
+            return;
+        }
+
+        // Update generation config before generating
+        $this->updateGenerationConfigFromForm();
+
         $this->generateFiles();
         $this->currentStep = 'generation_complete';
     }
@@ -304,19 +531,30 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
 
     public function addFormField(): void
     {
-        $newField = [
-            'name' => '',
-            'type' => 'textInput',
-            'label' => '',
-            'required' => false,
-            'disabled' => false,
-            'placeholder' => '',
-            'validation' => '',
-            'options' => '',
-        ];
+        // Check if there's already an empty field to prevent multiple empty entries
+        $hasEmptyField = false;
+        foreach ($this->generationConfig['form_fields'] ?? [] as $field) {
+            if (empty($field['name']) || empty($field['type'])) {
+                $hasEmptyField = true;
+                break;
+            }
+        }
 
-        $this->generationConfig['form_fields'][] = $newField;
-        $this->formConfiguration['fields'][] = $newField;
+        if (!$hasEmptyField) {
+            $newField = [
+                'name' => '',
+                'type' => 'textInput',
+                'label' => '',
+                'required' => false,
+                'disabled' => false,
+                'placeholder' => '',
+                'validation' => '',
+                'options' => '',
+            ];
+
+            $this->generationConfig['form_fields'][] = $newField;
+            $this->formConfiguration['fields'][] = $newField;
+        }
     }
 
     public function removeFormField(int $index): void
@@ -334,18 +572,29 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
 
     public function addTableColumn(): void
     {
-        $newColumn = [
-            'name' => '',
-            'type' => 'text',
-            'label' => '',
-            'sortable' => false,
-            'searchable' => false,
-            'toggleable' => false,
-            'options' => '',
-        ];
+        // Check if there's already an empty column to prevent multiple empty entries
+        $hasEmptyColumn = false;
+        foreach ($this->generationConfig['table_columns'] ?? [] as $column) {
+            if (empty($column['name']) || empty($column['type'])) {
+                $hasEmptyColumn = true;
+                break;
+            }
+        }
 
-        $this->generationConfig['table_columns'][] = $newColumn;
-        $this->tableConfiguration['columns'][] = $newColumn;
+        if (!$hasEmptyColumn) {
+            $newColumn = [
+                'name' => '',
+                'type' => 'text',
+                'label' => '',
+                'sortable' => false,
+                'searchable' => false,
+                'toggleable' => false,
+                'options' => '',
+            ];
+
+            $this->generationConfig['table_columns'][] = $newColumn;
+            $this->tableConfiguration['columns'][] = $newColumn;
+        }
     }
 
     public function removeTableColumn(int $index): void
@@ -363,14 +612,25 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
 
     public function addFilter(): void
     {
-        $newFilter = [
-            'name' => '',
-            'type' => 'text',
-            'configuration' => '',
-        ];
+        // Check if there's already an empty filter to prevent multiple empty entries
+        $hasEmptyFilter = false;
+        foreach ($this->generationConfig['filters'] ?? [] as $filter) {
+            if (empty($filter['name']) || empty($filter['type'])) {
+                $hasEmptyFilter = true;
+                break;
+            }
+        }
 
-        $this->generationConfig['filters'][] = $newFilter;
-        $this->filterConfiguration['filters'][] = $newFilter;
+        if (!$hasEmptyFilter) {
+            $newFilter = [
+                'name' => '',
+                'type' => 'text',
+                'configuration' => '',
+            ];
+
+            $this->generationConfig['filters'][] = $newFilter;
+            $this->filterConfiguration['filters'][] = $newFilter;
+        }
     }
 
     public function removeFilter(int $index): void
@@ -686,11 +946,11 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
     {
         $this->generationConfig['pages'] = ['index', 'create', 'edit'];
         $this->generationConfig['table_columns'] = [
-            ['name' => 'id', 'type' => 'text', 'sortable' => true],
-            ['name' => 'created_at', 'type' => 'datetime', 'sortable' => true],
+            ['name' => 'id', 'type' => 'text', 'label' => 'ID', 'sortable' => true, 'searchable' => false, 'toggleable' => false, 'options' => ''],
+            ['name' => 'created_at', 'type' => 'datetime', 'label' => 'Created At', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
         ];
         $this->generationConfig['form_fields'] = [
-            ['name' => 'name', 'type' => 'textInput', 'required' => true],
+            ['name' => 'name', 'type' => 'textInput', 'label' => 'Name', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter name', 'validation' => 'required|string|max:255', 'options' => ''],
         ];
         $this->syncConfigurationArrays();
     }
@@ -700,12 +960,12 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
         $this->generationConfig['pages'] = ['index', 'create', 'edit', 'view'];
         $this->generationConfig['enable_global_search'] = true;
         $this->generationConfig['filters'] = [
-            ['name' => 'status', 'type' => 'select'],
-            ['name' => 'created_at', 'type' => 'date'],
+            ['name' => 'status', 'type' => 'select', 'configuration' => ''],
+            ['name' => 'created_at', 'type' => 'date', 'configuration' => ''],
         ];
         $this->generationConfig['actions'] = [
-            ['name' => 'view', 'type' => 'view'],
-            ['name' => 'edit', 'type' => 'edit'],
+            ['name' => 'view', 'type' => 'view', 'configuration' => ''],
+            ['name' => 'edit', 'type' => 'edit', 'configuration' => ''],
         ];
         $this->syncConfigurationArrays();
     }
@@ -713,16 +973,16 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
     protected function applyUserManagementTemplate(): void
     {
         $this->generationConfig['table_columns'] = [
-            ['name' => 'id', 'type' => 'text', 'sortable' => true],
-            ['name' => 'name', 'type' => 'text', 'sortable' => true, 'searchable' => true],
-            ['name' => 'email', 'type' => 'text', 'sortable' => true, 'searchable' => true],
-            ['name' => 'email_verified_at', 'type' => 'datetime', 'sortable' => true],
-            ['name' => 'created_at', 'type' => 'datetime', 'sortable' => true],
+            ['name' => 'id', 'type' => 'text', 'label' => 'ID', 'sortable' => true, 'searchable' => false, 'toggleable' => false, 'options' => ''],
+            ['name' => 'name', 'type' => 'text', 'label' => 'Name', 'sortable' => true, 'searchable' => true, 'toggleable' => false, 'options' => ''],
+            ['name' => 'email', 'type' => 'text', 'label' => 'Email', 'sortable' => true, 'searchable' => true, 'toggleable' => false, 'options' => ''],
+            ['name' => 'email_verified_at', 'type' => 'datetime', 'label' => 'Email Verified', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
+            ['name' => 'created_at', 'type' => 'datetime', 'label' => 'Created At', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
         ];
         $this->generationConfig['form_fields'] = [
-            ['name' => 'name', 'type' => 'textInput', 'required' => true],
-            ['name' => 'email', 'type' => 'textInput', 'required' => true, 'validation' => 'required|email|unique:users,email'],
-            ['name' => 'password', 'type' => 'textInput', 'required' => true, 'validation' => 'required|min:8'],
+            ['name' => 'name', 'type' => 'textInput', 'label' => 'Name', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter name', 'validation' => 'required|string|max:255', 'options' => ''],
+            ['name' => 'email', 'type' => 'textInput', 'label' => 'Email', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter email address', 'validation' => 'required|email|unique:users,email', 'options' => ''],
+            ['name' => 'password', 'type' => 'textInput', 'label' => 'Password', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter password', 'validation' => 'required|min:8', 'options' => ''],
         ];
         $this->syncConfigurationArrays();
     }
@@ -1153,6 +1413,57 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
         ];
     }
 
+    protected function cleanupConfiguration(): void
+    {
+        // Remove empty table columns
+        $this->generationConfig['table_columns'] = array_filter(
+            $this->generationConfig['table_columns'] ?? [],
+            function ($column) {
+                return !empty($column['name']) && !empty($column['type']);
+            }
+        );
+        $this->generationConfig['table_columns'] = array_values($this->generationConfig['table_columns']);
+
+        // Remove empty form fields
+        $this->generationConfig['form_fields'] = array_filter(
+            $this->generationConfig['form_fields'] ?? [],
+            function ($field) {
+                return !empty($field['name']) && !empty($field['type']);
+            }
+        );
+        $this->generationConfig['form_fields'] = array_values($this->generationConfig['form_fields']);
+
+        // Remove empty filters
+        $this->generationConfig['filters'] = array_filter(
+            $this->generationConfig['filters'] ?? [],
+            function ($filter) {
+                return !empty($filter['name']) && !empty($filter['type']);
+            }
+        );
+        $this->generationConfig['filters'] = array_values($this->generationConfig['filters']);
+
+        // Remove empty actions
+        $this->generationConfig['actions'] = array_filter(
+            $this->generationConfig['actions'] ?? [],
+            function ($action) {
+                return !empty($action['name']) && !empty($action['type']);
+            }
+        );
+        $this->generationConfig['actions'] = array_values($this->generationConfig['actions']);
+
+        // Remove empty bulk actions
+        $this->generationConfig['bulk_actions'] = array_filter(
+            $this->generationConfig['bulk_actions'] ?? [],
+            function ($action) {
+                return !empty($action['name']) && !empty($action['type']);
+            }
+        );
+        $this->generationConfig['bulk_actions'] = array_values($this->generationConfig['bulk_actions']);
+
+        // Sync the cleaned configuration
+        $this->syncConfigurationArrays();
+    }
+
     protected function validateConfiguration(): array
     {
         $errors = [];
@@ -1286,22 +1597,28 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
     protected function getCommonTableColumns(string $modelName): array
     {
         $commonColumns = [
-            ['name' => 'id', 'type' => 'text', 'sortable' => true],
+            ['name' => 'id', 'type' => 'text', 'label' => 'ID', 'sortable' => true, 'searchable' => false, 'toggleable' => false, 'options' => ''],
         ];
 
         if (str_contains(strtolower($modelName), 'user')) {
             $commonColumns = array_merge($commonColumns, [
-                ['name' => 'name', 'type' => 'text', 'sortable' => true, 'searchable' => true],
-                ['name' => 'email', 'type' => 'text', 'sortable' => true, 'searchable' => true],
-                ['name' => 'email_verified_at', 'type' => 'datetime', 'sortable' => true],
-                ['name' => 'created_at', 'type' => 'datetime', 'sortable' => true],
+                ['name' => 'name', 'type' => 'text', 'label' => 'Name', 'sortable' => true, 'searchable' => true, 'toggleable' => false, 'options' => ''],
+                ['name' => 'email', 'type' => 'text', 'label' => 'Email', 'sortable' => true, 'searchable' => true, 'toggleable' => false, 'options' => ''],
+                ['name' => 'email_verified_at', 'type' => 'datetime', 'label' => 'Email Verified', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
+                ['name' => 'created_at', 'type' => 'datetime', 'label' => 'Created At', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
             ]);
         } elseif (str_contains(strtolower($modelName), 'product')) {
             $commonColumns = array_merge($commonColumns, [
-                ['name' => 'name', 'type' => 'text', 'sortable' => true, 'searchable' => true],
-                ['name' => 'price', 'type' => 'text', 'sortable' => true],
-                ['name' => 'is_active', 'type' => 'boolean', 'sortable' => true],
-                ['name' => 'created_at', 'type' => 'datetime', 'sortable' => true],
+                ['name' => 'name', 'type' => 'text', 'label' => 'Name', 'sortable' => true, 'searchable' => true, 'toggleable' => false, 'options' => ''],
+                ['name' => 'price', 'type' => 'text', 'label' => 'Price', 'sortable' => true, 'searchable' => false, 'toggleable' => false, 'options' => ''],
+                ['name' => 'is_active', 'type' => 'boolean', 'label' => 'Active', 'sortable' => true, 'searchable' => false, 'toggleable' => false, 'options' => ''],
+                ['name' => 'created_at', 'type' => 'datetime', 'label' => 'Created At', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
+            ]);
+        } else {
+            // Add basic columns for other models
+            $commonColumns = array_merge($commonColumns, [
+                ['name' => 'created_at', 'type' => 'datetime', 'label' => 'Created At', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
+                ['name' => 'updated_at', 'type' => 'datetime', 'label' => 'Updated At', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
             ]);
         }
 
@@ -1314,41 +1631,109 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
 
         if (str_contains(strtolower($modelName), 'user')) {
             $commonFields = [
-                ['name' => 'name', 'type' => 'textInput', 'required' => true],
-                ['name' => 'email', 'type' => 'textInput', 'required' => true, 'validation' => 'required|email|unique:users,email'],
-                ['name' => 'password', 'type' => 'textInput', 'required' => true, 'validation' => 'required|min:8'],
+                ['name' => 'name', 'type' => 'textInput', 'label' => 'Name', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter name', 'validation' => 'required|string|max:255', 'options' => ''],
+                ['name' => 'email', 'type' => 'textInput', 'label' => 'Email', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter email address', 'validation' => 'required|email|unique:users,email', 'options' => ''],
+                ['name' => 'password', 'type' => 'textInput', 'label' => 'Password', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter password', 'validation' => 'required|min:8', 'options' => ''],
             ];
         } elseif (str_contains(strtolower($modelName), 'product')) {
             $commonFields = [
-                ['name' => 'name', 'type' => 'textInput', 'required' => true],
-                ['name' => 'description', 'type' => 'textarea'],
-                ['name' => 'price', 'type' => 'textInput', 'required' => true, 'validation' => 'required|numeric|min:0'],
-                ['name' => 'is_active', 'type' => 'toggle'],
+                ['name' => 'name', 'type' => 'textInput', 'label' => 'Name', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter product name', 'validation' => 'required|string|max:255', 'options' => ''],
+                ['name' => 'description', 'type' => 'textarea', 'label' => 'Description', 'required' => false, 'disabled' => false, 'placeholder' => 'Enter product description', 'validation' => '', 'options' => ''],
+                ['name' => 'price', 'type' => 'textInput', 'label' => 'Price', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter price', 'validation' => 'required|numeric|min:0', 'options' => ''],
+                ['name' => 'is_active', 'type' => 'toggle', 'label' => 'Active', 'required' => false, 'disabled' => false, 'placeholder' => '', 'validation' => '', 'options' => ''],
+            ];
+        } else {
+            // Add basic fields for other models
+            $commonFields = [
+                ['name' => 'name', 'type' => 'textInput', 'label' => 'Name', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter name', 'validation' => 'required|string|max:255', 'options' => ''],
             ];
         }
 
         return $commonFields;
     }
 
-    public function getResourcePreviewData(): array
+    /**
+     * Convert service field types to page form field types
+     */
+    protected function convertFormFieldType(string $serviceType): string
     {
-        $resourceName = $this->generationConfig['class_name'] ?? 'ExampleResource';
-        $modelName = '';
+        return match ($serviceType) {
+            'text' => 'textInput',
+            'email' => 'textInput',
+            'password' => 'textInput',
+            'number' => 'textInput',
+            'textarea' => 'textarea',
+            'select' => 'select',
+            'toggle' => 'toggle',
+            'date' => 'datePicker',
+            'datetime' => 'dateTimePicker',
+            'time' => 'timePicker',
+            default => 'textInput',
+        };
+    }
 
-        if ($this->selectedModel) {
-            $modelName = class_basename($this->selectedModel);
-        } elseif (!empty($this->generationConfig['model'])) {
-            $modelName = class_basename($this->generationConfig['model']);
+    /**
+     * Generate validation rules for a field
+     */
+    protected function generateValidationRules(array $field): string
+    {
+        $rules = [];
+
+        if ($field['required'] ?? false) {
+            $rules[] = 'required';
         }
 
-        if (empty($modelName)) {
+        $type = $field['type'] ?? 'text';
+
+        switch ($type) {
+            case 'email':
+                $rules[] = 'email';
+                break;
+            case 'number':
+                $rules[] = 'numeric';
+                break;
+            case 'text':
+            case 'textarea':
+                $rules[] = 'string';
+                $rules[] = 'max:255';
+                break;
+        }
+
+        return implode('|', $rules);
+    }
+
+    public function getResourcePreviewData(): array
+    {
+        // Determine the resource name properly
+        $resourceName = '';
+        $modelName = '';
+        $modelClass = '';
+
+        if ($this->selectedModel) {
+            $modelClass = $this->selectedModel;
+            $modelName = class_basename($this->selectedModel);
+            $resourceName = $modelName . 'Resource';
+        } elseif (!empty($this->generationConfig['model'])) {
+            $modelClass = $this->generationConfig['model'];
+            $modelName = class_basename($this->generationConfig['model']);
+            $resourceName = $modelName . 'Resource';
+        } elseif (!empty($this->generationConfig['class_name'])) {
+            $resourceName = $this->generationConfig['class_name'];
             $modelName = str_replace('Resource', '', $resourceName);
+            $modelClass = 'App\\Models\\' . $modelName;
+        }
+
+        // Fallback if nothing is set
+        if (empty($resourceName)) {
+            $resourceName = 'ExampleResource';
+            $modelName = 'Example';
+            $modelClass = 'App\\Models\\Example';
         }
 
         return [
             'resource_name' => $resourceName,
             'model_name' => $modelName,
-            'model_class' => $this->selectedModel ?? $this->generationConfig['model'] ?? 'Not selected',
+            'model_class' => $modelClass,
         ];
     }
 

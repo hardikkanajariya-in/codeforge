@@ -846,8 +846,9 @@ class FilamentResourceGeneratorService
         $navigationGroup = $pageConfig['navigation_group'] ?? null;
         $navigationSort = $pageConfig['navigation_sort'] ?? null;
 
-        // Ensure model class exists, if not generate it
-        if (!class_exists($modelClass)) {
+        // Only generate model if it doesn't exist AND we're working from migration
+        // When using model selection, the model should already exist
+        if (!class_exists($modelClass) && !$this->isModelBasedGeneration($pageConfig)) {
             // Extract table name from model class for generation
             $tableName = Str::snake(Str::plural($modelClassName));
             $this->generateModelClass($modelClassName, $tableName, []);
@@ -879,7 +880,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class {$resourceClassName} extends Resource
 {
-    protected static ?string \$model = {$modelClass}::class;
+    protected static ?string \$model = {$modelClassName}::class;
 
     protected static ?string \$navigationIcon = '{$navigationIcon}';
     
@@ -929,14 +930,35 @@ class {$resourceClassName} extends Resource
     }
 
     /**
-     * Build form schema code
+     * Check if generation is model-based (not migration-based)
      */
+    protected function isModelBasedGeneration(array $pageConfig): bool
+    {
+        // This method helps distinguish between model-based and migration-based generation
+        // If source_type is set and equals 'model', we're doing model-based generation
+        return ($pageConfig['source_type'] ?? null) === 'model';
+    }
     protected function buildFormSchema(array $formConfig): string
     {
         $fields = [];
 
         foreach ($formConfig['fields'] ?? [] as $field) {
-            $fields[] = $this->buildFormField($field);
+            // Skip empty or invalid fields
+            if (empty($field['name']) || empty($field['type'])) {
+                continue;
+            }
+
+            $fieldCode = $this->buildFormField($field);
+            if ($fieldCode) {
+                $fields[] = $fieldCode;
+            }
+        }
+
+        // If no fields were provided, add at least a basic field
+        if (empty($fields)) {
+            $fields[] = "                Forms\Components\TextInput::make('name')
+                    ->label('Name')
+                    ->required()";
         }
 
         return implode(",\n", $fields);
@@ -1027,7 +1049,27 @@ class {$resourceClassName} extends Resource
         $columns = [];
 
         foreach ($tableConfig['columns'] ?? [] as $column) {
-            $columns[] = $this->buildTableColumn($column);
+            // Skip empty or invalid columns
+            if (empty($column['name']) || empty($column['type'])) {
+                continue;
+            }
+
+            $columnCode = $this->buildTableColumn($column);
+            if ($columnCode) {
+                $columns[] = $columnCode;
+            }
+        }
+
+        // If no columns were provided, add at least basic columns
+        if (empty($columns)) {
+            $columns[] = "                Tables\Columns\TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable()";
+            $columns[] = "                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Created At')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggledHiddenByDefault()";
         }
 
         return implode(",\n", $columns);
@@ -1645,10 +1687,17 @@ class {$modelName} extends Model
             $className = 'ExampleResource';
         }
 
+        // Extract just the resource name without 'Resource' suffix for proper naming
+        $resourceName = Str::replaceLast('Resource', '', $className);
+
+        // Ensure we have the correct model class reference
+        $finalModelClass = $modelClass ?: 'App\\Models\\' . $resourceName;
+
         // Map configuration to generator properties (matching expected property names)
-        $generator->name = str_replace('Resource', '', $className);
-        $generator->model = $modelClass ?: 'App\\Models\\Example';
-        $generator->model_class = $modelClass ?: 'App\\Models\\Example';  // Alternative property name
+        $generator->name = $resourceName;
+        $generator->class_name = $className;
+        $generator->model = $finalModelClass;
+        $generator->model_class = $finalModelClass;
         $generator->namespace = $config['namespace'] ?? 'App\\Filament\\Resources';
         $generator->navigation_icon = $config['navigation_icon'] ?? 'heroicon-o-rectangle-stack';
         $generator->navigation_label = $config['navigation_label'] ?? '';
@@ -1657,26 +1706,45 @@ class {$modelName} extends Model
         $generator->slug = $config['slug'] ?? '';
         $generator->pages = $config['pages'] ?? ['index', 'create', 'edit'];
 
-        // Convert arrays to expected format
+        // Prepare configuration arrays properly
+        $generator->form_configuration = [
+            'fields' => $config['form_fields'] ?? []
+        ];
+        $generator->table_configuration = [
+            'columns' => $config['table_columns'] ?? []
+        ];
+        $generator->filter_configuration = [
+            'filters' => $config['filters'] ?? []
+        ];
+        $generator->action_configuration = [
+            'actions' => $config['actions'] ?? []
+        ];
+        $generator->bulk_action_configuration = [
+            'bulk_actions' => $config['bulk_actions'] ?? []
+        ];
+        $generator->page_configuration = [
+            'generate_pages' => true,
+            'navigation_icon' => $config['navigation_icon'] ?? 'heroicon-o-rectangle-stack',
+            'navigation_group' => $config['navigation_group'] ?? null,
+            'navigation_sort' => $config['navigation_sort'] ?? null,
+            'enable_view_page' => in_array('view', $config['pages'] ?? []),
+            'source_type' => $config['source_type'] ?? 'model', // Track generation source
+        ];
+        $generator->policy_configuration = [
+            'generate_policy' => false
+        ];
+
+        // Backward compatibility properties
         $generator->table_columns = $config['table_columns'] ?? [];
-        $generator->table_configuration = $config['table_columns'] ?? [];
         $generator->form_fields = $config['form_fields'] ?? [];
-        $generator->form_configuration = $config['form_fields'] ?? [];
         $generator->filters = $config['filters'] ?? [];
-        $generator->filter_configuration = $config['filters'] ?? [];
         $generator->actions = $config['actions'] ?? [];
-        $generator->action_configuration = $config['actions'] ?? [];
         $generator->bulk_actions = $config['bulk_actions'] ?? [];
-        $generator->bulk_action_configuration = $config['bulk_actions'] ?? [];
         $generator->widgets = $config['widgets'] ?? [];
         $generator->relations = $config['relations'] ?? [];
         $generator->enable_global_search = $config['enable_global_search'] ?? true;
         $generator->searchable_fields = $config['searchable_fields'] ?? [];
         $generator->default_sort = $config['default_sort'] ?? ['id', 'desc'];
-
-        // Add page configuration
-        $generator->page_configuration = $config['pages'] ?? ['index', 'create', 'edit'];
-        $generator->policy_configuration = [];
 
         return $generator;
     }
