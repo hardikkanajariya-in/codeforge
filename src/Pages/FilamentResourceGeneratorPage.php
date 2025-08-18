@@ -5,6 +5,7 @@ namespace HkDevs\CodeForgeStudio\Pages;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
+use Filament\Pages\Page;
 use HkDevs\CodeForgeStudio\Services\FilamentResourceGeneratorService;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
@@ -12,60 +13,21 @@ use Illuminate\Support\Facades\Log;
 /**
  * FilamentResourceGeneratorPage
  * 
- * Advanced generator for creating complete Filament admin resources with
- * forms, tables, and CRUD functionality based on model analysis.
+ * Simple, single-page Filament resource generator that focuses on creating
+ * complete admin resources from existing Laravel models with real-time preview.
  * 
- * Key Features:
- * - Complete Filament resource generation with forms and tables
- * - Intelligent field type mapping for optimal UI components
- * - Relationship handling with proper form field generation
- * - Action generation for common CRUD operations
- * - Filter and search functionality generation
- * - Permission integration and access control setup
- * 
- * Resource Generation:
- * - Model analysis for automatic resource structure
- * - Form builder with appropriate field components
- * - Table builder with columns, filters, and actions
- * - Resource page generation (List, Create, Edit, View)
- * - Navigation integration and menu structure
- * 
- * Advanced Features:
- * - Custom action generation for specialized operations
- * - Bulk action support for batch operations
- * - Advanced filter generation based on field types
- * - Search functionality with intelligent field selection
- * - Export capabilities and data formatting
- * - Widget integration for dashboard components
- * 
- * UI Components:
- * - Automatic field component selection based on data types
- * - Relationship components for foreign key fields
- * - File upload components for file and image fields
- * - Rich text editors for text content
- * - Date/time pickers with appropriate formats
- * 
- * Configuration Options:
- * - Model selection and resource naming
- * - Field inclusion and customization
- * - Action selection and configuration
- * - Navigation group and positioning
- * - Permission and access control setup
- * 
- * Integration:
- * - Extends BaseGeneratorPage for workflow management
- * - FilamentResourceGeneratorService for generation logic
- * - Model introspection for intelligent defaults
- * - Template service for code generation
+ * Features:
+ * - Model-only generation (no migration complexity)
+ * - Real-time code preview with tabbed interface
+ * - Intelligent model analysis and field suggestion
+ * - Single-page workflow for better UX
+ * - Advanced configuration options
  * 
  * @package HkDevs\CodeForgeStudio\Pages
  * @author hardikkanajariya.in
- * @version 1.0.0
- * @since 1.0.0
- * 
- * @property array|null $generationConfig
+ * @version 2.0.0
  */
-class FilamentResourceGeneratorPage extends BaseGeneratorPage
+class FilamentResourceGeneratorPage extends Page
 {
     protected static string $view = 'codeforge-studio::pages.filament-resource-generator';
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
@@ -73,127 +35,41 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
     protected static ?string $navigationLabel = 'Filament Resource';
     protected static ?int $navigationSort = 5;
 
-    // Step-based properties for the wizard
-    public string $currentStep = 'select_source';
-    public ?string $sourceType = null;
+    // Core properties
     public ?string $selectedModel = null;
-    public ?string $selectedMigration = null;
-    public array $availableModels = [];
-    public array $availableMigrations = [];
-    public string $iconSearch = '';
+    public array $previewData = [];
+    public bool $isGenerating = false;
     public int $activePreviewTab = 0;
 
-    // Configuration arrays that the view expects
-    public array $formConfiguration = ['fields' => []];
-    public array $tableConfiguration = ['columns' => []];
-    public array $filterConfiguration = ['filters' => []];
-    public array $pageConfiguration = [
-        'use_custom_icon' => false,
-        'navigation_icon' => '',
+    // Configuration arrays
+    public array $formFields = [];
+    public array $tableColumns = [];
+    public array $filters = [];
+    public array $resourceSettings = [
+        'navigation_icon' => 'heroicon-o-rectangle-stack',
         'navigation_group' => '',
-        'navigation_sort' => 10,
+        'navigation_sort' => null,
         'enable_view_page' => false,
-    ];
-    public array $policyConfiguration = [
+        'enable_global_search' => true,
         'generate_policy' => false,
     ];
 
     public function mount(): void
     {
-        $this->initializeConfiguration();
-        $this->currentStep = 'select_source';
-        $this->isGenerating = false;
-        $this->dispatch('isGeneratingChanged', false);
+        $this->resetToDefaults();
     }
 
-    protected function initializeConfiguration(): void
+    public function resetToDefaults(): void
     {
-        $this->generationConfig = [
-            'enabled' => true,
-            'class_name' => '',
-            'model' => '',
-            'namespace' => 'App\\Filament\\Resources',
-            'navigation_icon' => 'heroicon-o-rectangle-stack',
-            'navigation_label' => '',
-            'navigation_group' => null,
-            'navigation_sort' => null,
-            'slug' => '',
-            'pages' => ['index', 'create', 'edit', 'view'],
-            'table_columns' => [],
-            'form_fields' => [],
-            'filters' => [],
-            'actions' => [],
-            'bulk_actions' => [],
-            'widgets' => [],
-            'relations' => [],
-            'enable_global_search' => true,
-            'searchable_fields' => [],
-            'default_sort' => ['id', 'desc'],
-        ];
-
-        // Initialize available models and migrations
-        $this->loadAvailableModels();
-        $this->loadAvailableMigrations();
-
-        // Initialize form and table configurations
-        $this->syncConfigurationArrays();
-    }
-
-    protected function syncConfigurationArrays(): void
-    {
-        // Sync form fields
-        $this->formConfiguration['fields'] = $this->generationConfig['form_fields'] ?? [];
-
-        // Sync table columns
-        $this->tableConfiguration['columns'] = $this->generationConfig['table_columns'] ?? [];
-
-        // Sync filters
-        $this->filterConfiguration['filters'] = $this->generationConfig['filters'] ?? [];
-
-        // Sync page configuration
-        $this->pageConfiguration = array_merge($this->pageConfiguration, [
-            'navigation_icon' => $this->generationConfig['navigation_icon'] ?? 'heroicon-o-rectangle-stack',
-            'navigation_group' => $this->generationConfig['navigation_group'] ?? '',
-            'navigation_sort' => $this->generationConfig['navigation_sort'] ?? 10,
-        ]);
-    }
-
-    public function selectSourceType(string $type): void
-    {
-        $this->sourceType = $type;
         $this->selectedModel = null;
-        $this->selectedMigration = null;
+        $this->previewData = [];
+        $this->formFields = [];
+        $this->tableColumns = [];
+        $this->filters = [];
+        $this->activePreviewTab = 0;
     }
 
-    public function selectModel(string $modelClass): void
-    {
-        $this->selectedModel = $modelClass;
-        $this->currentStep = 'configure_resource';
-
-        // Auto-populate configuration based on selected model
-        $this->autoConfigureFromModel($modelClass);
-    }
-
-    public function selectMigration(string $migrationFile): void
-    {
-        $this->selectedMigration = $migrationFile;
-        $this->currentStep = 'configure_resource';
-
-        // Auto-populate configuration based on selected migration
-        $this->autoConfigureFromMigration($migrationFile);
-    }
-
-    protected function loadAvailableModels(): void
-    {
-        $this->availableModels = $this->getModelsWithoutResources();
-    }
-
-    protected function loadAvailableMigrations(): void
-    {
-        $this->availableMigrations = $this->getAvailableMigrations();
-    }
-
-    public function getModelsWithoutResources(): array
+    public function getAvailableModelsProperty(): array
     {
         $models = [];
         $modelPath = app_path('Models');
@@ -210,9 +86,9 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
 
             if (class_exists($className)) {
                 $models[] = [
-                    'name' => $fileName,
-                    'class' => $className,
-                    'file' => $file,
+                    'value' => $className,
+                    'label' => $fileName,
+                    'description' => $this->getModelDescription($className),
                 ];
             }
         }
@@ -220,1521 +96,223 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
         return $models;
     }
 
-    public function getAvailableMigrations(): array
-    {
-        $migrations = [];
-        $migrationPath = database_path('migrations');
-
-        if (!is_dir($migrationPath)) {
-            return $migrations;
-        }
-
-        $files = glob($migrationPath . '/*.php');
-
-        foreach ($files as $file) {
-            $fileName = basename($file);
-            if (str_contains($fileName, 'create_') && str_contains($fileName, '_table')) {
-                $tableName = $this->extractTableNameFromMigration($fileName);
-                $migrations[] = [
-                    'name' => $fileName,
-                    'table' => $tableName,
-                    'file' => $file,
-                ];
-            }
-        }
-
-        return $migrations;
-    }
-
-    protected function extractTableNameFromMigration(string $fileName): string
-    {
-        // Extract table name from migration file name like "2023_01_01_000000_create_users_table.php"
-        preg_match('/create_(.+)_table/', $fileName, $matches);
-        return $matches[1] ?? '';
-    }
-
-    protected function autoConfigureFromModel(string $modelClass): void
+    protected function getModelDescription(string $modelClass): string
     {
         try {
-            $modelName = class_basename($modelClass);
-            $this->generationConfig['model'] = $modelClass;
-            $this->generationConfig['class_name'] = $modelName . 'Resource';
-            $this->generationConfig['source_type'] = 'model'; // Mark as model-based generation
+            $reflection = new \ReflectionClass($modelClass);
+            $model = new $modelClass;
 
-            // Get the generator service to analyze the model
-            $generatorService = $this->getGeneratorService();
-            $modelConfig = $generatorService->generateConfigurationFromModel($modelClass);
+            $table = $model->getTable() ?? 'unknown';
+            $fillable = count($model->getFillable());
 
-            // Set basic configuration
-            $this->generationConfig['navigation_label'] = Str::title(Str::plural($modelName));
-            $this->generationConfig['slug'] = Str::kebab(Str::plural($modelName));
-
-            // Convert suggested fields to page format
-            $this->generationConfig['form_fields'] = [];
-            foreach ($modelConfig['suggested_form_fields'] ?? [] as $field) {
-                $this->generationConfig['form_fields'][] = [
-                    'name' => $field['name'],
-                    'type' => $this->convertFormFieldType($field['type']),
-                    'label' => $field['label'] ?? str($field['name'])->title()->replace('_', ' '),
-                    'required' => $field['required'] ?? false,
-                    'disabled' => false,
-                    'placeholder' => $field['placeholder'] ?? '',
-                    'validation' => $this->generateValidationRules($field),
-                    'options' => '',
-                ];
-            }
-
-            // Convert suggested table columns to page format  
-            $this->generationConfig['table_columns'] = [];
-            foreach ($modelConfig['suggested_table_columns'] ?? [] as $column) {
-                $this->generationConfig['table_columns'][] = [
-                    'name' => $column['name'],
-                    'type' => $column['type'],
-                    'label' => $column['label'] ?? str($column['name'])->title()->replace('_', ' '),
-                    'sortable' => $column['sortable'] ?? false,
-                    'searchable' => $column['searchable'] ?? false,
-                    'toggleable' => in_array($column['name'], ['created_at', 'updated_at', 'deleted_at']),
-                    'options' => '',
-                ];
-            }
-
-            // Convert suggested filters to page format
-            $this->generationConfig['filters'] = [];
-            foreach ($modelConfig['suggested_filters'] ?? [] as $filter) {
-                $this->generationConfig['filters'][] = [
-                    'name' => $filter['name'],
-                    'type' => $filter['type'],
-                    'configuration' => '',
-                ];
-            }
-
-            // Sync the configuration arrays
-            $this->syncConfigurationArrays();
+            return "Table: {$table} • {$fillable} fillable fields";
         } catch (\Exception $e) {
-            // Fallback to basic auto-suggestion if model analysis fails
-            $modelName = class_basename($modelClass);
-            $this->generationConfig['model'] = $modelClass;
-            $this->generationConfig['class_name'] = $modelName . 'Resource';
-            $this->generationConfig['source_type'] = 'model'; // Mark as model-based generation
-            $this->autoSuggestNames($this->generationConfig['class_name']);
+            return 'Model details unavailable';
         }
     }
 
-    protected function autoConfigureFromMigration(string $migrationFile): void
+    public function updatedSelectedModel($value): void
     {
-        try {
-            $tableName = $this->extractTableNameFromMigration(basename($migrationFile));
-            $modelName = str(str($tableName)->singular())->studly();
-            $modelClass = 'App\\Models\\' . $modelName;
-
-            // Check if model already exists
-            if (class_exists($modelClass)) {
-                // Model exists, use it and configure like model selection
-                $this->autoConfigureFromModel($modelClass);
-                return;
-            }
-
-            // Model doesn't exist, we'll need to generate it
-            // Get the generator service to analyze the migration
-            $generatorService = $this->getGeneratorService();
-            $migrationConfig = $generatorService->generateConfigurationFromMigration(basename($migrationFile, '.php'));
-
-            $this->generationConfig['model'] = $modelClass;
-            $this->generationConfig['class_name'] = $modelName . 'Resource';
-            $this->generationConfig['source_type'] = 'migration'; // Mark as migration-based generation
-
-            // Set basic configuration
-            $this->generationConfig['navigation_label'] = Str::title(Str::plural($modelName));
-            $this->generationConfig['slug'] = Str::kebab(Str::plural($modelName));
-
-            // Convert suggested fields to page format
-            $this->generationConfig['form_fields'] = [];
-            foreach ($migrationConfig['suggested_form_fields'] ?? [] as $field) {
-                $this->generationConfig['form_fields'][] = [
-                    'name' => $field['name'],
-                    'type' => $this->convertFormFieldType($field['type']),
-                    'label' => $field['label'] ?? str($field['name'])->title()->replace('_', ' '),
-                    'required' => $field['required'] ?? false,
-                    'disabled' => false,
-                    'placeholder' => $field['placeholder'] ?? '',
-                    'validation' => $this->generateValidationRules($field),
-                    'options' => '',
-                ];
-            }
-
-            // Convert suggested table columns to page format  
-            $this->generationConfig['table_columns'] = [];
-            foreach ($migrationConfig['suggested_table_columns'] ?? [] as $column) {
-                $this->generationConfig['table_columns'][] = [
-                    'name' => $column['name'],
-                    'type' => $column['type'],
-                    'label' => $column['label'] ?? str($column['name'])->title()->replace('_', ' '),
-                    'sortable' => $column['sortable'] ?? false,
-                    'searchable' => $column['searchable'] ?? false,
-                    'toggleable' => in_array($column['name'], ['created_at', 'updated_at', 'deleted_at']),
-                    'options' => '',
-                ];
-            }
-
-            // Convert suggested filters to page format
-            $this->generationConfig['filters'] = [];
-            foreach ($migrationConfig['suggested_filters'] ?? [] as $filter) {
-                $this->generationConfig['filters'][] = [
-                    'name' => $filter['name'],
-                    'type' => $filter['type'],
-                    'configuration' => '',
-                ];
-            }
-
-            // Sync the configuration arrays
-            $this->syncConfigurationArrays();
-        } catch (\Exception $e) {
-            // Fallback to basic auto-suggestion if migration analysis fails
-            $tableName = $this->extractTableNameFromMigration(basename($migrationFile));
-            $modelName = str(str($tableName)->singular())->studly();
-
-            $this->generationConfig['model'] = 'App\\Models\\' . $modelName;
-            $this->generationConfig['class_name'] = $modelName . 'Resource';
-            $this->generationConfig['source_type'] = 'migration'; // Mark as migration-based generation
-            $this->autoSuggestNames($this->generationConfig['class_name'], $tableName);
-        }
-    }
-
-    public function setStep(string $step): void
-    {
-        $this->currentStep = $step;
-    }
-
-    public function previewResource(): void
-    {
-        // Clean up configuration before preview
-        $this->cleanupConfiguration();
-
-        // Validate configuration
-        $errors = $this->validateConfiguration();
-        if (!empty($errors)) {
-            foreach ($errors as $error) {
-                $this->addError('configuration', $error);
-            }
+        if (!$value) {
+            $this->resetToDefaults();
             return;
         }
 
-        $this->currentStep = 'preview';
-        $this->activePreviewTab = 0; // Reset to first tab
+        $this->analyzeModel($value);
         $this->generatePreview();
     }
 
-    /**
-     * Override to update configuration before preview generation
-     */
+    protected function analyzeModel(string $modelClass): void
+    {
+        try {
+            $generatorService = app(FilamentResourceGeneratorService::class);
+            $modelConfig = $generatorService->generateConfigurationFromModel($modelClass);
+
+            // Convert to our simplified format
+            $this->formFields = $this->convertFormFields($modelConfig['suggested_form_fields'] ?? []);
+            $this->tableColumns = $this->convertTableColumns($modelConfig['suggested_table_columns'] ?? []);
+            $this->filters = $this->convertFilters($modelConfig['suggested_filters'] ?? []);
+
+            // Set resource settings
+            $modelName = class_basename($modelClass);
+            $this->resourceSettings['navigation_label'] = Str::title(Str::plural($modelName));
+        } catch (\Exception $e) {
+            Log::error('Model analysis failed: ' . $e->getMessage());
+            $this->addError('model', 'Failed to analyze model: ' . $e->getMessage());
+        }
+    }
+
+    protected function convertFormFields(array $fields): array
+    {
+        $converted = [];
+        foreach ($fields as $field) {
+            $converted[] = [
+                'name' => $field['name'],
+                'type' => $field['type'],
+                'label' => $field['label'] ?? Str::title(str_replace('_', ' ', $field['name'])),
+                'required' => $field['required'] ?? false,
+                'enabled' => true,
+            ];
+        }
+        return $converted;
+    }
+
+    protected function convertTableColumns(array $columns): array
+    {
+        $converted = [];
+        foreach ($columns as $column) {
+            $converted[] = [
+                'name' => $column['name'],
+                'type' => $column['type'],
+                'label' => $column['label'] ?? Str::title(str_replace('_', ' ', $column['name'])),
+                'sortable' => $column['sortable'] ?? false,
+                'searchable' => $column['searchable'] ?? false,
+                'enabled' => true,
+            ];
+        }
+        return $converted;
+    }
+
+    protected function convertFilters(array $filters): array
+    {
+        $converted = [];
+        foreach ($filters as $filter) {
+            $converted[] = [
+                'name' => $filter['name'],
+                'type' => $filter['type'],
+                'label' => Str::title(str_replace('_', ' ', $filter['name'])),
+                'enabled' => false, // Start with filters disabled by default
+            ];
+        }
+        return $converted;
+    }
+
     public function generatePreview(): void
     {
-        // Update the generation config with our form configuration
-        $this->updateGenerationConfigFromForm();
-
-        // Debug: Log the configuration being sent
-        Log::info('Generating preview with config:', [
-            'model' => $this->generationConfig['model'] ?? 'NOT SET',
-            'class_name' => $this->generationConfig['class_name'] ?? 'NOT SET',
-            'form_fields_count' => count($this->generationConfig['form_fields'] ?? []),
-            'table_columns_count' => count($this->generationConfig['table_columns'] ?? []),
-        ]);
-
-        // Call parent implementation
-        parent::generatePreview();
-
-        // Ensure showPreview is set to true after successful generation
-        if (!empty($this->previewData)) {
-            $this->showPreview = true;
-            Log::info('Preview generated successfully with ' . count($this->previewData) . ' files');
-        } else {
-            Log::error('Preview generation failed - no preview data generated');
-        }
-    }
-    /**
-     * Update generation config from form arrays
-     */
-    protected function updateGenerationConfigFromForm(): void
-    {
-        // Update form fields
-        $this->generationConfig['form_fields'] = $this->formConfiguration['fields'] ?? [];
-
-        // Update table columns
-        $this->generationConfig['table_columns'] = $this->tableConfiguration['columns'] ?? [];
-
-        // Update filters
-        $this->generationConfig['filters'] = $this->filterConfiguration['filters'] ?? [];
-
-        // Update page configuration
-        if (isset($this->pageConfiguration['navigation_icon'])) {
-            $this->generationConfig['navigation_icon'] = $this->pageConfiguration['navigation_icon'];
-        }
-        if (isset($this->pageConfiguration['navigation_group'])) {
-            $this->generationConfig['navigation_group'] = $this->pageConfiguration['navigation_group'] ?: null;
-        }
-        if (isset($this->pageConfiguration['navigation_sort'])) {
-            $this->generationConfig['navigation_sort'] = $this->pageConfiguration['navigation_sort'] ?: null;
-        }
-        if (isset($this->pageConfiguration['enable_view_page'])) {
-            $this->generationConfig['enable_view_page'] = $this->pageConfiguration['enable_view_page'];
-        }
-
-        // Update policy configuration
-        if (isset($this->policyConfiguration['generate_policy'])) {
-            $this->generationConfig['generate_policy'] = $this->policyConfiguration['generate_policy'];
-        }
-
-        // Ensure we have the model set
-        if ($this->selectedModel) {
-            $this->generationConfig['model'] = $this->selectedModel;
-            $this->generationConfig['class_name'] = class_basename($this->selectedModel) . 'Resource';
-        }
-    }
-
-    public function generateResource(): void
-    {
-        // Clean up configuration before generation
-        $this->cleanupConfiguration();
-
-        // Validate configuration
-        $errors = $this->validateConfiguration();
-        if (!empty($errors)) {
-            foreach ($errors as $error) {
-                $this->addError('configuration', $error);
-            }
+        if (!$this->selectedModel) {
+            $this->previewData = [];
             return;
         }
 
-        // Update generation config before generating
-        $this->updateGenerationConfigFromForm();
-
-        $this->generateFiles();
-        $this->currentStep = 'generation_complete';
-    }
-
-    public function resetWizard(): void
-    {
-        $this->currentStep = 'select_source';
-        $this->sourceType = null;
-        $this->selectedModel = null;
-        $this->selectedMigration = null;
-        $this->resetConfiguration();
-    }
-
-    public function selectIcon(string $icon): void
-    {
-        $this->pageConfiguration['navigation_icon'] = $icon;
-
-        // Also update the generation config
-        $this->generationConfig['navigation_icon'] = $icon;
-    }
-
-    public function addFormField(): void
-    {
-        // Check if there's already an empty field to prevent multiple empty entries
-        $hasEmptyField = false;
-        foreach ($this->generationConfig['form_fields'] ?? [] as $field) {
-            if (empty($field['name']) || empty($field['type'])) {
-                $hasEmptyField = true;
-                break;
-            }
-        }
-
-        if (!$hasEmptyField) {
-            $newField = [
-                'name' => '',
-                'type' => 'textInput',
-                'label' => '',
-                'required' => false,
-                'disabled' => false,
-                'placeholder' => '',
-                'validation' => '',
-                'options' => '',
-            ];
-
-            $this->generationConfig['form_fields'][] = $newField;
-            $this->formConfiguration['fields'][] = $newField;
-        }
-    }
-
-    public function removeFormField(int $index): void
-    {
-        if (isset($this->generationConfig['form_fields'][$index])) {
-            unset($this->generationConfig['form_fields'][$index]);
-            $this->generationConfig['form_fields'] = array_values($this->generationConfig['form_fields']);
-        }
-
-        if (isset($this->formConfiguration['fields'][$index])) {
-            unset($this->formConfiguration['fields'][$index]);
-            $this->formConfiguration['fields'] = array_values($this->formConfiguration['fields']);
-        }
-    }
-
-    public function addTableColumn(): void
-    {
-        // Check if there's already an empty column to prevent multiple empty entries
-        $hasEmptyColumn = false;
-        foreach ($this->generationConfig['table_columns'] ?? [] as $column) {
-            if (empty($column['name']) || empty($column['type'])) {
-                $hasEmptyColumn = true;
-                break;
-            }
-        }
-
-        if (!$hasEmptyColumn) {
-            $newColumn = [
-                'name' => '',
-                'type' => 'text',
-                'label' => '',
-                'sortable' => false,
-                'searchable' => false,
-                'toggleable' => false,
-                'options' => '',
-            ];
-
-            $this->generationConfig['table_columns'][] = $newColumn;
-            $this->tableConfiguration['columns'][] = $newColumn;
-        }
-    }
-
-    public function removeTableColumn(int $index): void
-    {
-        if (isset($this->generationConfig['table_columns'][$index])) {
-            unset($this->generationConfig['table_columns'][$index]);
-            $this->generationConfig['table_columns'] = array_values($this->generationConfig['table_columns']);
-        }
-
-        if (isset($this->tableConfiguration['columns'][$index])) {
-            unset($this->tableConfiguration['columns'][$index]);
-            $this->tableConfiguration['columns'] = array_values($this->tableConfiguration['columns']);
-        }
-    }
-
-    public function addFilter(): void
-    {
-        // Check if there's already an empty filter to prevent multiple empty entries
-        $hasEmptyFilter = false;
-        foreach ($this->generationConfig['filters'] ?? [] as $filter) {
-            if (empty($filter['name']) || empty($filter['type'])) {
-                $hasEmptyFilter = true;
-                break;
-            }
-        }
-
-        if (!$hasEmptyFilter) {
-            $newFilter = [
-                'name' => '',
-                'type' => 'text',
-                'configuration' => '',
-            ];
-
-            $this->generationConfig['filters'][] = $newFilter;
-            $this->filterConfiguration['filters'][] = $newFilter;
-        }
-    }
-
-    public function removeFilter(int $index): void
-    {
-        if (isset($this->generationConfig['filters'][$index])) {
-            unset($this->generationConfig['filters'][$index]);
-            $this->generationConfig['filters'] = array_values($this->generationConfig['filters']);
-        }
-
-        if (isset($this->filterConfiguration['filters'][$index])) {
-            unset($this->filterConfiguration['filters'][$index]);
-            $this->filterConfiguration['filters'] = array_values($this->filterConfiguration['filters']);
-        }
-    }
-
-    public function getExistingResources(): array
-    {
-        $resources = [];
-        $resourcePath = app_path('Filament/Resources');
-
-        if (!is_dir($resourcePath)) {
-            return $resources;
-        }
-
-        $files = glob($resourcePath . '/*Resource.php');
-
-        foreach ($files as $file) {
-            $fileName = basename($file, '.php');
-            $className = 'App\\Filament\\Resources\\' . $fileName;
-
-            if (class_exists($className)) {
-                $resources[] = [
-                    'id' => count($resources) + 1,
-                    'name' => $fileName,
-                    'class' => $className,
-                    'file' => $file,
-                ];
-            }
-        }
-
-        return $resources;
-    }
-
-    public function getFormFieldTypes(): array
-    {
-        return [
-            'textInput' => 'Text Input',
-            'textarea' => 'Textarea',
-            'richEditor' => 'Rich Editor',
-            'select' => 'Select',
-            'checkbox' => 'Checkbox',
-            'toggle' => 'Toggle',
-            'radio' => 'Radio',
-            'datePicker' => 'Date Picker',
-            'timePicker' => 'Time Picker',
-            'dateTimePicker' => 'DateTime Picker',
-            'fileUpload' => 'File Upload',
-            'colorPicker' => 'Color Picker',
-            'keyValue' => 'Key-Value',
-            'repeater' => 'Repeater',
-            'tagsinput' => 'Tags Input',
-        ];
-    }
-
-    public function getTableColumnTypes(): array
-    {
-        return [
-            'text' => 'Text',
-            'badge' => 'Badge',
-            'boolean' => 'Boolean',
-            'date' => 'Date',
-            'datetime' => 'DateTime',
-            'image' => 'Image',
-            'icon' => 'Icon',
-            'color' => 'Color',
-            'toggle' => 'Toggle',
-            'select' => 'Select',
-            'tags' => 'Tags',
-        ];
-    }
-
-    public function getFilterTypes(): array
-    {
-        return [
-            'text' => 'Text Filter',
-            'select' => 'Select Filter',
-            'date' => 'Date Filter',
-            'boolean' => 'Boolean Filter',
-            'ternary' => 'Ternary Filter',
-        ];
-    }
-
-    public function getAvailableIcons(): array
-    {
-        return [
-            'general' => [
-                'heroicon-o-academic-cap',
-                'heroicon-o-adjustments-horizontal',
-                'heroicon-o-archive-box',
-                'heroicon-o-arrow-down-circle',
-                'heroicon-o-arrow-up-circle',
-                'heroicon-o-at-symbol',
-                'heroicon-o-banknotes',
-                'heroicon-o-beaker',
-                'heroicon-o-bell',
-                'heroicon-o-bookmark',
-                'heroicon-o-briefcase',
-                'heroicon-o-building-office',
-                'heroicon-o-calendar',
-                'heroicon-o-camera',
-                'heroicon-o-chart-bar',
-                'heroicon-o-chart-pie',
-                'heroicon-o-check-circle',
-                'heroicon-o-clipboard',
-                'heroicon-o-clock',
-                'heroicon-o-cog-6-tooth',
-                'heroicon-o-command-line',
-                'heroicon-o-computer-desktop',
-                'heroicon-o-credit-card',
-                'heroicon-o-cube',
-                'heroicon-o-currency-dollar',
-                'heroicon-o-document',
-                'heroicon-o-envelope',
-                'heroicon-o-eye',
-                'heroicon-o-face-smile',
-                'heroicon-o-flag',
-                'heroicon-o-folder',
-                'heroicon-o-gift',
-                'heroicon-o-globe-alt',
-                'heroicon-o-heart',
-                'heroicon-o-home',
-                'heroicon-o-identification',
-                'heroicon-o-inbox',
-                'heroicon-o-information-circle',
-                'heroicon-o-key',
-                'heroicon-o-language',
-                'heroicon-o-light-bulb',
-                'heroicon-o-link',
-                'heroicon-o-list-bullet',
-                'heroicon-o-lock-closed',
-                'heroicon-o-magnifying-glass',
-                'heroicon-o-map',
-                'heroicon-o-megaphone',
-                'heroicon-o-microphone',
-                'heroicon-o-musical-note',
-                'heroicon-o-newspaper',
-                'heroicon-o-paper-airplane',
-                'heroicon-o-pencil',
-                'heroicon-o-phone',
-                'heroicon-o-photo',
-                'heroicon-o-play',
-                'heroicon-o-presentation-chart-line',
-                'heroicon-o-printer',
-                'heroicon-o-puzzle-piece',
-                'heroicon-o-qr-code',
-                'heroicon-o-question-mark-circle',
-                'heroicon-o-rocket-launch',
-                'heroicon-o-scale',
-                'heroicon-o-scissors',
-                'heroicon-o-server',
-                'heroicon-o-share',
-                'heroicon-o-shield-check',
-                'heroicon-o-shopping-bag',
-                'heroicon-o-shopping-cart',
-                'heroicon-o-sparkles',
-                'heroicon-o-speaker-wave',
-                'heroicon-o-star',
-                'heroicon-o-sun',
-                'heroicon-o-tag',
-                'heroicon-o-ticket',
-                'heroicon-o-trash',
-                'heroicon-o-trophy',
-                'heroicon-o-truck',
-                'heroicon-o-tv',
-                'heroicon-o-user',
-                'heroicon-o-user-group',
-                'heroicon-o-users',
-                'heroicon-o-video-camera',
-                'heroicon-o-wallet',
-                'heroicon-o-wifi',
-                'heroicon-o-wrench-screwdriver',
-            ],
-            'business' => [
-                'heroicon-o-building-office-2',
-                'heroicon-o-building-storefront',
-                'heroicon-o-chart-bar-square',
-                'heroicon-o-presentation-chart-bar',
-                'heroicon-o-receipt-percent',
-                'heroicon-o-receipt-refund',
-                'heroicon-o-squares-2x2',
-                'heroicon-o-table-cells',
-                'heroicon-o-view-columns',
-                'heroicon-o-viewfinder-circle',
-            ],
-            'communication' => [
-                'heroicon-o-chat-bubble-bottom-center',
-                'heroicon-o-chat-bubble-left',
-                'heroicon-o-chat-bubble-left-ellipsis',
-                'heroicon-o-chat-bubble-left-right',
-                'heroicon-o-chat-bubble-oval-left',
-                'heroicon-o-chat-bubble-oval-left-ellipsis',
-                'heroicon-o-device-phone-mobile',
-                'heroicon-o-envelope-open',
-                'heroicon-o-phone-arrow-down-left',
-                'heroicon-o-phone-arrow-up-right',
-                'heroicon-o-signal',
-                'heroicon-o-signal-slash',
-            ],
-            'navigation' => [
-                'heroicon-o-arrow-down',
-                'heroicon-o-arrow-left',
-                'heroicon-o-arrow-path',
-                'heroicon-o-arrow-right',
-                'heroicon-o-arrow-up',
-                'heroicon-o-bars-3',
-                'heroicon-o-bars-3-bottom-left',
-                'heroicon-o-bars-3-bottom-right',
-                'heroicon-o-bars-3-center-left',
-                'heroicon-o-chevron-down',
-                'heroicon-o-chevron-left',
-                'heroicon-o-chevron-right',
-                'heroicon-o-chevron-up',
-                'heroicon-o-chevron-double-down',
-                'heroicon-o-chevron-double-left',
-                'heroicon-o-chevron-double-right',
-                'heroicon-o-chevron-double-up',
-                'heroicon-o-ellipsis-horizontal',
-                'heroicon-o-ellipsis-vertical',
-                'heroicon-o-minus',
-                'heroicon-o-plus',
-                'heroicon-o-x-mark',
-            ],
-            'media' => [
-                'heroicon-o-backward',
-                'heroicon-o-camera',
-                'heroicon-o-forward',
-                'heroicon-o-pause',
-                'heroicon-o-pause-circle',
-                'heroicon-o-play-circle',
-                'heroicon-o-play-pause',
-                'heroicon-o-speaker-x-mark',
-                'heroicon-o-stop',
-                'heroicon-o-stop-circle',
-                'heroicon-o-video-camera-slash',
-            ]
-        ];
-    }
-
-    public function getAvailableTemplates(): array
-    {
-        return [
-            [
-                'id' => 1,
-                'name' => 'Simple CRUD',
-                'description' => 'Basic Create, Read, Update, Delete resource',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Advanced Resource',
-                'description' => 'Resource with filters, actions, and widgets',
-            ],
-            [
-                'id' => 3,
-                'name' => 'User Management',
-                'description' => 'Resource optimized for user management',
-            ],
-        ];
-    }
-
-    public function editExistingResource(int $resourceId): void
-    {
-        $resources = $this->getExistingResources();
-        $resource = collect($resources)->firstWhere('id', $resourceId);
-
-        if ($resource) {
-            $this->selectedModel = $resource['class'];
-            $this->currentStep = 'configure_resource';
-            // Load existing resource configuration
-            $this->loadExistingResourceConfig($resource);
-        }
-    }
-
-    public function applyTemplate(int $templateId): void
-    {
-        $templates = $this->getAvailableTemplates();
-        $template = collect($templates)->firstWhere('id', $templateId);
-
-        if ($template) {
-            switch ($templateId) {
-                case 1: // Simple CRUD
-                    $this->applySimpleCrudTemplate();
-                    break;
-                case 2: // Advanced Resource
-                    $this->applyAdvancedResourceTemplate();
-                    break;
-                case 3: // User Management
-                    $this->applyUserManagementTemplate();
-                    break;
-            }
-        }
-    }
-
-    protected function loadExistingResourceConfig(array $resource): void
-    {
-        // This would analyze the existing resource file and populate the configuration
-        // For now, we'll just set basic defaults
-        $modelName = str_replace(['App\\Filament\\Resources\\', 'Resource'], '', $resource['class']);
-        $this->generationConfig['class_name'] = $resource['name'];
-        $this->generationConfig['model'] = 'App\\Models\\' . $modelName;
-    }
-
-    protected function applySimpleCrudTemplate(): void
-    {
-        $this->generationConfig['pages'] = ['index', 'create', 'edit'];
-        $this->generationConfig['table_columns'] = [
-            ['name' => 'id', 'type' => 'text', 'label' => 'ID', 'sortable' => true, 'searchable' => false, 'toggleable' => false, 'options' => ''],
-            ['name' => 'created_at', 'type' => 'datetime', 'label' => 'Created At', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
-        ];
-        $this->generationConfig['form_fields'] = [
-            ['name' => 'name', 'type' => 'textInput', 'label' => 'Name', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter name', 'validation' => 'required|string|max:255', 'options' => ''],
-        ];
-        $this->syncConfigurationArrays();
-    }
-
-    protected function applyAdvancedResourceTemplate(): void
-    {
-        $this->generationConfig['pages'] = ['index', 'create', 'edit', 'view'];
-        $this->generationConfig['enable_global_search'] = true;
-        $this->generationConfig['filters'] = [
-            ['name' => 'status', 'type' => 'select', 'configuration' => ''],
-            ['name' => 'created_at', 'type' => 'date', 'configuration' => ''],
-        ];
-        $this->generationConfig['actions'] = [
-            ['name' => 'view', 'type' => 'view', 'configuration' => ''],
-            ['name' => 'edit', 'type' => 'edit', 'configuration' => ''],
-        ];
-        $this->syncConfigurationArrays();
-    }
-
-    protected function applyUserManagementTemplate(): void
-    {
-        $this->generationConfig['table_columns'] = [
-            ['name' => 'id', 'type' => 'text', 'label' => 'ID', 'sortable' => true, 'searchable' => false, 'toggleable' => false, 'options' => ''],
-            ['name' => 'name', 'type' => 'text', 'label' => 'Name', 'sortable' => true, 'searchable' => true, 'toggleable' => false, 'options' => ''],
-            ['name' => 'email', 'type' => 'text', 'label' => 'Email', 'sortable' => true, 'searchable' => true, 'toggleable' => false, 'options' => ''],
-            ['name' => 'email_verified_at', 'type' => 'datetime', 'label' => 'Email Verified', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
-            ['name' => 'created_at', 'type' => 'datetime', 'label' => 'Created At', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
-        ];
-        $this->generationConfig['form_fields'] = [
-            ['name' => 'name', 'type' => 'textInput', 'label' => 'Name', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter name', 'validation' => 'required|string|max:255', 'options' => ''],
-            ['name' => 'email', 'type' => 'textInput', 'label' => 'Email', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter email address', 'validation' => 'required|email|unique:users,email', 'options' => ''],
-            ['name' => 'password', 'type' => 'textInput', 'label' => 'Password', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter password', 'validation' => 'required|min:8', 'options' => ''],
-        ];
-        $this->syncConfigurationArrays();
-    }
-
-    protected function getGeneratorService()
-    {
-        return app(FilamentResourceGeneratorService::class);
-    }
-
-    public function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Section::make('Resource Configuration')
-                    ->schema([
-                        Forms\Components\Grid::make(2)
-                            ->schema([
-                                Forms\Components\TextInput::make('class_name')
-                                    ->label('Resource Class Name')
-                                    ->placeholder('e.g., UserResource, ProductResource')
-                                    ->required()
-                                    ->live(debounce: 300)
-                                    ->afterStateUpdated(function ($state) {
-                                        if ($state) {
-                                            $this->autoSuggestNames($state);
-                                        }
-                                    })
-                                    ->rule(function ($get) {
-                                        return function (string $attribute, $value, \Closure $fail) use ($get) {
-                                            if ($value && preg_match('/^[A-Z][a-zA-Z0-9]*Resource$/', $value)) {
-                                                $namespace = $get('namespace') ?: 'App\\Filament\\Resources';
-                                                $resourcePath = $this->getResourceFilePath($value, $namespace);
-                                                $overwriteError = $this->wouldOverwriteFile($resourcePath, 'resource');
-                                                if ($overwriteError) {
-                                                    $fail($overwriteError);
-                                                }
-                                            }
-                                        };
-                                    }),
-
-                                Forms\Components\TextInput::make('model')
-                                    ->label('Target Model')
-                                    ->placeholder('e.g., User, Product, Order')
-                                    ->required(),
-
-                                Forms\Components\TextInput::make('namespace')
-                                    ->label('Namespace')
-                                    ->default('App\\Filament\\Resources')
-                                    ->required(),
-
-                                Forms\Components\TextInput::make('slug')
-                                    ->label('URL Slug')
-                                    ->placeholder('Auto-generated if empty'),
-                            ]),
-
-                        Forms\Components\Grid::make(2)
-                            ->schema([
-                                Forms\Components\TextInput::make('navigation_label')
-                                    ->label('Navigation Label')
-                                    ->placeholder('Auto-generated if empty'),
-
-                                Forms\Components\TextInput::make('navigation_group')
-                                    ->label('Navigation Group')
-                                    ->placeholder('Optional navigation group'),
-
-                                Forms\Components\Select::make('navigation_icon')
-                                    ->label('Navigation Icon')
-                                    ->options($this->getHeroicons())
-                                    ->default('heroicon-o-rectangle-stack')
-                                    ->searchable(),
-
-                                Forms\Components\TextInput::make('navigation_sort')
-                                    ->label('Navigation Sort Order')
-                                    ->numeric()
-                                    ->placeholder('Optional sort order'),
-                            ]),
-
-                        Forms\Components\Grid::make(2)
-                            ->schema([
-                                Forms\Components\Toggle::make('enable_global_search')
-                                    ->label('Enable Global Search')
-                                    ->default(true),
-
-                                Forms\Components\CheckboxList::make('pages')
-                                    ->label('Generate Pages')
-                                    ->options([
-                                        'index' => 'Index (List)',
-                                        'create' => 'Create',
-                                        'edit' => 'Edit',
-                                        'view' => 'View',
-                                    ])
-                                    ->default(['index', 'create', 'edit', 'view'])
-                                    ->columns(2),
-                            ]),
-
-                        Forms\Components\TagsInput::make('searchable_fields')
-                            ->label('Global Search Fields')
-                            ->placeholder('Add searchable field names')
-                            ->visible(fn(Forms\Get $get) => $get('enable_global_search')),
-
-                        Section::make('Table Configuration')
-                            ->schema([
-                                Forms\Components\Repeater::make('table_columns')
-                                    ->label('Table Columns')
-                                    ->schema($this->getTableColumnSchema())
-                                    ->columnSpanFull()
-                                    ->addActionLabel('Add Column')
-                                    ->defaultItems(0)
-                                    ->collapsible(),
-                            ]),
-
-                        Section::make('Form Configuration')
-                            ->schema([
-                                Forms\Components\Repeater::make('form_fields')
-                                    ->label('Form Fields')
-                                    ->schema($this->getFormFieldSchema())
-                                    ->columnSpanFull()
-                                    ->addActionLabel('Add Field')
-                                    ->defaultItems(0)
-                                    ->collapsible(),
-                            ]),
-
-                        Section::make('Filters & Actions')
-                            ->columns(2)
-                            ->schema([
-                                Forms\Components\Repeater::make('filters')
-                                    ->label('Table Filters')
-                                    ->schema($this->getFilterSchema())
-                                    ->addActionLabel('Add Filter')
-                                    ->defaultItems(0)
-                                    ->collapsible(),
-
-                                Forms\Components\Repeater::make('actions')
-                                    ->label('Table Actions')
-                                    ->schema($this->getActionSchema())
-                                    ->addActionLabel('Add Action')
-                                    ->defaultItems(0)
-                                    ->collapsible(),
-
-                                Forms\Components\Repeater::make('bulk_actions')
-                                    ->label('Bulk Actions')
-                                    ->schema($this->getBulkActionSchema())
-                                    ->addActionLabel('Add Bulk Action')
-                                    ->defaultItems(0)
-                                    ->collapsible(),
-
-                                Forms\Components\TagsInput::make('widgets')
-                                    ->label('Resource Widgets')
-                                    ->placeholder('Add widget class names'),
-                            ]),
-
-                        Section::make('Relations')
-                            ->schema([
-                                Forms\Components\TagsInput::make('relations')
-                                    ->label('Relation Managers')
-                                    ->placeholder('Add relation names to generate managers for')
-                                    ->helperText('These will generate RelationManager classes'),
-                            ]),
-                    ]),
-            ])
-            ->statePath('generationConfig');
-    }
-
-    protected function getTableColumnSchema(): array
-    {
-        return [
-            Forms\Components\Grid::make(4)
-                ->schema([
-                    Forms\Components\TextInput::make('name')
-                        ->label('Column Name')
-                        ->required(),
-
-                    Forms\Components\Select::make('type')
-                        ->label('Column Type')
-                        ->options([
-                            'text' => 'Text',
-                            'badge' => 'Badge',
-                            'boolean' => 'Boolean',
-                            'date' => 'Date',
-                            'datetime' => 'DateTime',
-                            'image' => 'Image',
-                            'icon' => 'Icon',
-                            'color' => 'Color',
-                            'toggle' => 'Toggle',
-                            'select' => 'Select',
-                            'tags' => 'Tags',
-                        ])
-                        ->required(),
-
-                    Forms\Components\TextInput::make('label')
-                        ->label('Label')
-                        ->placeholder('Auto-generated if empty'),
-
-                    Forms\Components\Toggle::make('sortable')
-                        ->label('Sortable'),
-
-                    Forms\Components\Toggle::make('searchable')
-                        ->label('Searchable'),
-
-                    Forms\Components\Toggle::make('toggleable')
-                        ->label('Toggleable'),
-                ]),
-
-            Forms\Components\Textarea::make('options')
-                ->label('Options/Configuration')
-                ->placeholder('Additional column configuration')
-                ->columnSpanFull(),
-        ];
-    }
-
-    protected function getFormFieldSchema(): array
-    {
-        return [
-            Forms\Components\Grid::make(3)
-                ->schema([
-                    Forms\Components\TextInput::make('name')
-                        ->label('Field Name')
-                        ->required(),
-
-                    Forms\Components\Select::make('type')
-                        ->label('Field Type')
-                        ->options([
-                            'textInput' => 'Text Input',
-                            'textarea' => 'Textarea',
-                            'richEditor' => 'Rich Editor',
-                            'select' => 'Select',
-                            'checkbox' => 'Checkbox',
-                            'toggle' => 'Toggle',
-                            'radio' => 'Radio',
-                            'datePicker' => 'Date Picker',
-                            'timePicker' => 'Time Picker',
-                            'dateTimePicker' => 'DateTime Picker',
-                            'fileUpload' => 'File Upload',
-                            'colorPicker' => 'Color Picker',
-                            'keyValue' => 'Key-Value',
-                            'repeater' => 'Repeater',
-                            'tagsinput' => 'Tags Input',
-                        ])
-                        ->required(),
-
-                    Forms\Components\TextInput::make('label')
-                        ->label('Label')
-                        ->placeholder('Auto-generated if empty'),
-
-                    Forms\Components\Toggle::make('required')
-                        ->label('Required'),
-
-                    Forms\Components\Toggle::make('disabled')
-                        ->label('Disabled'),
-
-                    Forms\Components\TextInput::make('placeholder')
-                        ->label('Placeholder'),
-                ]),
-
-            Forms\Components\Textarea::make('validation')
-                ->label('Validation Rules')
-                ->placeholder('e.g., required|string|max:255')
-                ->columnSpanFull(),
-
-            Forms\Components\Textarea::make('options')
-                ->label('Options/Configuration')
-                ->placeholder('Additional field configuration')
-                ->columnSpanFull(),
-        ];
-    }
-
-    protected function getFilterSchema(): array
-    {
-        return [
-            Forms\Components\TextInput::make('name')
-                ->label('Filter Name')
-                ->required(),
-
-            Forms\Components\Select::make('type')
-                ->label('Filter Type')
-                ->options([
-                    'text' => 'Text Filter',
-                    'select' => 'Select Filter',
-                    'date' => 'Date Filter',
-                    'boolean' => 'Boolean Filter',
-                    'ternary' => 'Ternary Filter',
-                ])
-                ->required(),
-
-            Forms\Components\Textarea::make('configuration')
-                ->label('Filter Configuration')
-                ->placeholder('Additional filter configuration'),
-        ];
-    }
-
-    protected function getActionSchema(): array
-    {
-        return [
-            Forms\Components\TextInput::make('name')
-                ->label('Action Name')
-                ->required(),
-
-            Forms\Components\Select::make('type')
-                ->label('Action Type')
-                ->options([
-                    'edit' => 'Edit Action',
-                    'view' => 'View Action',
-                    'delete' => 'Delete Action',
-                    'custom' => 'Custom Action',
-                ])
-                ->required(),
-
-            Forms\Components\Textarea::make('configuration')
-                ->label('Action Configuration')
-                ->placeholder('Additional action configuration'),
-        ];
-    }
-
-    protected function getBulkActionSchema(): array
-    {
-        return [
-            Forms\Components\TextInput::make('name')
-                ->label('Bulk Action Name')
-                ->required(),
-
-            Forms\Components\Select::make('type')
-                ->label('Action Type')
-                ->options([
-                    'delete' => 'Delete Action',
-                    'export' => 'Export Action',
-                    'custom' => 'Custom Action',
-                ])
-                ->required(),
-
-            Forms\Components\Textarea::make('configuration')
-                ->label('Action Configuration')
-                ->placeholder('Additional action configuration'),
-        ];
-    }
-
-    protected function getHeroicons(): array
-    {
-        return [
-            'heroicon-o-academic-cap' => 'Academic Cap',
-            'heroicon-o-adjustments-horizontal' => 'Adjustments Horizontal',
-            'heroicon-o-adjustments-vertical' => 'Adjustments Vertical',
-            'heroicon-o-archive-box' => 'Archive Box',
-            'heroicon-o-arrow-down' => 'Arrow Down',
-            'heroicon-o-arrow-left' => 'Arrow Left',
-            'heroicon-o-arrow-right' => 'Arrow Right',
-            'heroicon-o-arrow-up' => 'Arrow Up',
-            'heroicon-o-bars-3' => 'Bars 3',
-            'heroicon-o-bell' => 'Bell',
-            'heroicon-o-bookmark' => 'Bookmark',
-            'heroicon-o-briefcase' => 'Briefcase',
-            'heroicon-o-building-office' => 'Building Office',
-            'heroicon-o-calendar' => 'Calendar',
-            'heroicon-o-camera' => 'Camera',
-            'heroicon-o-chart-bar' => 'Chart Bar',
-            'heroicon-o-chat-bubble-left' => 'Chat Bubble Left',
-            'heroicon-o-check' => 'Check',
-            'heroicon-o-circle-stack' => 'Circle Stack',
-            'heroicon-o-clipboard' => 'Clipboard',
-            'heroicon-o-clock' => 'Clock',
-            'heroicon-o-cloud' => 'Cloud',
-            'heroicon-o-code-bracket' => 'Code Bracket',
-            'heroicon-o-cog-6-tooth' => 'Cog 6 Tooth',
-            'heroicon-o-command-line' => 'Command Line',
-            'heroicon-o-computer-desktop' => 'Computer Desktop',
-            'heroicon-o-cube' => 'Cube',
-            'heroicon-o-currency-dollar' => 'Currency Dollar',
-            'heroicon-o-document' => 'Document',
-            'heroicon-o-envelope' => 'Envelope',
-            'heroicon-o-eye' => 'Eye',
-            'heroicon-o-face-smile' => 'Face Smile',
-            'heroicon-o-film' => 'Film',
-            'heroicon-o-finger-print' => 'Finger Print',
-            'heroicon-o-fire' => 'Fire',
-            'heroicon-o-flag' => 'Flag',
-            'heroicon-o-folder' => 'Folder',
-            'heroicon-o-gift' => 'Gift',
-            'heroicon-o-globe-alt' => 'Globe Alt',
-            'heroicon-o-heart' => 'Heart',
-            'heroicon-o-home' => 'Home',
-            'heroicon-o-identification' => 'Identification',
-            'heroicon-o-inbox' => 'Inbox',
-            'heroicon-o-key' => 'Key',
-            'heroicon-o-light-bulb' => 'Light Bulb',
-            'heroicon-o-link' => 'Link',
-            'heroicon-o-list-bullet' => 'List Bullet',
-            'heroicon-o-lock-closed' => 'Lock Closed',
-            'heroicon-o-magnifying-glass' => 'Magnifying Glass',
-            'heroicon-o-map' => 'Map',
-            'heroicon-o-megaphone' => 'Megaphone',
-            'heroicon-o-microphone' => 'Microphone',
-            'heroicon-o-musical-note' => 'Musical Note',
-            'heroicon-o-newspaper' => 'Newspaper',
-            'heroicon-o-pencil' => 'Pencil',
-            'heroicon-o-phone' => 'Phone',
-            'heroicon-o-photo' => 'Photo',
-            'heroicon-o-play' => 'Play',
-            'heroicon-o-plus' => 'Plus',
-            'heroicon-o-presentation-chart-line' => 'Presentation Chart Line',
-            'heroicon-o-printer' => 'Printer',
-            'heroicon-o-puzzle-piece' => 'Puzzle Piece',
-            'heroicon-o-qr-code' => 'QR Code',
-            'heroicon-o-question-mark-circle' => 'Question Mark Circle',
-            'heroicon-o-rectangle-stack' => 'Rectangle Stack',
-            'heroicon-o-rocket-launch' => 'Rocket Launch',
-            'heroicon-o-scale' => 'Scale',
-            'heroicon-o-server' => 'Server',
-            'heroicon-o-shield-check' => 'Shield Check',
-            'heroicon-o-shopping-bag' => 'Shopping Bag',
-            'heroicon-o-shopping-cart' => 'Shopping Cart',
-            'heroicon-o-sparkles' => 'Sparkles',
-            'heroicon-o-squares-2x2' => 'Squares 2x2',
-            'heroicon-o-star' => 'Star',
-            'heroicon-o-table-cells' => 'Table Cells',
-            'heroicon-o-tag' => 'Tag',
-            'heroicon-o-ticket' => 'Ticket',
-            'heroicon-o-trash' => 'Trash',
-            'heroicon-o-trophy' => 'Trophy',
-            'heroicon-o-truck' => 'Truck',
-            'heroicon-o-tv' => 'TV',
-            'heroicon-o-user' => 'User',
-            'heroicon-o-user-group' => 'User Group',
-            'heroicon-o-users' => 'Users',
-            'heroicon-o-video-camera' => 'Video Camera',
-            'heroicon-o-wallet' => 'Wallet',
-            'heroicon-o-wifi' => 'WiFi',
-            'heroicon-o-wrench-screwdriver' => 'Wrench Screwdriver',
-            'heroicon-o-x-mark' => 'X Mark',
-        ];
-    }
-
-    protected function cleanupConfiguration(): void
-    {
-        // Remove empty table columns
-        $this->generationConfig['table_columns'] = array_filter(
-            $this->generationConfig['table_columns'] ?? [],
-            function ($column) {
-                return !empty($column['name']) && !empty($column['type']);
-            }
-        );
-        $this->generationConfig['table_columns'] = array_values($this->generationConfig['table_columns']);
-
-        // Remove empty form fields
-        $this->generationConfig['form_fields'] = array_filter(
-            $this->generationConfig['form_fields'] ?? [],
-            function ($field) {
-                return !empty($field['name']) && !empty($field['type']);
-            }
-        );
-        $this->generationConfig['form_fields'] = array_values($this->generationConfig['form_fields']);
-
-        // Remove empty filters
-        $this->generationConfig['filters'] = array_filter(
-            $this->generationConfig['filters'] ?? [],
-            function ($filter) {
-                return !empty($filter['name']) && !empty($filter['type']);
-            }
-        );
-        $this->generationConfig['filters'] = array_values($this->generationConfig['filters']);
-
-        // Remove empty actions
-        $this->generationConfig['actions'] = array_filter(
-            $this->generationConfig['actions'] ?? [],
-            function ($action) {
-                return !empty($action['name']) && !empty($action['type']);
-            }
-        );
-        $this->generationConfig['actions'] = array_values($this->generationConfig['actions']);
-
-        // Remove empty bulk actions
-        $this->generationConfig['bulk_actions'] = array_filter(
-            $this->generationConfig['bulk_actions'] ?? [],
-            function ($action) {
-                return !empty($action['name']) && !empty($action['type']);
-            }
-        );
-        $this->generationConfig['bulk_actions'] = array_values($this->generationConfig['bulk_actions']);
-
-        // Sync the cleaned configuration
-        $this->syncConfigurationArrays();
-    }
-
-    protected function validateConfiguration(): array
-    {
-        $errors = [];
-
-        // Check if a source (model or migration) has been selected
-        if (empty($this->selectedModel) && empty($this->selectedMigration)) {
-            $errors[] = 'Please select a model or migration as the source for your resource.';
-        }
-
-        if (empty($this->generationConfig['class_name'])) {
-            $errors[] = 'Resource class name is required.';
-        } elseif (!preg_match('/^[A-Z][a-zA-Z0-9]*Resource$/', $this->generationConfig['class_name'])) {
-            $errors[] = 'Resource class name must end with "Resource" and be a valid PHP class name.';
-        } else {
-            // Check if resource file already exists
-            $className = $this->generationConfig['class_name'];
-            $namespace = $this->generationConfig['namespace'] ?? 'App\\Filament\\Resources';
-            $resourcePath = $this->getResourceFilePath($className, $namespace);
-
-            $overwriteError = $this->wouldOverwriteFile($resourcePath, 'resource');
-            if ($overwriteError) {
-                $errors[] = $overwriteError;
-            }
-
-            // Check if any of the resource page files already exist
-            $pageErrors = $this->checkResourcePageFiles($className, $namespace);
-            $errors = array_merge($errors, $pageErrors);
-        }
-        if (empty($this->generationConfig['model'])) {
-            $errors[] = 'Target model is required.';
-        }
-
-        if (empty($this->generationConfig['pages'])) {
-            $errors[] = 'At least one page must be selected.';
-        }
-
-        return $errors;
-    }
-
-    /**
-     * Get the file path for a Filament resource based on class name and namespace
-     */
-    protected function getResourceFilePath(string $className, string $namespace): string
-    {
-        $namespacePath = $this->namespaceToPath($namespace);
-        return base_path($namespacePath . '/' . $className . '.php');
-    }
-
-    /**
-     * Check if resource page files already exist
-     */
-    protected function checkResourcePageFiles(string $resourceClassName, string $namespace): array
-    {
-        $errors = [];
-        $selectedPages = $this->generationConfig['pages'] ?? [];
-
-        // Remove 'Resource' suffix to get base name
-        $baseName = str_replace('Resource', '', $resourceClassName);
-
-        foreach ($selectedPages as $pageType) {
-            switch ($pageType) {
-                case 'ListPage':
-                    $pageClassName = "List{$baseName}";
-                    break;
-                case 'CreatePage':
-                    $pageClassName = "Create{$baseName}";
-                    break;
-                case 'EditPage':
-                    $pageClassName = "Edit{$baseName}";
-                    break;
-                case 'ViewPage':
-                    $pageClassName = "View{$baseName}";
-                    break;
-                default:
-                    continue 2; // Skip unknown page types
-            }
-
-            $pageNamespace = $namespace . '\\' . str_replace('Resource', '', $resourceClassName) . '\\Pages';
-            $pagePath = $this->getResourcePageFilePath($pageClassName, $pageNamespace);
-
-            $overwriteError = $this->wouldOverwriteFile($pagePath, 'resource page');
-            if ($overwriteError) {
-                $errors[] = $overwriteError;
-            }
-        }
-
-        return $errors;
-    }
-
-    /**
-     * Get the file path for a resource page
-     */
-    protected function getResourcePageFilePath(string $pageClassName, string $namespace): string
-    {
-        $namespacePath = $this->namespaceToPath($namespace);
-        return base_path($namespacePath . '/' . $pageClassName . '.php');
-    }
-    protected function autoSuggestNames(string $className, ?string $tableName = null): void
-    {
-        // Extract model name from resource class name
-        if (str_ends_with($className, 'Resource')) {
-            $modelName = str_replace('Resource', '', $className);
-            if (empty($this->generationConfig['model'])) {
-                $this->generationConfig['model'] = 'App\\Models\\' . $modelName;
-            }
-
-            // Auto-suggest navigation label
-            if (empty($this->generationConfig['navigation_label'])) {
-                $this->generationConfig['navigation_label'] = str(str()->plural($modelName))->title();
-            }
-
-            // Auto-suggest slug
-            if (empty($this->generationConfig['slug'])) {
-                $this->generationConfig['slug'] = str(str()->plural($modelName))->kebab();
-            }
-
-            // Auto-suggest table columns and form fields
-            if (empty($this->generationConfig['table_columns'])) {
-                $this->generationConfig['table_columns'] = $this->getCommonTableColumns($modelName);
-            }
-
-            if (empty($this->generationConfig['form_fields'])) {
-                $this->generationConfig['form_fields'] = $this->getCommonFormFields($modelName);
-            }
-
-            // Sync the configuration arrays
-            $this->syncConfigurationArrays();
-        }
-    }
-
-    protected function getCommonTableColumns(string $modelName): array
-    {
-        $commonColumns = [
-            ['name' => 'id', 'type' => 'text', 'label' => 'ID', 'sortable' => true, 'searchable' => false, 'toggleable' => false, 'options' => ''],
-        ];
-
-        if (str_contains(strtolower($modelName), 'user')) {
-            $commonColumns = array_merge($commonColumns, [
-                ['name' => 'name', 'type' => 'text', 'label' => 'Name', 'sortable' => true, 'searchable' => true, 'toggleable' => false, 'options' => ''],
-                ['name' => 'email', 'type' => 'text', 'label' => 'Email', 'sortable' => true, 'searchable' => true, 'toggleable' => false, 'options' => ''],
-                ['name' => 'email_verified_at', 'type' => 'datetime', 'label' => 'Email Verified', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
-                ['name' => 'created_at', 'type' => 'datetime', 'label' => 'Created At', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
+        try {
+            $config = $this->buildGenerationConfig();
+            $generatorService = app(FilamentResourceGeneratorService::class);
+
+            $this->previewData = $generatorService->generatePreview($config);
+            $this->activePreviewTab = 0; // Reset to first tab
+
+            Log::info('Preview generated successfully', [
+                'model' => $this->selectedModel,
+                'files_count' => count($this->previewData)
             ]);
-        } elseif (str_contains(strtolower($modelName), 'product')) {
-            $commonColumns = array_merge($commonColumns, [
-                ['name' => 'name', 'type' => 'text', 'label' => 'Name', 'sortable' => true, 'searchable' => true, 'toggleable' => false, 'options' => ''],
-                ['name' => 'price', 'type' => 'text', 'label' => 'Price', 'sortable' => true, 'searchable' => false, 'toggleable' => false, 'options' => ''],
-                ['name' => 'is_active', 'type' => 'boolean', 'label' => 'Active', 'sortable' => true, 'searchable' => false, 'toggleable' => false, 'options' => ''],
-                ['name' => 'created_at', 'type' => 'datetime', 'label' => 'Created At', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
-            ]);
-        } else {
-            // Add basic columns for other models
-            $commonColumns = array_merge($commonColumns, [
-                ['name' => 'created_at', 'type' => 'datetime', 'label' => 'Created At', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
-                ['name' => 'updated_at', 'type' => 'datetime', 'label' => 'Updated At', 'sortable' => true, 'searchable' => false, 'toggleable' => true, 'options' => ''],
-            ]);
+        } catch (\Exception $e) {
+            Log::error('Preview generation failed: ' . $e->getMessage());
+            $this->addError('preview', 'Failed to generate preview: ' . $e->getMessage());
+            $this->previewData = [];
         }
-
-        return $commonColumns;
     }
 
-    protected function getCommonFormFields(string $modelName): array
+    protected function buildGenerationConfig(): array
     {
-        $commonFields = [];
-
-        if (str_contains(strtolower($modelName), 'user')) {
-            $commonFields = [
-                ['name' => 'name', 'type' => 'textInput', 'label' => 'Name', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter name', 'validation' => 'required|string|max:255', 'options' => ''],
-                ['name' => 'email', 'type' => 'textInput', 'label' => 'Email', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter email address', 'validation' => 'required|email|unique:users,email', 'options' => ''],
-                ['name' => 'password', 'type' => 'textInput', 'label' => 'Password', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter password', 'validation' => 'required|min:8', 'options' => ''],
-            ];
-        } elseif (str_contains(strtolower($modelName), 'product')) {
-            $commonFields = [
-                ['name' => 'name', 'type' => 'textInput', 'label' => 'Name', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter product name', 'validation' => 'required|string|max:255', 'options' => ''],
-                ['name' => 'description', 'type' => 'textarea', 'label' => 'Description', 'required' => false, 'disabled' => false, 'placeholder' => 'Enter product description', 'validation' => '', 'options' => ''],
-                ['name' => 'price', 'type' => 'textInput', 'label' => 'Price', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter price', 'validation' => 'required|numeric|min:0', 'options' => ''],
-                ['name' => 'is_active', 'type' => 'toggle', 'label' => 'Active', 'required' => false, 'disabled' => false, 'placeholder' => '', 'validation' => '', 'options' => ''],
-            ];
-        } else {
-            // Add basic fields for other models
-            $commonFields = [
-                ['name' => 'name', 'type' => 'textInput', 'label' => 'Name', 'required' => true, 'disabled' => false, 'placeholder' => 'Enter name', 'validation' => 'required|string|max:255', 'options' => ''],
-            ];
-        }
-
-        return $commonFields;
-    }
-
-    /**
-     * Convert service field types to page form field types
-     */
-    protected function convertFormFieldType(string $serviceType): string
-    {
-        return match ($serviceType) {
-            'text' => 'textInput',
-            'email' => 'textInput',
-            'password' => 'textInput',
-            'number' => 'textInput',
-            'textarea' => 'textarea',
-            'select' => 'select',
-            'toggle' => 'toggle',
-            'date' => 'datePicker',
-            'datetime' => 'dateTimePicker',
-            'time' => 'timePicker',
-            default => 'textInput',
-        };
-    }
-
-    /**
-     * Generate validation rules for a field
-     */
-    protected function generateValidationRules(array $field): string
-    {
-        $rules = [];
-
-        if ($field['required'] ?? false) {
-            $rules[] = 'required';
-        }
-
-        $type = $field['type'] ?? 'text';
-
-        switch ($type) {
-            case 'email':
-                $rules[] = 'email';
-                break;
-            case 'number':
-                $rules[] = 'numeric';
-                break;
-            case 'text':
-            case 'textarea':
-                $rules[] = 'string';
-                $rules[] = 'max:255';
-                break;
-        }
-
-        return implode('|', $rules);
-    }
-
-    public function getResourcePreviewData(): array
-    {
-        // Determine the resource name properly
-        $resourceName = '';
-        $modelName = '';
-        $modelClass = '';
-
-        if ($this->selectedModel) {
-            $modelClass = $this->selectedModel;
-            $modelName = class_basename($this->selectedModel);
-            $resourceName = $modelName . 'Resource';
-        } elseif (!empty($this->generationConfig['model'])) {
-            $modelClass = $this->generationConfig['model'];
-            $modelName = class_basename($this->generationConfig['model']);
-            $resourceName = $modelName . 'Resource';
-        } elseif (!empty($this->generationConfig['class_name'])) {
-            $resourceName = $this->generationConfig['class_name'];
-            $modelName = str_replace('Resource', '', $resourceName);
-            $modelClass = 'App\\Models\\' . $modelName;
-        }
-
-        // Fallback if nothing is set
-        if (empty($resourceName)) {
-            $resourceName = 'ExampleResource';
-            $modelName = 'Example';
-            $modelClass = 'App\\Models\\Example';
-        }
+        $modelName = class_basename($this->selectedModel);
 
         return [
-            'resource_name' => $resourceName,
-            'model_name' => $modelName,
-            'model_class' => $modelClass,
+            'enabled' => true,
+            'model' => $this->selectedModel,
+            'class_name' => $modelName . 'Resource',
+            'namespace' => 'App\\Filament\\Resources',
+            'navigation_icon' => $this->resourceSettings['navigation_icon'],
+            'navigation_label' => $this->resourceSettings['navigation_label'] ?? Str::title(Str::plural($modelName)),
+            'navigation_group' => $this->resourceSettings['navigation_group'] ?: null,
+            'navigation_sort' => $this->resourceSettings['navigation_sort'],
+            'enable_view_page' => $this->resourceSettings['enable_view_page'],
+            'enable_global_search' => $this->resourceSettings['enable_global_search'],
+            'generate_policy' => $this->resourceSettings['generate_policy'],
+            'form_fields' => array_filter($this->formFields, fn($field) => $field['enabled'] ?? true),
+            'table_columns' => array_filter($this->tableColumns, fn($column) => $column['enabled'] ?? true),
+            'filters' => array_filter($this->filters, fn($filter) => $filter['enabled'] ?? false),
+            'pages' => $this->getEnabledPages(),
         ];
+    }
+
+    protected function getEnabledPages(): array
+    {
+        $pages = ['index', 'create', 'edit'];
+
+        if ($this->resourceSettings['enable_view_page']) {
+            $pages[] = 'view';
+        }
+
+        return $pages;
+    }
+
+    public function generateFiles(): void
+    {
+        if (!$this->selectedModel) {
+            $this->addError('generation', 'Please select a model first.');
+            return;
+        }
+
+        $this->isGenerating = true;
+
+        try {
+            $config = $this->buildGenerationConfig();
+            $generatorService = app(FilamentResourceGeneratorService::class);
+
+            $results = $generatorService->generateFiles($config);
+
+            $this->isGenerating = false;
+
+            // Show success notification
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'title' => 'Resource Generated Successfully!',
+                'message' => count($results) . ' files have been created.',
+            ]);
+
+            Log::info('Resource files generated successfully', [
+                'model' => $this->selectedModel,
+                'files' => $results
+            ]);
+        } catch (\Exception $e) {
+            $this->isGenerating = false;
+            $this->addError('generation', 'Failed to generate files: ' . $e->getMessage());
+            Log::error('Resource generation failed: ' . $e->getMessage());
+        }
+    }
+
+    public function refreshPreview(): void
+    {
+        $this->generatePreview();
+    }
+
+    public function toggleFormField(int $index): void
+    {
+        if (isset($this->formFields[$index])) {
+            $this->formFields[$index]['enabled'] = !($this->formFields[$index]['enabled'] ?? true);
+            $this->generatePreview();
+        }
+    }
+
+    public function toggleTableColumn(int $index): void
+    {
+        if (isset($this->tableColumns[$index])) {
+            $this->tableColumns[$index]['enabled'] = !($this->tableColumns[$index]['enabled'] ?? true);
+            $this->generatePreview();
+        }
+    }
+
+    public function toggleFilter(int $index): void
+    {
+        if (isset($this->filters[$index])) {
+            $this->filters[$index]['enabled'] = !($this->filters[$index]['enabled'] ?? false);
+            $this->generatePreview();
+        }
+    }
+
+    public function updateResourceSettings(): void
+    {
+        $this->generatePreview();
     }
 
     public static function getNavigationGroup(): ?string
