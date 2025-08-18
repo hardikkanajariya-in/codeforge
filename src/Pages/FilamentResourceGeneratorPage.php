@@ -5,6 +5,7 @@ namespace HkDevs\CodeForgeStudio\Pages;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use HkDevs\CodeForgeStudio\Services\FilamentResourceGeneratorService;
 use Illuminate\Support\Str;
@@ -41,6 +42,11 @@ class FilamentResourceGeneratorPage extends Page
     public bool $isGenerating = false;
     public int $activePreviewTab = 0;
 
+    // Designer toggles
+    public bool $showFormDesigner = false;
+    public bool $showTableDesigner = false;
+    public bool $showFilterDesigner = false;
+
     // Configuration arrays
     public array $formFields = [];
     public array $tableColumns = [];
@@ -53,7 +59,6 @@ class FilamentResourceGeneratorPage extends Page
         'enable_global_search' => true,
         'generate_policy' => false,
     ];
-
     public function mount(): void
     {
         $this->resetToDefaults();
@@ -67,6 +72,9 @@ class FilamentResourceGeneratorPage extends Page
         $this->tableColumns = [];
         $this->filters = [];
         $this->activePreviewTab = 0;
+        $this->showFormDesigner = false;
+        $this->showTableDesigner = false;
+        $this->showFilterDesigner = false;
     }
 
     public function getAvailableModelsProperty(): array
@@ -263,12 +271,12 @@ class FilamentResourceGeneratorPage extends Page
 
             $this->isGenerating = false;
 
-            // Show success notification
-            $this->dispatch('notify', [
-                'type' => 'success',
-                'title' => 'Resource Generated Successfully!',
-                'message' => count($results) . ' files have been created.',
-            ]);
+            // Show success notification using Filament notification
+            Notification::make()
+                ->title('Resource Generated Successfully!')
+                ->body(count($results) . ' files have been created.')
+                ->success()
+                ->send();
 
             Log::info('Resource files generated successfully', [
                 'model' => $this->selectedModel,
@@ -311,6 +319,228 @@ class FilamentResourceGeneratorPage extends Page
     }
 
     public function updateResourceSettings(): void
+    {
+        $this->generatePreview();
+    }
+
+    // Form Designer Methods
+    public function addFormField(): void
+    {
+        $this->formFields[] = [
+            'name' => '',
+            'type' => 'text',
+            'label' => '',
+            'required' => false,
+            'enabled' => true,
+            'placeholder' => '',
+            'helper_text' => '',
+            'validation' => '',
+            'options' => '',
+        ];
+    }
+
+    public function removeFormField(int $index): void
+    {
+        if (isset($this->formFields[$index])) {
+            unset($this->formFields[$index]);
+            $this->formFields = array_values($this->formFields);
+            $this->generatePreview();
+        }
+    }
+
+    public function moveFormFieldUp(int $index): void
+    {
+        if ($index > 0 && isset($this->formFields[$index])) {
+            $temp = $this->formFields[$index];
+            $this->formFields[$index] = $this->formFields[$index - 1];
+            $this->formFields[$index - 1] = $temp;
+            $this->generatePreview();
+        }
+    }
+
+    public function moveFormFieldDown(int $index): void
+    {
+        if ($index < count($this->formFields) - 1 && isset($this->formFields[$index])) {
+            $temp = $this->formFields[$index];
+            $this->formFields[$index] = $this->formFields[$index + 1];
+            $this->formFields[$index + 1] = $temp;
+            $this->generatePreview();
+        }
+    }
+
+    // Table Designer Methods
+    public function addTableColumn(): void
+    {
+        $this->tableColumns[] = [
+            'name' => '',
+            'type' => 'text',
+            'label' => '',
+            'sortable' => false,
+            'searchable' => false,
+            'enabled' => true,
+            'toggleable' => false,
+            'format' => '',
+            'badge_colors' => '',
+        ];
+    }
+
+    public function removeTableColumn(int $index): void
+    {
+        if (isset($this->tableColumns[$index])) {
+            unset($this->tableColumns[$index]);
+            $this->tableColumns = array_values($this->tableColumns);
+            $this->generatePreview();
+        }
+    }
+
+    public function moveTableColumnUp(int $index): void
+    {
+        if ($index > 0 && isset($this->tableColumns[$index])) {
+            $temp = $this->tableColumns[$index];
+            $this->tableColumns[$index] = $this->tableColumns[$index - 1];
+            $this->tableColumns[$index - 1] = $temp;
+            $this->generatePreview();
+        }
+    }
+
+    public function moveTableColumnDown(int $index): void
+    {
+        if ($index < count($this->tableColumns) - 1 && isset($this->tableColumns[$index])) {
+            $temp = $this->tableColumns[$index];
+            $this->tableColumns[$index] = $this->tableColumns[$index + 1];
+            $this->tableColumns[$index + 1] = $temp;
+            $this->generatePreview();
+        }
+    }
+
+    // Filter Designer Methods
+    public function addFilter(): void
+    {
+        $this->filters[] = [
+            'name' => '',
+            'type' => 'text',
+            'label' => '',
+            'enabled' => true,
+            'options' => '',
+            'relationship' => '',
+        ];
+    }
+
+    public function removeFilter(int $index): void
+    {
+        if (isset($this->filters[$index])) {
+            unset($this->filters[$index]);
+            $this->filters = array_values($this->filters);
+            $this->generatePreview();
+        }
+    }
+
+    public function moveFilterUp(int $index): void
+    {
+        if ($index > 0 && isset($this->filters[$index])) {
+            $temp = $this->filters[$index];
+            $this->filters[$index] = $this->filters[$index - 1];
+            $this->filters[$index - 1] = $temp;
+            $this->generatePreview();
+        }
+    }
+
+    public function moveFilterDown(int $index): void
+    {
+        if ($index < count($this->filters) - 1 && isset($this->filters[$index])) {
+            $temp = $this->filters[$index];
+            $this->filters[$index] = $this->filters[$index + 1];
+            $this->filters[$index + 1] = $temp;
+            $this->generatePreview();
+        }
+    }
+
+    public function toggleFormDesigner(): void
+    {
+        $this->showFormDesigner = !$this->showFormDesigner;
+    }
+
+    public function toggleTableDesigner(): void
+    {
+        $this->showTableDesigner = !$this->showTableDesigner;
+    }
+
+    public function toggleFilterDesigner(): void
+    {
+        $this->showFilterDesigner = !$this->showFilterDesigner;
+    }
+
+    // Available field types for dropdowns
+    public function getAvailableFormFieldTypes(): array
+    {
+        return [
+            'text' => 'Text Input',
+            'email' => 'Email Input',
+            'password' => 'Password Input',
+            'number' => 'Number Input',
+            'textarea' => 'Textarea',
+            'select' => 'Select Dropdown',
+            'checkbox' => 'Checkbox',
+            'radio' => 'Radio Buttons',
+            'toggle' => 'Toggle Switch',
+            'date' => 'Date Picker',
+            'datetime' => 'DateTime Picker',
+            'time' => 'Time Picker',
+            'file' => 'File Upload',
+            'image' => 'Image Upload',
+            'rich_editor' => 'Rich Text Editor',
+            'markdown' => 'Markdown Editor',
+            'color' => 'Color Picker',
+            'hidden' => 'Hidden Field',
+            'relationship' => 'Relationship Select',
+        ];
+    }
+
+    public function getAvailableTableColumnTypes(): array
+    {
+        return [
+            'text' => 'Text Column',
+            'badge' => 'Badge Column',
+            'boolean' => 'Boolean (Icon)',
+            'color' => 'Color Column',
+            'image' => 'Image Column',
+            'date' => 'Date Column',
+            'datetime' => 'DateTime Column',
+            'money' => 'Money Column',
+            'number' => 'Number Column',
+            'select' => 'Select Column',
+            'url' => 'URL Column',
+            'email' => 'Email Column',
+            'phone' => 'Phone Column',
+            'relationship' => 'Relationship Column',
+        ];
+    }
+
+    public function getAvailableFilterTypes(): array
+    {
+        return [
+            'text' => 'Text Filter',
+            'select' => 'Select Filter',
+            'boolean' => 'Boolean Filter',
+            'date' => 'Date Filter',
+            'date_range' => 'Date Range Filter',
+            'number' => 'Number Filter',
+            'number_range' => 'Number Range Filter',
+            'relationship' => 'Relationship Filter',
+        ];
+    }
+
+    public function updateFormField(): void
+    {
+        $this->generatePreview();
+    }
+
+    public function updateTableColumn(): void
+    {
+        $this->generatePreview();
+    }
+
+    public function updateFilter(): void
     {
         $this->generatePreview();
     }

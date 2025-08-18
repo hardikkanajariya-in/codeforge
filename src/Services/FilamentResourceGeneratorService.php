@@ -337,21 +337,25 @@ class FilamentResourceGeneratorService
                 $createdFiles[] = $policyFile;
             }
 
-            // Update generator record
-            $generator->update([
-                'resource_class' => 'App\\Filament\\Resources\\' . $generator->name . 'Resource',
-                'file_path' => $resourceFile,
-                'status' => 'generated',
-                'error_message' => null,
-            ]);
+            // Update generator record (only if it's an Eloquent model)
+            if (method_exists($generator, 'update')) {
+                $generator->update([
+                    'resource_class' => 'App\\Filament\\Resources\\' . $generator->name . 'Resource',
+                    'file_path' => $resourceFile,
+                    'status' => 'generated',
+                    'error_message' => null,
+                ]);
+            }
         } catch (\Exception $e) {
             $errors[] = $e->getMessage();
 
-            // Update generator with error
-            $generator->update([
-                'status' => 'error',
-                'error_message' => $e->getMessage(),
-            ]);
+            // Update generator with error (only if it's an Eloquent model)
+            if (method_exists($generator, 'update')) {
+                $generator->update([
+                    'status' => 'error',
+                    'error_message' => $e->getMessage(),
+                ]);
+            }
         }
 
         return [
@@ -423,18 +427,22 @@ class FilamentResourceGeneratorService
             $result = $this->createResourceFiles($generator, $generatedCode);
 
             if ($result['success']) {
-                $generator->update([
-                    'status' => 'updated',
-                    'error_message' => null,
-                ]);
+                if (method_exists($generator, 'update')) {
+                    $generator->update([
+                        'status' => 'updated',
+                        'error_message' => null,
+                    ]);
+                }
             }
 
             return $result;
         } catch (\Exception $e) {
-            $generator->update([
-                'status' => 'error',
-                'error_message' => $e->getMessage(),
-            ]);
+            if (method_exists($generator, 'update')) {
+                $generator->update([
+                    'status' => 'error',
+                    'error_message' => $e->getMessage(),
+                ]);
+            }
 
             throw $e;
         }
@@ -470,12 +478,14 @@ class FilamentResourceGeneratorService
                 $deletedFiles[] = $policyFile;
             }
 
-            $generator->update([
-                'status' => 'draft',
-                'resource_class' => null,
-                'file_path' => null,
-                'error_message' => null,
-            ]);
+            if (method_exists($generator, 'update')) {
+                $generator->update([
+                    'status' => 'draft',
+                    'resource_class' => null,
+                    'file_path' => null,
+                    'error_message' => null,
+                ]);
+            }
         } catch (\Exception $e) {
             $errors[] = $e->getMessage();
         }
@@ -1229,10 +1239,10 @@ class {$resourceClassName} extends Resource
     protected function buildPages(string $resourceName, array $pageConfig): string
     {
         $pages = [
-            "            'index' => Pages\List{$resourceName}s::class,",
-            "            'create' => Pages\Create{$resourceName}::class,",
-            "            'view' => Pages\View{$resourceName}::class,",
-            "            'edit' => Pages\Edit{$resourceName}::class,",
+            "            'index' => Pages\List{$resourceName}s::route('/'),",
+            "            'create' => Pages\Create{$resourceName}::route('/create'),",
+            "            'view' => Pages\View{$resourceName}::route('/{record}'),",
+            "            'edit' => Pages\Edit{$resourceName}::route('/{record}/edit'),",
         ];
 
         return implode("\n", $pages);
@@ -1526,9 +1536,28 @@ class {$policyClassName}
     /**
      * Format options array for PHP code generation
      */
-    protected function formatOptionsArray(array $options): string
+    protected function formatOptionsArray($options): string
     {
+        // Handle different input types
         if (empty($options)) {
+            return '[]';
+        }
+
+        // If it's a string, try to parse it or return as simple array
+        if (is_string($options)) {
+            // Try to parse as JSON first
+            $decoded = json_decode($options, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                $options = $decoded;
+            } else {
+                // If not JSON, treat as comma-separated values
+                $items = array_map('trim', explode(',', $options));
+                $options = array_combine($items, $items);
+            }
+        }
+
+        // Ensure we have an array at this point
+        if (!is_array($options)) {
             return '[]';
         }
 
