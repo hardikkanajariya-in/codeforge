@@ -78,11 +78,22 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
     public ?string $selectedMigration = null;
     public array $availableModels = [];
     public array $availableMigrations = [];
+    public string $iconSearch = '';
 
     // Configuration arrays that the view expects
     public array $formConfiguration = ['fields' => []];
     public array $tableConfiguration = ['columns' => []];
     public array $filterConfiguration = ['filters' => []];
+    public array $pageConfiguration = [
+        'use_custom_icon' => false,
+        'navigation_icon' => '',
+        'navigation_group' => '',
+        'navigation_sort' => 10,
+        'enable_view_page' => false,
+    ];
+    public array $policyConfiguration = [
+        'generate_policy' => false,
+    ];
 
     public function mount(): void
     {
@@ -135,6 +146,13 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
 
         // Sync filters
         $this->filterConfiguration['filters'] = $this->generationConfig['filters'] ?? [];
+
+        // Sync page configuration
+        $this->pageConfiguration = array_merge($this->pageConfiguration, [
+            'navigation_icon' => $this->generationConfig['navigation_icon'] ?? 'heroicon-o-rectangle-stack',
+            'navigation_group' => $this->generationConfig['navigation_group'] ?? '',
+            'navigation_sort' => $this->generationConfig['navigation_sort'] ?? 10,
+        ]);
     }
 
     public function selectSourceType(string $type): void
@@ -274,6 +292,14 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
         $this->selectedModel = null;
         $this->selectedMigration = null;
         $this->resetConfiguration();
+    }
+
+    public function selectIcon(string $icon): void
+    {
+        $this->pageConfiguration['navigation_icon'] = $icon;
+
+        // Also update the generation config
+        $this->generationConfig['navigation_icon'] = $icon;
     }
 
     public function addFormField(): void
@@ -434,6 +460,162 @@ class FilamentResourceGeneratorPage extends BaseGeneratorPage
             'date' => 'Date Filter',
             'boolean' => 'Boolean Filter',
             'ternary' => 'Ternary Filter',
+        ];
+    }
+
+    public function getAvailableIcons(): array
+    {
+        return [
+            'general' => [
+                'heroicon-o-academic-cap',
+                'heroicon-o-adjustments-horizontal',
+                'heroicon-o-archive-box',
+                'heroicon-o-arrow-down-circle',
+                'heroicon-o-arrow-up-circle',
+                'heroicon-o-at-symbol',
+                'heroicon-o-banknotes',
+                'heroicon-o-beaker',
+                'heroicon-o-bell',
+                'heroicon-o-bookmark',
+                'heroicon-o-briefcase',
+                'heroicon-o-building-office',
+                'heroicon-o-calendar',
+                'heroicon-o-camera',
+                'heroicon-o-chart-bar',
+                'heroicon-o-chart-pie',
+                'heroicon-o-check-circle',
+                'heroicon-o-clipboard',
+                'heroicon-o-clock',
+                'heroicon-o-cog-6-tooth',
+                'heroicon-o-command-line',
+                'heroicon-o-computer-desktop',
+                'heroicon-o-credit-card',
+                'heroicon-o-cube',
+                'heroicon-o-currency-dollar',
+                'heroicon-o-document',
+                'heroicon-o-envelope',
+                'heroicon-o-eye',
+                'heroicon-o-face-smile',
+                'heroicon-o-flag',
+                'heroicon-o-folder',
+                'heroicon-o-gift',
+                'heroicon-o-globe-alt',
+                'heroicon-o-heart',
+                'heroicon-o-home',
+                'heroicon-o-identification',
+                'heroicon-o-inbox',
+                'heroicon-o-information-circle',
+                'heroicon-o-key',
+                'heroicon-o-language',
+                'heroicon-o-light-bulb',
+                'heroicon-o-link',
+                'heroicon-o-list-bullet',
+                'heroicon-o-lock-closed',
+                'heroicon-o-magnifying-glass',
+                'heroicon-o-map',
+                'heroicon-o-megaphone',
+                'heroicon-o-microphone',
+                'heroicon-o-musical-note',
+                'heroicon-o-newspaper',
+                'heroicon-o-paper-airplane',
+                'heroicon-o-pencil',
+                'heroicon-o-phone',
+                'heroicon-o-photo',
+                'heroicon-o-play',
+                'heroicon-o-presentation-chart-line',
+                'heroicon-o-printer',
+                'heroicon-o-puzzle-piece',
+                'heroicon-o-qr-code',
+                'heroicon-o-question-mark-circle',
+                'heroicon-o-rocket-launch',
+                'heroicon-o-scale',
+                'heroicon-o-scissors',
+                'heroicon-o-server',
+                'heroicon-o-share',
+                'heroicon-o-shield-check',
+                'heroicon-o-shopping-bag',
+                'heroicon-o-shopping-cart',
+                'heroicon-o-sparkles',
+                'heroicon-o-speaker-wave',
+                'heroicon-o-star',
+                'heroicon-o-sun',
+                'heroicon-o-tag',
+                'heroicon-o-ticket',
+                'heroicon-o-trash',
+                'heroicon-o-trophy',
+                'heroicon-o-truck',
+                'heroicon-o-tv',
+                'heroicon-o-user',
+                'heroicon-o-user-group',
+                'heroicon-o-users',
+                'heroicon-o-video-camera',
+                'heroicon-o-wallet',
+                'heroicon-o-wifi',
+                'heroicon-o-wrench-screwdriver',
+            ],
+            'business' => [
+                'heroicon-o-building-office-2',
+                'heroicon-o-building-storefront',
+                'heroicon-o-chart-bar-square',
+                'heroicon-o-presentation-chart-bar',
+                'heroicon-o-receipt-percent',
+                'heroicon-o-receipt-refund',
+                'heroicon-o-squares-2x2',
+                'heroicon-o-table-cells',
+                'heroicon-o-view-columns',
+                'heroicon-o-viewfinder-circle',
+            ],
+            'communication' => [
+                'heroicon-o-chat-bubble-bottom-center',
+                'heroicon-o-chat-bubble-left',
+                'heroicon-o-chat-bubble-left-ellipsis',
+                'heroicon-o-chat-bubble-left-right',
+                'heroicon-o-chat-bubble-oval-left',
+                'heroicon-o-chat-bubble-oval-left-ellipsis',
+                'heroicon-o-device-phone-mobile',
+                'heroicon-o-envelope-open',
+                'heroicon-o-phone-arrow-down-left',
+                'heroicon-o-phone-arrow-up-right',
+                'heroicon-o-signal',
+                'heroicon-o-signal-slash',
+            ],
+            'navigation' => [
+                'heroicon-o-arrow-down',
+                'heroicon-o-arrow-left',
+                'heroicon-o-arrow-path',
+                'heroicon-o-arrow-right',
+                'heroicon-o-arrow-up',
+                'heroicon-o-bars-3',
+                'heroicon-o-bars-3-bottom-left',
+                'heroicon-o-bars-3-bottom-right',
+                'heroicon-o-bars-3-center-left',
+                'heroicon-o-chevron-down',
+                'heroicon-o-chevron-left',
+                'heroicon-o-chevron-right',
+                'heroicon-o-chevron-up',
+                'heroicon-o-chevron-double-down',
+                'heroicon-o-chevron-double-left',
+                'heroicon-o-chevron-double-right',
+                'heroicon-o-chevron-double-up',
+                'heroicon-o-ellipsis-horizontal',
+                'heroicon-o-ellipsis-vertical',
+                'heroicon-o-minus',
+                'heroicon-o-plus',
+                'heroicon-o-x-mark',
+            ],
+            'media' => [
+                'heroicon-o-backward',
+                'heroicon-o-camera',
+                'heroicon-o-forward',
+                'heroicon-o-pause',
+                'heroicon-o-pause-circle',
+                'heroicon-o-play-circle',
+                'heroicon-o-play-pause',
+                'heroicon-o-speaker-x-mark',
+                'heroicon-o-stop',
+                'heroicon-o-stop-circle',
+                'heroicon-o-video-camera-slash',
+            ]
         ];
     }
 

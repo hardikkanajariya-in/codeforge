@@ -456,34 +456,6 @@
 
                 <!-- Sidebar -->
                 <div class="space-y-6">
-                    <!-- Templates -->
-                    <div style="background: white; border-radius: 0.75rem; padding: 1.5rem; border: 1px solid #e5e7eb;">
-                        <h3 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 1rem; color: #1f2937;">Quick Templates</h3>
-                        
-                        <div class="space-y-2">
-                            @foreach($this->getAvailableTemplates() as $template)
-                                <button 
-                                    wire:click="applyTemplate({{ $template['id'] }})"
-                                    style="
-                                        width: 100%; 
-                                        text-align: left; 
-                                        padding: 0.75rem; 
-                                        border: 1px solid #e5e7eb; 
-                                        border-radius: 0.5rem; 
-                                        background: white; 
-                                        cursor: pointer;
-                                        transition: all 0.2s;
-                                    "
-                                >
-                                    <div style="font-weight: 600; color: #1f2937;">{{ $template['name'] }}</div>
-                                    @if($template['description'])
-                                        <div style="font-size: 0.875rem; color: #6b7280;">{{ $template['description'] }}</div>
-                                    @endif
-                                </button>
-                            @endforeach
-                        </div>
-                    </div>
-
                     <!-- Page Configuration -->
                     <div style="background: white; border-radius: 0.75rem; padding: 1.5rem; border: 1px solid #e5e7eb;">
                         <h3 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 1rem; color: #1f2937;">Page Settings</h3>
@@ -491,12 +463,124 @@
                         <div class="space-y-4">
                             <div>
                                 <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Navigation Icon</label>
-                                <input 
-                                    type="text" 
-                                    wire:model="pageConfiguration.navigation_icon"
-                                    style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem;"
-                                    placeholder="heroicon-o-rectangle-stack"
-                                >
+                                
+                                <!-- Icon Selection Toggle -->
+                                <div style="margin-bottom: 0.5rem;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: #374151;">
+                                        <input 
+                                            type="checkbox" 
+                                            wire:model.live="pageConfiguration.use_custom_icon"
+                                            style="width: 1rem; height: 1rem;"
+                                        >
+                                        Use Custom Icon Name
+                                    </label>
+                                </div>
+
+                                @if($pageConfiguration['use_custom_icon'] ?? false)
+                                    <!-- Custom Icon Input -->
+                                    <input 
+                                        type="text" 
+                                        wire:model="pageConfiguration.navigation_icon"
+                                        style="width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem;"
+                                        placeholder="heroicon-o-custom-icon"
+                                    >
+                                    <div style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">
+                                        Enter custom Heroicon name (e.g., heroicon-o-custom-icon)
+                                    </div>
+                                @else
+                                    <!-- Icon Search -->
+                                    <input 
+                                        type="text" 
+                                        wire:model.live="iconSearch"
+                                        placeholder="Search icons..."
+                                        class="fi-input block w-full border-gray-300 transition duration-75 rounded-lg shadow-sm focus:border-primary-600 focus:ring-1 focus:ring-inset focus:ring-primary-600 disabled:opacity-70"
+                                        style="margin-bottom: 0.75rem;"
+                                    >
+                                    
+                                    <!-- Visual Icon Grid -->
+                                    <div class="fi-section-content-ctn rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10" style="max-height: 400px; overflow-y: auto; padding: 1rem;">
+                                        @php
+                                            $hasResults = false;
+                                        @endphp
+                                        
+                                        @foreach($this->getAvailableIcons() as $iconGroup => $icons)
+                                            @php
+                                                $filteredIcons = [];
+                                                foreach($icons as $icon) {
+                                                    if(empty($iconSearch) || str_contains(strtolower($icon), strtolower($iconSearch))) {
+                                                        $filteredIcons[] = $icon;
+                                                    }
+                                                }
+                                                if(!empty($filteredIcons)) {
+                                                    $hasResults = true;
+                                                }
+                                            @endphp
+                                            
+                                            @if(!empty($filteredIcons))
+                                                <div style="margin-bottom: 1.5rem;">
+                                                    <h4 class="fi-section-header-heading text-base font-semibold leading-6 text-gray-950 dark:text-white" style="margin-bottom: 0.75rem;">
+                                                        {{ ucfirst(str_replace('-', ' ', $iconGroup)) }}
+                                                    </h4>
+                                                    
+                                                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.5rem;">
+                                                        @foreach($filteredIcons as $icon)
+                                                            @php
+                                                                $isSelected = ($pageConfiguration['navigation_icon'] ?? '') === $icon;
+                                                            @endphp
+                                                            <button 
+                                                                type="button"
+                                                                wire:click="selectIcon('{{ $icon }}')"
+                                                                class="fi-btn relative grid w-full place-content-center rounded-lg outline-none transition duration-75 focus-visible:ring-2 hover:bg-gray-50 focus-visible:ring-primary-600 dark:hover:bg-white/5 {{ $isSelected ? 'ring-2 ring-primary-600 bg-primary-50 dark:bg-primary-950/50' : 'ring-1 ring-gray-300 dark:ring-gray-600' }}"
+                                                                style="padding: 0.75rem; transition: all 0.2s;"
+                                                            >
+                                                                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                                                                    <x-filament::icon 
+                                                                        :icon="$icon" 
+                                                                        class="fi-icon-size-lg {{ $isSelected ? 'text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400' }}"
+                                                                        style="width: 1.5rem; height: 1.5rem;"
+                                                                    />
+                                                                    <span class="fi-btn-label text-xs font-medium {{ $isSelected ? 'text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-200' }}" style="text-align: center; line-height: 1.2; word-break: break-word;">
+                                                                        {{ str_replace(['heroicon-o-', 'heroicon-s-', 'heroicon-m-'], '', $icon) }}
+                                                                    </span>
+                                                                </div>
+                                                            </button>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                        
+                                        @if(!$hasResults && !empty($iconSearch))
+                                            <div class="fi-empty-state-content mx-auto grid max-w-lg justify-items-center text-center">
+                                                <div class="fi-empty-state-description text-sm text-gray-500 dark:text-gray-400">
+                                                    No icons found matching "{{ $iconSearch }}"
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <!-- Selected Icon Preview -->
+                                    @if(!empty($pageConfiguration['navigation_icon']))
+                                        <div class="fi-section-content-ctn rounded-lg bg-gray-50 p-3 dark:bg-white/5" style="margin-top: 0.75rem;">
+                                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                                <span class="fi-section-description text-sm text-gray-600 dark:text-gray-400">Selected:</span>
+                                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                    <x-filament::icon 
+                                                        :icon="$pageConfiguration['navigation_icon']" 
+                                                        class="fi-icon-size-md text-primary-600 dark:text-primary-400"
+                                                    />
+                                                    <span class="fi-modal-description text-sm font-mono text-gray-700 dark:text-gray-300">
+                                                        {{ str_replace(['heroicon-o-', 'heroicon-s-', 'heroicon-m-'], '', $pageConfiguration['navigation_icon']) }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    
+                                    <div class="fi-fo-field-wrp-hint text-xs text-gray-500 dark:text-gray-400" style="margin-top: 0.5rem;">
+                                        Choose from available Heroicons or enable custom input above
+                                    </div>
+                                @endif
                             </div>
                             
                             <div>
