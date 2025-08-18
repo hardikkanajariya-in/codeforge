@@ -1,4 +1,4 @@
-﻿@extends('codeforge-database-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
 
 @section('title', 'Documentation Generator - CodeForge Database Studio')
 
@@ -19,7 +19,7 @@
 @endsection
 
 @section('navigation')
-    @include('codeforge-database-studio::docs.partials.navigation')
+    @include('codeforge-studio::docs.partials.navigation')
 @endsection
 
 
@@ -76,18 +76,18 @@
         <p>Generate various types of documentation:</p>
 
         <h3>Schema Documentation</h3>
-        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>✓ Complete table structure documentation
-    ✓ Column details with data types and constraints
-    ✓ Index and key documentation
-    ✓ Foreign key relationships mapping
-    ✓ Database statistics and metrics</code></pre>
+        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>? Complete table structure documentation
+    ? Column details with data types and constraints
+    ? Index and key documentation
+    ? Foreign key relationships mapping
+    ? Database statistics and metrics</code></pre>
 
         <h3>Model Integration</h3>
-        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>✓ Eloquent model discovery and mapping
-    ✓ Relationship documentation with types
-    ✓ Attribute documentation with casts
-    ✓ Scope and accessor documentation
-    ✓ Factory integration patterns</code></pre>
+        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>? Eloquent model discovery and mapping
+    ? Relationship documentation with types
+    ? Attribute documentation with casts
+    ? Scope and accessor documentation
+    ? Factory integration patterns</code></pre>
 
         <h2>Export Formats</h2>
         <p>Multiple export formats for different use cases:</p>

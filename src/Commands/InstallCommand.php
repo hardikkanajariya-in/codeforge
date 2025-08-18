@@ -111,7 +111,7 @@ class InstallCommand extends Command
         $this->info('Publishing configuration...');
 
         $this->call('vendor:publish', [
-            '--tag' => 'codeforge-database-studio-config',
+            '--tag' => 'codeforge-studio-config',
             '--force' => $this->option('force'),
         ]);
     }
@@ -179,7 +179,7 @@ class InstallCommand extends Command
             $this->info('Publishing migrations...');
 
             $this->call('vendor:publish', [
-                '--tag' => 'codeforge-database-studio-migrations',
+                '--tag' => 'codeforge-studio-migrations',
                 '--force' => $this->option('force'),
             ]);
         } else {

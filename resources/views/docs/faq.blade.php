@@ -1,4 +1,4 @@
-﻿@extends('codeforge-database-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
 
 @section('title', 'Faq - CodeForge Database Studio')
 
@@ -7,7 +7,7 @@
 @endsection
 
 @section('navigation')
-    @include('codeforge-database-studio::docs.partials.navigation')
+    @include('codeforge-studio::docs.partials.navigation')
 @endsection
 
 @section('content')

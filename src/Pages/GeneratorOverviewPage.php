@@ -54,7 +54,7 @@ use Filament\Support\Enums\MaxWidth;
  */
 class GeneratorOverviewPage extends Page
 {
-    protected static string $view = 'codeforge-database-studio::pages.generator-overview';
+    protected static string $view = 'codeforge-studio::pages.generator-overview';
     protected static ?string $navigationIcon = 'heroicon-o-command-line';
     protected static ?string $title = 'Code Generator Overview';
     protected static ?string $navigationLabel = 'Code Generators';

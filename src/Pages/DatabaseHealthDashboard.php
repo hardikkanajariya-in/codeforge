@@ -59,7 +59,7 @@ class DatabaseHealthDashboard extends Page
     protected static ?string $navigationLabel = 'Health Monitor';
     protected static ?string $navigationGroup = 'Database Health';
     protected static ?int $navigationSort = 1;
-    protected static string $view = 'codeforge-database-studio::pages.database-health-dashboard';
+    protected static string $view = 'codeforge-studio::pages.database-health-dashboard';
 
     protected function getHealthService(): DatabaseHealthService
     {

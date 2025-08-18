@@ -1,4 +1,4 @@
-@extends('codeforge-database-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
 
 @section('title', 'Features Overview - CodeForge Database Studio')
 @section('description', 'Complete overview of all CodeForge Database Studio features including database health monitoring, migration management, and code generation.')
@@ -20,7 +20,7 @@
 @endsection
 
 @section('navigation')
-    @include('codeforge-database-studio::docs.partials.navigation')
+    @include('codeforge-studio::docs.partials.navigation')
 @endsection
 
 @section('content')

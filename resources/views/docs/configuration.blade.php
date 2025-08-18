@@ -1,4 +1,4 @@
-@extends('codeforge-database-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
 
 @section('title', 'Configuration Guide - CodeForge Database Studio')
 @section('description', 'Complete configuration guide for CodeForge Database Studio. Learn how to customize features and optimize performance.')
@@ -14,7 +14,7 @@
 @endsection
 
 @section('navigation')
-    @include('codeforge-database-studio::docs.partials.navigation')
+    @include('codeforge-studio::docs.partials.navigation')
 @endsection
 
 @section('content')

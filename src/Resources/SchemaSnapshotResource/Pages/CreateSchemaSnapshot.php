@@ -51,6 +51,24 @@ class CreateSchemaSnapshot extends CreateRecord
         }
     }
 
+    protected function getRedirectUrl(): string
+    {
+        // Fix for Laravel bug where lastInsertId() returns wrong value
+        // Find the actual record by name and use its real ID
+        if ($this->record && $this->record->name) {
+            $actualRecord = \HkDevs\CodeForgeStudio\Models\SchemaSnapshot::where('name', $this->record->name)
+                ->orderBy('id', 'desc')
+                ->first();
+
+            if ($actualRecord) {
+                return $this->getResource()::getUrl('view', ['record' => $actualRecord->id]);
+            }
+        }
+
+        // Fallback to index if we can't find the record
+        return $this->getResource()::getUrl('index');
+    }
+
     protected function afterCreate(): void
     {
         Notification::make()

@@ -76,7 +76,7 @@ class DocumentationGenerator extends Page implements HasForms
 
     protected static ?int $navigationSort = 6;
 
-    protected static string $view = 'codeforge-database-studio::pages.documentation-generator';
+    protected static string $view = 'codeforge-studio::pages.documentation-generator';
 
     public ?array $data = [];
     public bool $quickGenerate = false;

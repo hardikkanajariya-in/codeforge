@@ -1,4 +1,4 @@
-ï»¿@extends('codeforge-database-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
 
 @section('title', 'Services - CodeForge Database Studio')
 
@@ -19,7 +19,7 @@
 @endsection
 
 @section('navigation')
-    @include('codeforge-database-studio::docs.partials.navigation')
+    @include('codeforge-studio::docs.partials.navigation')
 @endsection
 
 @section('content')
@@ -53,14 +53,14 @@
                 <h3 class="text-lg font-semibold text-gray-900 mb-3">Core Service Principles</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <ul class="space-y-2 text-gray-700">
-                        <li>â€¢ <strong>Single Responsibility:</strong> Each service handles one domain area</li>
-                        <li>â€¢ <strong>Dependency Injection:</strong> Constructor-based dependency resolution</li>
-                        <li>â€¢ <strong>Interface Contracts:</strong> Consistent method signatures and return types</li>
+                        <li>• <strong>Single Responsibility:</strong> Each service handles one domain area</li>
+                        <li>• <strong>Dependency Injection:</strong> Constructor-based dependency resolution</li>
+                        <li>• <strong>Interface Contracts:</strong> Consistent method signatures and return types</li>
                     </ul>
                     <ul class="space-y-2 text-gray-700">
-                        <li>â€¢ <strong>Error Handling:</strong> Comprehensive exception management</li>
-                        <li>â€¢ <strong>Logging Integration:</strong> Detailed operation logging</li>
-                        <li>â€¢ <strong>Performance Optimization:</strong> Caching and query optimization</li>
+                        <li>• <strong>Error Handling:</strong> Comprehensive exception management</li>
+                        <li>• <strong>Logging Integration:</strong> Detailed operation logging</li>
+                        <li>• <strong>Performance Optimization:</strong> Caching and query optimization</li>
                     </ul>
                 </div>
             </div>
@@ -90,21 +90,21 @@
                         <div>
                             <h4 class="font-semibold text-blue-900 mb-2">Key Methods</h4>
                             <ul class="space-y-1 text-sm text-blue-800">
-                                <li>â€¢ <code>getOverallHealthScore()</code> - Calculate overall health rating</li>
-                                <li>â€¢ <code>performHealthCheck()</code> - Comprehensive health assessment</li>
-                                <li>â€¢ <code>checkConnectionHealth($connection)</code> - Connection-specific health</li>
-                                <li>â€¢ <code>analyzeQueryPerformance()</code> - Query performance analysis</li>
-                                <li>â€¢ <code>generateHealthReport()</code> - Detailed health reporting</li>
+                                <li>• <code>getOverallHealthScore()</code> - Calculate overall health rating</li>
+                                <li>• <code>performHealthCheck()</code> - Comprehensive health assessment</li>
+                                <li>• <code>checkConnectionHealth($connection)</code> - Connection-specific health</li>
+                                <li>• <code>analyzeQueryPerformance()</code> - Query performance analysis</li>
+                                <li>• <code>generateHealthReport()</code> - Detailed health reporting</li>
                             </ul>
                         </div>
                         <div>
                             <h4 class="font-semibold text-blue-900 mb-2">Capabilities</h4>
                             <ul class="space-y-1 text-sm text-blue-800">
-                                <li>â€¢ Connection timeout detection and monitoring</li>
-                                <li>â€¢ Performance metrics collection and analysis</li>
-                                <li>â€¢ Health score calculation with trend analysis</li>
-                                <li>â€¢ Alert generation based on configurable thresholds</li>
-                                <li>â€¢ Resource usage monitoring and optimization suggestions</li>
+                                <li>• Connection timeout detection and monitoring</li>
+                                <li>• Performance metrics collection and analysis</li>
+                                <li>• Health score calculation with trend analysis</li>
+                                <li>• Alert generation based on configurable thresholds</li>
+                                <li>• Resource usage monitoring and optimization suggestions</li>
                             </ul>
                         </div>
                     </div>
@@ -130,21 +130,21 @@
                         <div>
                             <h4 class="font-semibold text-green-900 mb-2">Key Methods</h4>
                             <ul class="space-y-1 text-sm text-green-800">
-                                <li>â€¢ <code>discoverRelationships()</code> - Automatic relationship detection</li>
-                                <li>â€¢ <code>analyzeTablePerformance($table)</code> - Table-specific analysis</li>
-                                <li>â€¢ <code>getOptimizationRecommendations()</code> - Performance suggestions</li>
-                                <li>â€¢ <code>generateSchemaSummary()</code> - Complete schema overview</li>
-                                <li>â€¢ <code>validateSchemaIntegrity()</code> - Integrity checking</li>
+                                <li>• <code>discoverRelationships()</code> - Automatic relationship detection</li>
+                                <li>• <code>analyzeTablePerformance($table)</code> - Table-specific analysis</li>
+                                <li>• <code>getOptimizationRecommendations()</code> - Performance suggestions</li>
+                                <li>• <code>generateSchemaSummary()</code> - Complete schema overview</li>
+                                <li>• <code>validateSchemaIntegrity()</code> - Integrity checking</li>
                             </ul>
                         </div>
                         <div>
                             <h4 class="font-semibold text-green-900 mb-2">Capabilities</h4>
                             <ul class="space-y-1 text-sm text-green-800">
-                                <li>â€¢ Foreign key and implicit relationship discovery</li>
-                                <li>â€¢ Index analysis and optimization recommendations</li>
-                                <li>â€¢ Query pattern analysis and performance insights</li>
-                                <li>â€¢ Schema visualization and dependency mapping</li>
-                                <li>â€¢ Data integrity validation and reporting</li>
+                                <li>• Foreign key and implicit relationship discovery</li>
+                                <li>• Index analysis and optimization recommendations</li>
+                                <li>• Query pattern analysis and performance insights</li>
+                                <li>• Schema visualization and dependency mapping</li>
+                                <li>• Data integrity validation and reporting</li>
                             </ul>
                         </div>
                     </div>
@@ -169,21 +169,21 @@
                         <div>
                             <h4 class="font-semibold text-purple-900 mb-2">Key Methods</h4>
                             <ul class="space-y-1 text-sm text-purple-800">
-                                <li>â€¢ <code>generateForTable($table, $count)</code> - Table-specific generation</li>
-                                <li>â€¢ <code>generateWithTemplate($table, $template)</code> - Template-based generation</li>
-                                <li>â€¢ <code>seedMultipleTables($config)</code> - Bulk seeding operations</li>
-                                <li>â€¢ <code>generateRealisticData($field, $type)</code> - Context-aware data</li>
-                                <li>â€¢ <code>validateRelationships($data)</code> - Relationship validation</li>
+                                <li>• <code>generateForTable($table, $count)</code> - Table-specific generation</li>
+                                <li>• <code>generateWithTemplate($table, $template)</code> - Template-based generation</li>
+                                <li>• <code>seedMultipleTables($config)</code> - Bulk seeding operations</li>
+                                <li>• <code>generateRealisticData($field, $type)</code> - Context-aware data</li>
+                                <li>• <code>validateRelationships($data)</code> - Relationship validation</li>
                             </ul>
                         </div>
                         <div>
                             <h4 class="font-semibold text-purple-900 mb-2">Capabilities</h4>
                             <ul class="space-y-1 text-sm text-purple-800">
-                                <li>â€¢ Relationship-aware data generation</li>
-                                <li>â€¢ Realistic pattern recognition and application</li>
-                                <li>â€¢ Custom template system for data patterns</li>
-                                <li>â€¢ Bulk operations with performance optimization</li>
-                                <li>â€¢ Constraint validation and integrity checking</li>
+                                <li>• Relationship-aware data generation</li>
+                                <li>• Realistic pattern recognition and application</li>
+                                <li>• Custom template system for data patterns</li>
+                                <li>• Bulk operations with performance optimization</li>
+                                <li>• Constraint validation and integrity checking</li>
                             </ul>
                         </div>
                     </div>
@@ -233,19 +233,19 @@
                 <div>
                     <h4 class="font-semibold text-gray-900 mb-3">Unit Testing</h4>
                     <ul class="space-y-2 text-gray-700 text-sm">
-                        <li>â€¢ Mock dependencies for isolated testing</li>
-                        <li>â€¢ Test all public methods with various inputs</li>
-                        <li>â€¢ Validate error handling and edge cases</li>
-                        <li>â€¢ Performance benchmarking for critical methods</li>
+                        <li>• Mock dependencies for isolated testing</li>
+                        <li>• Test all public methods with various inputs</li>
+                        <li>• Validate error handling and edge cases</li>
+                        <li>• Performance benchmarking for critical methods</li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-900 mb-3">Integration Testing</h4>
                     <ul class="space-y-2 text-gray-700 text-sm">
-                        <li>â€¢ Test service interactions and workflows</li>
-                        <li>â€¢ Validate database operations and transactions</li>
-                        <li>â€¢ Test real database connections and queries</li>
-                        <li>â€¢ End-to-end feature testing with multiple services</li>
+                        <li>• Test service interactions and workflows</li>
+                        <li>• Validate database operations and transactions</li>
+                        <li>• Test real database connections and queries</li>
+                        <li>• End-to-end feature testing with multiple services</li>
                     </ul>
                 </div>
             </div>
@@ -259,20 +259,20 @@
                     <h4 class="font-semibold text-orange-800 text-lg mb-2">Caching Strategy</h4>
                     <p class="text-orange-700 mb-3">Intelligent caching at multiple levels to optimize performance:</p>
                     <ul class="text-sm text-orange-800 space-y-1">
-                        <li>â€¢ Service-level result caching</li>
-                        <li>â€¢ Database query result caching</li>
-                        <li>â€¢ Configuration and metadata caching</li>
-                        <li>â€¢ Time-based cache invalidation</li>
+                        <li>• Service-level result caching</li>
+                        <li>• Database query result caching</li>
+                        <li>• Configuration and metadata caching</li>
+                        <li>• Time-based cache invalidation</li>
                     </ul>
                 </div>
                 <div class="bg-teal-50 p-6 rounded-lg border border-teal-200">
                     <h4 class="font-semibold text-teal-800 text-lg mb-2">Optimization Techniques</h4>
                     <p class="text-teal-700 mb-3">Performance optimization strategies implemented across services:</p>
                     <ul class="text-sm text-teal-800 space-y-1">
-                        <li>â€¢ Lazy loading of expensive operations</li>
-                        <li>â€¢ Batch processing for bulk operations</li>
-                        <li>â€¢ Connection pooling and reuse</li>
-                        <li>â€¢ Memory-efficient data structures</li>
+                        <li>• Lazy loading of expensive operations</li>
+                        <li>• Batch processing for bulk operations</li>
+                        <li>• Connection pooling and reuse</li>
+                        <li>• Memory-efficient data structures</li>
                     </ul>
                 </div>
             </div>

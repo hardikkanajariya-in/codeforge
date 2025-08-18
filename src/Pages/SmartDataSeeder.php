@@ -73,7 +73,7 @@ use Illuminate\Support\Facades\Log;
 class SmartDataSeeder extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-cpu-chip';
-    protected static string $view = 'codeforge-database-studio::pages.smart-data-seeder';
+    protected static string $view = 'codeforge-studio::pages.smart-data-seeder';
     protected static ?string $title = 'Smart Data Seeder';
     protected static ?string $navigationLabel = 'Smart Seeder';
     protected static ?int $navigationSort = 4;

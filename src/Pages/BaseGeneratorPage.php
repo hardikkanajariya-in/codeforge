@@ -121,7 +121,7 @@ abstract class BaseGeneratorPage extends Page implements HasActions
             ->modal()
             ->modalHeading('Configuration Errors Found')
             ->modalDescription('Please fix the following errors before proceeding:')
-            ->modalContent(view('codeforge-database-studio::components.validation-errors-modal', [
+            ->modalContent(view('codeforge-studio::components.validation-errors-modal', [
                 'errors' => $this->validationErrors ?? []
             ]))
             ->modalSubmitAction(false)

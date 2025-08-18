@@ -1,4 +1,4 @@
-﻿@extends('codeforge-database-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
 
 @section('title', 'Schema Designer - CodeForge Database Studio')
 
@@ -19,7 +19,7 @@
 @endsection
 
 @section('navigation')
-    @include('codeforge-database-studio::docs.partials.navigation')
+    @include('codeforge-studio::docs.partials.navigation')
 @endsection
 
 
@@ -70,18 +70,18 @@
         <p>Comprehensive tools for understanding your database structure:</p>
 
         <h3>Relationship Analysis</h3>
-        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>✓ Foreign key relationship discovery
-        ✓ Implicit relationship detection
-        ✓ Circular dependency identification
-        ✓ Orphaned record detection
-        ✓ Referential integrity validation</code></pre>
+        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>? Foreign key relationship discovery
+        ? Implicit relationship detection
+        ? Circular dependency identification
+        ? Orphaned record detection
+        ? Referential integrity validation</code></pre>
 
         <h3>Performance Insights</h3>
-        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>✓ Index utilization analysis
-        ✓ Query performance patterns
-        ✓ Table fragmentation assessment
-        ✓ Storage optimization opportunities
-        ✓ Query optimization recommendations</code></pre>
+        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>? Index utilization analysis
+        ? Query performance patterns
+        ? Table fragmentation assessment
+        ? Storage optimization opportunities
+        ? Query optimization recommendations</code></pre>
 
         <h2>Schema Optimization</h2>
         <p>Get intelligent recommendations for schema improvements:</p>

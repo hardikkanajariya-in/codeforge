@@ -30,7 +30,7 @@ class DocsController extends Controller
      */
     public function home(): View
     {
-        return view('codeforge-database-studio::docs.home');
+        return view('codeforge-studio::docs.home');
     }
 
     /**
@@ -40,7 +40,7 @@ class DocsController extends Controller
      */
     public function gettingStarted(): View
     {
-        return view('codeforge-database-studio::docs.getting-started');
+        return view('codeforge-studio::docs.getting-started');
     }
 
     /**
@@ -50,7 +50,7 @@ class DocsController extends Controller
      */
     public function installation(): View
     {
-        return view('codeforge-database-studio::docs.installation');
+        return view('codeforge-studio::docs.installation');
     }
 
     /**
@@ -60,7 +60,7 @@ class DocsController extends Controller
      */
     public function configuration(): View
     {
-        return view('codeforge-database-studio::docs.configuration');
+        return view('codeforge-studio::docs.configuration');
     }
 
     /**
@@ -70,7 +70,7 @@ class DocsController extends Controller
      */
     public function requirements(): View
     {
-        return view('codeforge-database-studio::docs.requirements');
+        return view('codeforge-studio::docs.requirements');
     }
 
     /**
@@ -80,7 +80,7 @@ class DocsController extends Controller
      */
     public function featuresOverview(): View
     {
-        return view('codeforge-database-studio::docs.features.overview');
+        return view('codeforge-studio::docs.features.overview');
     }
 
     /**
@@ -90,7 +90,7 @@ class DocsController extends Controller
      */
     public function databaseHealth(): View
     {
-        return view('codeforge-database-studio::docs.features.database-health');
+        return view('codeforge-studio::docs.features.database-health');
     }
 
     /**
@@ -100,7 +100,7 @@ class DocsController extends Controller
      */
     public function migrationManagement(): View
     {
-        return view('codeforge-database-studio::docs.features.migration-management');
+        return view('codeforge-studio::docs.features.migration-management');
     }
 
     /**
@@ -110,7 +110,7 @@ class DocsController extends Controller
      */
     public function schemaDesigner(): View
     {
-        return view('codeforge-database-studio::docs.features.schema-designer');
+        return view('codeforge-studio::docs.features.schema-designer');
     }
 
     /**
@@ -120,7 +120,7 @@ class DocsController extends Controller
      */
     public function codeGeneration(): View
     {
-        return view('codeforge-database-studio::docs.features.code-generation');
+        return view('codeforge-studio::docs.features.code-generation');
     }
 
     /**
@@ -130,7 +130,7 @@ class DocsController extends Controller
      */
     public function dataSeeding(): View
     {
-        return view('codeforge-database-studio::docs.features.data-seeding');
+        return view('codeforge-studio::docs.features.data-seeding');
     }
 
     /**
@@ -140,7 +140,7 @@ class DocsController extends Controller
      */
     public function documentationGenerator(): View
     {
-        return view('codeforge-database-studio::docs.features.documentation-generator');
+        return view('codeforge-studio::docs.features.documentation-generator');
     }
 
     /**
@@ -150,7 +150,7 @@ class DocsController extends Controller
      */
     public function architectureOverview(): View
     {
-        return view('codeforge-database-studio::docs.architecture.overview');
+        return view('codeforge-studio::docs.architecture.overview');
     }
 
     /**
@@ -160,7 +160,7 @@ class DocsController extends Controller
      */
     public function services(): View
     {
-        return view('codeforge-database-studio::docs.architecture.services');
+        return view('codeforge-studio::docs.architecture.services');
     }
 
     /**
@@ -170,7 +170,7 @@ class DocsController extends Controller
      */
     public function events(): View
     {
-        return view('codeforge-database-studio::docs.architecture.events');
+        return view('codeforge-studio::docs.architecture.events');
     }
 
     /**
@@ -180,7 +180,7 @@ class DocsController extends Controller
      */
     public function databaseDesign(): View
     {
-        return view('codeforge-database-studio::docs.architecture.database-design');
+        return view('codeforge-studio::docs.architecture.database-design');
     }
 
     /**
@@ -190,7 +190,7 @@ class DocsController extends Controller
      */
     public function security(): View
     {
-        return view('codeforge-database-studio::docs.architecture.security');
+        return view('codeforge-studio::docs.architecture.security');
     }
 
     /**
@@ -200,7 +200,7 @@ class DocsController extends Controller
      */
     public function apiOverview(): View
     {
-        return view('codeforge-database-studio::docs.api.overview');
+        return view('codeforge-studio::docs.api.overview');
     }
 
     /**
@@ -210,7 +210,7 @@ class DocsController extends Controller
      */
     public function apiServices(): View
     {
-        return view('codeforge-database-studio::docs.api.services');
+        return view('codeforge-studio::docs.api.services');
     }
 
     /**
@@ -220,7 +220,7 @@ class DocsController extends Controller
      */
     public function apiCommands(): View
     {
-        return view('codeforge-database-studio::docs.api.commands');
+        return view('codeforge-studio::docs.api.commands');
     }
 
     /**
@@ -230,7 +230,7 @@ class DocsController extends Controller
      */
     public function apiEvents(): View
     {
-        return view('codeforge-database-studio::docs.api.events');
+        return view('codeforge-studio::docs.api.events');
     }
 
     /**
@@ -240,7 +240,7 @@ class DocsController extends Controller
      */
     public function apiFilamentResources(): View
     {
-        return view('codeforge-database-studio::docs.api.filament-resources');
+        return view('codeforge-studio::docs.api.filament-resources');
     }
 
     /**
@@ -250,7 +250,7 @@ class DocsController extends Controller
      */
     public function customization(): View
     {
-        return view('codeforge-database-studio::docs.advanced.customization');
+        return view('codeforge-studio::docs.advanced.customization');
     }
 
     /**
@@ -260,7 +260,7 @@ class DocsController extends Controller
      */
     public function extending(): View
     {
-        return view('codeforge-database-studio::docs.advanced.extending');
+        return view('codeforge-studio::docs.advanced.extending');
     }
 
     /**
@@ -270,7 +270,7 @@ class DocsController extends Controller
      */
     public function performance(): View
     {
-        return view('codeforge-database-studio::docs.advanced.performance');
+        return view('codeforge-studio::docs.advanced.performance');
     }
 
     /**
@@ -280,7 +280,7 @@ class DocsController extends Controller
      */
     public function testing(): View
     {
-        return view('codeforge-database-studio::docs.advanced.testing');
+        return view('codeforge-studio::docs.advanced.testing');
     }
 
     /**
@@ -290,7 +290,7 @@ class DocsController extends Controller
      */
     public function deployment(): View
     {
-        return view('codeforge-database-studio::docs.advanced.deployment');
+        return view('codeforge-studio::docs.advanced.deployment');
     }
 
     /**
@@ -300,7 +300,7 @@ class DocsController extends Controller
      */
     public function codingStandards(): View
     {
-        return view('codeforge-database-studio::docs.guidelines.coding-standards');
+        return view('codeforge-studio::docs.guidelines.coding-standards');
     }
 
     /**
@@ -310,7 +310,7 @@ class DocsController extends Controller
      */
     public function contribution(): View
     {
-        return view('codeforge-database-studio::docs.guidelines.contribution');
+        return view('codeforge-studio::docs.guidelines.contribution');
     }
 
     /**
@@ -320,7 +320,7 @@ class DocsController extends Controller
      */
     public function workflow(): View
     {
-        return view('codeforge-database-studio::docs.guidelines.workflow');
+        return view('codeforge-studio::docs.guidelines.workflow');
     }
 
     /**
@@ -330,7 +330,7 @@ class DocsController extends Controller
      */
     public function troubleshooting(): View
     {
-        return view('codeforge-database-studio::docs.troubleshooting');
+        return view('codeforge-studio::docs.troubleshooting');
     }
 
     /**
@@ -340,7 +340,7 @@ class DocsController extends Controller
      */
     public function faq(): View
     {
-        return view('codeforge-database-studio::docs.faq');
+        return view('codeforge-studio::docs.faq');
     }
 
     /**
@@ -350,7 +350,7 @@ class DocsController extends Controller
      */
     public function changelog(): View
     {
-        return view('codeforge-database-studio::docs.changelog');
+        return view('codeforge-studio::docs.changelog');
     }
 
     /**
@@ -360,7 +360,7 @@ class DocsController extends Controller
      */
     public function support(): View
     {
-        return view('codeforge-database-studio::docs.support');
+        return view('codeforge-studio::docs.support');
     }
 
     /**

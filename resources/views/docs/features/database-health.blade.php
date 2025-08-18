@@ -1,4 +1,4 @@
-﻿@extends('codeforge-database-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
 
 @section('title', 'Database Health - CodeForge Database Studio')
 
@@ -19,7 +19,7 @@
 @endsection
 
 @section('navigation')
-    @include('codeforge-database-studio::docs.partials.navigation')
+    @include('codeforge-studio::docs.partials.navigation')
 @endsection
 
 
@@ -221,16 +221,16 @@
     <p>The system performs automated health checks including:</p>
 
     <h3>Connection Monitoring</h3>
-    <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>✓ Database connection availability
-    ✓ Connection response time analysis
-    ✓ Connection pool utilization
-    ✓ Authentication and permission validation</code></pre>
+    <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>? Database connection availability
+    ? Connection response time analysis
+    ? Connection pool utilization
+    ? Authentication and permission validation</code></pre>
 
     <h3>Performance Analysis</h3>
-    <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>✓ Query execution time monitoring
-    ✓ Resource usage assessment
-    ✓ Index utilization analysis
-    ✓ Table fragmentation detection</code></pre>
+    <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>? Query execution time monitoring
+    ? Resource usage assessment
+    ? Index utilization analysis
+    ? Table fragmentation detection</code></pre>
 
     <h2>Alert System</h2>
     <p>Configure intelligent alerts for proactive monitoring:</p>

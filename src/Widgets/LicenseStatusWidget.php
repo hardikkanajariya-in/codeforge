@@ -7,7 +7,7 @@ use HkDevs\CodeForgeStudio\Services\LicenseValidationService;
 
 class LicenseStatusWidget extends Widget
 {
-    protected static string $view = 'codeforge-database-studio::widgets.license-status';
+    protected static string $view = 'codeforge-studio::widgets.license-status';
 
     protected int | string | array $columnSpan = 'full';
 

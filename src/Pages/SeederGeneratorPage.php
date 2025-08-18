@@ -68,7 +68,7 @@ use HkDevs\CodeForgeStudio\Services\SeederGeneratorService;
  */
 class SeederGeneratorPage extends BaseGeneratorPage
 {
-    protected static string $view = 'codeforge-database-studio::pages.seeder-generator';
+    protected static string $view = 'codeforge-studio::pages.seeder-generator';
     protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
     protected static ?string $title = 'Seeder Generator';
     protected static ?string $navigationLabel = 'Seeder Generator';

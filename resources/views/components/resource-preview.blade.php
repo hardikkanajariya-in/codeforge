@@ -29,7 +29,7 @@
                     </div>
                 </div>
             @elseif(isset($preview) && is_array($preview) && count($preview) > 0)
-                @include('codeforge-database-studio::components.preview-generated-code', ['codeFiles' => $preview])
+                @include('codeforge-studio::components.preview-generated-code', ['codeFiles' => $preview])
             @else
                 <div class="text-center py-8">
                     <div class="text-gray-500">

@@ -55,7 +55,7 @@ use HkDevs\CodeForgeStudio\Services\FactoryGeneratorService;
  */
 class FactoryGeneratorPage extends BaseGeneratorPage
 {
-    protected static string $view = 'codeforge-database-studio::pages.factory-generator';
+    protected static string $view = 'codeforge-studio::pages.factory-generator';
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
     protected static ?string $title = 'Factory Generator';
     protected static ?string $navigationLabel = 'Factory Generator';

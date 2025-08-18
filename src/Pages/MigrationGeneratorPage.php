@@ -62,7 +62,7 @@ use Illuminate\Support\Facades\Schema;
  */
 class MigrationGeneratorPage extends BaseGeneratorPage
 {
-    protected static string $view = 'codeforge-database-studio::pages.migration-generator';
+    protected static string $view = 'codeforge-studio::pages.migration-generator';
     protected static ?string $navigationIcon = 'heroicon-o-table-cells';
     protected static ?string $title = 'Migration Generator';
     protected static ?string $navigationLabel = 'Migration Generator';

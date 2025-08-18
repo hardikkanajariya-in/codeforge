@@ -1,4 +1,4 @@
-@extends('codeforge-database-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
 
 @section('title', 'Getting Started - CodeForge Database Studio')
 @section('description', 'Learn how to install and configure CodeForge Database Studio for your Laravel project. Complete guide for developers.')

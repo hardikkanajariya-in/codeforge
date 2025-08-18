@@ -1,4 +1,4 @@
-@extends('codeforge-database-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
 
 @section('title', 'API Overview - CodeForge Database Studio')
 @section('description', 'Complete API reference for CodeForge Database Studio services, commands, and events.')
@@ -20,7 +20,7 @@
 @endsection
 
 @section('navigation')
-    @include('codeforge-database-studio::docs.partials.navigation')
+    @include('codeforge-studio::docs.partials.navigation')
 @endsection
 
 @section('content')

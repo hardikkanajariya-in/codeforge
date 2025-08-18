@@ -240,7 +240,7 @@ class SeederExecutionLogResource extends Resource
                     ->color('info')
                     ->modalHeading(fn(SeederExecutionLog $record): string => 'Execution Output - ' . $record->seeder_name)
                     ->modalContent(function (SeederExecutionLog $record) {
-                        return view('codeforge-database-studio::components.execution-output', [
+                        return view('codeforge-studio::components.execution-output', [
                             'output' => $record->output,
                             'error' => $record->error_message,
                         ]);

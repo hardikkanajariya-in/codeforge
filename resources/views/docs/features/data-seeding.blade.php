@@ -1,4 +1,4 @@
-﻿@extends('codeforge-database-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
 
 @section('title', 'Data Seeding - CodeForge Database Studio')
 
@@ -19,7 +19,7 @@
 @endsection
 
 @section('navigation')
-    @include('codeforge-database-studio::docs.partials.navigation')
+    @include('codeforge-studio::docs.partials.navigation')
 @endsection
 
 
@@ -79,19 +79,19 @@
         <p>Intelligent pattern recognition for realistic data:</p>
 
         <h3>Field Pattern Recognition</h3>
-        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>✓ Email fields → realistic email addresses
-        ✓ Name fields → proper names with cultural diversity
-        ✓ Address fields → valid addresses with proper formatting
-        ✓ Phone fields → valid phone numbers with regional patterns
-        ✓ Date fields → realistic date ranges and patterns
-        ✓ URL fields → valid URLs and domain patterns</code></pre>
+        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>? Email fields ? realistic email addresses
+        ? Name fields ? proper names with cultural diversity
+        ? Address fields ? valid addresses with proper formatting
+        ? Phone fields ? valid phone numbers with regional patterns
+        ? Date fields ? realistic date ranges and patterns
+        ? URL fields ? valid URLs and domain patterns</code></pre>
 
         <h3>Relationship Handling</h3>
-        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>✓ Foreign key consistency
-        ✓ Many-to-many relationship seeding
-        ✓ Polymorphic relationship support
-        ✓ Circular dependency resolution
-        ✓ Orphaned record prevention</code></pre>
+        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>? Foreign key consistency
+        ? Many-to-many relationship seeding
+        ? Polymorphic relationship support
+        ? Circular dependency resolution
+        ? Orphaned record prevention</code></pre>
 
         <h2>Template Configuration</h2>
         <p>Create custom data generation templates:</p>

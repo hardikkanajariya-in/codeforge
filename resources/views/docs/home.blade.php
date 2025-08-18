@@ -1,4 +1,4 @@
-@extends('codeforge-database-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
 
 @section('title', 'CodeForge Database Studio Documentation')
 @section('description', 'Comprehensive documentation for CodeForge Database Studio - Advanced Laravel database management and code generation suite.')

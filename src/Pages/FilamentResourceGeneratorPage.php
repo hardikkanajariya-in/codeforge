@@ -65,7 +65,7 @@ use HkDevs\CodeForgeStudio\Services\FilamentResourceGeneratorService;
  */
 class FilamentResourceGeneratorPage extends BaseGeneratorPage
 {
-    protected static string $view = 'codeforge-database-studio::pages.filament-resource-generator';
+    protected static string $view = 'codeforge-studio::pages.filament-resource-generator';
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
     protected static ?string $title = 'Filament Resource Generator';
     protected static ?string $navigationLabel = 'Filament Resource';

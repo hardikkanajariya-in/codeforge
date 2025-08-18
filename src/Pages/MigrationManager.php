@@ -52,7 +52,7 @@ use HkDevs\CodeForgeStudio\Models\Migration;
 class MigrationManager extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-arrow-path';
-    protected static string $view = 'codeforge-database-studio::pages.migration-manager';
+    protected static string $view = 'codeforge-studio::pages.migration-manager';
     protected static ?string $navigationLabel = 'Migration Manager';
     protected static ?int $navigationSort = 2;
 
@@ -172,26 +172,50 @@ class MigrationManager extends Page
                 return;
             }
 
-            // Run the migration
-            $result = Artisan::call('migrate', ['--force' => true]);
-            $output = Artisan::output();
+            // Create temporary directory for the specific migration
+            $tempDir = storage_path('app/temp_migrations');
+            if (!File::exists($tempDir)) {
+                File::makeDirectory($tempDir, 0755, true);
+            }
 
-            Log::info('Migration command executed', [
-                'migration' => $migrationName,
-                'result_code' => $result,
-                'output' => $output
-            ]);
+            // Copy the specific migration to temp directory
+            $tempMigrationPath = $tempDir . '/' . $migrationFile;
+            File::copy($sourcePath, $tempMigrationPath);
 
-            if ($result === 0) {
-                Notification::make()
-                    ->title('Migration executed successfully')
-                    ->body('Migration "' . $this->formatMigrationName($migrationName) . '" has been executed.')
-                    ->success()
-                    ->send();
+            try {
+                // Run only the specific migration using the temp path
+                $result = Artisan::call('migrate', [
+                    '--path' => 'storage/app/temp_migrations',
+                    '--force' => true
+                ]);
+                $output = Artisan::output();
 
-                $this->loadMigrations(); // Refresh data
-            } else {
-                throw new \Exception('Migration failed with code: ' . $result . '. Output: ' . $output);
+                Log::info('Individual migration command executed', [
+                    'migration' => $migrationName,
+                    'result_code' => $result,
+                    'output' => $output
+                ]);
+
+                if ($result === 0) {
+                    Notification::make()
+                        ->title('Migration executed successfully')
+                        ->body('Migration "' . $this->formatMigrationName($migrationName) . '" has been executed.')
+                        ->success()
+                        ->send();
+
+                    $this->loadMigrations(); // Refresh data
+                } else {
+                    throw new \Exception('Migration failed with code: ' . $result . '. Output: ' . $output);
+                }
+            } finally {
+                // Clean up temporary files
+                if (File::exists($tempMigrationPath)) {
+                    File::delete($tempMigrationPath);
+                }
+                // Remove temp directory if empty
+                if (File::exists($tempDir) && count(File::files($tempDir)) === 0) {
+                    File::deleteDirectory($tempDir);
+                }
             }
         } catch (\Exception $e) {
             Log::error('Migration execution failed', [

@@ -1,4 +1,4 @@
-ï»¿@extends('codeforge-database-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
 
 @section('title', 'Overview - CodeForge Database Studio')
 
@@ -19,7 +19,7 @@
 @endsection
 
 @section('navigation')
-    @include('codeforge-database-studio::docs.partials.navigation')
+    @include('codeforge-studio::docs.partials.navigation')
 @endsection
 
 @section('content')
@@ -104,51 +104,51 @@
                 <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
                     <h3 class="text-lg font-semibold text-blue-900 mb-4">Service Layer</h3>
                     <ul class="space-y-2 text-blue-800 text-sm">
-                        <li>â€¢ <strong>DatabaseHealthService:</strong> Real-time health monitoring and performance tracking
+                        <li>• <strong>DatabaseHealthService:</strong> Real-time health monitoring and performance tracking
                         </li>
-                        <li>â€¢ <strong>SchemaAnalyzerService:</strong> Relationship discovery and performance analysis</li>
-                        <li>â€¢ <strong>DataGenerationService:</strong> Intelligent data seeding with relationship awareness
+                        <li>• <strong>SchemaAnalyzerService:</strong> Relationship discovery and performance analysis</li>
+                        <li>• <strong>DataGenerationService:</strong> Intelligent data seeding with relationship awareness
                         </li>
-                        <li>â€¢ <strong>CodeGenerationService:</strong> Laravel component generation with dependency
+                        <li>• <strong>CodeGenerationService:</strong> Laravel component generation with dependency
                             management</li>
-                        <li>â€¢ <strong>MigrationTrackingService:</strong> Migration execution monitoring and history</li>
-                        <li>â€¢ <strong>SchemaDocumentationService:</strong> Automated documentation generation</li>
+                        <li>• <strong>MigrationTrackingService:</strong> Migration execution monitoring and history</li>
+                        <li>• <strong>SchemaDocumentationService:</strong> Automated documentation generation</li>
                     </ul>
                 </div>
 
                 <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200">
                     <h3 class="text-lg font-semibold text-green-900 mb-4">Data Layer</h3>
                     <ul class="space-y-2 text-green-800 text-sm">
-                        <li>â€¢ <strong>DatabaseManagerLogs:</strong> Comprehensive database operation logging</li>
-                        <li>â€¢ <strong>MigrationHistories:</strong> Detailed migration execution tracking</li>
-                        <li>â€¢ <strong>QueryPerformanceLogs:</strong> Query performance metrics and analysis</li>
-                        <li>â€¢ <strong>DatabaseHealthMetrics:</strong> Real-time health scoring and alerts</li>
-                        <li>â€¢ <strong>DataSeeders:</strong> Smart seeding configuration and templates</li>
-                        <li>â€¢ <strong>SchemaSnapshots:</strong> Version-controlled schema documentation</li>
+                        <li>• <strong>DatabaseManagerLogs:</strong> Comprehensive database operation logging</li>
+                        <li>• <strong>MigrationHistories:</strong> Detailed migration execution tracking</li>
+                        <li>• <strong>QueryPerformanceLogs:</strong> Query performance metrics and analysis</li>
+                        <li>• <strong>DatabaseHealthMetrics:</strong> Real-time health scoring and alerts</li>
+                        <li>• <strong>DataSeeders:</strong> Smart seeding configuration and templates</li>
+                        <li>• <strong>SchemaSnapshots:</strong> Version-controlled schema documentation</li>
                     </ul>
                 </div>
 
                 <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
                     <h3 class="text-lg font-semibold text-purple-900 mb-4">User Interface</h3>
                     <ul class="space-y-2 text-purple-800 text-sm">
-                        <li>â€¢ <strong>Filament Integration:</strong> Native Filament admin panel components</li>
-                        <li>â€¢ <strong>Interactive Dashboards:</strong> Real-time monitoring and analytics</li>
-                        <li>â€¢ <strong>Resource Management:</strong> CRUD operations with advanced filtering</li>
-                        <li>â€¢ <strong>Visual Analytics:</strong> Charts, graphs, and performance visualizations</li>
-                        <li>â€¢ <strong>Configuration Management:</strong> Dynamic feature configuration interface</li>
-                        <li>â€¢ <strong>Documentation Viewer:</strong> Integrated documentation browsing</li>
+                        <li>• <strong>Filament Integration:</strong> Native Filament admin panel components</li>
+                        <li>• <strong>Interactive Dashboards:</strong> Real-time monitoring and analytics</li>
+                        <li>• <strong>Resource Management:</strong> CRUD operations with advanced filtering</li>
+                        <li>• <strong>Visual Analytics:</strong> Charts, graphs, and performance visualizations</li>
+                        <li>• <strong>Configuration Management:</strong> Dynamic feature configuration interface</li>
+                        <li>• <strong>Documentation Viewer:</strong> Integrated documentation browsing</li>
                     </ul>
                 </div>
 
                 <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-lg border border-orange-200">
                     <h3 class="text-lg font-semibold text-orange-900 mb-4">Integration Layer</h3>
                     <ul class="space-y-2 text-orange-800 text-sm">
-                        <li>â€¢ <strong>Laravel Commands:</strong> Artisan command integration for CLI operations</li>
-                        <li>â€¢ <strong>Event System:</strong> Laravel event broadcasting and listening</li>
-                        <li>â€¢ <strong>Queue Integration:</strong> Background job processing for heavy operations</li>
-                        <li>â€¢ <strong>Cache Management:</strong> Intelligent caching with Redis/Memcached support</li>
-                        <li>â€¢ <strong>File System:</strong> Multi-disk file storage and management</li>
-                        <li>â€¢ <strong>API Endpoints:</strong> RESTful API for external integrations</li>
+                        <li>• <strong>Laravel Commands:</strong> Artisan command integration for CLI operations</li>
+                        <li>• <strong>Event System:</strong> Laravel event broadcasting and listening</li>
+                        <li>• <strong>Queue Integration:</strong> Background job processing for heavy operations</li>
+                        <li>• <strong>Cache Management:</strong> Intelligent caching with Redis/Memcached support</li>
+                        <li>• <strong>File System:</strong> Multi-disk file storage and management</li>
+                        <li>• <strong>API Endpoints:</strong> RESTful API for external integrations</li>
                     </ul>
                 </div>
             </div>
@@ -197,36 +197,36 @@
                 <div>
                     <h4 class="font-semibold text-gray-900 mb-3">Framework</h4>
                     <ul class="space-y-2 text-sm text-gray-700">
-                        <li>â€¢ Laravel ^10.0</li>
-                        <li>â€¢ Filament ^3.0</li>
-                        <li>â€¢ PHP ^8.1</li>
+                        <li>• Laravel ^10.0</li>
+                        <li>• Filament ^3.0</li>
+                        <li>• PHP ^8.1</li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-900 mb-3">Database</h4>
                     <ul class="space-y-2 text-sm text-gray-700">
-                        <li>â€¢ MySQL 5.7+</li>
-                        <li>â€¢ PostgreSQL 12+</li>
-                        <li>â€¢ SQLite 3.8+</li>
-                        <li>â€¢ SQL Server 2017+</li>
+                        <li>• MySQL 5.7+</li>
+                        <li>• PostgreSQL 12+</li>
+                        <li>• SQLite 3.8+</li>
+                        <li>• SQL Server 2017+</li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-900 mb-3">Frontend</h4>
                     <ul class="space-y-2 text-sm text-gray-700">
-                        <li>â€¢ Livewire ^3.0</li>
-                        <li>â€¢ Alpine.js</li>
-                        <li>â€¢ Tailwind CSS</li>
-                        <li>â€¢ Chart.js</li>
+                        <li>• Livewire ^3.0</li>
+                        <li>• Alpine.js</li>
+                        <li>• Tailwind CSS</li>
+                        <li>• Chart.js</li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-900 mb-3">Tools</h4>
                     <ul class="space-y-2 text-sm text-gray-700">
-                        <li>â€¢ Redis/Memcached</li>
-                        <li>â€¢ Queue Workers</li>
-                        <li>â€¢ PHPUnit Testing</li>
-                        <li>â€¢ Composer</li>
+                        <li>• Redis/Memcached</li>
+                        <li>• Queue Workers</li>
+                        <li>• PHPUnit Testing</li>
+                        <li>• Composer</li>
                     </ul>
                 </div>
             </div>

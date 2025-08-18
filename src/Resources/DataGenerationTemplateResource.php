@@ -274,28 +274,25 @@ class DataGenerationTemplateResource extends Resource
                 Tables\Actions\Action::make('preview')
                     ->icon('heroicon-o-eye')
                     ->color('info')
-                    ->action(function (DataGenerationTemplate $record) {
+                    ->modalHeading('Data Preview')
+                    ->modalDescription('Preview of generated data based on this template')
+                    ->modalContent(function (DataGenerationTemplate $record) {
                         try {
                             $service = app(DataGenerationService::class);
                             $preview = $service->previewData($record, 3);
-
-                            Notification::make()
-                                ->title('Preview Generated')
-                                ->body('Check the browser console for preview data')
-                                ->success()
-                                ->send();
-
-                            // In a real implementation, you'd show this in a modal
-                            // For now, we'll log it
-                            Log::info('Template Preview', ['template' => $record->name, 'data' => $preview]);
+                            
+                            return view('codeforge-studio::components.data-preview', [
+                                'data' => $preview,
+                                'template' => $record,
+                            ]);
                         } catch (\Exception $e) {
-                            Notification::make()
-                                ->title('Preview Failed')
-                                ->body($e->getMessage())
-                                ->danger()
-                                ->send();
+                            return view('codeforge-studio::components.error-message', [
+                                'error' => $e->getMessage(),
+                            ]);
                         }
-                    }),
+                    })
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Close'),
 
                 Tables\Actions\Action::make('generate')
                     ->icon('heroicon-o-play')
@@ -365,16 +362,24 @@ class DataGenerationTemplateResource extends Resource
     protected static function getAvailableTables(): array
     {
         try {
-            $tables = DB::connection()->getDoctrineSchemaManager()->listTableNames();
+            $tables = DB::select('SHOW TABLES');
             $tableNames = [];
 
-            foreach ($tables as $tableName) {
+            foreach ($tables as $table) {
+                // Get the table name from the result object
+                $tableName = array_values((array)$table)[0];
+
                 // Skip system tables
                 if (!in_array($tableName, [
                     'migrations',
                     'personal_access_tokens',
                     'password_reset_tokens',
                     'failed_jobs',
+                    'cache',
+                    'cache_locks',
+                    'sessions',
+                    'job_batches',
+                    'jobs',
                 ])) {
                     $tableNames[$tableName] = $tableName;
                 }
@@ -382,6 +387,7 @@ class DataGenerationTemplateResource extends Resource
 
             return $tableNames;
         } catch (\Exception $e) {
+            Log::error('Failed to retrieve available tables: ' . $e->getMessage());
             return [];
         }
     }

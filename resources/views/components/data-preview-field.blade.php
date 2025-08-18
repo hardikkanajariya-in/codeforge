@@ -8,7 +8,7 @@
             <p class="mt-2">No preview available. Select a table and click "Generate Preview".</p>
         </div>
     @else
-        @include('codeforge-database-studio::components.data-preview', [
+        @include('codeforge-studio::components.data-preview', [
             'data' => $previewData,
             'tableName' => $selectedTable
         ])

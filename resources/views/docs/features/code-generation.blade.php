@@ -1,5 +1,5 @@
-﻿@extends('codeforge-database-studio::layout.docs')
-@extends('codeforge-database-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
 
 @section('title', 'Code Generation - CodeForge Database Studio')
 
@@ -20,7 +20,7 @@
 @endsection
 
 @section('navigation')
-    @include('codeforge-database-studio::docs.partials.navigation')
+    @include('codeforge-studio::docs.partials.navigation')
 @endsection
 
 
@@ -91,18 +91,18 @@
         <p>Generate a wide variety of Laravel components:</p>
 
         <h3>Database Components</h3>
-        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>✓ Database migrations with complete schema definition
-    ✓ Eloquent models with relationships and attributes
-    ✓ Model factories with realistic data generation
-    ✓ Database seeders with dependency management
-    ✓ Pivot table handling for many-to-many relationships</code></pre>
+        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>? Database migrations with complete schema definition
+    ? Eloquent models with relationships and attributes
+    ? Model factories with realistic data generation
+    ? Database seeders with dependency management
+    ? Pivot table handling for many-to-many relationships</code></pre>
 
         <h3>Application Components</h3>
-        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>✓ RESTful controllers with CRUD operations
-    ✓ Form request classes with validation rules
-    ✓ Policy classes with authorization logic
-    ✓ Resource classes for API transformations
-    ✓ Event and listener classes for decoupled architecture</code></pre>
+        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>? RESTful controllers with CRUD operations
+    ? Form request classes with validation rules
+    ? Policy classes with authorization logic
+    ? Resource classes for API transformations
+    ? Event and listener classes for decoupled architecture</code></pre>
 
         <h2>Generation Templates</h2>
         <p>Flexible template system for customized code generation:</p>

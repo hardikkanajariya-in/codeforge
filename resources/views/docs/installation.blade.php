@@ -1,4 +1,4 @@
-@extends('codeforge-database-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
 
 @section('title', 'Installation Guide - CodeForge Database Studio')
 @section('description', 'Complete installation guide for CodeForge Database Studio. Step-by-step instructions for Laravel developers.')
@@ -14,7 +14,7 @@
 @endsection
 
 @section('navigation')
-    @include('codeforge-database-studio::docs.partials.navigation')
+    @include('codeforge-studio::docs.partials.navigation')
 @endsection
 
 @section('content')

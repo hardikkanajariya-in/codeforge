@@ -69,7 +69,7 @@ use Illuminate\Support\Facades\Log;
 class SchemaDesigner extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
-    protected static string $view = 'codeforge-database-studio::pages.schema-designer';
+    protected static string $view = 'codeforge-studio::pages.schema-designer';
     protected static ?string $navigationLabel = 'Schema Designer';
     protected static ?string $title = 'Visual Schema Designer';
     protected static ?int $navigationSort = 3;

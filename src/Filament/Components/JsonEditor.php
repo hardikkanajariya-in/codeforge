@@ -29,7 +29,7 @@ use Filament\Forms\Components\Textarea;
  */
 class JsonEditor extends Textarea
 {
-    protected string $view = 'codeforge-database-studio::components.json-editor';
+    protected string $view = 'codeforge-studio::components.json-editor';
 
     public static function make(string $name): static
     {

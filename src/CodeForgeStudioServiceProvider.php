@@ -88,23 +88,23 @@ class CodeForgeStudioServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/../config/codeforge-database-studio.php' => config_path('codeforge-database-studio.php'),
-        ], 'codeforge-database-studio-config');
+        ], 'codeforge-studio-config');
 
         $this->publishes([
             __DIR__ . '/../database/migrations' => database_path('migrations'),
-        ], 'codeforge-database-studio-migrations');
+        ], 'codeforge-studio-migrations');
 
         $this->publishes([
-            __DIR__ . '/../resources/views' => resource_path('views/vendor/codeforge-database-studio'),
-        ], 'codeforge-database-studio-views');
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/codeforge-studio'),
+        ], 'codeforge-studio-views');
 
         $this->publishes([
-            __DIR__ . '/../resources/css' => public_path('vendor/codeforge-database-studio/css'),
-            __DIR__ . '/../resources/js' => public_path('vendor/codeforge-database-studio/js'),
-        ], 'codeforge-database-studio-assets');
+            __DIR__ . '/../resources/css' => public_path('vendor/codeforge-studio/css'),
+            __DIR__ . '/../resources/js' => public_path('vendor/codeforge-studio/js'),
+        ], 'codeforge-studio-assets');
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'codeforge-database-studio');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'codeforge-studio');
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         $this->loadRoutesFrom(__DIR__ . '/../routes/docs.php');
 

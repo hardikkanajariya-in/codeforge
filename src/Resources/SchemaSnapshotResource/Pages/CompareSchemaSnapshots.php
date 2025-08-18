@@ -44,7 +44,7 @@ class CompareSchemaSnapshots extends Page implements HasForms
 
     protected static string $resource = SchemaSnapshotResource::class;
 
-    protected static string $view = 'codeforge-database-studio::pages.compare-schema-snapshots';
+    protected static string $view = 'codeforge-studio::pages.compare-schema-snapshots';
 
     public SchemaSnapshot $record;
     public ?SchemaSnapshot $compareWith = null;

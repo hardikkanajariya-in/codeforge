@@ -71,7 +71,7 @@ use HkDevs\CodeForgeStudio\Services\IntelligentSuggestionService;
  */
 class ModelGeneratorPage extends BaseGeneratorPage
 {
-    protected static string $view = 'codeforge-database-studio::pages.model-generator';
+    protected static string $view = 'codeforge-studio::pages.model-generator';
     protected static ?string $navigationIcon = 'heroicon-o-cube';
     protected static ?string $title = 'Model Generator';
     protected static ?string $navigationLabel = 'Model Generator';

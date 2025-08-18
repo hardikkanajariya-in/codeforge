@@ -51,7 +51,7 @@ use Illuminate\Support\Facades\Route;
 class DatabaseOverview extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
-    protected static string $view = 'codeforge-database-studio::pages.database-overview';
+    protected static string $view = 'codeforge-studio::pages.database-overview';
     protected static ?string $title = '';
     protected static ?string $navigationLabel = 'Overview';
     protected static ?int $navigationSort = 1;

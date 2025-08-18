@@ -161,25 +161,13 @@
 
                                                     <x-filament::modal id="confirm-run-{{ $migration['migration'] }}" width="md">
                                                         <x-slot name="heading">
-                                                            Confirm Migration Execution
+                                                            Run Migration
                                                         </x-slot>
 
                                                         <div class="fi-mo-content">
                                                             <p class="fi-modal-description">
-                                                                Are you sure you want to run the migration <strong>{{ $migration['display_name'] }}</strong>?
+                                                                Are you sure you want to run the migration <br/> <strong>{{ $migration['display_name'] }}</strong>?
                                                             </p>
-                                                            
-                                                            <x-filament::section class="fi-color-warning">
-                                                                <div class="flex items-start">
-                                                                    <x-filament::icon 
-                                                                        icon="heroicon-o-exclamation-triangle" 
-                                                                        class="fi-icon-size-md text-warning-500" 
-                                                                    />
-                                                                    <p class="fi-section-content-text">
-                                                                        This action will modify your database structure and cannot be undone.
-                                                                    </p>
-                                                                </div>
-                                                            </x-filament::section>
                                                         </div>
 
                                                         <x-slot name="footerActions">
@@ -187,14 +175,14 @@
                                                                 Cancel
                                                             </x-filament::button>
 
-                                                            <x-filament::button 
-                                                                color="success" 
+                                                            <x-filament::button
+                                                                color="success"
                                                                 wire:click="runMigration('{{ $migration['migration'] }}')"
-                                                                wire:loading.attr="disabled" 
+                                                                wire:loading.attr="disabled"
                                                                 wire:target="runMigration('{{ $migration['migration'] }}')"
                                                                 x-on:click="close">
                                                                 <span wire:loading.remove wire:target="runMigration('{{ $migration['migration'] }}')">
-                                                                    Run Migration
+                                                                    Confirm
                                                                 </span>
                                                                 <span wire:loading wire:target="runMigration('{{ $migration['migration'] }}')">
                                                                     Running...
@@ -219,20 +207,8 @@
 
                                                             <div class="fi-mo-content">
                                                                 <p class="fi-modal-description">
-                                                                    Are you sure you want to rollback the migration <strong>{{ $migration['display_name'] }}</strong>?
+                                                                    Are you sure you want to rollback the migration <br/> <strong>{{ $migration['display_name'] }}</strong>?
                                                                 </p>
-                                                                
-                                                                <x-filament::section class="fi-color-danger">
-                                                                    <div class="flex items-start gap-3">
-                                                                        <x-filament::icon 
-                                                                            icon="heroicon-o-exclamation-triangle" 
-                                                                            class="fi-icon-size-md text-danger-500" 
-                                                                        />
-                                                                        <p class="fi-section-content-text">
-                                                                            This action cannot be undone and may result in data loss.
-                                                                        </p>
-                                                                    </div>
-                                                                </x-filament::section>
                                                             </div>
 
                                                             <x-slot name="footerActions">

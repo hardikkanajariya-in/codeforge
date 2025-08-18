@@ -1,4 +1,4 @@
-﻿@extends('codeforge-database-studio::layout.docs')
+@extends('codeforge-studio::layout.docs')
 
 @section('title', 'Migration Management - CodeForge Database Studio')
 
@@ -19,7 +19,7 @@
 @endsection
 
 @section('navigation')
-    @include('codeforge-database-studio::docs.partials.navigation')
+    @include('codeforge-studio::docs.partials.navigation')
 @endsection
 
 @section('content')
@@ -69,18 +69,18 @@
         <p>Comprehensive tracking of all migration activities:</p>
 
         <h3>Execution Monitoring</h3>
-        <pre class='bg-gray-800 text-green-400 p-4 rounded-md'><code>✓ Real-time migration execution tracking
-    ✓ Performance metrics collection
-    ✓ Error detection and reporting
-    ✓ User activity attribution
-    ✓ Environment-specific logging</code></pre>
+        <pre class='bg-gray-800 text-green-400 p-4 rounded-md'><code>? Real-time migration execution tracking
+    ? Performance metrics collection
+    ? Error detection and reporting
+    ? User activity attribution
+    ? Environment-specific logging</code></pre>
 
         <h3>Batch Management</h3>
-        <pre class='bg-gray-800 text-green-400 p-4 rounded-md'><code>✓ Migration batch identification
-    ✓ Rollback point management
-    ✓ Cross-system synchronization
-    ✓ Orphaned entry cleanup
-    ✓ Consistency validation</code></pre>
+        <pre class='bg-gray-800 text-green-400 p-4 rounded-md'><code>? Migration batch identification
+    ? Rollback point management
+    ? Cross-system synchronization
+    ? Orphaned entry cleanup
+    ? Consistency validation</code></pre>
 
         <h2>Configuration</h2>
         <p>Configure migration tracking settings:</p>

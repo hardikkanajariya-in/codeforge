@@ -94,19 +94,19 @@ class ManageAssetsCommand extends Command
     protected $description = 'Manage CodeForge Database Studio published assets (remove, publish, or refresh)';
 
     private array $publishableTags = [
-        'config' => 'codeforge-database-studio-config',
-        'migrations' => 'codeforge-database-studio-migrations',
-        'views' => 'codeforge-database-studio-views',
-        'assets' => 'codeforge-database-studio-assets',
+        'config' => 'codeforge-studio-config',
+        'migrations' => 'codeforge-studio-migrations',
+        'views' => 'codeforge-studio-views',
+        'assets' => 'codeforge-studio-assets',
     ];
 
     private array $publishedPaths = [
         'config' => 'config/codeforge-database-studio.php',
         'migrations' => 'database/migrations',
-        'views' => 'resources/views/vendor/codeforge-database-studio',
+        'views' => 'resources/views/vendor/codeforge-studio',
         'assets' => [
-            'public/vendor/codeforge-database-studio/css',
-            'public/vendor/codeforge-database-studio/js'
+            'public/vendor/codeforge-studio/css',
+            'public/vendor/codeforge-studio/js'
         ],
     ];
 

@@ -28,7 +28,7 @@ use Filament\Forms\Components\View;
  */
 class PreviewGeneratedCode extends View
 {
-    protected string $view = 'codeforge-database-studio::components.preview-generated-code';
+    protected string $view = 'codeforge-studio::components.preview-generated-code';
 
     protected array $codeFiles = [];
     protected string $language = 'php';
