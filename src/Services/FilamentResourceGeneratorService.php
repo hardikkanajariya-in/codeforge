@@ -1026,6 +1026,29 @@ class {$resourceClassName} extends Resource
             case 'time':
                 $code .= "TimePicker::make('{$name}')";
                 break;
+            case 'relationship':
+                $relationshipType = $field['relationship_type'] ?? 'belongsTo';
+                $relationshipName = $field['relationship_name'] ?? $name;
+                $titleAttribute = $field['title_attribute'] ?? 'name';
+                $relatedModel = $field['related_model'] ?? '';
+
+                if ($relationshipType === 'belongsToMany') {
+                    $code .= "CheckboxList::make('{$relationshipName}')";
+                    $code .= "\n                    ->relationship('{$relationshipName}', '{$titleAttribute}')";
+                    if ($field['searchable'] ?? false) {
+                        $code .= "\n                    ->searchable()";
+                    }
+                } else {
+                    $code .= "Select::make('{$relationshipName}')";
+                    $code .= "\n                    ->relationship('{$relationshipName}', '{$titleAttribute}')";
+                    if ($field['searchable'] ?? false) {
+                        $code .= "\n                    ->searchable()";
+                    }
+                    if ($field['preload'] ?? false) {
+                        $code .= "\n                    ->preload()";
+                    }
+                }
+                break;
             default:
                 $code .= "TextInput::make('{$name}')";
         }
@@ -1124,6 +1147,19 @@ class {$resourceClassName} extends Resource
                 break;
             case 'money':
                 $code .= "TextColumn::make('{$name}')\n                    ->money('USD')";
+                break;
+            case 'relationship':
+                $relationshipName = $column['relationship_name'] ?? $name;
+                $titleAttribute = $column['title_attribute'] ?? 'name';
+                $relationshipType = $column['relationship_type'] ?? 'belongsTo';
+
+                if ($relationshipType === 'belongsToMany') {
+                    // For many-to-many relationships, show a comma-separated list
+                    $code .= "TextColumn::make('{$relationshipName}.{$titleAttribute}')\n                    ->listWithLineBreaks()";
+                } else {
+                    // For belongsTo and hasOne relationships
+                    $code .= "TextColumn::make('{$relationshipName}.{$titleAttribute}')";
+                }
                 break;
             default:
                 $code .= "TextColumn::make('{$name}')";

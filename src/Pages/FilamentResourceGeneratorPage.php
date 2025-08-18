@@ -336,6 +336,13 @@ class FilamentResourceGeneratorPage extends Page
             'helper_text' => '',
             'validation' => '',
             'options' => '',
+            // Relationship-specific properties
+            'relationship_name' => '',
+            'related_model' => '',
+            'title_attribute' => 'name',
+            'relationship_type' => 'belongsTo', // belongsTo, hasMany, belongsToMany
+            'searchable' => false,
+            'preload' => false,
         ];
     }
 
@@ -381,6 +388,11 @@ class FilamentResourceGeneratorPage extends Page
             'toggleable' => false,
             'format' => '',
             'badge_colors' => '',
+            // Relationship-specific properties
+            'relationship_name' => '',
+            'related_model' => '',
+            'title_attribute' => 'name',
+            'relationship_type' => 'belongsTo',
         ];
     }
 
@@ -543,6 +555,39 @@ class FilamentResourceGeneratorPage extends Page
     public function updateFilter(): void
     {
         $this->generatePreview();
+    }
+
+    public function getAvailableModelsForRelationships(): array
+    {
+        $models = [];
+        $modelPath = app_path('Models');
+
+        if (!is_dir($modelPath)) {
+            return $models;
+        }
+
+        $files = glob($modelPath . '/*.php');
+
+        foreach ($files as $file) {
+            $fileName = basename($file, '.php');
+            $className = 'App\\Models\\' . $fileName;
+
+            if (class_exists($className)) {
+                $models[$className] = $fileName;
+            }
+        }
+
+        return $models;
+    }
+
+    public function getRelationshipTypes(): array
+    {
+        return [
+            'belongsTo' => 'Belongs To (Many-to-One)',
+            'hasMany' => 'Has Many (One-to-Many)',
+            'belongsToMany' => 'Belongs To Many (Many-to-Many)',
+            'hasOne' => 'Has One (One-to-One)',
+        ];
     }
 
     public static function getNavigationGroup(): ?string

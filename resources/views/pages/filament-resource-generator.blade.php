@@ -337,6 +337,68 @@
                                                         <span style="font-size: 0.875rem;">Required</span>
                                                     </label>
                                                 </div>
+
+                                                <!-- Relationship Configuration (shown only for relationship type) -->
+                                                @if(($formFields[$index]['type'] ?? '') === 'relationship')
+                                                    <div style="margin-top: 0.75rem; padding: 0.75rem; background: #f0f9ff; border-radius: 6px; border-left: 4px solid #0ea5e9;">
+                                                        <h5 style="font-weight: 600; color: #0369a1; margin: 0 0 0.5rem 0; font-size: 0.875rem;">🔗 Relationship Configuration</h5>
+                                                        
+                                                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+                                                            <!-- Relationship Type -->
+                                                            <div>
+                                                                <label style="display: block; font-size: 0.75rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Relationship Type</label>
+                                                                <select wire:model.live="formFields.{{ $index }}.relationship_type" wire:change="updateFormField"
+                                                                    style="padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.875rem; width: 100%;">
+                                                                    @foreach($this->getRelationshipTypes() as $value => $label)
+                                                                        <option value="{{ $value }}">{{ $label }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <!-- Related Model -->
+                                                            <div>
+                                                                <label style="display: block; font-size: 0.75rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Related Model</label>
+                                                                <select wire:model.live="formFields.{{ $index }}.related_model" wire:change="updateFormField"
+                                                                    style="padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.875rem; width: 100%;">
+                                                                    <option value="">Select Model...</option>
+                                                                    @foreach($this->getAvailableModelsForRelationships() as $modelClass => $modelName)
+                                                                        <option value="{{ $modelClass }}">{{ $modelName }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <!-- Title Attribute -->
+                                                            <div>
+                                                                <label style="display: block; font-size: 0.75rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Display Attribute</label>
+                                                                <input type="text" wire:model.live="formFields.{{ $index }}.title_attribute"
+                                                                    wire:change="updateFormField" placeholder="name"
+                                                                    style="padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.875rem; width: 100%;" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                                                            <!-- Relationship Name -->
+                                                            <div>
+                                                                <label style="display: block; font-size: 0.75rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Relationship Method Name</label>
+                                                                <input type="text" wire:model.live="formFields.{{ $index }}.relationship_name"
+                                                                    wire:change="updateFormField" placeholder="e.g., category, user, tags"
+                                                                    style="padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.875rem; width: 100%;" />
+                                                            </div>
+
+                                                            <!-- Additional Options -->
+                                                            <div style="display: flex; gap: 1rem; align-items: end;">
+                                                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                                                    <input type="checkbox" wire:model.live="formFields.{{ $index }}.searchable" wire:change="updateFormField" />
+                                                                    <span style="font-size: 0.875rem;">Searchable</span>
+                                                                </label>
+                                                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                                                    <input type="checkbox" wire:model.live="formFields.{{ $index }}.preload" wire:change="updateFormField" />
+                                                                    <span style="font-size: 0.875rem;">Preload</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             </div>
                                         @endforeach
                                     </div>
@@ -461,6 +523,56 @@
                                                         <span style="font-size: 0.875rem;">Toggleable</span>
                                                     </label>
                                                 </div>
+
+                                                <!-- Relationship Configuration for Table Columns -->
+                                                @if(($tableColumns[$index]['type'] ?? '') === 'relationship')
+                                                    <div style="margin-top: 0.75rem; padding: 0.75rem; background: #f0f9ff; border-radius: 6px; border-left: 4px solid #0ea5e9;">
+                                                        <h5 style="font-weight: 600; color: #0369a1; margin: 0 0 0.5rem 0; font-size: 0.875rem;">🔗 Relationship Column Configuration</h5>
+                                                        
+                                                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+                                                            <!-- Relationship Type -->
+                                                            <div>
+                                                                <label style="display: block; font-size: 0.75rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Relationship Type</label>
+                                                                <select wire:model.live="tableColumns.{{ $index }}.relationship_type" wire:change="updateTableColumn"
+                                                                    style="padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.875rem; width: 100%;">
+                                                                    @foreach($this->getRelationshipTypes() as $value => $label)
+                                                                        <option value="{{ $value }}">{{ $label }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <!-- Related Model -->
+                                                            <div>
+                                                                <label style="display: block; font-size: 0.75rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Related Model</label>
+                                                                <select wire:model.live="tableColumns.{{ $index }}.related_model" wire:change="updateTableColumn"
+                                                                    style="padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.875rem; width: 100%;">
+                                                                    <option value="">Select Model...</option>
+                                                                    @foreach($this->getAvailableModelsForRelationships() as $modelClass => $modelName)
+                                                                        <option value="{{ $modelClass }}">{{ $modelName }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+
+                                                            <!-- Title Attribute -->
+                                                            <div>
+                                                                <label style="display: block; font-size: 0.75rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Display Attribute</label>
+                                                                <input type="text" wire:model.live="tableColumns.{{ $index }}.title_attribute"
+                                                                    wire:change="updateTableColumn" placeholder="name"
+                                                                    style="padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.875rem; width: 100%;" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div style="margin-top: 0.75rem;">
+                                                            <!-- Relationship Name -->
+                                                            <div>
+                                                                <label style="display: block; font-size: 0.75rem; font-weight: 500; color: #374151; margin-bottom: 0.25rem;">Relationship Method Name</label>
+                                                                <input type="text" wire:model.live="tableColumns.{{ $index }}.relationship_name"
+                                                                    wire:change="updateTableColumn" placeholder="e.g., category, user, tags"
+                                                                    style="padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 4px; font-size: 0.875rem; width: 100%;" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             </div>
                                         @endforeach
                                     </div>
