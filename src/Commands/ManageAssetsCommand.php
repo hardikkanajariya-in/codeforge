@@ -341,11 +341,11 @@ class ManageAssetsCommand extends Command
     {
         return $this->description . PHP_EOL . PHP_EOL .
             'Examples:' . PHP_EOL .
-            '  Remove all assets:     php artisan codeforge-database-studio:assets remove' . PHP_EOL .
-            '  Publish all assets:    php artisan codeforge-database-studio:assets publish --force' . PHP_EOL .
-            '  Refresh all assets:    php artisan codeforge-database-studio:assets refresh' . PHP_EOL .
-            '  Remove only config:    php artisan codeforge-database-studio:assets remove --config' . PHP_EOL .
-            '  Refresh only views:    php artisan codeforge-database-studio:assets refresh --views' . PHP_EOL .
-            '  Dry run (preview):     php artisan codeforge-database-studio:assets remove --dry-run' . PHP_EOL;
+            '  Remove all assets:     php artisan codeforge:assets remove' . PHP_EOL .
+            '  Publish all assets:    php artisan codeforge:assets publish --force' . PHP_EOL .
+            '  Refresh all assets:    php artisan codeforge:assets refresh' . PHP_EOL .
+            '  Remove only config:    php artisan codeforge:assets remove --config' . PHP_EOL .
+            '  Refresh only views:    php artisan codeforge:assets refresh --views' . PHP_EOL .
+            '  Dry run (preview):     php artisan codeforge:assets remove --dry-run' . PHP_EOL;
     }
 }

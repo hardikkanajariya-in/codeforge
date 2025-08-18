@@ -90,6 +90,9 @@ class InstallCommand extends Command
         // Publish config
         $this->publishConfig();
 
+        // Publish assets (CSS, JS, Views)
+        $this->publishAssets();
+
         // Publish and run migrations only if they don't exist
         $this->publishMigrations();
 
@@ -101,6 +104,7 @@ class InstallCommand extends Command
         $this->line('Next steps:');
         $this->line('1. Add the plugin to your Filament panel');
         $this->line('2. Configure settings in config/codeforge-database-studio.php');
+        $this->line('3. Assets published to public/vendor/codeforge-database-studio/');
         $this->line('');
 
         return self::SUCCESS;
@@ -114,6 +118,25 @@ class InstallCommand extends Command
             '--tag' => 'codeforge-studio-config',
             '--force' => $this->option('force'),
         ]);
+    }
+
+    private function publishAssets(): void
+    {
+        $this->info('Publishing assets (CSS, JS, Views)...');
+
+        // Publish CSS and JS assets
+        $this->call('vendor:publish', [
+            '--tag' => 'codeforge-studio-assets',
+            '--force' => $this->option('force'),
+        ]);
+
+        // Publish views
+        $this->call('vendor:publish', [
+            '--tag' => 'codeforge-studio-views',
+            '--force' => $this->option('force'),
+        ]);
+
+        $this->info('✅ Assets published successfully to public/vendor/codeforge-database-studio/');
     }
 
     private function publishMigrations(): void

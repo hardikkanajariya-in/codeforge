@@ -95,12 +95,12 @@ class CodeForgeStudioServiceProvider extends ServiceProvider
         ], 'codeforge-studio-migrations');
 
         $this->publishes([
-            __DIR__ . '/../resources/views' => resource_path('views/vendor/codeforge-studio'),
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/codeforge'),
         ], 'codeforge-studio-views');
 
         $this->publishes([
-            __DIR__ . '/../resources/css' => public_path('vendor/codeforge-studio/css'),
-            __DIR__ . '/../resources/js' => public_path('vendor/codeforge-studio/js'),
+            __DIR__ . '/../resources/css' => public_path('vendor/codeforge/css'),
+            __DIR__ . '/../resources/js' => public_path('vendor/codeforge/js'),
         ], 'codeforge-studio-assets');
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
