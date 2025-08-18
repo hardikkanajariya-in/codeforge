@@ -988,44 +988,213 @@ class {$resourceClassName} extends Resource
         switch ($type) {
             case 'text':
                 $code .= "TextInput::make('{$name}')";
+                if (!empty($field['min_length'])) {
+                    $code .= "\n                    ->minLength({$field['min_length']})";
+                }
+                if (!empty($field['max_length'])) {
+                    $code .= "\n                    ->maxLength({$field['max_length']})";
+                }
                 break;
+
             case 'email':
                 $code .= "TextInput::make('{$name}')\n                    ->email()";
                 break;
+
             case 'password':
                 $code .= "TextInput::make('{$name}')\n                    ->password()";
+                if ($field['revealable'] ?? true) {
+                    $code .= "\n                    ->revealable()";
+                }
+                if (!empty($field['min_length'])) {
+                    $code .= "\n                    ->minLength({$field['min_length']})";
+                }
+                if ($field['confirmation'] ?? false) {
+                    $code .= "\n                    ->confirmed()";
+                }
                 break;
+
             case 'number':
                 $code .= "TextInput::make('{$name}')\n                    ->numeric()";
-                if (isset($field['step'])) {
+                if (!empty($field['min_value'])) {
+                    $code .= "\n                    ->minValue({$field['min_value']})";
+                }
+                if (!empty($field['max_value'])) {
+                    $code .= "\n                    ->maxValue({$field['max_value']})";
+                }
+                if (!empty($field['step'])) {
                     $code .= "\n                    ->step('{$field['step']}')";
                 }
-                break;
-            case 'textarea':
-                $code .= "Textarea::make('{$name}')";
-                if (isset($field['rows'])) {
-                    $code .= "\n                    ->rows({$field['rows']})";
+                if (!empty($field['default_value'])) {
+                    $code .= "\n                    ->default({$field['default_value']})";
                 }
                 break;
+
+            case 'textarea':
+                $code .= "Textarea::make('{$name}')";
+                if (!empty($field['rows'])) {
+                    $code .= "\n                    ->rows({$field['rows']})";
+                }
+                if (!empty($field['min_length'])) {
+                    $code .= "\n                    ->minLength({$field['min_length']})";
+                }
+                if (!empty($field['max_length'])) {
+                    $code .= "\n                    ->maxLength({$field['max_length']})";
+                }
+                break;
+
             case 'select':
                 $code .= "Select::make('{$name}')";
-                if (isset($field['options'])) {
+                if (!empty($field['options'])) {
+                    $options = $this->formatOptionsArray($field['options']);
+                    $code .= "\n                    ->options({$options})";
+                }
+                if ($field['multiple'] ?? false) {
+                    $code .= "\n                    ->multiple()";
+                }
+                if ($field['searchable'] ?? false) {
+                    $code .= "\n                    ->searchable()";
+                }
+                if ($field['native'] ?? false) {
+                    $code .= "\n                    ->native(false)";
+                }
+                break;
+
+            case 'radio':
+                $code .= "Radio::make('{$name}')";
+                if (!empty($field['options'])) {
                     $options = $this->formatOptionsArray($field['options']);
                     $code .= "\n                    ->options({$options})";
                 }
                 break;
+
+            case 'checkbox':
+                $code .= "Checkbox::make('{$name}')";
+                if ($field['accepted'] ?? false) {
+                    $code .= "\n                    ->accepted()";
+                }
+                if (($field['default_state'] ?? 'false') === 'true') {
+                    $code .= "\n                    ->default(true)";
+                }
+                break;
+
             case 'toggle':
                 $code .= "Toggle::make('{$name}')";
+                if ($field['inline'] ?? false) {
+                    $code .= "\n                    ->inline()";
+                }
+                if (($field['default_state'] ?? 'false') === 'true') {
+                    $code .= "\n                    ->default(true)";
+                }
                 break;
+
             case 'date':
                 $code .= "DatePicker::make('{$name}')";
+                if (!empty($field['display_format'])) {
+                    $code .= "\n                    ->displayFormat('{$field['display_format']}')";
+                }
+                if (!empty($field['min_date'])) {
+                    $code .= "\n                    ->minDate('{$field['min_date']}')";
+                }
+                if (!empty($field['max_date'])) {
+                    $code .= "\n                    ->maxDate('{$field['max_date']}')";
+                }
                 break;
+
             case 'datetime':
                 $code .= "DateTimePicker::make('{$name}')";
+                if (!empty($field['display_format'])) {
+                    $code .= "\n                    ->displayFormat('{$field['display_format']}')";
+                }
+                if (!empty($field['min_date'])) {
+                    $code .= "\n                    ->minDate('{$field['min_date']}')";
+                }
+                if (!empty($field['max_date'])) {
+                    $code .= "\n                    ->maxDate('{$field['max_date']}')";
+                }
                 break;
+
             case 'time':
                 $code .= "TimePicker::make('{$name}')";
+                if (!empty($field['display_format'])) {
+                    $code .= "\n                    ->displayFormat('{$field['display_format']}')";
+                }
                 break;
+
+            case 'file':
+                $code .= "FileUpload::make('{$name}')";
+                if (!empty($field['disk'])) {
+                    $code .= "\n                    ->disk('{$field['disk']}')";
+                }
+                if (!empty($field['directory'])) {
+                    $code .= "\n                    ->directory('{$field['directory']}')";
+                }
+                if (!empty($field['accepted_file_types'])) {
+                    $types = array_map('trim', explode(',', $field['accepted_file_types']));
+                    $typesString = "['" . implode("', '", $types) . "']";
+                    $code .= "\n                    ->acceptedFileTypes({$typesString})";
+                }
+                if (!empty($field['max_size'])) {
+                    $code .= "\n                    ->maxSize({$field['max_size']} * 1024)";
+                }
+                if ($field['multiple'] ?? false) {
+                    $code .= "\n                    ->multiple()";
+                }
+                break;
+
+            case 'image':
+                $code .= "FileUpload::make('{$name}')\n                    ->image()";
+                if (!empty($field['disk'])) {
+                    $code .= "\n                    ->disk('{$field['disk']}')";
+                }
+                if (!empty($field['directory'])) {
+                    $code .= "\n                    ->directory('{$field['directory']}')";
+                }
+                if (!empty($field['max_size'])) {
+                    $code .= "\n                    ->maxSize({$field['max_size']} * 1024)";
+                }
+                if ($field['multiple'] ?? false) {
+                    $code .= "\n                    ->multiple()";
+                }
+                if ($field['image_preview'] ?? true) {
+                    $code .= "\n                    ->imagePreviewHeight('250')";
+                }
+                break;
+
+            case 'rich_editor':
+                $code .= "RichEditor::make('{$name}')";
+                if ($field['disable_toolbar_buttons'] ?? false) {
+                    if (!empty($field['toolbar_buttons'])) {
+                        $buttons = array_map('trim', explode(',', $field['toolbar_buttons']));
+                        $buttonsString = "['" . implode("', '", $buttons) . "']";
+                        $code .= "\n                    ->toolbarButtons({$buttonsString})";
+                    }
+                } else {
+                    $code .= "\n                    ->disableToolbarButtons([])";
+                }
+                if ($field['disable_styling'] ?? false) {
+                    $code .= "\n                    ->disableAllToolbarButtons()";
+                }
+                break;
+
+            case 'markdown':
+                $code .= "MarkdownEditor::make('{$name}')";
+                if ($field['disable_toolbar_buttons'] ?? false) {
+                    if (!empty($field['toolbar_buttons'])) {
+                        $buttons = array_map('trim', explode(',', $field['toolbar_buttons']));
+                        $buttonsString = "['" . implode("', '", $buttons) . "']";
+                        $code .= "\n                    ->toolbarButtons({$buttonsString})";
+                    }
+                }
+                break;
+
+            case 'color':
+                $code .= "ColorPicker::make('{$name}')";
+                break;
+
+            case 'hidden':
+                $code .= "Hidden::make('{$name}')";
+                break;
+
             case 'relationship':
                 $relationshipType = $field['relationship_type'] ?? 'belongsTo';
                 $relationshipName = $field['relationship_name'] ?? $name;
@@ -1049,8 +1218,10 @@ class {$resourceClassName} extends Resource
                     }
                 }
                 break;
+
             default:
                 $code .= "TextInput::make('{$name}')";
+                break;
         }
 
         // Add common properties
@@ -1063,12 +1234,18 @@ class {$resourceClassName} extends Resource
         }
 
         // Only add placeholder for components that support it (exclude toggle, date pickers, etc.)
-        if (isset($field['placeholder']) && !in_array($type, ['toggle', 'date', 'datetime', 'time'])) {
+        if (!empty($field['placeholder']) && !in_array($type, ['toggle', 'date', 'datetime', 'time', 'checkbox', 'file', 'image', 'rich_editor', 'markdown', 'color', 'hidden'])) {
             $code .= "\n                    ->placeholder('{$field['placeholder']}')";
         }
 
-        if (isset($field['helper_text'])) {
+        if (!empty($field['helper_text'])) {
             $code .= "\n                    ->helperText('{$field['helper_text']}')";
+        }
+
+        if (!empty($field['validation'])) {
+            $rules = array_map('trim', explode('|', $field['validation']));
+            $rulesString = "['" . implode("', '", $rules) . "']";
+            $code .= "\n                    ->rules({$rulesString})";
         }
 
         return $code;
@@ -1123,31 +1300,108 @@ class {$resourceClassName} extends Resource
             case 'text':
                 $code .= "TextColumn::make('{$name}')";
                 break;
+
             case 'badge':
                 $code .= "TextColumn::make('{$name}')\n                    ->badge()";
-                if (isset($column['colors'])) {
+                if (!empty($column['colors'])) {
+                    $colors = $this->formatOptionsArray($column['colors']);
                     $code .= "\n                    ->color(fn (string \$state): string => match (\$state) {";
-                    foreach ($column['colors'] as $value => $color) {
-                        $code .= "\n                        '{$value}' => '{$color}',";
+                    if (is_string($column['colors'])) {
+                        $colorArray = json_decode($column['colors'], true);
+                        if (is_array($colorArray)) {
+                            foreach ($colorArray as $value => $color) {
+                                $code .= "\n                        '{$value}' => '{$color}',";
+                            }
+                        }
                     }
                     $code .= "\n                        default => 'gray',\n                    })";
                 }
-                break;
-            case 'icon':
-                $code .= "IconColumn::make('{$name}')";
-                if ($column['boolean'] ?? false) {
-                    $code .= "\n                    ->boolean()";
+                if (!empty($column['icons'])) {
+                    if (is_string($column['icons'])) {
+                        $iconArray = json_decode($column['icons'], true);
+                        if (is_array($iconArray)) {
+                            $code .= "\n                    ->icon(fn (string \$state): string => match (\$state) {";
+                            foreach ($iconArray as $value => $icon) {
+                                $code .= "\n                        '{$value}' => '{$icon}',";
+                            }
+                            $code .= "\n                        default => null,\n                    })";
+                        }
+                    }
                 }
                 break;
+
+            case 'boolean':
+                $code .= "IconColumn::make('{$name}')\n                    ->boolean()";
+                if (!empty($column['true_icon'])) {
+                    $code .= "\n                    ->trueIcon('{$column['true_icon']}')";
+                }
+                if (!empty($column['false_icon'])) {
+                    $code .= "\n                    ->falseIcon('{$column['false_icon']}')";
+                }
+                if (!empty($column['true_color'])) {
+                    $code .= "\n                    ->trueColor('{$column['true_color']}')";
+                }
+                break;
+
+            case 'color':
+                $code .= "ColorColumn::make('{$name}')";
+                if (!empty($column['size'])) {
+                    $code .= "\n                    ->size(ColorColumn\ColorColumnSize::" . ucfirst($column['size']) . ")";
+                }
+                if ($column['copy_message'] ?? false) {
+                    $code .= "\n                    ->copyable()";
+                }
+                if ($column['copy_message_text'] ?? false) {
+                    $code .= "\n                    ->copyMessage('Color copied!')";
+                }
+                break;
+
+            case 'image':
+                $code .= "ImageColumn::make('{$name}')";
+                if (!empty($column['height'])) {
+                    $code .= "\n                    ->height({$column['height']})";
+                }
+                if (!empty($column['width'])) {
+                    $code .= "\n                    ->width({$column['width']})";
+                }
+                if (!empty($column['shape'])) {
+                    $code .= "\n                    ->" . $column['shape'] . "()";
+                }
+                if ($column['stacked'] ?? false) {
+                    $code .= "\n                    ->stacked()";
+                }
+                break;
+
             case 'date':
                 $code .= "TextColumn::make('{$name}')\n                    ->date()";
+                if (!empty($column['date_format'])) {
+                    $code .= "\n                    ->dateFormat('{$column['date_format']}')";
+                }
+                if (!empty($column['timezone'])) {
+                    $code .= "\n                    ->timezone('{$column['timezone']}')";
+                }
+                if ($column['since'] ?? false) {
+                    $code .= "\n                    ->since()";
+                }
                 break;
+
             case 'datetime':
                 $code .= "TextColumn::make('{$name}')\n                    ->dateTime()";
+                if (!empty($column['date_format'])) {
+                    $code .= "\n                    ->dateTimeFormat('{$column['date_format']}')";
+                }
+                if (!empty($column['timezone'])) {
+                    $code .= "\n                    ->timezone('{$column['timezone']}')";
+                }
+                if ($column['since'] ?? false) {
+                    $code .= "\n                    ->since()";
+                }
                 break;
+
             case 'money':
                 $code .= "TextColumn::make('{$name}')\n                    ->money('USD')";
                 break;
+
             case 'relationship':
                 $relationshipName = $column['relationship_name'] ?? $name;
                 $titleAttribute = $column['title_attribute'] ?? 'name';
@@ -1161,8 +1415,10 @@ class {$resourceClassName} extends Resource
                     $code .= "TextColumn::make('{$relationshipName}.{$titleAttribute}')";
                 }
                 break;
+
             default:
                 $code .= "TextColumn::make('{$name}')";
+                break;
         }
 
         // Add common properties
@@ -1176,6 +1432,18 @@ class {$resourceClassName} extends Resource
 
         if ($column['sortable'] ?? false) {
             $code .= "\n                    ->sortable()";
+        }
+
+        if ($column['toggleable'] ?? false) {
+            $code .= "\n                    ->toggleable()";
+        }
+
+        if (!empty($column['format'])) {
+            $code .= "\n                    ->formatStateUsing(fn (string \$state): string => '{$column['format']}' . \$state)";
+        }
+
+        if (!empty($column['suffix'])) {
+            $code .= "\n                    ->suffix('{$column['suffix']}')";
         }
 
         return $code;
