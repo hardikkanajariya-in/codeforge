@@ -192,9 +192,8 @@
                     class="w-16 h-16 bg-gradient-to-br from-red-100 to-pink-100 rounded-xl flex items-center justify-center mb-6">
                     <span class="text-3xl">💖</span>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Database Health Monitoring</h3>
-                <p class="text-gray-600 mb-4">Real-time monitoring of database performance, health metrics, and connection
-                    status with advanced alerting.</p>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Database Overview</h3>
+                <p class="text-gray-600 mb-4">Centralized dashboard with database connection status, table overview, and comprehensive system monitoring.</p>
                 <a href="{{ route('codeforge.docs.features.database-health') }}"
                     class="text-primary-600 hover:text-primary-700 font-medium inline-flex items-center">
                     Learn more
@@ -209,9 +208,8 @@
                     class="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center mb-6">
                     <span class="text-3xl">🔄</span>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Migration Management</h3>
-                <p class="text-gray-600 mb-4">Advanced migration tools with history tracking, rollback capabilities, and
-                    impact analysis.</p>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Migration Manager</h3>
+                <p class="text-gray-600 mb-4">Complete migration control with individual execution, batch operations, status tracking, and safe rollback capabilities.</p>
                 <a href="{{ route('codeforge.docs.features.migration-management') }}"
                     class="text-primary-600 hover:text-primary-700 font-medium inline-flex items-center">
                     Learn more
@@ -227,8 +225,7 @@
                     <span class="text-3xl">🎨</span>
                 </div>
                 <h3 class="text-xl font-bold text-gray-900 mb-3">Visual Schema Designer</h3>
-                <p class="text-gray-600 mb-4">Drag-and-drop interface for database schema exploration with relationship
-                    mapping and documentation.</p>
+                <p class="text-gray-600 mb-4">Interactive database schema visualization with table views, relationship mapping, dependency tracking, and performance analysis.</p>
                 <a href="{{ route('codeforge.docs.features.schema-designer') }}"
                     class="text-primary-600 hover:text-primary-700 font-medium inline-flex items-center">
                     Learn more
@@ -243,9 +240,8 @@
                     class="w-16 h-16 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-xl flex items-center justify-center mb-6">
                     <span class="text-3xl">⚡</span>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Intelligent Code Generation</h3>
-                <p class="text-gray-600 mb-4">Automated generation of models, migrations, factories, and Filament resources
-                    with smart templates.</p>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Code Generation Suite</h3>
+                <p class="text-gray-600 mb-4">Comprehensive Laravel component generation including models, migrations, factories, seeders, and Filament resources with intelligent templates.</p>
                 <a href="{{ route('codeforge.docs.features.code-generation') }}"
                     class="text-primary-600 hover:text-primary-700 font-medium inline-flex items-center">
                     Learn more
@@ -261,8 +257,7 @@
                     <span class="text-3xl">🌱</span>
                 </div>
                 <h3 class="text-xl font-bold text-gray-900 mb-3">Smart Data Seeding</h3>
-                <p class="text-gray-600 mb-4">Context-aware data generation with relationship handling and custom seeding
-                    templates.</p>
+                <p class="text-gray-600 mb-4">Intelligent data generation with relationship awareness, customizable templates, and execution tracking for realistic test data.</p>
                 <a href="{{ route('codeforge.docs.features.data-seeding') }}"
                     class="text-primary-600 hover:text-primary-700 font-medium inline-flex items-center">
                     Learn more
@@ -277,16 +272,35 @@
                     class="w-16 h-16 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-xl flex items-center justify-center mb-6">
                     <span class="text-3xl">📚</span>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">Documentation Generator</h3>
-                <p class="text-gray-600 mb-4">Automated schema documentation with multiple export formats and ERD generation
-                    capabilities.</p>
-                <a href="{{ route('codeforge.docs.features.documentation-generator') }}"
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Database Health</h3>
+                <p class="text-gray-600 mb-4">Real-time performance monitoring with health metrics, query analysis, and comprehensive connection tracking dashboard.</p>
+                <a href="{{ route('codeforge.docs.features.database-health') }}"
                     class="text-primary-600 hover:text-primary-700 font-medium inline-flex items-center">
                     Learn more
                     <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </a>
+            </div>
+        </div>
+
+        <!-- Future Features Note -->
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-8 mb-16">
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-amber-800 mb-2">Development in Progress</h3>
+                    <p class="text-amber-700 mb-4">
+                        CodeForge Database Studio is actively being developed. Additional features like the Documentation Generator are currently in development and will be available in future updates.
+                    </p>
+                    <p class="text-amber-700 text-sm">
+                        <strong>Note:</strong> All features shown above are currently implemented and available in your installation.
+                    </p>
+                </div>
             </div>
         </div>
 
