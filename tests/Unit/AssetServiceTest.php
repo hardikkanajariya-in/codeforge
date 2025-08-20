@@ -21,7 +21,7 @@ class AssetServiceTest extends TestCase
     public function test_asset_path_detection(): void
     {
         $paths = AssetService::getAssetPaths();
-        
+
         $this->assertArrayHasKey('published_css', $paths);
         $this->assertArrayHasKey('published_js', $paths);
         $this->assertArrayHasKey('package_css', $paths);

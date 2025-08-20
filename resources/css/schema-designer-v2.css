@@ -36,32 +36,14 @@
     --schema-transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Dark theme support */
-/* @media (prefers-color-scheme: dark) {
-    :root {
-        --schema-bg-primary: #0f172a;
-        --schema-bg-secondary: #1e293b;
-        --schema-bg-tertiary: #334155;
-        --schema-border: #475569;
-        --schema-border-light: #334155;
-
-        --schema-text-primary: #f8fafc;
-        --schema-text-secondary: #cbd5e1;
-        --schema-text-muted: #94a3b8;
-    }
-} */
-
 /* Reset and Base Styles */
 .schema-designer-v2 {
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     color: var(--schema-text-primary);
     background: transparent;
-    display: flex;
-    flex-direction: column;
     gap: 1rem;
     position: relative;
-    /* Remove fixed padding to work with Filament's container */
 }
 
 /* Stats Panel */
@@ -69,7 +51,6 @@
     background: var(--schema-bg-primary);
     border: 1px solid var(--schema-border);
     border-radius: var(--schema-radius-lg);
-    padding: 1.5rem;
     box-shadow: var(--schema-shadow-sm);
     margin-bottom: 0.5rem;
 }
@@ -1035,201 +1016,6 @@ input:checked+.toggle-slider:before {
     }
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .main-workspace {
-        grid-template-columns: 280px 1fr;
-    }
-
-    .stat-card-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    }
-
-    .control-panel {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-    }
-
-    .control-actions {
-        width: 100%;
-        justify-content: space-between;
-    }
-}
-
-@media (max-width: 1024px) {
-    .schema-designer-v2 {
-        gap: 0.875rem;
-    }
-
-    .main-workspace {
-        grid-template-columns: 280px 1fr;
-        gap: 0.875rem;
-    }
-
-    .stat-card-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .control-actions {
-        gap: 0.875rem;
-    }
-
-    .view-mode-selector {
-        gap: 0.125rem;
-    }
-
-    .view-btn {
-        padding: 0.5rem 0.625rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .schema-designer-v2 {
-        gap: 0.75rem;
-    }
-
-    .main-workspace {
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-        min-height: 400px;
-    }
-
-    .main-workspace.sidebar-open {
-        grid-template-columns: 1fr;
-    }
-
-    .workspace-sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        width: 280px;
-        z-index: 1000;
-        transform: translateX(-100%);
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: var(--schema-shadow-xl);
-        max-height: 100vh;
-    }
-
-    .workspace-sidebar.show {
-        transform: translateX(0);
-    }
-
-    .stat-card-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
-    }
-
-    .control-panel {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.875rem;
-    }
-
-    .control-actions {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    .view-mode-selector {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-
-    .view-mode-selector::-webkit-scrollbar {
-        display: none;
-    }
-
-    .view-btn span {
-        display: none;
-    }
-
-    .quick-actions {
-        justify-content: center;
-    }
-
-    .workspace-canvas {
-        min-height: 400px;
-        max-height: 500px;
-    }
-
-    .detail-panel {
-        height: 250px;
-    }
-}
-
-@media (max-width: 640px) {
-    .schema-designer-v2 {
-        padding: 0.25rem;
-    }
-
-    .stats-panel {
-        padding: 1rem;
-        margin-bottom: 0.25rem;
-    }
-
-    .stat-card-grid {
-        grid-template-columns: 1fr;
-        gap: 0.75rem;
-    }
-
-    .stat-card {
-        padding: 1rem;
-    }
-
-    .control-panel {
-        padding: 1rem;
-    }
-
-    .control-title {
-        font-size: 1rem;
-    }
-
-    .canvas-toolbar {
-        padding: 0.75rem 1rem;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
-
-    .toolbar-section {
-        gap: 0.375rem;
-    }
-
-    .workspace-sidebar {
-        width: 100%;
-        padding: 1rem;
-    }
-
-    .sidebar-title {
-        font-size: 0.8rem;
-    }
-
-    .search-input {
-        padding: 0.625rem 0.625rem 0.625rem 2.25rem;
-    }
-
-    .detail-panel {
-        height: 250px;
-    }
-
-    .minimap {
-        width: 120px;
-        height: 80px;
-    }
-
-    .view-btn {
-        padding: 0.5rem;
-        min-width: 2.5rem;
-    }
-
-    .action-btn {
-        width: 2.25rem;
-        height: 2.25rem;
-    }
-}
 
 /* High DPI displays */
 @media (-webkit-min-device-pixel-ratio: 2),

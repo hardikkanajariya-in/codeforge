@@ -22,12 +22,12 @@ class AssetService
     public static function asset(string $path): string
     {
         $publicPath = public_path("vendor/codeforge/{$path}");
-        
+
         // If asset exists in published location, use it
         if (File::exists($publicPath)) {
             return asset("vendor/codeforge/{$path}");
         }
-        
+
         // Fallback to package route
         return route('codeforge.asset', ['path' => $path]);
     }
@@ -38,14 +38,14 @@ class AssetService
     public static function serveAsset(string $path)
     {
         $packagePath = __DIR__ . "/../../resources/{$path}";
-        
+
         if (!File::exists($packagePath)) {
             abort(404, 'Asset not found');
         }
 
         $mimeType = self::getMimeType($path);
         $content = File::get($packagePath);
-        
+
         return Response::make($content, 200, [
             'Content-Type' => $mimeType,
             'Cache-Control' => 'public, max-age=31536000', // 1 year cache
@@ -59,7 +59,7 @@ class AssetService
     protected static function getMimeType(string $path): string
     {
         $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-        
+
         return match ($extension) {
             'css' => 'text/css',
             'js' => 'application/javascript',
@@ -82,7 +82,7 @@ class AssetService
     public static function areAssetsPublished(): bool
     {
         return File::exists(public_path('vendor/codeforge/css/schema-designer-v2.css')) &&
-               File::exists(public_path('vendor/codeforge/js/schema-designer-v2.js'));
+            File::exists(public_path('vendor/codeforge/js/schema-designer-v2.js'));
     }
 
     /**
@@ -97,7 +97,7 @@ class AssetService
             'package_js' => __DIR__ . '/../../resources/js/schema-designer-v2.js',
             'published_exists' => self::areAssetsPublished(),
             'package_exists' => File::exists(__DIR__ . '/../../resources/css/schema-designer-v2.css') &&
-                              File::exists(__DIR__ . '/../../resources/js/schema-designer-v2.js'),
+                File::exists(__DIR__ . '/../../resources/js/schema-designer-v2.js'),
         ];
     }
 }
