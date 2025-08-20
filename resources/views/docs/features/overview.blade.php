@@ -154,102 +154,94 @@
                 </div>
             </div>
         </div>
-        <h3 class="ml-3 text-lg font-semibold text-indigo-900">Documentation Generator</h3>
-    </div>
-    <p class="text-indigo-800 text-sm mb-4">Automated schema documentation with versioning, multi-format export,
-        and comprehensive reporting.</p>
-    <a href="{{ route('codeforge.docs.features.documentation-generator') }}"
-        class="inline-block text-indigo-600 hover:text-indigo-700 font-medium text-sm">Learn More →</a>
-    </div>
-    </div>
 
-    <!-- Key Capabilities -->
-    <div class="bg-gray-50 p-8 rounded-xl mb-12">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Core Capabilities Across All Features</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="bg-white p-4 rounded-lg">
-                <h4 class="font-semibold text-gray-900 mb-2">🔧 Configuration-Based</h4>
-                <p class="text-sm text-gray-700">All features can be enabled/disabled via configuration</p>
-            </div>
-            <div class="bg-white p-4 rounded-lg">
-                <h4 class="font-semibold text-gray-900 mb-2">⚡ Performance Optimized</h4>
-                <p class="text-sm text-gray-700">Built for efficiency with intelligent caching and optimization</p>
-            </div>
-            <div class="bg-white p-4 rounded-lg">
-                <h4 class="font-semibold text-gray-900 mb-2">🛡️ Security-First</h4>
-                <p class="text-sm text-gray-700">Enterprise-grade security with confirmation for destructive operations
-                </p>
-            </div>
-            <div class="bg-white p-4 rounded-lg">
-                <h4 class="font-semibold text-gray-900 mb-2">📊 Comprehensive Logging</h4>
-                <p class="text-sm text-gray-700">Detailed logging and monitoring for all operations</p>
-            </div>
-            <div class="bg-white p-4 rounded-lg">
-                <h4 class="font-semibold text-gray-900 mb-2">🎯 Laravel Integration</h4>
-                <p class="text-sm text-gray-700">Seamless integration with Laravel's ecosystem</p>
-            </div>
-            <div class="bg-white p-4 rounded-lg">
-                <h4 class="font-semibold text-gray-900 mb-2">🔄 Real-time Updates</h4>
-                <p class="text-sm text-gray-700">Live updates and real-time monitoring capabilities</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Start -->
-    <div class="bg-green-50 p-8 rounded-xl mb-12">
-        <h2 class="text-2xl font-bold text-green-900 mb-6">Quick Start Steps</h2>
-        <div class="space-y-4">
-            <div class="flex items-start">
-                <span
-                    class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4">1</span>
-                <div>
-                    <h4 class="font-semibold text-green-900">Configure Features</h4>
-                    <p class="text-sm text-green-700">Enable the features you need in your configuration file</p>
+        <!-- Core Implementation Details -->
+        <div class="bg-gray-50 p-8 rounded-xl mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Core Capabilities Across All Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-4 rounded-lg">
+                    <h4 class="font-semibold text-gray-900 mb-2">🔧 Configuration-Based</h4>
+                    <p class="text-sm text-gray-700">All features can be enabled/disabled via plugin configuration methods
+                    </p>
                 </div>
-            </div>
-            <div class="flex items-start">
-                <span
-                    class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4">2</span>
-                <div>
-                    <h4 class="font-semibold text-green-900">Run Initial Setup</h4>
-                    <p class="text-sm text-green-700">Execute the setup commands to initialize the plugin</p>
+                <div class="bg-white p-4 rounded-lg">
+                    <h4 class="font-semibold text-gray-900 mb-2">⚡ Widget-Based Dashboard</h4>
+                    <p class="text-sm text-gray-700">Real-time dashboard widgets for monitoring and management</p>
                 </div>
-            </div>
-            <div class="flex items-start">
-                <span
-                    class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4">3</span>
-                <div>
-                    <h4 class="font-semibold text-green-900">Access the Dashboard</h4>
-                    <p class="text-sm text-green-700">Navigate to the CodeForge panel in your Filament admin</p>
+                <div class="bg-white p-4 rounded-lg">
+                    <h4 class="font-semibold text-gray-900 mb-2">🛡️ Safety Features</h4>
+                    <p class="text-sm text-gray-700">Confirmation dialogs and validation for destructive operations</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg">
+                    <h4 class="font-semibold text-gray-900 mb-2">📊 Comprehensive Logging</h4>
+                    <p class="text-sm text-gray-700">Detailed operation logging and error tracking</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg">
+                    <h4 class="font-semibold text-gray-900 mb-2">🎯 Filament Integration</h4>
+                    <p class="text-sm text-gray-700">Native Filament components and navigation structure</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg">
+                    <h4 class="font-semibold text-gray-900 mb-2">🔄 Real-time Updates</h4>
+                    <p class="text-sm text-gray-700">Live status updates and interactive controls</p>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Configuration Example -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-12">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4">Feature Configuration</h2>
-        <p class="text-gray-600 mb-6">All features can be individually configured in your <code
-                class="bg-gray-100 px-2 py-1 rounded">config/codeforge-database-studio.php</code> file:</p>
-        <pre class="bg-gray-800 text-white p-4 rounded-md overflow-x-auto"><code>'features' => [
-                    'health_monitoring' => true,
-                    'schema_designer' => true,
-                    'data_seeding' => true,
-                    'code_generation' => true,
-                    'migration_management' => true,
-                    'documentation_generator' => true,
-                ],</code></pre>
-    </div>
+        <!-- Quick Start -->
+        <div class="bg-green-50 p-8 rounded-xl mb-12">
+            <h2 class="text-2xl font-bold text-green-900 mb-6">Quick Start Steps</h2>
+            <div class="space-y-4">
+                <div class="flex items-start">
+                    <span
+                        class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4">1</span>
+                    <div>
+                        <h4 class="font-semibold text-green-900">Configure Features</h4>
+                        <p class="text-sm text-green-700">Enable the features you need in your configuration file</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <span
+                        class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4">2</span>
+                    <div>
+                        <h4 class="font-semibold text-green-900">Run Initial Setup</h4>
+                        <p class="text-sm text-green-700">Execute the setup commands to initialize the plugin</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <span
+                        class="flex-shrink-0 w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4">3</span>
+                    <div>
+                        <h4 class="font-semibold text-green-900">Access the Dashboard</h4>
+                        <p class="text-sm text-green-700">Navigate to the CodeForge panel in your Filament admin</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <!-- Support -->
-    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-6">
-        <h3 class="text-lg font-semibold text-yellow-900 mb-2">Professional Support</h3>
-        <p class="text-yellow-800">
-            CodeForge Database Studio includes professional support with your commercial license.
-            Contact us at <a href="mailto:contact@hardikkanajariya.in"
-                class="text-yellow-600 hover:text-yellow-700 font-medium">contact@hardikkanajariya.in</a>
-            for assistance with implementation, customization, or troubleshooting.
-        </p>
-    </div>
+        <!-- Configuration Example -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Feature Configuration</h2>
+            <p class="text-gray-600 mb-6">All features can be individually configured in your <code
+                    class="bg-gray-100 px-2 py-1 rounded">config/codeforge-database-studio.php</code> file:</p>
+            <pre class="bg-gray-800 text-white p-4 rounded-md overflow-x-auto"><code>'features' => [
+                        'health_monitoring' => true,
+                        'schema_designer' => true,
+                        'data_seeding' => true,
+                        'code_generation' => true,
+                        'migration_management' => true,
+                        'documentation_generator' => true,
+                    ],</code></pre>
+        </div>
+
+        <!-- Support -->
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-6">
+            <h3 class="text-lg font-semibold text-yellow-900 mb-2">Professional Support</h3>
+            <p class="text-yellow-800">
+                CodeForge Database Studio includes professional support with your commercial license.
+                Contact us at <a href="mailto:contact@hardikkanajariya.in"
+                    class="text-yellow-600 hover:text-yellow-700 font-medium">contact@hardikkanajariya.in</a>
+                for assistance with implementation, customization, or troubleshooting.
+            </p>
+        </div>
     </div>
 @endsection
