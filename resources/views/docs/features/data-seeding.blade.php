@@ -45,194 +45,184 @@
             </div>
         </div>
 
+        <!-- Overview -->
+        <div class="bg-gradient-to-r from-purple-50 to-blue-50 p-8 rounded-xl mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Overview</h2>
+            <p class="text-gray-600 mb-6">
+                The Smart Data Seeding feature provides intelligent data generation for your database tables. Using
+                template-based generation and relationship analysis, it creates realistic test data that maintains
+                referential integrity and follows natural patterns.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-4 rounded-lg border border-purple-200">
+                    <div class="flex items-center mb-3">
+                        <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                                </path>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-gray-900">Template-Based</h3>
+                    </div>
+                    <p class="text-sm text-gray-600">Customizable data generation templates with field-specific patterns and
+                        rules</p>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg border border-blue-200">
+                    <div class="flex items-center mb-3">
+                        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-gray-900">Relationship-Aware</h3>
+                    </div>
+                    <p class="text-sm text-gray-600">Automatically analyzes table relationships and maintains referential
+                        integrity</p>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg border border-green-200">
+                    <div class="flex items-center mb-3">
+                        <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-gray-900">Intelligent Patterns</h3>
+                    </div>
+                    <p class="text-sm text-gray-600">Generates realistic data patterns based on field names and data types
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Features -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Key Features</h2>
+
+            <div class="space-y-6">
+                <div class="border-l-4 border-purple-500 pl-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Template Management</h3>
+                    <p class="text-gray-600 mb-3">Create and manage data generation templates with customizable field
+                        patterns and generation rules.</p>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• Template-based data generation with reusable patterns</li>
+                        <li>• Field-specific generation rules and constraints</li>
+                        <li>• Custom data patterns for realistic test scenarios</li>
+                        <li>• Template sharing and import/export capabilities</li>
+                    </ul>
+                </div>
+
+                <div class="border-l-4 border-blue-500 pl-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Relationship Analysis</h3>
+                    <p class="text-gray-600 mb-3">Automatically analyzes database relationships to maintain data integrity
+                        during generation.</p>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• Foreign key relationship detection and handling</li>
+                        <li>• Parent-child data generation ordering</li>
+                        <li>• Referential integrity maintenance</li>
+                        <li>• Cross-table dependency management</li>
+                    </ul>
+                </div>
+
+                <div class="border-l-4 border-green-500 pl-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Smart Data Patterns</h3>
+                    <p class="text-gray-600 mb-3">Intelligent data generation based on field names, types, and contextual
+                        analysis.</p>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• Field name-based pattern recognition (email, phone, name, etc.)</li>
+                        <li>• Data type-aware generation (strings, numbers, dates, booleans)</li>
+                        <li>• Locale-specific data generation</li>
+                        <li>• Realistic data distribution and variance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Access -->
+        <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-8 rounded-xl mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Dashboard Access</h2>
+            <p class="text-gray-600 mb-6">Access the Smart Data Seeder through your Filament admin panel:</p>
+
+            <div class="bg-white p-4 rounded-lg border">
+                <ol class="list-decimal list-inside space-y-2 text-gray-700">
+                    <li>Navigate to your Filament admin panel</li>
+                    <li>Look for the <strong>"Database Tools"</strong> navigation group</li>
+                    <li>Click on <strong>"Smart Data Seeder"</strong></li>
+                    <li>Select your target table and configure generation parameters</li>
+                    <li>Create or select a data generation template</li>
+                    <li>Execute the seeding operation</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Template System -->
+        <div class="bg-gray-50 p-8 rounded-xl mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Data Generation Templates</h2>
+            <p class="text-gray-600 mb-6">Templates define how data should be generated for specific tables and use cases:
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-4 rounded-lg border">
+                    <h4 class="font-semibold text-gray-900 mb-2">Template Structure</h4>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• Table-specific field definitions</li>
+                        <li>• Generation rules and constraints</li>
+                        <li>• Relationship handling instructions</li>
+                        <li>• Custom pattern definitions</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg border">
+                    <h4 class="font-semibold text-gray-900 mb-2">Template Features</h4>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• Reusable across multiple projects</li>
+                        <li>• Version control and history tracking</li>
+                        <li>• Import/export capabilities</li>
+                        <li>• Community template sharing</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Configuration -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Configuration</h2>
+            <p class="text-gray-600 mb-6">Enable smart data seeding in your plugin configuration:</p>
+
+            <pre class="bg-gray-800 text-white p-6 rounded-lg overflow-x-auto"><code>// In your AdminPanelProvider.php
+    CodeForgeStudioPlugin::make()
+        ->enableSmartDataSeeding(true)  // Enable smart data seeding
+        // ... other configuration</code></pre>
+        </div>
+
         <h3>Intelligent Data Generation</h3>
         <div class="bg-gray-50 p-4 rounded-md">
             <ul>
-                <li><strong>Relationship-Aware:</strong> Automatically handles foreign key relationships</li>
-                <li><strong>Constraint Validation:</strong> Respects all database constraints and rules</li>
+                <li><strong>Template-Based:</strong> Uses customizable templates for data generation</li>
                 <li><strong>Realistic Patterns:</strong> Generates realistic data based on field names and types</li>
-                <li><strong>Localization Support:</strong> Multi-language data generation capabilities</li>
+                <li><strong>Performance Optimized:</strong> Efficient generation for large datasets</li>
             </ul>
         </div>
 
-        <h3>Template System</h3>
-        <div class="bg-blue-50 p-4 rounded-md">
-            <ul>
-                <li><strong>Custom Templates:</strong> Define custom data generation templates</li>
-                <li><strong>Business Logic Integration:</strong> Incorporate business rules into data generation</li>
-                <li><strong>Field-Specific Patterns:</strong> Specialized patterns for different data types</li>
-                <li><strong>Conditional Generation:</strong> Context-aware data generation based on other fields</li>
-            </ul>
-        </div>
+        <!-- Data Generation Services -->
+        <div class="bg-blue-50 p-8 rounded-xl mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Generation Services</h2>
+            <p class="text-gray-600 mb-6">The seeding system is powered by specialized services:</p>
 
-        <h3>Advanced Seeding Options</h3>
-        <div class="bg-green-50 p-4 rounded-md">
-            <ul>
-                <li><strong>Bulk Operations:</strong> Efficient bulk data generation and insertion</li>
-                <li><strong>Incremental Seeding:</strong> Add data to existing datasets without conflicts</li>
-                <li><strong>Performance Optimization:</strong> Optimized for large-scale data generation</li>
-                <li><strong>Memory Management:</strong> Efficient memory usage for large datasets</li>
-            </ul>
-        </div>
-
-        <h2>Data Generation Patterns</h2>
-        <p>Intelligent pattern recognition for realistic data:</p>
-
-        <h3>Field Pattern Recognition</h3>
-        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>? Email fields ? realistic email addresses
-        ? Name fields ? proper names with cultural diversity
-        ? Address fields ? valid addresses with proper formatting
-        ? Phone fields ? valid phone numbers with regional patterns
-        ? Date fields ? realistic date ranges and patterns
-        ? URL fields ? valid URLs and domain patterns</code></pre>
-
-        <h3>Relationship Handling</h3>
-        <pre class="bg-gray-800 text-green-400 p-4 rounded-md"><code>? Foreign key consistency
-        ? Many-to-many relationship seeding
-        ? Polymorphic relationship support
-        ? Circular dependency resolution
-        ? Orphaned record prevention</code></pre>
-
-        <h2>Template Configuration</h2>
-        <p>Create custom data generation templates:</p>
-
-        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-            <h4 class="font-semibold">Template Features:</h4>
-            <ul>
-                <li><strong>Field-Specific Rules:</strong> Define generation rules for specific fields</li>
-                <li><strong>Business Logic:</strong> Incorporate complex business rules</li>
-                <li><strong>Data Relationships:</strong> Define how related data should be generated</li>
-                <li><strong>Validation Rules:</strong> Ensure generated data meets validation requirements</li>
-            </ul>
-        </div>
-
-        <h2>Seeding Strategies</h2>
-        <p>Multiple seeding strategies for different needs:</p>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="bg-gray-50 p-4 rounded-md">
-                <h4 class="font-semibold">Fresh Seeding</h4>
-                <p>Complete database seeding from scratch</p>
-                <ul class="text-sm mt-2">
-                    <li>Truncates existing data</li>
-                    <li>Generates fresh dataset</li>
-                    <li>Ensures data consistency</li>
-                </ul>
-            </div>
-            <div class="bg-blue-50 p-4 rounded-md">
-                <h4 class="font-semibold">Incremental Seeding</h4>
-                <p>Add data to existing datasets</p>
-                <ul class="text-sm mt-2">
-                    <li>Preserves existing data</li>
-                    <li>Avoids duplicate entries</li>
-                    <li>Maintains referential integrity</li>
-                </ul>
-            </div>
-        </div>
-
-        <h2>Configuration</h2>
-        <p>Configure data seeding options:</p>
-
-        <pre class="bg-gray-800 text-white p-4 rounded-md"><code>'features' => [
-            'data_seeding' => true,
-        ],
-
-        'data_seeding' => [
-            'default_count' => 50,
-            'batch_size' => 1000,
-            'locales' => ['en_US', 'en_GB', 'es_ES'],
-            'templates' => [
-                'users' => [
-                    'name' => 'realistic_name',
-                    'email' => 'unique_email',
-                    'phone' => 'regional_phone',
-                ],
-            ],
-            'relationships' => [
-                'auto_discover' => true,
-                'respect_constraints' => true,
-                'handle_polymorphic' => true,
-            ],
-        ],</code></pre>
-
-        <h2>Usage Examples</h2>
-        <p>Generate data programmatically:</p>
-
-        <pre class="bg-gray-800 text-white p-4 rounded-md"><code>use HkDevs\CodeForgeStudio\Services\DataGenerationService;
-
-        $generator = app(DataGenerationService::class);
-
-        // Generate data for a specific table
-        $data = $generator->generateForTable('users', 100);
-
-        // Generate data with custom template
-        $data = $generator->generateWithTemplate('users', [
-            'name' => 'realistic_name',
-            'email' => 'company_email',
-            'role' => 'weighted_choice:admin:5,user:95'
-        ]);
-
-        // Bulk seed multiple tables
-        $generator->seedMultipleTables([
-            'users' => 100,
-            'posts' => 500,
-            'comments' => 1000
-        ]);</code></pre>
-
-        <h2>Data Types Support</h2>
-        <p>Comprehensive support for all common data types:</p>
-
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white border border-gray-300">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-4 py-2 border-b font-semibold">Data Type</th>
-                        <th class="px-4 py-2 border-b font-semibold">Generation Pattern</th>
-                        <th class="px-4 py-2 border-b font-semibold">Examples</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="px-4 py-2 border-b">String</td>
-                        <td class="px-4 py-2 border-b">Context-aware patterns</td>
-                        <td class="px-4 py-2 border-b">Names, addresses, descriptions</td>
-                    </tr>
-                    <tr class="bg-gray-50">
-                        <td class="px-4 py-2 border-b">Integer</td>
-                        <td class="px-4 py-2 border-b">Range-based generation</td>
-                        <td class="px-4 py-2 border-b">IDs, counts, quantities</td>
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-2 border-b">DateTime</td>
-                        <td class="px-4 py-2 border-b">Realistic date ranges</td>
-                        <td class="px-4 py-2 border-b">Created dates, birthdays</td>
-                    </tr>
-                    <tr class="bg-gray-50">
-                        <td class="px-4 py-2 border-b">Boolean</td>
-                        <td class="px-4 py-2 border-b">Weighted distribution</td>
-                        <td class="px-4 py-2 border-b">Flags, status indicators</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <h2>Benefits</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-            <div class="bg-green-50 p-4 rounded-md">
-                <h4 class="font-semibold text-green-800">Realistic Data</h4>
-                <p>Generate realistic test data that mimics production patterns</p>
-            </div>
-            <div class="bg-blue-50 p-4 rounded-md">
-                <h4 class="font-semibold text-blue-800">Relationship Integrity</h4>
-                <p>Automatically maintain referential integrity across all tables</p>
-            </div>
-            <div class="bg-purple-50 p-4 rounded-md">
-                <h4 class="font-semibold text-purple-800">Performance Optimized</h4>
-                <p>Efficient bulk operations for large-scale data generation</p>
-            </div>
-            <div class="bg-orange-50 p-4 rounded-md">
-                <h4 class="font-semibold text-orange-800">Customizable</h4>
-                <p>Flexible templates and patterns for any data requirement</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-3 rounded border">
+                    <code class="text-sm text-blue-600">DataGenerationService</code>
+                    <p class="text-xs text-gray-500 mt-1">Core data generation engine with pattern recognition</p>
+                </div>
+                <div class="bg-white p-3 rounded border">
+                    <code class="text-sm text-blue-600">DataGenerationTemplate</code>
+                    <p class="text-xs text-gray-500 mt-1">Template model for storing generation patterns</p>
+                </div>
             </div>
         </div>
     </div>

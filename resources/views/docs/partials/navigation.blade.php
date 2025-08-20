@@ -46,6 +46,10 @@
                 class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.features.code-generation') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
                 ⚡ Code Generation
             </a>
+            <a href="{{ route('codeforge.docs.features.documentation-generator') }}"
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.features.documentation-generator') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                📄 Documentation Generation
+            </a>
             <a href="{{ route('codeforge.docs.features.data-seeding') }}"
                 class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.features.data-seeding') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
                 🌱 Data Seeding
@@ -58,7 +62,7 @@
         <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Architecture</h3>
         <div class="space-y-1">
             <a href="{{ route('codeforge.docs.architecture.overview') }}"
-                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.architecture.*') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.architecture.overview') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
                 🏗️ Overview
             </a>
             <a href="{{ route('codeforge.docs.architecture.services') }}"
