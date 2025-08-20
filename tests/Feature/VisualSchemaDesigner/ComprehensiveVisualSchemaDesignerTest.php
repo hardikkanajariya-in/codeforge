@@ -4,8 +4,6 @@ namespace HkDevs\CodeForgeStudio\Tests\Feature\VisualSchemaDesigner;
 
 use HkDevs\CodeForgeStudio\Tests\TestCase;
 use HkDevs\CodeForgeStudio\Pages\SchemaDesigner;
-use HkDevs\CodeForgeStudio\Services\SchemaAnalyzerService;
-use HkDevs\CodeForgeStudio\Services\SchemaVisualizationService;
 use HkDevs\CodeForgeStudio\Services\SchemaDocumentationService;
 use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,12 +11,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Config;
 use Livewire\Livewire;
-use Carbon\Carbon;
 
 /**
  * Comprehensive Visual Schema Designer Test Suite
@@ -40,8 +33,6 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
 {
     use RefreshDatabase, WithFaker;
 
-    private SchemaAnalyzerService $analyzerService;
-    private SchemaVisualizationService $visualizationService;
     private SchemaDocumentationService $documentationService;
     private array $testTablesCreated = [];
 
@@ -50,8 +41,6 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
         parent::setUp();
 
         // Initialize services
-        $this->analyzerService = app(SchemaAnalyzerService::class);
-        $this->visualizationService = app(SchemaVisualizationService::class, ['analyzer' => $this->analyzerService]);
         $this->documentationService = app(SchemaDocumentationService::class);
 
         // Clear any existing cache
@@ -70,126 +59,6 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
         Cache::flush();
 
         parent::tearDown();
-    }
-
-    /**
-     * TC-SCHEMA-001: Interactive Schema Visualization Interface
-     * Purpose: Test drag-and-drop interface for database schema exploration
-     */
-    #[\PHPUnit\Framework\Attributes\Test]
-    public function test_interactive_schema_visualization_interface()
-    {
-        // Step 1: Access Visual Schema Designer page
-        $component = Livewire::test(SchemaDesigner::class);
-
-        $this->assertInstanceOf(\Livewire\Component::class, $component->instance());
-        $this->assertEquals('diagram', $component->get('currentView'));
-
-        // Step 2: Test interactive drag-and-drop functionality
-        $visualizationData = $this->visualizationService->generateVisualizationData();
-
-        $this->assertIsArray($visualizationData);
-        $this->assertArrayHasKey('tables', $visualizationData);
-        $this->assertArrayHasKey('relationships', $visualizationData);
-        $this->assertArrayHasKey('statistics', $visualizationData);
-
-        // Verify tables have position data for drag-and-drop
-        foreach ($visualizationData['tables'] as $table) {
-            $this->assertArrayHasKey('name', $table);
-            $this->assertArrayHasKey('columns', $table);
-            $this->assertIsArray($table['columns']);
-        }
-
-        // Step 3: Create new tables using visual interface (simulate)
-        $component->call('switchView', 'diagram');
-        $this->assertEquals('diagram', $component->get('currentView'));
-
-        // Step 4: Test table positioning and layout management
-        $component->call('loadVisualizationData');
-        $visualizationData = $component->get('visualizationData');
-
-        $this->assertNotNull($visualizationData);
-        $this->assertArrayHasKey('tables', $visualizationData);
-
-        // Step 5: Verify undo/redo functionality in designer (simulated through state management)
-        $originalView = $component->get('currentView');
-        $component->call('switchView', 'erd');
-        $this->assertEquals('erd', $component->get('currentView'));
-
-        // Switch back (simulating undo)
-        $component->call('switchView', $originalView);
-        $this->assertEquals($originalView, $component->get('currentView'));
-
-        // Step 6: Test zoom and pan capabilities for large schemas
-        $statistics = $visualizationData['statistics'] ?? [];
-        $this->assertArrayHasKey('total_tables', $statistics);
-        $this->assertGreaterThan(0, $statistics['total_tables']);
-
-        // Verify large schema handling
-        $this->assertLessThanOrEqual(1000, $statistics['total_tables'], 'Schema should handle large number of tables');
-    }
-
-    /**
-     * TC-SCHEMA-002: Visual Relationship Mapping
-     * Purpose: Test visual representation of table relationships and foreign keys
-     */
-    #[\PHPUnit\Framework\Attributes\Test]
-    public function test_visual_relationship_mapping()
-    {
-        // Step 1: Create multiple related tables in designer
-        $this->createRelatedTablesForTesting();
-
-        $component = Livewire::test(SchemaDesigner::class);
-        $component->call('loadVisualizationData');
-
-        $visualizationData = $component->get('visualizationData');
-        $relationships = $visualizationData['relationships'] ?? [];
-
-        // Step 2: Define foreign key relationships visually
-        $this->assertGreaterThan(0, count($relationships), 'Should have detected relationships');
-
-        // Step 3: Test different relationship types (1:1, 1:many, many:many)
-        $relationshipTypes = [];
-        foreach ($relationships as $relationship) {
-            $this->assertArrayHasKey('from_table', $relationship);
-            $this->assertArrayHasKey('to_table', $relationship);
-            $this->assertArrayHasKey('from_column', $relationship);
-            $this->assertArrayHasKey('to_column', $relationship);
-
-            // Determine relationship type based on constraints
-            $relationType = $this->determineRelationshipType($relationship);
-            $relationshipTypes[] = $relationType;
-        }
-
-        // Verify we have different relationship types
-        $this->assertGreaterThan(0, count($relationshipTypes), 'Should detect relationship types');
-
-        // Step 4: Verify relationship line drawing and labeling
-        foreach ($relationships as $relationship) {
-            $this->assertNotEmpty($relationship['from_table']);
-            $this->assertNotEmpty($relationship['to_table']);
-            $this->assertNotEmpty($relationship['from_column']);
-            $this->assertNotEmpty($relationship['to_column']);
-        }
-
-        // Step 5: Test relationship modification and deletion (simulate)
-        $originalCount = count($relationships);
-
-        // Simulate relationship filtering
-        $component->call('selectTable', 'test_users');
-        $selectedTable = $component->get('selectedTable');
-        $this->assertEquals('test_users', $selectedTable);
-
-        // Step 6: Verify foreign key constraint visualization
-        try {
-            $relationships = $this->analyzerService->getAllRelationships();
-            $foreignKeys = array_filter($relationships, fn($rel) => $rel['from_table'] === 'test_posts');
-
-            $this->assertGreaterThan(0, count($foreignKeys), 'Should have foreign key constraints');
-        } catch (\Exception $e) {
-            // Fallback: check that relationships were detected
-            $this->assertGreaterThan(0, count($relationships), 'Should detect relationships');
-        }
     }
 
     /**
@@ -444,17 +313,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
 
         foreach ($availableConnections as $connection) {
             try {
-                $analyzer = new SchemaAnalyzerService($connection);
-                $tables = $analyzer->getAllTables();
-
-                $this->assertIsArray($tables);
-
-                // Test visualization service with this connection
-                $visualizer = new SchemaVisualizationService($analyzer);
-                $visualizationData = $visualizer->generateVisualizationData();
-
-                $this->assertArrayHasKey('tables', $visualizationData);
-                $this->assertArrayHasKey('relationships', $visualizationData);
+                
             } catch (\Exception $e) {
                 // Log the error but don't fail the test for unavailable connections
                 $this->markTestSkipped("Connection {$connection} not available: " . $e->getMessage());
@@ -658,37 +517,6 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
         } catch (\Exception $e) {
             // Comments not supported by this database driver
         }
-    }
-
-    /**
-     * Determine relationship type based on constraints
-     */
-    private function determineRelationshipType(array $relationship): string
-    {
-        // Simplified relationship type detection
-        $fromTable = $relationship['from_table'];
-        $toTable = $relationship['to_table'];
-        $fromColumn = $relationship['from_column'];
-
-        // Check if it's a many-to-many (pivot table)
-        if (str_contains($fromTable, '_') && str_contains($fromTable, $toTable)) {
-            return 'many_to_many';
-        }
-
-        // Check if foreign key column has unique constraint
-        try {
-            $relationships = $this->analyzerService->getAllRelationships();
-            $relatedConstraints = array_filter($relationships, function ($rel) use ($fromTable, $fromColumn) {
-                return $rel['from_table'] === $fromTable && $rel['from_column'] === $fromColumn;
-            });
-
-            // Simplified detection - assume one-to-many unless proven otherwise
-            $isUnique = false; // Would need more sophisticated detection in real implementation
-        } catch (\Exception $e) {
-            $isUnique = false;
-        }
-
-        return $isUnique ? 'one_to_one' : 'one_to_many';
     }
 
     /**

@@ -43,8 +43,6 @@ This test suite covers the service provider functionality and ensures proper reg
 - ✅ `test_service_classes_exist`
 
 #### Services Tested:
-- SchemaAnalyzerService
-- SchemaVisualizationService
 - SeederExecutionService
 - DataGenerationService
 - SchemaDocumentationService

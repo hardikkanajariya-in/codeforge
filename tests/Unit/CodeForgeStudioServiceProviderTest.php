@@ -4,8 +4,6 @@ namespace HkDevs\CodeForgeStudio\Tests\Unit;
 
 use HkDevs\CodeForgeStudio\Tests\TestCase;
 use HkDevs\CodeForgeStudio\CodeForgeStudioServiceProvider;
-use HkDevs\CodeForgeStudio\Services\SchemaAnalyzerService;
-use HkDevs\CodeForgeStudio\Services\SchemaVisualizationService;
 use HkDevs\CodeForgeStudio\Services\SeederExecutionService;
 use HkDevs\CodeForgeStudio\Services\DataGenerationService;
 use HkDevs\CodeForgeStudio\Services\SchemaDocumentationService;
@@ -78,8 +76,6 @@ class CodeForgeStudioServiceProviderTest extends TestCase
         $this->serviceProvider->register();
 
         $expectedSingletons = [
-            SchemaAnalyzerService::class,
-            SchemaVisualizationService::class,
             SeederExecutionService::class,
             DataGenerationService::class,
             SchemaDocumentationService::class,
@@ -111,8 +107,6 @@ class CodeForgeStudioServiceProviderTest extends TestCase
         $this->serviceProvider->register();
 
         $services = [
-            SchemaAnalyzerService::class,
-            SchemaVisualizationService::class,
             SeederExecutionService::class,
             DataGenerationService::class,
             SchemaDocumentationService::class,
@@ -372,8 +366,6 @@ class CodeForgeStudioServiceProviderTest extends TestCase
     public function test_service_classes_exist()
     {
         $serviceClasses = [
-            SchemaAnalyzerService::class,
-            SchemaVisualizationService::class,
             SeederExecutionService::class,
             DataGenerationService::class,
             SchemaDocumentationService::class,

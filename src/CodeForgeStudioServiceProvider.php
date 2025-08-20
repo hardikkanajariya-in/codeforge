@@ -23,8 +23,6 @@ use HkDevs\CodeForgeStudio\Commands\ManageAssetsCommand;
 use HkDevs\CodeForgeStudio\Commands\AssetDebugCommand;
 use HkDevs\CodeForgeStudio\Commands\BatchMigrateCommand;
 use HkDevs\CodeForgeStudio\Listeners\QueryPerformanceListener;
-use HkDevs\CodeForgeStudio\Services\SchemaAnalyzerService;
-use HkDevs\CodeForgeStudio\Services\SchemaVisualizationService;
 use HkDevs\CodeForgeStudio\Services\SeederExecutionService;
 use HkDevs\CodeForgeStudio\Services\DataGenerationService;
 use HkDevs\CodeForgeStudio\Services\SchemaDocumentationService;
@@ -66,8 +64,6 @@ class CodeForgeStudioServiceProvider extends ServiceProvider
         );
 
         // Register services
-        $this->app->singleton(SchemaAnalyzerService::class);
-        $this->app->singleton(SchemaVisualizationService::class);
         $this->app->singleton(SeederExecutionService::class);
         $this->app->singleton(DataGenerationService::class);
         $this->app->singleton(SchemaDocumentationService::class);

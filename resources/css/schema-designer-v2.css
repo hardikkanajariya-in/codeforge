@@ -42,8 +42,7 @@
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     color: var(--schema-text-primary);
     background: transparent;
-    gap: 1rem;
-    position: relative;
+    border: 1 px solid red;
 }
 
 /* Stats Panel */

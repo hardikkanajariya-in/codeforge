@@ -63,7 +63,6 @@ class VisualSchemaDesignerAndDataSeedingTestSuite extends TestCase
         // Verify schema designer components are available
         $this->assertTrue(class_exists(\HkDevs\CodeForgeStudio\Pages\SchemaDesigner::class));
         $this->assertTrue(class_exists(\HkDevs\CodeForgeStudio\Services\SchemaAnalyzerService::class));
-        $this->assertTrue(class_exists(\HkDevs\CodeForgeStudio\Services\SchemaVisualizationService::class));
     }
 
     /**

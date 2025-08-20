@@ -3,766 +3,667 @@
 namespace HkDevs\CodeForgeStudio\Pages;
 
 use Filament\Pages\Page;
-use Filament\Forms\Form;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Actions;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Notifications\Notification;
-use Filament\Support\Enums\MaxWidth;
-use HkDevs\CodeForgeStudio\Services\SchemaAnalyzerService;
-use HkDevs\CodeForgeStudio\Services\SchemaVisualizationService;
-use HkDevs\CodeForgeStudio\Services\AssetService;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Log;
-use Livewire\Attributes\On;
+use Illuminate\Support\Str;
+use HkDevs\CodeForgeStudio\Models\SchemaVersion;
 
-/**
- * Advanced Visual Schema Designer
- * 
- * A comprehensive, interactive database schema visualization tool with modern UI/UX
- * and advanced functionality for database design and analysis.
- * 
- * Core Features:
- * ✨ Interactive Drag & Drop Interface with smooth animations and grid snapping
- * 🎨 Advanced Visual Design Tools with customizable themes and layouts
- * 🔍 Real-time Schema Analysis with performance insights and optimization suggestions
- * 📊 Multiple Visualization Modes including ERD, dependency graphs, and table views
- * 🔗 Intelligent Relationship Mapping with automatic detection and validation
- * 📱 Responsive Design optimized for all screen sizes and devices
- * 
- * Visualization Modes:
- * - Interactive Diagram View: Drag-and-drop table positioning with relationship mapping
- * - Table Structure View: Detailed column information with constraints and indexes
- * - Dependency Graph: Hierarchical visualization of table dependencies
- * - Schema Overview: High-level metrics and performance indicators
- * - Relationship Matrix: Grid-based relationship visualization
- * - Performance View: Real-time performance analysis and bottleneck identification
- * 
- * Advanced Interactions:
- * - Multi-select operations for bulk table management
- * - Context-sensitive right-click menus for quick actions
- * - Keyboard shortcuts for power users
- * - Real-time collaborative editing (future enhancement)
- * - Undo/redo functionality for design changes
- * - Auto-save and session persistence
- * 
- * Design Tools:
- * - Grid system with snap-to-grid functionality
- * - Alignment tools for professional diagram layout
- * - Zoom controls with focus areas and minimap navigation
- * - Layer management for complex schema organization
- * - Custom color coding and visual grouping
- * - Export to multiple formats (SVG, PNG, PDF, JSON)
- * 
- * Filtering & Organization:
- * - Advanced search with fuzzy matching and regex support
- * - Dynamic filtering by table types, relationships, and attributes
- * - Custom grouping and categorization
- * - Saved filter presets for quick access
- * - Tag-based organization system
- * - Connection-specific schema isolation
- * 
- * Performance & Optimization:
- * - Lazy loading for large schemas with thousands of tables
- * - Virtualized rendering for optimal performance
- * - Intelligent caching with automatic invalidation
- * - Background analysis with progress indicators
- * - Memory-efficient data structures
- * - Progressive enhancement for slower connections
- * 
- * Integration & Extensions:
- * - Multi-database connection management
- * - Laravel model integration and relationship mapping
- * - Migration script generation from visual changes
- * - Documentation export with customizable templates
- * - API endpoints for external tool integration
- * - Plugin architecture for custom extensions
- * 
- * @package HkDevs\CodeForgeStudio\Pages
- * @author hardikkanajariya.in
- * @version 2.0.0
- * @since 1.0.0
- */
 class SchemaDesigner extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
     protected static string $view = 'codeforge-studio::pages.schema-designer';
     protected static ?string $navigationLabel = 'Schema Designer';
-    protected static ?string $title = 'Advanced Schema Designer';
+    protected static ?string $title = 'Database Schema Designer';
     protected static ?int $navigationSort = 3;
 
-    // Core Properties
-    public string $activeView = 'interactive';
     public string $selectedConnection = '';
-    public array $availableConnections = [];
+    public array $connectionInfo = [];
     public array $schemaData = [];
-    public array $visualizationSettings = [];
-    public array $filterSettings = [];
-    public array $layoutSettings = [];
-
-    // State Management
-    public ?string $selectedTable = null;
-    public array $selectedTables = [];
-    public array $tablePositions = [];
-    public bool $showRelationships = true;
-    public bool $showIndexes = true;
-    public bool $showConstraints = true;
-    public string $searchQuery = '';
-    public array $activeFilters = [];
-
-    // UI State
-    public bool $isLoading = false;
-    public bool $showSidebar = true;
-    public bool $showMinimap = false;
-    public string $currentTheme = 'light';
-    public int $zoomLevel = 100;
-    public array $viewportPosition = ['x' => 0, 'y' => 0];
-
-    // Performance Settings
-    public bool $enableVirtualization = true;
-    public bool $enableAnimations = true;
-    public int $maxTablesPerView = 50;
-
-    // Advanced Features
-    public array $savedLayouts = [];
-    public array $bookmarkedTables = [];
-    public array $recentActions = [];
-    public bool $enableRealTimeUpdates = true;
-
-    protected function getSchemaAnalyzerService(): SchemaAnalyzerService
-    {
-        return app(SchemaAnalyzerService::class, ['connectionName' => $this->selectedConnection]);
-    }
-
-    protected function getSchemaVisualizationService(): SchemaVisualizationService
-    {
-        $analyzer = $this->getSchemaAnalyzerService();
-        return app(SchemaVisualizationService::class, ['analyzer' => $analyzer]);
-    }
-
-    public static function getNavigationGroup(): ?string
-    {
-        return 'Database Tools';
-    }
-
-    public static function shouldRegisterNavigation(): bool
-    {
-        return config('codeforge-database-studio.features.schema_designer', true);
-    }
+    public ?int $currentVersionId = null;
+    public array $versionHistory = [];
 
     public function mount(): void
     {
-        $this->initializeDefaults();
-        $this->loadAvailableConnections();
-        $this->loadSchemaData();
-        $this->loadSavedSettings();
-    }
-
-    protected function initializeDefaults(): void
-    {
         $this->selectedConnection = config('database.default');
-
-        $this->visualizationSettings = [
-            'algorithm' => 'force-directed',
-            'spacing' => 200,
-            'repulsion' => 1000,
-            'attraction' => 0.1,
-            'iterations' => 100,
-            'stabilization' => true,
-        ];
-
-        $this->filterSettings = [
-            'show_system_tables' => false,
-            'show_empty_tables' => true,
-            'show_laravel_tables' => true,
-            'table_name_pattern' => '',
-            'min_columns' => 0,
-            'max_columns' => 999,
-        ];
-
-        $this->layoutSettings = [
-            'grid_size' => 20,
-            'snap_to_grid' => true,
-            'auto_layout' => true,
-            'preserve_positions' => true,
-            'show_grid' => false,
-        ];
+        $this->loadConnectionInfo();
+        $this->loadSchemaData(true); // Force fresh load to skip cached data initially
+        $this->loadVersionHistory();
     }
 
-    protected function loadAvailableConnections(): void
+    protected function loadConnectionInfo(): void
     {
-        $connections = config('database.connections', []);
-        $this->availableConnections = [];
+        $connectionConfig = config("database.connections.{$this->selectedConnection}", []);
 
-        foreach ($connections as $name => $config) {
-            $this->availableConnections[] = [
-                'name' => $name,
-                'driver' => $config['driver'] ?? 'unknown',
-                'host' => $config['host'] ?? 'localhost',
-                'database' => $config['database'] ?? '',
-                'active' => $name === $this->selectedConnection,
-            ];
-        }
+        $this->connectionInfo = [
+            'name' => $this->selectedConnection,
+            'driver' => $connectionConfig['driver'] ?? 'unknown',
+            'database' => $connectionConfig['database'] ?? 'N/A',
+            'host' => $connectionConfig['host'] ?? 'localhost',
+            'port' => $connectionConfig['port'] ?? 'default',
+        ];
     }
 
-    protected function loadSchemaData(): void
+    protected function loadSchemaData(bool $forceRefresh = false): void
     {
         try {
-            $this->isLoading = true;
+            // Check if schema_versions table exists first
+            if (!$forceRefresh && Schema::hasTable('schema_versions')) {
+                // Load existing schema from database
+                $latestVersion = DB::table('schema_versions')
+                    ->where('connection', $this->selectedConnection)
+                    ->where('user_id', auth()->id())
+                    ->orderBy('created_at', 'desc')
+                    ->first();
 
-            $cacheKey = "schema_designer_data_{$this->selectedConnection}_v2";
+                if ($latestVersion) {
+                    $this->currentVersionId = $latestVersion->id;
+                    $this->schemaData = json_decode($latestVersion->schema_data, true);
+                    return;
+                }
+            }
 
-            $this->schemaData = Cache::remember($cacheKey, 300, function () {
-                $service = $this->getSchemaVisualizationService();
+            // Load current database schema
+            $this->schemaData = $this->analyzeDatabaseSchema();
+        } catch (\Exception $e) {
+            Log::error('Failed to load schema data', [
+                'error' => $e->getMessage(),
+                'connection' => $this->selectedConnection
+            ]);
+            $this->schemaData = ['tables' => [], 'relationships' => []];
+        }
+    }
 
-                $data = [
-                    'tables' => $this->getSchemaAnalyzerService()->getAllTables(),
-                    'relationships' => $this->getSchemaAnalyzerService()->getAllRelationships(),
-                    'statistics' => $this->generateSchemaStatistics(),
-                    'metadata' => [
-                        'connection' => $this->selectedConnection,
-                        'database' => config("database.connections.{$this->selectedConnection}.database"),
-                        'generated_at' => now()->toISOString(),
-                        'version' => '2.0.0',
-                    ],
+    protected function analyzeDatabaseSchema(): array
+    {
+        $tables = [];
+        $relationships = [];
+
+        try {
+            // Ensure we're using the correct connection
+            $schemaBuilder = Schema::connection($this->selectedConnection);
+            $databaseName = $this->connectionInfo['database'];
+
+            // Get table names using connection-specific raw queries for better database filtering
+            $tableNames = [];
+            $driver = $this->connectionInfo['driver'];
+
+            if ($driver === 'mysql') {
+                // For MySQL, get tables only from the specific database with explicit connection
+                $rawTables = DB::connection($this->selectedConnection)
+                    ->select("
+                        SELECT TABLE_NAME 
+                        FROM information_schema.TABLES 
+                        WHERE TABLE_SCHEMA = ? 
+                        AND TABLE_TYPE = 'BASE TABLE'
+                        ORDER BY TABLE_NAME
+                    ", [$databaseName]);
+
+                $allTableNames = array_column($rawTables, 'TABLE_NAME');
+
+                // Debug: Log what we found
+                Log::info("Found " . count($allTableNames) . " total tables in database '{$databaseName}'", [
+                    'database' => $databaseName,
+                    'connection' => $this->selectedConnection,
+                    'sample_tables' => array_slice($allTableNames, 0, 10)
+                ]);
+
+                $tableNames = $allTableNames;
+            } else {
+                // Fallback to Laravel's method for other drivers
+                $schemaTables = $schemaBuilder->getTables();
+                foreach ($schemaTables as $table) {
+                    if (is_array($table)) {
+                        $tableName = $table['name'] ?? $table['table_name'] ?? $table[0];
+                        // For other drivers, check database matching if available
+                        if (isset($table['table_schema']) || isset($table['database'])) {
+                            $tableDatabase = $table['table_schema'] ?? $table['database'];
+                            if ($tableDatabase !== $databaseName) {
+                                continue; // Skip tables from other databases
+                            }
+                        }
+                        $tableNames[] = $tableName;
+                    } else {
+                        $tableNames[] = $table;
+                    }
+                }
+            }
+
+            // Filter out system tables, framework tables, and plugin-specific tables
+            $userTables = array_filter($tableNames, function ($tableName) {
+                // Skip common system tables
+                $systemTables = [
+                    'information_schema',
+                    'performance_schema',
+                    'mysql',
+                    'sys',
+                    'sqlite_master',
+                    'sqlite_sequence',
+                    'sqlite_temp_master',
+                    'pg_catalog',
+                    'pg_toast',
+                    'pg_stat',
+                    'pg_settings'
                 ];
 
-                // Apply intelligent positioning
-                $data['table_positions'] = $this->calculateOptimalPositions($data['tables'], $data['relationships']);
+                // Skip Laravel/framework tables that might clutter the view
+                $frameworkTables = [
+                    'migrations',
+                    'password_resets',
+                    'password_reset_tokens',
+                    'personal_access_tokens',
+                    'failed_jobs',
+                    'telescope_entries',
+                    'telescope_entries_tags',
+                    'telescope_monitoring',
+                    'cache',
+                    'cache_locks',
+                    'jobs',
+                    'job_batches',
+                    'sessions'
+                ];
 
-                return $data;
+                // Skip CodeForge Studio plugin tables
+                $pluginTables = [
+                    'database_manager_logs',
+                    'migration_histories',
+                    'query_performance_logs',
+                    'database_health_metrics',
+                    'data_seeders',
+                    'seeder_execution_logs',
+                    'data_generation_templates',
+                    'documentation_generations',
+                    'schema_snapshots',
+                    'schema_versions',
+                    'code_generation_histories'
+                ];
+
+                $tableLower = strtolower($tableName);
+
+                // Skip tables that start with system prefixes
+                foreach ($systemTables as $systemTable) {
+                    if (str_starts_with($tableLower, strtolower($systemTable))) {
+                        return false;
+                    }
+                }
+
+                // Skip known framework tables
+                foreach ($frameworkTables as $frameworkTable) {
+                    if ($tableLower === strtolower($frameworkTable)) {
+                        return false;
+                    }
+                }
+
+                // Skip plugin-specific tables
+                foreach ($pluginTables as $pluginTable) {
+                    if ($tableLower === strtolower($pluginTable)) {
+                        return false;
+                    }
+                }
+
+                return true;
             });
 
-            $this->dispatch('schema-data-loaded', $this->schemaData);
+            // Debug: Log filtering results
+            Log::info("After filtering: " . count($userTables) . " user tables remaining", [
+                'filtered_count' => count($userTables),
+                'sample_filtered' => array_slice($userTables, 0, 10)
+            ]);
+
+            foreach ($userTables as $tableName) {
+                try {
+                    // Get columns for this table using the specific connection
+                    $columns = $schemaBuilder->getColumns($tableName);
+                    $indexes = $schemaBuilder->getIndexes($tableName);
+
+                    $tableData = [
+                        'name' => $tableName,
+                        'columns' => [],
+                        'indexes' => [],
+                        'position' => ['x' => rand(50, 500), 'y' => rand(50, 500)]
+                    ];
+
+                    foreach ($columns as $column) {
+                        $tableData['columns'][] = [
+                            'name' => $column['name'],
+                            'type' => $column['type_name'] ?? $column['type'] ?? 'varchar',
+                            'nullable' => $column['nullable'] ?? true,
+                            'default' => $column['default'] ?? null,
+                            'autoIncrement' => $column['auto_increment'] ?? false,
+                        ];
+                    }
+
+                    foreach ($indexes as $index) {
+                        $tableData['indexes'][] = [
+                            'name' => $index['name'],
+                            'columns' => $index['columns'],
+                            'type' => $index['type'] ?? 'index',
+                            'unique' => $index['unique'] ?? false,
+                        ];
+                    }
+
+                    $tables[$tableName] = $tableData;
+
+                    // Detect relationships based on foreign key naming convention
+                    foreach ($tableData['columns'] as $column) {
+                        if (Str::endsWith($column['name'], '_id') && $column['name'] !== 'id') {
+                            $relatedTable = Str::plural(Str::beforeLast($column['name'], '_id'));
+                            if (isset($tables[$relatedTable]) || in_array($relatedTable, $userTables)) {
+                                $relationships[] = [
+                                    'from' => $tableName,
+                                    'to' => $relatedTable,
+                                    'fromColumn' => $column['name'],
+                                    'toColumn' => 'id',
+                                    'type' => 'belongsTo',
+                                ];
+                            }
+                        }
+                    }
+                } catch (\Exception $e) {
+                    // Skip tables that we can't read (permissions, etc.)
+                    continue;
+                }
+            }
         } catch (\Exception $e) {
-            Notification::make()
-                ->title('Schema Loading Error')
-                ->body("Failed to load schema data: {$e->getMessage()}")
-                ->danger()
-                ->send();
-
-            $this->schemaData = $this->getEmptySchemaData();
-        } finally {
-            $this->isLoading = false;
+            // If we can't connect or read the schema, return empty
+            return ['tables' => [], 'relationships' => []];
         }
+
+        return [
+            'tables' => array_values($tables),
+            'relationships' => $relationships,
+        ];
     }
 
-    protected function loadSavedSettings(): void
+    public function getConnectionDisplayProperty(): string
     {
-        $settingsKey = "schema_designer_settings_{$this->selectedConnection}";
-        $savedSettings = Cache::get($settingsKey, []);
-
-        if (!empty($savedSettings)) {
-            $this->tablePositions = $savedSettings['table_positions'] ?? [];
-            $this->savedLayouts = $savedSettings['saved_layouts'] ?? [];
-            $this->bookmarkedTables = $savedSettings['bookmarked_tables'] ?? [];
-            $this->visualizationSettings = array_merge($this->visualizationSettings, $savedSettings['visualization_settings'] ?? []);
-        }
+        return "{$this->connectionInfo['name']} ({$this->connectionInfo['driver']}) - {$this->connectionInfo['database']}";
     }
 
-    public function form(Form $form): Form
+    public function getConnectionDetailsProperty(): array
     {
-        return $form
-            ->schema([
-                // Connection Management
-                Select::make('selectedConnection')
-                    ->label('Database Connection')
-                    ->options(collect($this->availableConnections)->pluck('name', 'name')->toArray())
-                    ->default($this->selectedConnection)
-                    ->live()
-                    ->afterStateUpdated(fn($state) => $this->switchConnection($state)),
-
-                // View Mode Selection
-                Select::make('activeView')
-                    ->label('Visualization Mode')
-                    ->options([
-                        'interactive' => '🎨 Interactive Designer',
-                        'table_detail' => '📋 Table Details',
-                        'dependencies' => '🔗 Dependencies',
-                        'performance' => '⚡ Performance',
-                        'matrix' => '🗂️ Relationship Matrix',
-                        'overview' => '📊 Schema Overview',
-                    ])
-                    ->default($this->activeView)
-                    ->live()
-                    ->afterStateUpdated(fn($state) => $this->switchView($state)),
-
-                // Quick Search
-                TextInput::make('searchQuery')
-                    ->label('Search Tables & Columns')
-                    ->placeholder('Type to search...')
-                    ->suffixIcon('heroicon-m-magnifying-glass')
-                    ->live(debounce: 300)
-                    ->afterStateUpdated(fn($state) => $this->updateSearch($state)),
-
-                // Visualization Controls
-                Toggle::make('showRelationships')
-                    ->label('Show Relationships')
-                    ->default(true)
-                    ->live()
-                    ->afterStateUpdated(fn($state) => $this->toggleRelationships($state)),
-
-                Toggle::make('showIndexes')
-                    ->label('Show Indexes')
-                    ->default(true)
-                    ->live()
-                    ->afterStateUpdated(fn($state) => $this->toggleIndexes($state)),
-
-                Toggle::make('showSidebar')
-                    ->label('Show Sidebar')
-                    ->default(true)
-                    ->live()
-                    ->afterStateUpdated(fn($state) => $this->toggleSidebar($state)),
-
-                // Action Buttons
-                Actions::make([
-                    Action::make('refresh')
-                        ->label('Refresh Schema')
-                        ->icon('heroicon-m-arrow-path')
-                        ->color('primary')
-                        ->action('refreshSchema'),
-
-                    Action::make('autoLayout')
-                        ->label('Auto Layout')
-                        ->icon('heroicon-m-sparkles')
-                        ->color('success')
-                        ->action('applyAutoLayout'),
-
-                    Action::make('resetView')
-                        ->label('Reset View')
-                        ->icon('heroicon-m-arrow-uturn-left')
-                        ->color('gray')
-                        ->action('resetView'),
-
-                    Action::make('export')
-                        ->label('Export')
-                        ->icon('heroicon-m-arrow-down-tray')
-                        ->color('warning')
-                        ->action('openExportModal'),
-
-                    Action::make('settings')
-                        ->label('Settings')
-                        ->icon('heroicon-m-cog-6-tooth')
-                        ->color('gray')
-                        ->action('openSettingsModal'),
-                ])->columnSpanFull(),
-            ])
-            ->columns(3);
-    }
-
-    // Event Handlers and Actions
-
-    public function switchConnection(string $connection): void
-    {
-        if ($connection !== $this->selectedConnection) {
-            $this->selectedConnection = $connection;
-            $this->selectedTable = null;
-            $this->selectedTables = [];
-            $this->clearCache();
-            $this->loadSchemaData();
-
-            Notification::make()
-                ->title('Connection Switched')
-                ->body("Now viewing {$connection} database")
-                ->success()
-                ->send();
-        }
-    }
-
-    public function switchView(string $view): void
-    {
-        $this->activeView = $view;
-        $this->dispatch('view-changed', ['view' => $view]);
-
-        // Load view-specific data if needed
-        $this->loadViewData($view);
-    }
-
-    public function updateSearch(string $query): void
-    {
-        $this->searchQuery = $query;
-        $this->dispatch('search-updated', ['query' => $query]);
-    }
-
-    public function toggleRelationships(bool $show): void
-    {
-        $this->showRelationships = $show;
-        $this->dispatch('relationships-toggled', ['show' => $show]);
-    }
-
-    public function toggleIndexes(bool $show): void
-    {
-        $this->showIndexes = $show;
-        $this->dispatch('indexes-toggled', ['show' => $show]);
-    }
-
-    public function toggleSidebar(bool $show): void
-    {
-        $this->showSidebar = $show;
-        $this->dispatch('sidebar-toggled', ['show' => $show]);
+        return [
+            'Connection Name' => $this->connectionInfo['name'],
+            'Database Driver' => ucfirst($this->connectionInfo['driver']),
+            'Database Name' => $this->connectionInfo['database'],
+            'Host' => $this->connectionInfo['host'],
+            'Port' => $this->connectionInfo['port'],
+        ];
     }
 
     public function refreshSchema(): void
     {
-        $this->clearCache();
-        $this->loadSchemaData();
-
-        Notification::make()
-            ->title('Schema Refreshed')
-            ->body('Database schema has been reloaded successfully')
-            ->success()
-            ->send();
-    }
-
-    public function applyAutoLayout(): void
-    {
         try {
-            $this->tablePositions = $this->calculateOptimalPositions(
-                $this->schemaData['tables'] ?? [],
-                $this->schemaData['relationships'] ?? []
-            );
+            // Force reload of schema data (bypass cached version)
+            $this->loadSchemaData(true);
 
-            $this->dispatch('layout-applied', ['positions' => $this->tablePositions]);
-            $this->saveSettings();
+            // Reload version history
+            $this->loadVersionHistory();
+
+            // Dispatch event to frontend with the new data in the correct format
+            $this->dispatch('schema-loaded', [
+                'tables' => $this->schemaData['tables'] ?? [],
+                'relationships' => $this->schemaData['relationships'] ?? []
+            ]);
+
+            $tableCount = count($this->schemaData['tables'] ?? []);
 
             Notification::make()
-                ->title('Auto Layout Applied')
-                ->body('Tables have been automatically positioned')
+                ->title('Schema Refreshed')
+                ->body("Loaded {$tableCount} tables from database")
                 ->success()
                 ->send();
         } catch (\Exception $e) {
             Notification::make()
-                ->title('Layout Error')
-                ->body("Failed to apply auto layout: {$e->getMessage()}")
+                ->title('Refresh Failed')
+                ->body('Error refreshing schema: ' . $e->getMessage())
+                ->danger()
+                ->send();
+
+            Log::error('Schema refresh failed', [
+                'error' => $e->getMessage(),
+                'connection' => $this->selectedConnection,
+                'database' => $this->connectionInfo['database']
+            ]);
+        }
+    }
+
+    public function updateFrontend(): void
+    {
+        // Simple method to just update the frontend with current backend data
+        $this->dispatch('schema-loaded', [
+            'tables' => $this->schemaData['tables'] ?? [],
+            'relationships' => $this->schemaData['relationships'] ?? []
+        ]);
+    }
+
+    public function debugTableInfo(): void
+    {
+        try {
+            $databaseName = $this->connectionInfo['database'];
+            $driver = $this->connectionInfo['driver'];
+
+            // Get raw table count
+            if ($driver === 'mysql') {
+                $rawTables = DB::connection($this->selectedConnection)
+                    ->select("SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_TYPE = 'BASE TABLE'", [$databaseName]);
+                $allTables = array_column($rawTables, 'TABLE_NAME');
+            } else {
+                $allTables = Schema::connection($this->selectedConnection)->getTableListing();
+            }
+
+            $debugInfo = [
+                'Database Name' => $databaseName,
+                'Connection' => $this->selectedConnection,
+                'Driver' => $driver,
+                'Total Tables Found' => count($allTables),
+                'Sample Tables' => array_slice($allTables, 0, 20),
+                'Current Schema Tables' => count($this->schemaData['tables'] ?? [])
+            ];
+
+            Log::info('Debug Table Info', $debugInfo);
+
+            Notification::make()
+                ->title('Debug Info Logged')
+                ->body("Found " . count($allTables) . " total tables. Check logs for details.")
+                ->info()
+                ->send();
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title('Debug Failed')
+                ->body($e->getMessage())
                 ->danger()
                 ->send();
         }
     }
 
-    public function resetView(): void
+    protected function loadVersionHistory(): void
     {
-        $this->selectedTable = null;
-        $this->selectedTables = [];
-        $this->searchQuery = '';
-        $this->zoomLevel = 100;
-        $this->viewportPosition = ['x' => 0, 'y' => 0];
-
-        $this->dispatch('view-reset');
-
-        Notification::make()
-            ->title('View Reset')
-            ->body('Designer view has been reset to defaults')
-            ->success()
-            ->send();
-    }
-
-    #[On('table-selected')]
-    public function selectTable(string $tableName): void
-    {
-        $this->selectedTable = $tableName;
-        $this->dispatch('table-selection-changed', ['table' => $tableName]);
-    }
-
-    #[On('table-position-updated')]
-    public function updateTablePosition(string $tableName, array $position): void
-    {
-        $this->tablePositions[$tableName] = $position;
-        $this->saveSettings();
-    }
-
-    #[On('viewport-changed')]
-    public function updateViewport(array $viewport): void
-    {
-        $this->zoomLevel = $viewport['zoom'] ?? $this->zoomLevel;
-        $this->viewportPosition = [
-            'x' => $viewport['x'] ?? $this->viewportPosition['x'],
-            'y' => $viewport['y'] ?? $this->viewportPosition['y'],
-        ];
-    }
-
-    // Utility Methods
-
-    protected function calculateOptimalPositions(array $tables, array $relationships): array
-    {
-        if (empty($tables)) {
-            return [];
-        }
-
-        // Force-directed layout algorithm
-        $positions = [];
-        $tableCount = count($tables);
-        $width = 1200;
-        $height = 800;
-
-        // Initial random positioning
-        foreach ($tables as $index => $table) {
-            $angle = (2 * M_PI * $index) / $tableCount;
-            $radius = min($width, $height) * 0.3;
-
-            $positions[$table['name']] = [
-                'x' => $width / 2 + $radius * cos($angle),
-                'y' => $height / 2 + $radius * sin($angle),
-                'vx' => 0,
-                'vy' => 0,
-            ];
-        }
-
-        // Apply force-directed positioning
-        $iterations = $this->visualizationSettings['iterations'];
-        for ($i = 0; $i < $iterations; $i++) {
-            $this->applyForces($positions, $relationships);
-        }
-
-        // Clean up and return final positions
-        return collect($positions)->map(function ($pos) {
-            return ['x' => round($pos['x']), 'y' => round($pos['y'])];
-        })->toArray();
-    }
-
-    protected function applyForces(array &$positions, array $relationships): void
-    {
-        $repulsion = $this->visualizationSettings['repulsion'];
-        $attraction = $this->visualizationSettings['attraction'];
-        $damping = 0.9;
-
-        // Reset forces
-        foreach ($positions as &$pos) {
-            $pos['fx'] = 0;
-            $pos['fy'] = 0;
-        }
-
-        // Repulsion between all nodes
-        $tables = array_keys($positions);
-        for ($i = 0; $i < count($tables); $i++) {
-            for ($j = $i + 1; $j < count($tables); $j++) {
-                $table1 = $tables[$i];
-                $table2 = $tables[$j];
-
-                $dx = $positions[$table1]['x'] - $positions[$table2]['x'];
-                $dy = $positions[$table1]['y'] - $positions[$table2]['y'];
-                $distance = sqrt($dx * $dx + $dy * $dy) + 0.01; // Avoid division by zero
-
-                $force = $repulsion / ($distance * $distance);
-                $fx = $force * $dx / $distance;
-                $fy = $force * $dy / $distance;
-
-                $positions[$table1]['fx'] += $fx;
-                $positions[$table1]['fy'] += $fy;
-                $positions[$table2]['fx'] -= $fx;
-                $positions[$table2]['fy'] -= $fy;
-            }
-        }
-
-        // Attraction for connected nodes
-        foreach ($relationships as $rel) {
-            $from = $rel['from_table'];
-            $to = $rel['to_table'];
-
-            if (!isset($positions[$from]) || !isset($positions[$to])) {
-                continue;
+        try {
+            if (!Schema::hasTable('schema_versions')) {
+                $this->versionHistory = [];
+                return;
             }
 
-            $dx = $positions[$to]['x'] - $positions[$from]['x'];
-            $dy = $positions[$to]['y'] - $positions[$from]['y'];
-            $distance = sqrt($dx * $dx + $dy * $dy) + 0.01;
-
-            $force = $attraction * $distance;
-            $fx = $force * $dx / $distance;
-            $fy = $force * $dy / $distance;
-
-            $positions[$from]['fx'] += $fx;
-            $positions[$from]['fy'] += $fy;
-            $positions[$to]['fx'] -= $fx;
-            $positions[$to]['fy'] -= $fy;
-        }
-
-        // Update positions
-        foreach ($positions as &$pos) {
-            $pos['vx'] = ($pos['vx'] + $pos['fx']) * $damping;
-            $pos['vy'] = ($pos['vy'] + $pos['fy']) * $damping;
-            $pos['x'] += $pos['vx'];
-            $pos['y'] += $pos['vy'];
-        }
-    }
-
-    protected function generateSchemaStatistics(): array
-    {
-        $tables = $this->schemaData['tables'] ?? [];
-        $relationships = $this->schemaData['relationships'] ?? [];
-
-        $totalColumns = collect($tables)->sum(fn($table) => count($table['columns'] ?? []));
-        $totalRows = collect($tables)->sum(fn($table) => $table['row_count'] ?? 0);
-        $tablesWithData = collect($tables)->filter(fn($table) => ($table['row_count'] ?? 0) > 0)->count();
-
-        return [
-            'total_tables' => count($tables),
-            'total_columns' => $totalColumns,
-            'total_relationships' => count($relationships),
-            'total_rows' => $totalRows,
-            'tables_with_data' => $tablesWithData,
-            'average_columns_per_table' => count($tables) > 0 ? round($totalColumns / count($tables), 2) : 0,
-            'relationship_density' => count($tables) > 0 ? round(count($relationships) / count($tables), 2) : 0,
-            'largest_table' => $this->findLargestTable($tables),
-            'most_connected_table' => $this->findMostConnectedTable($tables, $relationships),
-        ];
-    }
-
-    protected function findLargestTable(array $tables): ?array
-    {
-        return collect($tables)->sortByDesc('row_count')->first();
-    }
-
-    protected function findMostConnectedTable(array $tables, array $relationships): ?array
-    {
-        $connections = [];
-
-        foreach ($relationships as $rel) {
-            $connections[$rel['from_table']] = ($connections[$rel['from_table']] ?? 0) + 1;
-            $connections[$rel['to_table']] = ($connections[$rel['to_table']] ?? 0) + 1;
-        }
-
-        if (empty($connections)) {
-            return null;
-        }
-
-        $mostConnectedTableName = array_keys($connections, max($connections))[0];
-        return collect($tables)->firstWhere('name', $mostConnectedTableName);
-    }
-
-    protected function loadViewData(string $view): void
-    {
-        switch ($view) {
-            case 'dependencies':
-                $this->dispatch('load-dependency-data');
-                break;
-            case 'performance':
-                $this->dispatch('load-performance-data');
-                break;
-            case 'matrix':
-                $this->dispatch('load-matrix-data');
-                break;
+            $this->versionHistory = SchemaVersion::forConnection($this->selectedConnection)
+                ->forUser(auth()->id())
+                ->latest()
+                ->limit(10)
+                ->get()
+                ->map(function ($version) {
+                    return [
+                        'id' => $version->id,
+                        'name' => $version->name,
+                        'version' => $version->version_display,
+                        'description' => $version->description,
+                        'created_at' => $version->formatted_date,
+                        'table_count' => $version->table_count,
+                        'is_active' => $version->is_active,
+                    ];
+                })
+                ->toArray();
+        } catch (\Exception $e) {
+            $this->versionHistory = [];
         }
     }
 
-    protected function getEmptySchemaData(): array
+    public function saveSchema(array $schemaData, ?string $name = null): void
     {
-        return [
-            'tables' => [],
-            'relationships' => [],
-            'statistics' => [
-                'total_tables' => 0,
-                'total_columns' => 0,
-                'total_relationships' => 0,
-                'total_rows' => 0,
-                'tables_with_data' => 0,
-                'average_columns_per_table' => 0,
-                'relationship_density' => 0,
-            ],
-            'metadata' => [
+        try {
+            if (!Schema::hasTable('schema_versions')) {
+                Notification::make()
+                    ->title('Schema versions table not found')
+                    ->body('Please run migrations first to enable schema saving.')
+                    ->warning()
+                    ->send();
+                return;
+            }
+
+            $name = $name ?: 'Schema ' . now()->format('Y-m-d H:i:s');
+
+            SchemaVersion::create([
+                'user_id' => auth()->id(),
                 'connection' => $this->selectedConnection,
-                'generated_at' => now()->toISOString(),
-                'version' => '2.0.0',
-            ],
-        ];
-    }
+                'name' => $name,
+                'description' => 'Auto-saved schema design',
+                'schema_data' => $schemaData,
+                'metadata' => [
+                    'created_by' => auth()->user()->name ?? 'Unknown',
+                    'browser' => request()->header('User-Agent'),
+                    'ip_address' => request()->ip(),
+                ],
+                'is_active' => true,
+            ]);
 
-    protected function clearCache(): void
-    {
-        $patterns = [
-            "schema_designer_data_{$this->selectedConnection}_v2",
-            "schema_visualization_{$this->selectedConnection}",
-            "schema_dependencies_{$this->selectedConnection}",
-        ];
+            $this->loadVersionHistory();
 
-        foreach ($patterns as $pattern) {
-            Cache::forget($pattern);
+            Notification::make()
+                ->title('Schema Saved')
+                ->success()
+                ->send();
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title('Save Failed')
+                ->body($e->getMessage())
+                ->danger()
+                ->send();
         }
     }
 
-    protected function saveSettings(): void
+    public function loadVersion(int $versionId): void
     {
-        $settingsKey = "schema_designer_settings_{$this->selectedConnection}";
+        try {
+            if (!Schema::hasTable('schema_versions')) {
+                Notification::make()
+                    ->title('Schema versions table not found')
+                    ->body('Please run migrations first.')
+                    ->warning()
+                    ->send();
+                return;
+            }
 
-        Cache::put($settingsKey, [
-            'table_positions' => $this->tablePositions,
-            'saved_layouts' => $this->savedLayouts,
-            'bookmarked_tables' => $this->bookmarkedTables,
-            'visualization_settings' => $this->visualizationSettings,
-            'filter_settings' => $this->filterSettings,
-            'layout_settings' => $this->layoutSettings,
-        ], 3600); // Cache for 1 hour
+            $version = SchemaVersion::forUser(auth()->id())
+                ->find($versionId);
+
+            if ($version) {
+                $this->currentVersionId = $versionId;
+                $this->schemaData = $version->schema_data;
+
+                $this->dispatch('schema-loaded', [
+                    'tables' => $this->schemaData['tables'] ?? [],
+                    'relationships' => $this->schemaData['relationships'] ?? []
+                ]);
+
+                Notification::make()
+                    ->title('Version Loaded')
+                    ->body("Loaded '{$version->name}' {$version->version_display}")
+                    ->success()
+                    ->send();
+            } else {
+                Notification::make()
+                    ->title('Version not found')
+                    ->body('The requested version could not be found.')
+                    ->warning()
+                    ->send();
+            }
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title('Load Failed')
+                ->body($e->getMessage())
+                ->danger()
+                ->send();
+        }
     }
 
-    // Public getters for view data
-
-    public function getSchemaData(): array
+    public function exportMigration(array $schemaData): void
     {
-        return $this->schemaData;
+        try {
+            $migrations = $this->generateMigrations($schemaData);
+
+            $timestamp = now()->format('Y_m_d_His');
+            $filename = "{$timestamp}_create_schema_from_designer.php";
+
+            $content = "<?php\n\n";
+            $content .= "use Illuminate\\Database\\Migrations\\Migration;\n";
+            $content .= "use Illuminate\\Database\\Schema\\Blueprint;\n";
+            $content .= "use Illuminate\\Support\\Facades\\Schema;\n\n";
+            $content .= "return new class extends Migration\n{\n";
+            $content .= "    public function up(): void\n    {\n";
+
+            foreach ($migrations as $migration) {
+                $content .= $migration . "\n";
+            }
+
+            $content .= "    }\n\n";
+            $content .= "    public function down(): void\n    {\n";
+
+            // Add drop statements in reverse order
+            $tables = array_reverse($schemaData['tables']);
+            foreach ($tables as $table) {
+                $content .= "        Schema::dropIfExists('{$table['name']}');\n";
+            }
+
+            $content .= "    }\n};\n";
+
+            // For now, we'll just show the content. In production, you'd save this to a file
+            $this->dispatch('migration-generated', [
+                'content' => $content,
+                'filename' => $filename
+            ]);
+
+            Notification::make()
+                ->title('Migration Generated')
+                ->body('Migration file has been generated successfully.')
+                ->success()
+                ->send();
+        } catch (\Exception $e) {
+            Notification::make()
+                ->title('Export Failed')
+                ->body($e->getMessage())
+                ->danger()
+                ->send();
+        }
     }
 
-    public function getVisualizationConfig(): array
+    protected function generateMigrations(array $schemaData): array
+    {
+        $migrations = [];
+        $tables = $schemaData['tables'] ?? [];
+        $relationships = $schemaData['relationships'] ?? [];
+
+        // First pass: Create tables without foreign keys
+        foreach ($tables as $table) {
+            $migration = "        Schema::create('{$table['name']}', function (Blueprint \$table) {\n";
+
+            foreach ($table['columns'] as $column) {
+                $migration .= $this->generateColumnDefinition($column);
+            }
+
+            // Add indexes
+            foreach ($table['indexes'] ?? [] as $index) {
+                if ($index['unique']) {
+                    $migration .= "            \$table->unique(['" . implode("', '", $index['columns']) . "']);\n";
+                } else {
+                    $migration .= "            \$table->index(['" . implode("', '", $index['columns']) . "']);\n";
+                }
+            }
+
+            $migration .= "        });\n";
+            $migrations[] = $migration;
+        }
+
+        // Second pass: Add foreign keys
+        $foreignKeyMigrations = [];
+        foreach ($relationships as $relationship) {
+            $migration = "        Schema::table('{$relationship['from']}', function (Blueprint \$table) {\n";
+            $migration .= "            \$table->foreign('{$relationship['fromColumn']}')\n";
+            $migration .= "                ->references('{$relationship['toColumn']}')\n";
+            $migration .= "                ->on('{$relationship['to']}')\n";
+            $migration .= "                ->onDelete('cascade');\n";
+            $migration .= "        });\n";
+            $foreignKeyMigrations[] = $migration;
+        }
+
+        return array_merge($migrations, $foreignKeyMigrations);
+    }
+
+    protected function generateColumnDefinition(array $column): string
+    {
+        $definition = "            \$table->";
+
+        // Map column types to Laravel methods
+        $typeMap = [
+            'bigint' => 'bigInteger',
+            'int' => 'integer',
+            'varchar' => 'string',
+            'text' => 'text',
+            'datetime' => 'dateTime',
+            'date' => 'date',
+            'boolean' => 'boolean',
+            'decimal' => 'decimal',
+            'json' => 'json',
+        ];
+
+        $laravelType = $typeMap[$column['type']] ?? 'string';
+
+        if ($column['name'] === 'id' && $column['autoIncrement']) {
+            $definition .= "id()";
+        } else {
+            $definition .= "{$laravelType}('{$column['name']}')";
+        }
+
+        if ($column['nullable']) {
+            $definition .= "->nullable()";
+        }
+
+        if ($column['default'] !== null) {
+            $definition .= "->default('{$column['default']}')";
+        }
+
+        if ($column['unique'] ?? false) {
+            $definition .= "->unique()";
+        }
+
+        $definition .= ";\n";
+
+        return $definition;
+    }
+
+    public function createDefaultTable(): array
     {
         return [
-            'view' => $this->activeView,
-            'settings' => $this->visualizationSettings,
-            'filters' => $this->filterSettings,
-            'layout' => $this->layoutSettings,
-            'ui_state' => [
-                'show_relationships' => $this->showRelationships,
-                'show_indexes' => $this->showIndexes,
-                'show_sidebar' => $this->showSidebar,
-                'show_minimap' => $this->showMinimap,
-                'theme' => $this->currentTheme,
-                'zoom' => $this->zoomLevel,
-                'viewport' => $this->viewportPosition,
+            'name' => 'new_table_' . Str::random(6),
+            'columns' => [
+                [
+                    'name' => 'id',
+                    'type' => 'bigint',
+                    'nullable' => false,
+                    'default' => null,
+                    'autoIncrement' => true,
+                    'unique' => true,
+                ],
+                [
+                    'name' => 'created_at',
+                    'type' => 'timestamp',
+                    'nullable' => true,
+                    'default' => null,
+                ],
+                [
+                    'name' => 'updated_at',
+                    'type' => 'timestamp',
+                    'nullable' => true,
+                    'default' => null,
+                ],
+            ],
+            'indexes' => [
+                [
+                    'name' => 'primary',
+                    'columns' => ['id'],
+                    'type' => 'primary',
+                    'unique' => true,
+                ],
             ],
         ];
-    }
-
-    public function getTableData(string $tableName): ?array
-    {
-        return collect($this->schemaData['tables'] ?? [])->firstWhere('name', $tableName);
-    }
-
-    public function getMaxWidth(): MaxWidth
-    {
-        return MaxWidth::Full;
-    }
-
-    // Modal Actions (to be implemented)
-    public function openExportModal(): void
-    {
-        $this->dispatch('open-export-modal');
-    }
-
-    public function openSettingsModal(): void
-    {
-        $this->dispatch('open-settings-modal');
-    }
-
-    /**
-     * Get asset URL with fallback to package directory
-     */
-    public function getAssetUrl(string $path): string
-    {
-        return AssetService::asset($path);
-    }
-
-    /**
-     * Get schema designer CSS URL
-     */
-    public function getSchemaDesignerCssUrl(): string
-    {
-        return $this->getAssetUrl('css/schema-designer-v2.css');
-    }
-
-    /**
-     * Get schema designer JS URL
-     */
-    public function getSchemaDesignerJsUrl(): string
-    {
-        return $this->getAssetUrl('js/schema-designer-v2.js');
     }
 }

@@ -208,8 +208,6 @@ return [
 The test suite requires the following dependencies to be available:
 
 - **Core Services**:
-  - `SchemaAnalyzerService`
-  - `SchemaVisualizationService`
   - `SchemaDocumentationService`
   - `DataGenerationService`
 
