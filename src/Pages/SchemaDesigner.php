@@ -30,6 +30,13 @@ class SchemaDesigner extends Page
         $this->loadConnectionInfo();
         $this->loadSchemaData(true); // Force fresh load to skip cached data initially
         $this->loadVersionHistory();
+
+        Log::info('SchemaDesigner mounted', [
+            'connection' => $this->selectedConnection,
+            'database' => $this->connectionInfo['database'] ?? 'unknown',
+            'tables_loaded' => count($this->schemaData['tables'] ?? []),
+            'relationships_loaded' => count($this->schemaData['relationships'] ?? [])
+        ]);
     }
 
     protected function loadConnectionInfo(): void
@@ -295,11 +302,18 @@ class SchemaDesigner extends Page
     public function refreshSchema(): void
     {
         try {
+            Log::info('RefreshSchema called - starting refresh process');
+
             // Force reload of schema data (bypass cached version)
             $this->loadSchemaData(true);
 
             // Reload version history
             $this->loadVersionHistory();
+
+            Log::info('RefreshSchema - dispatching event', [
+                'tables_count' => count($this->schemaData['tables'] ?? []),
+                'relationships_count' => count($this->schemaData['relationships'] ?? [])
+            ]);
 
             // Dispatch event to frontend with the new data in the correct format
             $this->dispatch('schema-loaded', [
@@ -315,6 +329,11 @@ class SchemaDesigner extends Page
                 ->success()
                 ->send();
         } catch (\Exception $e) {
+            Log::error('RefreshSchema failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
             Notification::make()
                 ->title('Refresh Failed')
                 ->body('Error refreshing schema: ' . $e->getMessage())
@@ -331,6 +350,11 @@ class SchemaDesigner extends Page
 
     public function updateFrontend(): void
     {
+        Log::info('UpdateFrontend called', [
+            'tables_count' => count($this->schemaData['tables'] ?? []),
+            'relationships_count' => count($this->schemaData['relationships'] ?? [])
+        ]);
+
         // Simple method to just update the frontend with current backend data
         $this->dispatch('schema-loaded', [
             'tables' => $this->schemaData['tables'] ?? [],
@@ -359,17 +383,26 @@ class SchemaDesigner extends Page
                 'Driver' => $driver,
                 'Total Tables Found' => count($allTables),
                 'Sample Tables' => array_slice($allTables, 0, 20),
-                'Current Schema Tables' => count($this->schemaData['tables'] ?? [])
+                'Current Schema Tables' => count($this->schemaData['tables'] ?? []),
+                'Schema Data Sample' => array_slice($this->schemaData['tables'] ?? [], 0, 3)
             ];
 
             Log::info('Debug Table Info', $debugInfo);
 
+            // Also dispatch current data to frontend
+            $this->dispatch('schema-loaded', [
+                'tables' => $this->schemaData['tables'] ?? [],
+                'relationships' => $this->schemaData['relationships'] ?? []
+            ]);
+
             Notification::make()
                 ->title('Debug Info Logged')
-                ->body("Found " . count($allTables) . " total tables. Check logs for details.")
+                ->body("Found " . count($allTables) . " total tables. Current schema has " . count($this->schemaData['tables'] ?? []) . " tables. Check logs for details.")
                 ->info()
                 ->send();
         } catch (\Exception $e) {
+            Log::error('Debug failed', ['error' => $e->getMessage()]);
+
             Notification::make()
                 ->title('Debug Failed')
                 ->body($e->getMessage())

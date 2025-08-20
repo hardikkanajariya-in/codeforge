@@ -191,17 +191,17 @@
             <div class="flex items-center justify-center min-h-screen px-4">
                 <div class="fixed inset-0 bg-black opacity-50" @click="closeTableEditor()"></div>
 
-                <div class="relative bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
+                <div class="relative bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden" x-show="editingTable">
                     <div class="px-6 py-4 border-b">
                         <h2 class="text-lg font-medium">Edit Table: <span x-text="editingTable?.name"></span></h2>
                     </div>
 
-                    <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+                    <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]" x-show="editingTable">
                         <!-- Table Name -->
                         <div class="mb-6">
                             <x-filament::input.wrapper>
                                 <x-slot name="label">Table Name</x-slot>
-                                <x-filament::input type="text" x-model="editingTable.name" />
+                                <x-filament::input type="text" x-model="editingTable?.name" />
                             </x-filament::input.wrapper>
                         </div>
 
@@ -209,8 +209,8 @@
                         <div class="mb-6">
                             <h3 class="text-sm font-medium mb-4">Columns</h3>
 
-                            <div class="space-y-4">
-                                <template x-for="(column, index) in editingTable.columns" :key="index">
+                            <div class="space-y-4" x-show="editingTable && editingTable.columns">
+                                <template x-for="(column, index) in editingTable?.columns || []" :key="index">
                                     <div class="flex gap-2 items-start p-4 border rounded-lg">
                                         <div class="flex-1 grid grid-cols-4 gap-2">
                                             <x-filament::input.wrapper>
@@ -267,7 +267,7 @@
                         </div>
                     </div>
 
-                    <div class="px-6 py-4 border-t flex justify-end gap-2">
+                    <div class="px-6 py-4 border-t flex justify-end gap-2" x-show="editingTable">
                         <x-filament::button color="gray" @click="closeTableEditor()">
                             Cancel
                         </x-filament::button>
@@ -372,16 +372,38 @@
                         console.log('Initial relationships:', this.relationships.length);
 
                         this.initDrawFlow();
-                        this.filterTables(); // Only filter initially, don't load schema yet
+                        this.filterTables();
 
-                        // Listen for Livewire events
-                        window.addEventListener('schema-loaded', (event) => {
-                            console.log('Schema loaded event received:', event.detail);
+                        // Load initial schema if we have data
+                        if (this.tables.length > 0) {
+                            console.log('Loading initial schema with', this.tables.length, 'tables');
+                            this.loadSchema();
+                        }
 
-                            // Simple data extraction - Livewire passes data directly in event.detail
-                            const data = event.detail || {};
-                            this.tables = data.tables || [];
-                            this.relationships = data.relationships || [];
+                        // Listen for Livewire events using Alpine's $wire integration
+                        this.$wire.on('schema-loaded', (data) => {
+                            console.log('Schema loaded via $wire event:', data);
+
+                            let tables = [];
+                            let relationships = [];
+
+                            // Handle different possible event data structures
+                            if (Array.isArray(data)) {
+                                // If data is an array, use first element
+                                const eventData = data[0] || {};
+                                tables = eventData.tables || [];
+                                relationships = eventData.relationships || [];
+                            } else if (data && data.tables) {
+                                // Direct structure
+                                tables = data.tables || [];
+                                relationships = data.relationships || [];
+                            } else {
+                                console.error('Unexpected data structure:', data);
+                                return;
+                            }
+
+                            this.tables = tables;
+                            this.relationships = relationships;
 
                             console.log('Updated tables count:', this.tables.length);
                             console.log('Updated relationships count:', this.relationships.length);
@@ -400,29 +422,36 @@
                             console.log('Schema update complete.');
                         });
 
-                        window.addEventListener('migration-generated', (event) => {
-                            console.log('Migration generated event received:', event.detail);
+                        // Listen for migration generation events
+                        this.$wire.on('migration-generated', (data) => {
+                            console.log('Migration generated via $wire event:', data);
+
+                            let content, filename;
+
+                            if (Array.isArray(data)) {
+                                // If data is an array, use first element
+                                const eventData = data[0] || {};
+                                content = eventData.content;
+                                filename = eventData.filename;
+                            } else if (data) {
+                                content = data.content;
+                                filename = data.filename;
+                            }
 
                             // Check if event data is valid
-                            if (!event.detail || !event.detail.content) {
-                                console.error('Invalid migration data received:', event.detail);
+                            if (!content) {
+                                console.error('Invalid migration data received:', data);
                                 return;
                             }
 
                             // Download the migration content
-                            const blob = new Blob([event.detail.content], { type: 'text/plain' });
+                            const blob = new Blob([content], { type: 'text/plain' });
                             const url = window.URL.createObjectURL(blob);
                             const a = document.createElement('a');
                             a.href = url;
-                            a.download = event.detail.filename || 'migration.php';
+                            a.download = filename || 'migration.php';
                             a.click();
                             window.URL.revokeObjectURL(url);
-                        });
-
-                        // Load initial schema after component is ready
-                        this.$nextTick(() => {
-                            console.log('Loading initial schema...');
-                            this.loadSchema();
                         });
                     },
 
@@ -554,11 +583,11 @@
                         });
 
                         const nodeHtml = `
-                                                <div class="title">${table.name}</div>
-                                                <div class="content">
-                                                    ${columnsHtml}
-                                                </div>
-                                            `;
+                                                    <div class="title">${table.name}</div>
+                                                    <div class="content">
+                                                        ${columnsHtml}
+                                                    </div>
+                                                `;
 
                         console.log('Generated node HTML for:', table.name);
                         return nodeHtml;
@@ -623,6 +652,11 @@
                     },
 
                     addColumn() {
+                        if (!this.editingTable || !this.editingTable.columns) {
+                            console.error('Cannot add column: editingTable is not properly initialized');
+                            return;
+                        }
+                        
                         this.editingTable.columns.push({
                             name: '',
                             type: 'varchar',
@@ -634,10 +668,20 @@
                     },
 
                     removeColumn(index) {
+                        if (!this.editingTable || !this.editingTable.columns) {
+                            console.error('Cannot remove column: editingTable is not properly initialized');
+                            return;
+                        }
+                        
                         this.editingTable.columns.splice(index, 1);
                     },
 
                     saveTableChanges() {
+                        if (!this.editingTable) {
+                            console.error('Cannot save: editingTable is not initialized');
+                            return;
+                        }
+                        
                         const index = this.tables.findIndex(t => t.name === this.selectedTable);
                         if (index !== -1) {
                             // Update table name in relationships if changed
@@ -657,7 +701,7 @@
 
                             // Update node in DrawFlow
                             const nodeId = this.nodePositions[this.selectedTable];
-                            if (nodeId) {
+                            if (nodeId && this.editingTable) {
                                 const nodeData = this.editor.getNodeFromId(nodeId);
                                 nodeData.data.table = this.editingTable.name;
                                 nodeData.html = this.createTableNode(this.editingTable);
