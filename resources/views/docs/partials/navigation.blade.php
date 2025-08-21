@@ -1,4 +1,14 @@
 <div class="space-y-6">
+    <!-- Home Section -->
+    <div>
+        <div class="space-y-1">
+            <a href="{{ route('codeforge.docs.home') }}"
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.home') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                🏠 Documentation Home
+            </a>
+        </div>
+    </div>
+
     <!-- Getting Started Section -->
     <div>
         <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Getting Started</h3>
@@ -73,6 +83,14 @@
                 class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.architecture.events') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
                 📡 Events
             </a>
+            <a href="{{ route('codeforge.docs.architecture.database-design') }}"
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.architecture.database-design') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                🗄️ Database Design
+            </a>
+            <a href="{{ route('codeforge.docs.architecture.security') }}"
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.architecture.security') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                � Security
+            </a>
         </div>
     </div>
 
@@ -92,10 +110,64 @@
                 class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.api.commands') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
                 ⌨️ Artisan Commands
             </a>
+            <a href="{{ route('codeforge.docs.api.events') }}"
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.api.events') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                📡 Events
+            </a>
+            <a href="{{ route('codeforge.docs.api.filament-resources') }}"
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.api.filament-resources') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                📦 Filament Resources
+            </a>
         </div>
     </div>
 
-    <!-- Support Section -->
+    <!-- Advanced Topics Section -->
+    <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Advanced Topics</h3>
+        <div class="space-y-1">
+            <a href="{{ route('codeforge.docs.advanced.customization') }}"
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.advanced.customization') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                🎨 Customization
+            </a>
+            <a href="{{ route('codeforge.docs.advanced.extending') }}"
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.advanced.extending') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                🔌 Extending
+            </a>
+            <a href="{{ route('codeforge.docs.advanced.performance') }}"
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.advanced.performance') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                ⚡ Performance
+            </a>
+            <a href="{{ route('codeforge.docs.advanced.testing') }}"
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.advanced.testing') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                🧪 Testing
+            </a>
+            <a href="{{ route('codeforge.docs.advanced.deployment') }}"
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.advanced.deployment') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                🚀 Deployment
+            </a>
+        </div>
+    </div>
+
+    <!-- Development Guidelines Section -->
+    <div>
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Development Guidelines</h3>
+        <div class="space-y-1">
+            <a href="{{ route('codeforge.docs.guidelines.coding-standards') }}"
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.guidelines.coding-standards') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                📝 Coding Standards
+            </a>
+            <a href="{{ route('codeforge.docs.guidelines.contribution') }}"
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.guidelines.contribution') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                🤝 Contribution
+            </a>
+            <a href="{{ route('codeforge.docs.guidelines.workflow') }}"
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.guidelines.workflow') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                🔄 Workflow
+            </a>
+        </div>
+    </div>
+
+    <!-- Help & Support Section -->
     <div>
         <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Help & Support</h3>
         <div class="space-y-1">
@@ -106,6 +178,10 @@
             <a href="{{ route('codeforge.docs.faq') }}"
                 class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.faq') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
                 ❓ FAQ
+            </a>
+            <a href="{{ route('codeforge.docs.changelog') }}"
+                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.changelog') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
+                📋 Changelog
             </a>
             <a href="{{ route('codeforge.docs.support') }}"
                 class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.support') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
