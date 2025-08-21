@@ -45,7 +45,6 @@ Route::middleware(['web'])->prefix('codeforge/docs')->name('codeforge.docs.')->g
     Route::get('/api/overview', [DocsController::class, 'apiOverview'])->name('api.overview');
     Route::get('/api/services', [DocsController::class, 'apiServices'])->name('api.services');
     Route::get('/api/commands', [DocsController::class, 'apiCommands'])->name('api.commands');
-    Route::get('/api/events', [DocsController::class, 'apiEvents'])->name('api.events');
     Route::get('/api/filament-resources', [DocsController::class, 'apiFilamentResources'])->name('api.filament-resources');
 
     // Advanced Topics

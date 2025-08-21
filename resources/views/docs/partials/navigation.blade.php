@@ -110,10 +110,6 @@
                 class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.api.commands') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
                 ⌨️ Artisan Commands
             </a>
-            <a href="{{ route('codeforge.docs.api.events') }}"
-                class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.api.events') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
-                📡 Events
-            </a>
             <a href="{{ route('codeforge.docs.api.filament-resources') }}"
                 class="flex items-center px-3 py-2 text-sm {{ request()->routeIs('codeforge.docs.api.filament-resources') ? 'text-primary-600 bg-primary-50 border-r-2 border-primary-600 font-medium' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50' }} rounded">
                 📦 Filament Resources
