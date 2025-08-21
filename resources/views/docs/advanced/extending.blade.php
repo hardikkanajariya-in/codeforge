@@ -27,20 +27,25 @@
         <!-- Page Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 mb-4">Extending the Plugin</h1>
-            <p class="text-lg text-gray-600">CodeForge Database Studio is designed for extensibility. Add custom functionality, hook into events, create custom pages, override services, and integrate with your existing Laravel architecture.</p>
+            <p class="text-lg text-gray-600">CodeForge Database Studio is designed for extensibility. Add custom
+                functionality, hook into events, create custom pages, override services, and integrate with your existing
+                Laravel architecture.</p>
         </div>
 
         <!-- Extension Overview -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Extension Methods</h2>
-            <p class="text-gray-600 mb-6">Multiple approaches to extend the plugin functionality to meet your specific requirements.</p>
+            <p class="text-gray-600 mb-6">Multiple approaches to extend the plugin functionality to meet your specific
+                requirements.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
                     <div class="flex items-center mb-3">
                         <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
                             <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122">
+                                </path>
                             </svg>
                         </div>
                         <h3 class="font-semibold text-gray-900">Event Listeners</h3>
@@ -52,7 +57,9 @@
                     <div class="flex items-center mb-3">
                         <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3">
                             <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                                </path>
                             </svg>
                         </div>
                         <h3 class="font-semibold text-gray-900">Service Extension</h3>
@@ -64,7 +71,9 @@
                     <div class="flex items-center mb-3">
                         <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
                             <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4">
+                                </path>
                             </svg>
                         </div>
                         <h3 class="font-semibold text-gray-900">Custom Pages</h3>
@@ -76,13 +85,17 @@
                     <div class="flex items-center mb-3">
                         <div class="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center mr-3">
                             <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                             </svg>
                         </div>
                         <h3 class="font-semibold text-gray-900">Plugin Architecture</h3>
                     </div>
-                    <p class="text-sm text-gray-600">Create plugins that extend or integrate with CodeForge functionality.</p>
+                    <p class="text-sm text-gray-600">Create plugins that extend or integrate with CodeForge functionality.
+                    </p>
                 </div>
             </div>
         </div>
@@ -90,7 +103,8 @@
         <!-- Event System -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-6">Event System Integration</h2>
-            <p class="text-gray-600 mb-6">CodeForge Database Studio dispatches events throughout its operation lifecycle. Hook into these events to add custom functionality.</p>
+            <p class="text-gray-600 mb-6">CodeForge Database Studio dispatches events throughout its operation lifecycle.
+                Hook into these events to add custom functionality.</p>
 
             <div class="space-y-6">
                 <!-- Available Events -->
@@ -123,17 +137,17 @@
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Creating Event Listeners</h3>
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code># Generate a listener
-php artisan make:listener DatabaseHealthNotificationListener --event=HkDevs\\CodeForgeStudio\\Events\\DatabaseHealthChecked
+    php artisan make:listener DatabaseHealthNotificationListener --event=HkDevs\\CodeForgeStudio\\Events\\DatabaseHealthChecked
 
-# Register in EventServiceProvider
-protected $listen = [
-    \HkDevs\CodeForgeStudio\Events\DatabaseHealthChecked::class => [
-        \App\Listeners\DatabaseHealthNotificationListener::class,
-    ],
-    \HkDevs\CodeForgeStudio\Events\QueryPerformanceLogged::class => [
-        \App\Listeners\SlowQueryAlertListener::class,
-    ],
-];</code></pre>
+    # Register in EventServiceProvider
+    protected $listen = [
+        \HkDevs\CodeForgeStudio\Events\DatabaseHealthChecked::class => [
+            \App\Listeners\DatabaseHealthNotificationListener::class,
+        ],
+        \HkDevs\CodeForgeStudio\Events\QueryPerformanceLogged::class => [
+            \App\Listeners\SlowQueryAlertListener::class,
+        ],
+    ];</code></pre>
                     </div>
                 </div>
 
@@ -143,39 +157,39 @@ protected $listen = [
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code>namespace App\Listeners;
 
-use HkDevs\CodeForgeStudio\Events\QueryPerformanceLogged;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
+    use HkDevs\CodeForgeStudio\Events\QueryPerformanceLogged;
+    use Illuminate\Support\Facades\Log;
+    use Illuminate\Support\Facades\Mail;
 
-class SlowQueryAlertListener
-{
-    public function handle(QueryPerformanceLogged $event)
+    class SlowQueryAlertListener
     {
-        $queryLog = $event->queryLog;
-        
-        // Log to custom channel
-        Log::channel('performance')->critical('Slow query detected', [
-            'query' => $queryLog->query,
-            'execution_time' => $queryLog->execution_time,
-            'connection' => $queryLog->connection,
-            'user_id' => auth()->id(),
-        ]);
-        
-        // Send alert for extremely slow queries
-        if ($queryLog->execution_time > 5000) { // 5 seconds
-            Mail::to('admin@yourapp.com')->send(
-                new SlowQueryAlert($queryLog)
-            );
-        }
-        
-        // Trigger external monitoring (e.g., Sentry, DataDog)
-        if (class_exists(\Sentry\Laravel\Facade::class)) {
-            \Sentry\captureMessage('Slow Query Alert', 'warning', [
-                'extra' => $queryLog->toArray()
+        public function handle(QueryPerformanceLogged $event)
+        {
+            $queryLog = $event->queryLog;
+
+            // Log to custom channel
+            Log::channel('performance')->critical('Slow query detected', [
+                'query' => $queryLog->query,
+                'execution_time' => $queryLog->execution_time,
+                'connection' => $queryLog->connection,
+                'user_id' => auth()->id(),
             ]);
+
+            // Send alert for extremely slow queries
+            if ($queryLog->execution_time > 5000) { // 5 seconds
+                Mail::to('admin@yourapp.com')->send(
+                    new SlowQueryAlert($queryLog)
+                );
+            }
+
+            // Trigger external monitoring (e.g., Sentry, DataDog)
+            if (class_exists(\Sentry\Laravel\Facade::class)) {
+                \Sentry\captureMessage('Slow Query Alert', 'warning', [
+                    'extra' => $queryLog->toArray()
+                ]);
+            }
         }
-    }
-}</code></pre>
+    }</code></pre>
                     </div>
                 </div>
             </div>
@@ -184,7 +198,8 @@ class SlowQueryAlertListener
         <!-- Service Extension -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-6">Service Extension & Override</h2>
-            <p class="text-gray-600 mb-6">Override or extend core services to modify plugin behavior without modifying the core package.</p>
+            <p class="text-gray-600 mb-6">Override or extend core services to modify plugin behavior without modifying the
+                core package.</p>
 
             <div class="space-y-6">
                 <!-- Service Override -->
@@ -192,39 +207,39 @@ class SlowQueryAlertListener
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Overriding Core Services</h3>
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code># Create custom service
-php artisan make:class Services/CustomDatabaseHealthService
+    php artisan make:class Services/CustomDatabaseHealthService
 
-namespace App\Services;
+    namespace App\Services;
 
-use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
-use Illuminate\Support\Facades\Cache;
+    use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
+    use Illuminate\Support\Facades\Cache;
 
-class CustomDatabaseHealthService extends DatabaseHealthService
-{
-    public function checkHealth(): array
+    class CustomDatabaseHealthService extends DatabaseHealthService
     {
-        // Call parent method
-        $health = parent::checkHealth();
-        
-        // Add custom checks
-        $health['custom_metrics'] = $this->getCustomMetrics();
-        $health['third_party_status'] = $this->checkThirdPartyServices();
-        
-        // Cache results longer for better performance
-        Cache::put('custom_health_check', $health, now()->addMinutes(10));
-        
-        return $health;
-    }
-    
-    protected function getCustomMetrics(): array
-    {
-        return [
-            'redis_status' => $this->checkRedisConnection(),
-            'queue_size' => $this->getQueueSize(),
-            'storage_usage' => $this->getStorageUsage(),
-        ];
-    }
-}</code></pre>
+        public function checkHealth(): array
+        {
+            // Call parent method
+            $health = parent::checkHealth();
+
+            // Add custom checks
+            $health['custom_metrics'] = $this->getCustomMetrics();
+            $health['third_party_status'] = $this->checkThirdPartyServices();
+
+            // Cache results longer for better performance
+            Cache::put('custom_health_check', $health, now()->addMinutes(10));
+
+            return $health;
+        }
+
+        protected function getCustomMetrics(): array
+        {
+            return [
+                'redis_status' => $this->checkRedisConnection(),
+                'queue_size' => $this->getQueueSize(),
+                'storage_usage' => $this->getStorageUsage(),
+            ];
+        }
+    }</code></pre>
                     </div>
                 </div>
 
@@ -233,31 +248,31 @@ class CustomDatabaseHealthService extends DatabaseHealthService
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Registering Custom Services</h3>
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code>// In AppServiceProvider
-public function register()
-{
-    // Complete service override
-    $this->app->bind(
-        \HkDevs\CodeForgeStudio\Services\DatabaseHealthService::class,
-        \App\Services\CustomDatabaseHealthService::class
-    );
-    
-    // Extend existing service
-    $this->app->extend(
-        \HkDevs\CodeForgeStudio\Services\CodeGenerationService::class,
-        function ($service, $app) {
-            // Add custom templates
-            $service->registerTemplate('api-controller', $app['path.stubs'] . '/api-controller.stub');
-            $service->registerTemplate('custom-model', $app['path.stubs'] . '/custom-model.stub');
-            
-            return $service;
-        }
-    );
-    
-    // Register additional services
-    $this->app->singleton('codeforge.custom.metrics', function ($app) {
-        return new CustomMetricsService($app['db'], $app['cache']);
-    });
-}</code></pre>
+    public function register()
+    {
+        // Complete service override
+        $this->app->bind(
+            \HkDevs\CodeForgeStudio\Services\DatabaseHealthService::class,
+            \App\Services\CustomDatabaseHealthService::class
+        );
+
+        // Extend existing service
+        $this->app->extend(
+            \HkDevs\CodeForgeStudio\Services\CodeGenerationService::class,
+            function ($service, $app) {
+                // Add custom templates
+                $service->registerTemplate('api-controller', $app['path.stubs'] . '/api-controller.stub');
+                $service->registerTemplate('custom-model', $app['path.stubs'] . '/custom-model.stub');
+
+                return $service;
+            }
+        );
+
+        // Register additional services
+        $this->app->singleton('codeforge.custom.metrics', function ($app) {
+            return new CustomMetricsService($app['db'], $app['cache']);
+        });
+    }</code></pre>
                     </div>
                 </div>
 
@@ -266,41 +281,41 @@ public function register()
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Implementing Service Interfaces</h3>
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code>// Custom data generation service
-namespace App\Services;
+    namespace App\Services;
 
-use HkDevs\CodeForgeStudio\Contracts\DataGenerationContract;
-use Illuminate\Database\Eloquent\Model;
+    use HkDevs\CodeForgeStudio\Contracts\DataGenerationContract;
+    use Illuminate\Database\Eloquent\Model;
 
-class CustomDataGenerationService implements DataGenerationContract
-{
-    public function generateForModel(Model $model, int $count = 10): array
+    class CustomDataGenerationService implements DataGenerationContract
     {
-        // Custom logic for specific models
-        if ($model instanceof \App\Models\User) {
-            return $this->generateUsers($count);
+        public function generateForModel(Model $model, int $count = 10): array
+        {
+            // Custom logic for specific models
+            if ($model instanceof \App\Models\User) {
+                return $this->generateUsers($count);
+            }
+
+            if ($model instanceof \App\Models\Product) {
+                return $this->generateProducts($count);
+            }
+
+            // Fallback to default generation
+            return $this->generateGenericData($model, $count);
         }
-        
-        if ($model instanceof \App\Models\Product) {
-            return $this->generateProducts($count);
+
+        protected function generateUsers(int $count): array
+        {
+            // Custom user generation with real-world data
+            return collect(range(1, $count))->map(function () {
+                return [
+                    'name' => $this->generateRealisticName(),
+                    'email' => $this->generateValidEmail(),
+                    'role' => $this->selectWeightedRole(),
+                    'created_at' => $this->generateSequentialDate(),
+                ];
+            })->toArray();
         }
-        
-        // Fallback to default generation
-        return $this->generateGenericData($model, $count);
-    }
-    
-    protected function generateUsers(int $count): array
-    {
-        // Custom user generation with real-world data
-        return collect(range(1, $count))->map(function () {
-            return [
-                'name' => $this->generateRealisticName(),
-                'email' => $this->generateValidEmail(),
-                'role' => $this->selectWeightedRole(),
-                'created_at' => $this->generateSequentialDate(),
-            ];
-        })->toArray();
-    }
-}</code></pre>
+    }</code></pre>
                     </div>
                 </div>
             </div>
@@ -309,7 +324,8 @@ class CustomDataGenerationService implements DataGenerationContract
         <!-- Custom Pages and Widgets -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-6">Custom Pages & Widgets</h2>
-            <p class="text-gray-600 mb-6">Extend the plugin's Filament interface with custom pages, widgets, and resources integrated into the CodeForge navigation.</p>
+            <p class="text-gray-600 mb-6">Extend the plugin's Filament interface with custom pages, widgets, and resources
+                integrated into the CodeForge navigation.</p>
 
             <div class="space-y-6">
                 <!-- Custom Page -->
@@ -317,47 +333,47 @@ class CustomDataGenerationService implements DataGenerationContract
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Creating Custom Pages</h3>
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code># Generate custom page
-php artisan make:filament-page CustomDatabaseAnalytics --resource=
+    php artisan make:filament-page CustomDatabaseAnalytics --resource=
 
-namespace App\Filament\Pages;
+    namespace App\Filament\Pages;
 
-use Filament\Pages\Page;
-use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
+    use Filament\Pages\Page;
+    use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
 
-class CustomDatabaseAnalytics extends Page
-{
-    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
-    protected static ?string $navigationGroup = 'Database Studio';
-    protected static ?int $navigationSort = 10;
-    protected static string $view = 'filament.pages.custom-database-analytics';
-    
-    public function mount(): void
+    class CustomDatabaseAnalytics extends Page
     {
-        // Check if user has CodeForge license
-        if (!app('codeforge.license')->isValid()) {
-            abort(403, 'Valid CodeForge license required');
+        protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
+        protected static ?string $navigationGroup = 'Database Studio';
+        protected static ?int $navigationSort = 10;
+        protected static string $view = 'filament.pages.custom-database-analytics';
+
+        public function mount(): void
+        {
+            // Check if user has CodeForge license
+            if (!app('codeforge.license')->isValid()) {
+                abort(403, 'Valid CodeForge license required');
+            }
         }
-    }
-    
-    protected function getHeaderWidgets(): array
-    {
-        return [
-            CustomDatabaseMetricsWidget::class,
-            CustomQueryAnalyticsWidget::class,
-        ];
-    }
-    
-    public function getAnalyticsData(): array
-    {
-        $healthService = app(DatabaseHealthService::class);
-        
-        return [
-            'performance_metrics' => $healthService->getPerformanceMetrics(),
-            'usage_statistics' => $this->getUsageStatistics(),
-            'custom_insights' => $this->generateCustomInsights(),
-        ];
-    }
-}</code></pre>
+
+        protected function getHeaderWidgets(): array
+        {
+            return [
+                CustomDatabaseMetricsWidget::class,
+                CustomQueryAnalyticsWidget::class,
+            ];
+        }
+
+        public function getAnalyticsData(): array
+        {
+            $healthService = app(DatabaseHealthService::class);
+
+            return [
+                'performance_metrics' => $healthService->getPerformanceMetrics(),
+                'usage_statistics' => $this->getUsageStatistics(),
+                'custom_insights' => $this->generateCustomInsights(),
+            ];
+        }
+    }</code></pre>
                     </div>
                 </div>
 
@@ -366,48 +382,48 @@ class CustomDatabaseAnalytics extends Page
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Creating Custom Widgets</h3>
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code># Generate custom widget
-php artisan make:filament-widget CustomQueryMetricsWidget --stats-overview
+    php artisan make:filament-widget CustomQueryMetricsWidget --stats-overview
 
-namespace App\Filament\Widgets;
+    namespace App\Filament\Widgets;
 
-use Filament\Widgets\StatsOverviewWidget as BaseWidget;
-use Filament\Widgets\StatsOverviewWidget\Stat;
-use HkDevs\CodeForgeStudio\Services\QueryPerformanceService;
+    use Filament\Widgets\StatsOverviewWidget as BaseWidget;
+    use Filament\Widgets\StatsOverviewWidget\Stat;
+    use HkDevs\CodeForgeStudio\Services\QueryPerformanceService;
 
-class CustomQueryMetricsWidget extends BaseWidget
-{
-    protected static ?int $sort = 1;
-    protected int | string | array $columnSpan = 'full';
-    
-    protected function getStats(): array
+    class CustomQueryMetricsWidget extends BaseWidget
     {
-        $queryService = app(QueryPerformanceService::class);
-        $metrics = $queryService->getMetricsForLast24Hours();
-        
-        return [
-            Stat::make('Average Query Time', $metrics['avg_time'] . 'ms')
-                ->description('Last 24 hours')
-                ->descriptionIcon('heroicon-m-clock')
-                ->color('primary')
-                ->chart($metrics['hourly_averages']),
-                
-            Stat::make('Slow Queries', $metrics['slow_queries'])
-                ->description('Queries > 1000ms')
-                ->descriptionIcon('heroicon-m-exclamation-triangle')
-                ->color($metrics['slow_queries'] > 10 ? 'danger' : 'success'),
-                
-            Stat::make('Total Queries', number_format($metrics['total_queries']))
-                ->description('24 hour volume')
-                ->descriptionIcon('heroicon-m-database')
-                ->color('info'),
-        ];
-    }
-    
-    public function getPollingInterval(): ?string
-    {
-        return '30s'; // Auto-refresh every 30 seconds
-    }
-}</code></pre>
+        protected static ?int $sort = 1;
+        protected int | string | array $columnSpan = 'full';
+
+        protected function getStats(): array
+        {
+            $queryService = app(QueryPerformanceService::class);
+            $metrics = $queryService->getMetricsForLast24Hours();
+
+            return [
+                Stat::make('Average Query Time', $metrics['avg_time'] . 'ms')
+                    ->description('Last 24 hours')
+                    ->descriptionIcon('heroicon-m-clock')
+                    ->color('primary')
+                    ->chart($metrics['hourly_averages']),
+
+                Stat::make('Slow Queries', $metrics['slow_queries'])
+                    ->description('Queries > 1000ms')
+                    ->descriptionIcon('heroicon-m-exclamation-triangle')
+                    ->color($metrics['slow_queries'] > 10 ? 'danger' : 'success'),
+
+                Stat::make('Total Queries', number_format($metrics['total_queries']))
+                    ->description('24 hour volume')
+                    ->descriptionIcon('heroicon-m-database')
+                    ->color('info'),
+            ];
+        }
+
+        public function getPollingInterval(): ?string
+        {
+            return '30s'; // Auto-refresh every 30 seconds
+        }
+    }</code></pre>
                     </div>
                 </div>
 
@@ -416,29 +432,29 @@ class CustomQueryMetricsWidget extends BaseWidget
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Navigation Integration</h3>
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code>// In your custom page or resource
-protected static ?string $navigationGroup = 'Database Studio'; // Groups with CodeForge
+    protected static ?string $navigationGroup = 'Database Studio'; // Groups with CodeForge
 
-// Or create a separate group that appears alongside CodeForge
-protected static ?string $navigationGroup = 'Custom Database Tools';
-protected static ?int $navigationSort = 2; // After CodeForge group
+    // Or create a separate group that appears alongside CodeForge
+    protected static ?string $navigationGroup = 'Custom Database Tools';
+    protected static ?int $navigationSort = 2; // After CodeForge group
 
-// Register custom pages in AdminPanelProvider
-use App\Filament\Pages\CustomDatabaseAnalytics;
-use App\Filament\Resources\CustomDatabaseLogResource;
+    // Register custom pages in AdminPanelProvider
+    use App\Filament\Pages\CustomDatabaseAnalytics;
+    use App\Filament\Resources\CustomDatabaseLogResource;
 
-public function panel(Panel $panel): Panel
-{
-    return $panel
-        ->pages([
-            CustomDatabaseAnalytics::class,
-        ])
-        ->resources([
-            CustomDatabaseLogResource::class,
-        ])
-        ->plugins([
-            CodeForgeStudioPlugin::make(),
-        ]);
-}</code></pre>
+    public function panel(Panel $panel): Panel
+    {
+        return $panel
+            ->pages([
+                CustomDatabaseAnalytics::class,
+            ])
+            ->resources([
+                CustomDatabaseLogResource::class,
+            ])
+            ->plugins([
+                CodeForgeStudioPlugin::make(),
+            ]);
+    }</code></pre>
                     </div>
                 </div>
             </div>
@@ -447,7 +463,8 @@ public function panel(Panel $panel): Panel
         <!-- Plugin Architecture -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-6">Creating Extension Plugins</h2>
-            <p class="text-gray-600 mb-6">Build companion plugins that extend CodeForge functionality while maintaining separation of concerns.</p>
+            <p class="text-gray-600 mb-6">Build companion plugins that extend CodeForge functionality while maintaining
+                separation of concerns.</p>
 
             <div class="space-y-6">
                 <!-- Plugin Structure -->
@@ -455,22 +472,22 @@ public function panel(Panel $panel): Panel
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Extension Plugin Structure</h3>
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code># Create extension package
-composer init # Create composer.json for your extension
+    composer init # Create composer.json for your extension
 
-# Package structure
-your-extension/
-├── src/
-│   ├── YourExtensionPlugin.php
-│   ├── YourExtensionServiceProvider.php
-│   ├── Pages/
-│   ├── Resources/
-│   ├── Services/
-│   └── Events/
-├── config/
-│   └── your-extension.php
-├── resources/
-│   └── views/
-└── composer.json</code></pre>
+    # Package structure
+    your-extension/
+    ├── src/
+    │   ├── YourExtensionPlugin.php
+    │   ├── YourExtensionServiceProvider.php
+    │   ├── Pages/
+    │   ├── Resources/
+    │   ├── Services/
+    │   └── Events/
+    ├── config/
+    │   └── your-extension.php
+    ├── resources/
+    │   └── views/
+    └── composer.json</code></pre>
                     </div>
                 </div>
 
@@ -480,57 +497,57 @@ your-extension/
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code>namespace YourCompany\CodeForgeExtension;
 
-use Filament\Contracts\Plugin;
-use Filament\Panel;
-use HkDevs\CodeForgeStudio\CodeForgeStudioPlugin;
+    use Filament\Contracts\Plugin;
+    use Filament\Panel;
+    use HkDevs\CodeForgeStudio\CodeForgeStudioPlugin;
 
-class CodeForgeAnalyticsExtension implements Plugin
-{
-    public function getId(): string
+    class CodeForgeAnalyticsExtension implements Plugin
     {
-        return 'codeforge-analytics-extension';
-    }
-    
-    public function register(Panel $panel): void
-    {
-        // Ensure CodeForge is installed
-        if (!$panel->getPlugin('codeforge-studio')) {
-            throw new \Exception('CodeForge Database Studio is required for this extension');
+        public function getId(): string
+        {
+            return 'codeforge-analytics-extension';
         }
-        
-        $panel
-            ->pages([
-                Pages\AdvancedAnalytics::class,
-                Pages\CustomReports::class,
-            ])
-            ->resources([
-                Resources\AnalyticsReportResource::class,
-            ]);
-    }
-    
-    public function boot(Panel $panel): void
-    {
-        // Register event listeners that hook into CodeForge events
-        app('events')->listen(
-            \HkDevs\CodeForgeStudio\Events\DatabaseHealthChecked::class,
-            Listeners\AnalyticsDataCollector::class
-        );
-        
-        // Extend CodeForge services
-        app()->extend(
-            \HkDevs\CodeForgeStudio\Services\DatabaseHealthService::class,
-            function ($service) {
-                $service->addAnalyticsCollector(new AnalyticsCollector());
-                return $service;
+
+        public function register(Panel $panel): void
+        {
+            // Ensure CodeForge is installed
+            if (!$panel->getPlugin('codeforge-studio')) {
+                throw new \Exception('CodeForge Database Studio is required for this extension');
             }
-        );
-    }
-    
-    public static function make(): static
-    {
-        return app(static::class);
-    }
-}</code></pre>
+
+            $panel
+                ->pages([
+                    Pages\AdvancedAnalytics::class,
+                    Pages\CustomReports::class,
+                ])
+                ->resources([
+                    Resources\AnalyticsReportResource::class,
+                ]);
+        }
+
+        public function boot(Panel $panel): void
+        {
+            // Register event listeners that hook into CodeForge events
+            app('events')->listen(
+                \HkDevs\CodeForgeStudio\Events\DatabaseHealthChecked::class,
+                Listeners\AnalyticsDataCollector::class
+            );
+
+            // Extend CodeForge services
+            app()->extend(
+                \HkDevs\CodeForgeStudio\Services\DatabaseHealthService::class,
+                function ($service) {
+                    $service->addAnalyticsCollector(new AnalyticsCollector());
+                    return $service;
+                }
+            );
+        }
+
+        public static function make(): static
+        {
+            return app(static::class);
+        }
+    }</code></pre>
                     </div>
                 </div>
 
@@ -540,58 +557,58 @@ class CodeForgeAnalyticsExtension implements Plugin
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code>namespace YourCompany\CodeForgeExtension;
 
-use Illuminate\Support\ServiceProvider;
-use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
+    use Illuminate\Support\ServiceProvider;
+    use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
 
-class CodeForgeExtensionServiceProvider extends ServiceProvider
-{
-    public function register()
+    class CodeForgeExtensionServiceProvider extends ServiceProvider
     {
-        // Register extension config
-        $this->mergeConfigFrom(
-            __DIR__.'/../config/codeforge-extension.php',
-            'codeforge-extension'
-        );
-        
-        // Register extension services
-        $this->app->singleton(AnalyticsService::class);
-        $this->app->singleton(CustomReportService::class);
-    }
-    
-    public function boot()
-    {
-        // Publish extension config
-        $this->publishes([
-            __DIR__.'/../config/codeforge-extension.php' => config_path('codeforge-extension.php'),
-        ], 'codeforge-extension-config');
-        
-        // Register custom commands
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                Commands\GenerateAnalyticsReport::class,
-                Commands\ExportDatabaseMetrics::class,
-            ]);
+        public function register()
+        {
+            // Register extension config
+            $this->mergeConfigFrom(
+                __DIR__.'/../config/codeforge-extension.php',
+                'codeforge-extension'
+            );
+
+            // Register extension services
+            $this->app->singleton(AnalyticsService::class);
+            $this->app->singleton(CustomReportService::class);
         }
-        
-        // Hook into CodeForge events after it's loaded
-        $this->app->booted(function () {
-            if (class_exists(\HkDevs\CodeForgeStudio\CodeForgeStudioServiceProvider::class)) {
-                $this->registerCodeForgeIntegration();
+
+        public function boot()
+        {
+            // Publish extension config
+            $this->publishes([
+                __DIR__.'/../config/codeforge-extension.php' => config_path('codeforge-extension.php'),
+            ], 'codeforge-extension-config');
+
+            // Register custom commands
+            if ($this->app->runningInConsole()) {
+                $this->commands([
+                    Commands\GenerateAnalyticsReport::class,
+                    Commands\ExportDatabaseMetrics::class,
+                ]);
             }
-        });
-    }
-    
-    protected function registerCodeForgeIntegration()
-    {
-        // Extend existing services
-        $this->app->extend(DatabaseHealthService::class, function ($service) {
-            $service->addHealthCheck('analytics', function () {
-                return app(AnalyticsService::class)->getHealthStatus();
+
+            // Hook into CodeForge events after it's loaded
+            $this->app->booted(function () {
+                if (class_exists(\HkDevs\CodeForgeStudio\CodeForgeStudioServiceProvider::class)) {
+                    $this->registerCodeForgeIntegration();
+                }
             });
-            return $service;
-        });
-    }
-}</code></pre>
+        }
+
+        protected function registerCodeForgeIntegration()
+        {
+            // Extend existing services
+            $this->app->extend(DatabaseHealthService::class, function ($service) {
+                $service->addHealthCheck('analytics', function () {
+                    return app(AnalyticsService::class)->getHealthStatus();
+                });
+                return $service;
+            });
+        }
+    }</code></pre>
                     </div>
                 </div>
             </div>
@@ -609,37 +626,37 @@ class CodeForgeExtensionServiceProvider extends ServiceProvider
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code>namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
-use HkDevs\CodeForgeStudio\Services\CodeGenerationService;
+    use Illuminate\Console\Command;
+    use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
+    use HkDevs\CodeForgeStudio\Services\CodeGenerationService;
 
-class CustomDatabaseMaintenance extends Command
-{
-    protected $signature = 'codeforge:custom-maintenance {--report} {--optimize}';
-    protected $description = 'Custom database maintenance with CodeForge integration';
-    
-    public function handle()
+    class CustomDatabaseMaintenance extends Command
     {
-        $healthService = app(DatabaseHealthService::class);
-        $codeService = app(CodeGenerationService::class);
-        
-        $this->info('Starting custom maintenance...');
-        
-        // Run health check
-        $health = $healthService->checkHealth();
-        $this->table(['Metric', 'Status'], collect($health)->map(function ($value, $key) {
-            return [$key, is_bool($value) ? ($value ? 'OK' : 'FAIL') : $value];
-        }));
-        
-        if ($this->option('optimize')) {
-            $this->optimizeDatabase($healthService);
+        protected $signature = 'codeforge:custom-maintenance {--report} {--optimize}';
+        protected $description = 'Custom database maintenance with CodeForge integration';
+
+        public function handle()
+        {
+            $healthService = app(DatabaseHealthService::class);
+            $codeService = app(CodeGenerationService::class);
+
+            $this->info('Starting custom maintenance...');
+
+            // Run health check
+            $health = $healthService->checkHealth();
+            $this->table(['Metric', 'Status'], collect($health)->map(function ($value, $key) {
+                return [$key, is_bool($value) ? ($value ? 'OK' : 'FAIL') : $value];
+            }));
+
+            if ($this->option('optimize')) {
+                $this->optimizeDatabase($healthService);
+            }
+
+            if ($this->option('report')) {
+                $this->generateMaintenanceReport($healthService, $codeService);
+            }
         }
-        
-        if ($this->option('report')) {
-            $this->generateMaintenanceReport($healthService, $codeService);
-        }
-    }
-}</code></pre>
+    }</code></pre>
                     </div>
                 </div>
 
@@ -649,33 +666,33 @@ class CustomDatabaseMaintenance extends Command
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code>namespace App\Http\Middleware;
 
-use Closure;
-use HkDevs\CodeForgeStudio\Services\QueryPerformanceService;
+    use Closure;
+    use HkDevs\CodeForgeStudio\Services\QueryPerformanceService;
 
-class DatabasePerformanceMiddleware
-{
-    public function handle($request, Closure $next)
+    class DatabasePerformanceMiddleware
     {
-        $start = microtime(true);
-        
-        $response = $next($request);
-        
-        $executionTime = (microtime(true) - $start) * 1000;
-        
-        // Log request performance to CodeForge
-        if ($executionTime > 500) { // Log slow requests
-            app(QueryPerformanceService::class)->logRequestPerformance([
-                'url' => $request->fullUrl(),
-                'method' => $request->method(),
-                'execution_time' => $executionTime,
-                'user_id' => auth()->id(),
-                'ip_address' => $request->ip(),
-            ]);
+        public function handle($request, Closure $next)
+        {
+            $start = microtime(true);
+
+            $response = $next($request);
+
+            $executionTime = (microtime(true) - $start) * 1000;
+
+            // Log request performance to CodeForge
+            if ($executionTime > 500) { // Log slow requests
+                app(QueryPerformanceService::class)->logRequestPerformance([
+                    'url' => $request->fullUrl(),
+                    'method' => $request->method(),
+                    'execution_time' => $executionTime,
+                    'user_id' => auth()->id(),
+                    'ip_address' => $request->ip(),
+                ]);
+            }
+
+            return $response;
         }
-        
-        return $response;
-    }
-}</code></pre>
+    }</code></pre>
                     </div>
                 </div>
 
@@ -685,44 +702,44 @@ class DatabasePerformanceMiddleware
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code>namespace App\Jobs;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use HkDevs\CodeForgeStudio\Services\DataGenerationService;
+    use Illuminate\Bus\Queueable;
+    use Illuminate\Queue\SerializesModels;
+    use Illuminate\Queue\InteractsWithQueue;
+    use Illuminate\Contracts\Queue\ShouldQueue;
+    use HkDevs\CodeForgeStudio\Services\DataGenerationService;
 
-class GenerateTestDataJob implements ShouldQueue
-{
-    use InteractsWithQueue, Queueable, SerializesModels;
-    
-    public function __construct(
-        public string $modelClass,
-        public int $count,
-        public array $constraints = []
-    ) {}
-    
-    public function handle()
+    class GenerateTestDataJob implements ShouldQueue
     {
-        $dataService = app(DataGenerationService::class);
-        
-        // Use CodeForge's smart data generation
-        $data = $dataService->generateSmartData(
-            $this->modelClass,
-            $this->count,
-            $this->constraints
-        );
-        
-        // Create records in batches
-        collect($data)->chunk(100)->each(function ($chunk) {
-            $this->modelClass::insert($chunk->toArray());
-        });
-        
-        // Dispatch follow-up jobs if needed
-        if ($this->shouldGenerateRelatedData()) {
-            GenerateRelatedDataJob::dispatch($this->modelClass);
+        use InteractsWithQueue, Queueable, SerializesModels;
+
+        public function __construct(
+            public string $modelClass,
+            public int $count,
+            public array $constraints = []
+        ) {}
+
+        public function handle()
+        {
+            $dataService = app(DataGenerationService::class);
+
+            // Use CodeForge's smart data generation
+            $data = $dataService->generateSmartData(
+                $this->modelClass,
+                $this->count,
+                $this->constraints
+            );
+
+            // Create records in batches
+            collect($data)->chunk(100)->each(function ($chunk) {
+                $this->modelClass::insert($chunk->toArray());
+            });
+
+            // Dispatch follow-up jobs if needed
+            if ($this->shouldGenerateRelatedData()) {
+                GenerateRelatedDataJob::dispatch($this->modelClass);
+            }
         }
-    }
-}</code></pre>
+    }</code></pre>
                     </div>
                 </div>
             </div>
