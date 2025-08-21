@@ -259,7 +259,7 @@
                         <span class="px-2 py-1 bg-primary-100 text-primary-800 rounded-full">v1.0</span>
                     </div>
                     <div class="space-y-1">
-                        <p>&copy; 2024-2025 <a href="https://codeforge.hardikkanajariya.in"
+                        <p>&copy; {{ date('Y') }} <a href="https://codeforge.hardikkanajariya.in"
                                 class="text-primary-600 hover:text-primary-700">HkDevs</a></p>
                         <p>Commercial License</p>
                     </div>
