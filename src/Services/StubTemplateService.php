@@ -646,7 +646,10 @@ class {{ CLASS_NAME }} extends {{ EXTENDS }}
      */
     public function __invoke(Request $request)
     {
-        // TODO: Implement the invokable controller logic
+        return response()->json([
+            'message' => 'Success',
+            'data' => []
+        ]);
     }
 }
 STUB;
