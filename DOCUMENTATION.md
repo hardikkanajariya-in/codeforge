@@ -28,17 +28,15 @@ Before installing CodeForge Database Studio, ensure your system meets these requ
 - MySQL 5.7+, PostgreSQL 11+, SQLite 3.8+, or SQL Server 2017+
 - Composer 2.0+
 
-⚠️ **Important**: Manual installation is currently required as the package is not yet available via Composer/Packagist.
-
 ### Step 1: Download Plugin Files
 
-Download the plugin files from your purchase source or obtain them from the development repository.
+Download the plugin files from your purchase confirmation email.
 
-### Step 2: Manual Installation
+### Step 2: Installation
 
 Choose one of the following installation methods:
 
-**Method A: Direct Copy Installation**
+**Method A: Direct Installation**
 
 ```bash
 # Navigate to your Laravel project root
@@ -47,7 +45,7 @@ cd /path/to/your/laravel/project
 # Create vendor directory structure
 mkdir -p vendor/hkdevs
 
-# Copy the plugin files to the vendor directory
+# Extract the plugin files to the vendor directory
 cp -r /path/to/codeforge-database-studio vendor/hkdevs/
 
 # Windows PowerShell equivalent:

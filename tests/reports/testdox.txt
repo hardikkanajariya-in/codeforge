@@ -1,5 +1,20 @@
-Basic (HkDevs\CodeForgeStudio\Tests\Unit\Basic)
- [x] Basic assertion
- [x] Php version
- [x] String operations
+Code Forge Studio Service Provider (HkDevs\CodeForgeStudio\Tests\Unit\CodeForgeStudioServiceProvider)
+ [x] Service provider can be instantiated
+ [x] Config is merged correctly
+ [x] All services are registered as singletons
+ [x] Services can be resolved
+ [x] Migrations are loaded
+ [x] Views are loaded
+ [x] Routes are loaded
+ [x] Commands are registered in console
+ [x] Event listeners are registered
+ [x] Livewire components are registered
+ [x] Publishable assets are configured
+ [x] Package dependencies are available
+ [x] Configuration structure
+ [x] Service provider boots without errors
+ [x] Service provider registers without errors
+ [x] Widget classes exist
+ [x] Command classes exist
+ [x] Service classes exist
 

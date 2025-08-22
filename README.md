@@ -1,20 +1,18 @@
-# HkDevs CodeForge Database Studio (Alpha Prerelease)
+# HkDevs CodeForge Database Studio
 
 A comprehensive database management and code generation suite for Laravel applications using FilamentPHP. This plugin provides advanced database management capabilities including schema visualization, migration management, health monitoring, smart seeding, automated documentation, and intelligent code generation.
 
-**⚠️ Prerelease Notice**: This is an alpha prerelease version (v1.0.0-alpha.1) intended for early testing and feedback. Please report any issues to help us improve the plugin before the stable release.
-
 **Navigation**: The plugin automatically organizes features into logical navigation groups (Database Overview, Database Tools, Database Management, etc.) for optimal user experience.
 
-[![Prerelease](https://img.shields.io/badge/Version-1.0.0--alpha.1-orange.svg?style=flat-square)](https://codeforge.hardikkanajariya.in/codeforge-database-studio)
-[![Commercial License](https://img.shields.io/badge/License-Commercial-blue.svg?style=flat-square)](https://codeforge.hardikkanajariya.in/license)
+[![Stable Release](https://img.shields.io/badge/Version-1.0.0-green.svg?style=flat-square)](#)
+[![Commercial License](https://img.shields.io/badge/License-Commercial-blue.svg?style=flat-square)](#license)
 [![Professional Support](https://img.shields.io/badge/Support-Professional-green.svg?style=flat-square)](mailto:contact@hardikkanajariya.in)
 
 ## 💰 Purchase & Licensing
 
 **Commercial Plugin** - Choose the license that fits your needs:
 
-- **💳 Regular License** - $99.00
+- **💳 Single License** - $99.00
   - Use on one (1) project
   - Source code access and modification rights  
   - 6 months of updates and support
@@ -22,15 +20,11 @@ A comprehensive database management and code generation suite for Laravel applic
   - Installation and configuration guidance
 
 - **👑 Extended License** - $349.00  
-  - Use on one (1) project
+  - Use on unlimited projects
   - Source code access and modification rights
   - 12 months of updates and support
   - Priority email support
   - Extended customer support and consultation
-
-⚠️ **Note**: Commercial licensing will be available once the plugin is officially released. Currently in alpha/beta phase for testing and feedback.
-
-> **Future Availability**: Purchase links will be updated once the plugin is available on Anystack/CodeCanyon marketplaces.
 
 ## 🚀 Key Features
 
@@ -90,26 +84,21 @@ A comprehensive database management and code generation suite for Laravel applic
 
 ## 🛠️ Installation
 
-⚠️ **Manual Installation Required**: The composer package is not yet available on packagist. Please follow the manual installation steps below.
-
 ### 1. Download Plugin Files
 
-Download the plugin files from your purchase (CodeCanyon/Anystack) or clone from the repository if you have access.
+Download the plugin files from your purchase confirmation email after completing your order.
 
-### 2. Manual Installation
+### 2. Install via Composer
 
-**Option A: Copy to Laravel Project**
+**Option A: Extract to Vendor Directory**
 
 ```bash
 # Create the vendor directory structure
 mkdir -p vendor/hkdevs
 cd vendor/hkdevs
 
-# Copy or clone the plugin files
-cp -r /path/to/downloaded/codeforge-database-studio ./
-
-# Or clone from repository (if you have access)
-git clone https://github.com/hardik-kanajariya/codeforge-database-studio.git
+# Extract the downloaded plugin files
+unzip /path/to/downloaded/codeforge-database-studio.zip
 ```
 
 **Option B: Add Local Path to Composer**
@@ -125,7 +114,7 @@ Add the plugin as a local path dependency in your `composer.json`:
         }
     ],
     "require": {
-        "hkdevs/codeforge-database-studio": "@dev"
+        "hkdevs/codeforge-database-studio": "^1.0"
     }
 }
 ```

@@ -6,14 +6,12 @@ return [
     | License Configuration
     |--------------------------------------------------------------------------
     |
-    | Configure your Anystack license for CodeForge Database Studio.
-    | Get your license key from: https://anystack.sh/products/hkdevs-codeforge-database-studio
+    | Configure your license for CodeForge Database Studio.
     |
     */
     'license_key' => env('CODEFORGE_LICENSE_KEY'),
-    'fingerprint' => env('CODEFORGE_FINGERPRINT'),
     'license_validation' => [
-        'enabled' => env('CODEFORGE_LICENSE_VALIDATION', true),
+        'enabled' => env('CODEFORGE_LICENSE_VALIDATION', false),
         'cache_duration' => 3600, // 1 hour
         'grace_period' => 7, // Days to allow usage after license expiry
     ],

@@ -2,7 +2,7 @@
     "name": "CodeForge Database Studio",
     "slug": "hkdevs-codeforge-database-studio",
     "description": "A comprehensive database management suite for FilamentPHP with schema design, migration management, health monitoring, and automated resource generation.",
-    "version": "1.0.0-alpha.3",
+    "version": "1.0.0",
     "author": {
         "name": "HkDevs",
         "email": "contact@hardikkanajariya.in",
@@ -11,19 +11,14 @@
     "license": "commercial",
     "pricing": {
         "single": {
-            "price": 79.00,
-            "currency": "EUR",
-            "description": "Single Project License"
+            "price": 99.00,
+            "currency": "USD",
+            "description": "Single License"
         },
-        "multiple": {
-            "price": 129.00,
-            "currency": "EUR",
-            "description": "Multiple Project License"
-        },
-        "unlimited": {
-            "price": 199.00,
-            "currency": "EUR",
-            "description": "Unlimited License"
+        "extended": {
+            "price": 349.00,
+            "currency": "USD",
+            "description": "Extended License"
         }
     },
     "repository": {

@@ -36,29 +36,8 @@
             "providers": [
                 "HkDevs\\CodeForgeStudio\\CodeForgeStudioServiceProvider"
             ]
-        },
-        "anystack": {
-            "product_id": "9f9d2843-f44a-4d2a-ad42-c65ac7728bb1",
-            "license": "commercial",
-            "pricing_tiers": [
-                {
-                    "name": "single",
-                    "price": 79.00,
-                    "currency": "EUR"
-                },
-                {
-                    "name": "multiple",
-                    "price": 129.00,
-                    "currency": "EUR"
-                },
-                {
-                    "name": "unlimited",
-                    "price": 199.00,
-                    "currency": "EUR"
-                }
-            ]
         }
     },
-    "minimum-stability": "alpha",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
