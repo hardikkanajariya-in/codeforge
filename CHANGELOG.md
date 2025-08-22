@@ -5,7 +5,7 @@ All notable changes to the HkDevs CodeForge Database Studio plugin will be docum
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.0.0-alpha.2]
 
 ### 🐛 Bug Fixes
 - **Fixed Filament resource redirect issue**: Fixed bug where creating records in Filament resources redirected to non-existent random IDs instead of the actual created record

@@ -28,25 +28,76 @@ Before installing CodeForge Database Studio, ensure your system meets these requ
 - MySQL 5.7+, PostgreSQL 11+, SQLite 3.8+, or SQL Server 2017+
 - Composer 2.0+
 
-### Step 1: Purchase License
+⚠️ **Important**: Manual installation is currently required as the package is not yet available via Composer/Packagist.
 
-Purchase your license from CodeCanyon and download the plugin files.
+### Step 1: Download Plugin Files
 
-### Step 2: Install via Composer
+Download the plugin files from your purchase source or obtain them from the development repository.
+
+### Step 2: Manual Installation
+
+Choose one of the following installation methods:
+
+**Method A: Direct Copy Installation**
 
 ```bash
-# Extract the downloaded files to your project
-composer require hkdevs/codeforge-database-studio
+# Navigate to your Laravel project root
+cd /path/to/your/laravel/project
 
-# Publish and run migrations
-php artisan vendor:publish --tag="codeforge-migrations"
-php artisan migrate
+# Create vendor directory structure
+mkdir -p vendor/hkdevs
 
-# Publish configuration (optional)
-php artisan vendor:publish --tag="codeforge-config"
+# Copy the plugin files to the vendor directory
+cp -r /path/to/codeforge-database-studio vendor/hkdevs/
+
+# Windows PowerShell equivalent:
+# New-Item -ItemType Directory -Force -Path "vendor\hkdevs"
+# Copy-Item -Path "C:\path\to\codeforge-database-studio" -Destination "vendor\hkdevs\" -Recurse
 ```
 
-### Step 3: Register the Plugin
+**Method B: Local Composer Path (Recommended)**
+
+1. Place the plugin files in a `packages` directory in your project root:
+```bash
+mkdir packages
+cp -r /path/to/codeforge-database-studio packages/
+```
+
+2. Add the local repository to your `composer.json`:
+```json
+{
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./packages/codeforge-database-studio"
+        }
+    ],
+    "require": {
+        "hkdevs/codeforge-database-studio": "@dev"
+    }
+}
+```
+
+3. Install via Composer:
+```bash
+composer install
+```
+
+### Step 3: Publish Configuration and Run Migrations
+
+```bash
+# Publish the configuration file
+php artisan vendor:publish --tag="codeforge-database-studio-config" --force
+
+# Publish and run migrations
+php artisan vendor:publish --tag="codeforge-database-studio-migrations" --force
+php artisan migrate
+
+# Optional: Publish assets if needed
+php artisan vendor:publish --tag="codeforge-database-studio-assets" --force
+```
+
+### Step 4: Register the Plugin
 
 Add the plugin to your Filament panel provider:
 
@@ -66,13 +117,43 @@ public function panel(Panel $panel): Panel
 }
 ```
 
-### Step 4: Clear Cache
+### Step 5: Clear Cache and Verify
 
 ```bash
 php artisan config:clear
 php artisan cache:clear
 php artisan view:clear
+php artisan route:clear
 ```
+
+### Step 6: Verify Installation
+
+1. Navigate to your Filament admin panel
+2. Check that the following navigation groups appear:
+   - **Database Overview** - Main dashboard and statistics
+   - **Database Tools** - Migration manager and schema designer  
+   - **Database Management** - Health monitoring and seeding tools
+   - **Database Docs** - Documentation generator
+
+### Troubleshooting Installation
+
+If you encounter issues during installation:
+
+1. **Plugin not appearing**: Ensure the plugin is properly registered and cache is cleared
+2. **Migration errors**: Check database permissions and connection settings
+3. **File permissions**: Ensure proper file permissions for the vendor directory
+4. **Autoloader issues**: Run `composer dump-autoload` to refresh the autoloader
+
+### Future Composer Installation
+
+Once the package is published to Packagist, installation will be simplified to:
+
+```bash
+composer require hkdevs/codeforge-database-studio
+php artisan codeforge-database-studio:install
+```
+
+We'll update this documentation when Composer installation becomes available.
 
 ## 🎯 Getting Started
 

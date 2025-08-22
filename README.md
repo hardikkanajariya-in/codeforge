@@ -28,7 +28,9 @@ A comprehensive database management and code generation suite for Laravel applic
   - Priority email support
   - Extended customer support and consultation
 
-> **Note**: Update the Anystack URLs above with your actual product URLs once your Anystack listing is live.
+⚠️ **Note**: Commercial licensing will be available once the plugin is officially released. Currently in alpha/beta phase for testing and feedback.
+
+> **Future Availability**: Purchase links will be updated once the plugin is available on Anystack/CodeCanyon marketplaces.
 
 ## 🚀 Key Features
 
@@ -88,63 +90,65 @@ A comprehensive database management and code generation suite for Laravel applic
 
 ## 🛠️ Installation
 
-### 1. Purchase License
+⚠️ **Manual Installation Required**: The composer package is not yet available on packagist. Please follow the manual installation steps below.
 
-First, purchase a license from Anystack:
-- [Regular License ($99)](https://anystack.sh/products/hkdevs-codeforge-database-studio/regular)
-- [Extended License ($349)](https://anystack.sh/products/hkdevs-codeforge-database-studio/extended)
+### 1. Download Plugin Files
 
-### 2. Add Private Repository
+Download the plugin files from your purchase (CodeCanyon/Anystack) or clone from the repository if you have access.
 
-Add the Anystack private repository to your `composer.json`:
+### 2. Manual Installation
+
+**Option A: Copy to Laravel Project**
+
+```bash
+# Create the vendor directory structure
+mkdir -p vendor/hkdevs
+cd vendor/hkdevs
+
+# Copy or clone the plugin files
+cp -r /path/to/downloaded/codeforge-database-studio ./
+
+# Or clone from repository (if you have access)
+git clone https://github.com/hardik-kanajariya/codeforge-database-studio.git
+```
+
+**Option B: Add Local Path to Composer**
+
+Add the plugin as a local path dependency in your `composer.json`:
 
 ```json
 {
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://9f9d2843-f44a-4d2a-ad42-c65ac7728bb1.composer.sh"
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./packages/codeforge-database-studio"
+        }
+    ],
+    "require": {
+        "hkdevs/codeforge-database-studio": "@dev"
     }
-  ]
 }
 ```
 
-### 3. Install via Composer
+Then run:
+```bash
+composer install
+```
+
+### 3. Publish Configuration and Assets
 
 ```bash
-composer require hkdevs/codeforge-database-studio
+# Publish configuration file
+php artisan vendor:publish --tag="codeforge-database-studio-config"
+
+# Publish migrations
+php artisan vendor:publish --tag="codeforge-database-studio-migrations"
+
+# Run migrations
+php artisan migrate
 ```
 
-When prompted for authentication:
-- **Username**: Your email address (used for purchase)
-- **Password**: Your license key (provided after purchase)
-
-Example:
-```
-Loading composer repositories with package information
-Authentication required (9f9d2843-f44a-4d2a-ad42-c65ac7728bb1.composer.sh):
-Username: your-email@example.com
-Password: 8c21df8f-6273-4932-b4ba-8bcc723ef500
-```
-
-### 4. Run Installation Command
-
-```bash
-php artisan codeforge-database-studio:install
-```
-
-This command will:
-- Publish the configuration file
-- Run plugin migrations
-- Set up initial plugin data
-
-Use `--force` flag to overwrite existing configuration:
-
-```bash
-php artisan codeforge-database-studio:install --force
-```
-
-### 5. Register the Plugin
+### 4. Register the Plugin
 
 Add the plugin to your Filament panel provider:
 
@@ -163,18 +167,38 @@ public function panel(Panel $panel): Panel
 }
 ```
 
----
-
-## 🧪 Alpha Testing (Free Access)
-
-**For Alpha Testing Only** - Use this temporary access for testing purposes:
+### 5. Clear Cache and Optimize
 
 ```bash
-# Add to composer.json temporarily
-composer require hkdevs/codeforge-database-studio:1.0.0-alpha.2 --with-prereleases
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
 ```
 
-⚠️ **Note**: Alpha access is temporary and will be removed once stable release is available.
+### 6. Verify Installation
+
+Visit your Filament admin panel and verify that the CodeForge Database Studio navigation groups appear:
+- Database Overview
+- Database Tools  
+- Database Management
+- Documentation
+
+---
+
+## 🚀 Future Composer Installation
+
+Once the package is available on Packagist, you'll be able to install via:
+
+```bash
+composer require hkdevs/codeforge-database-studio
+```
+
+We'll update this documentation when Composer installation becomes available.
+
+---
+
+## 🧪 Development Setup (For Contributors)
 
 ### 4. Configure Features (Optional)
 
