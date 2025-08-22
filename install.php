@@ -28,9 +28,8 @@ class CodeForgeInstaller
             $this->createConfig();
             $this->clearCache();
             $this->success[] = "CodeForge Database Studio installed successfully!";
-            
+
             return $this->getInstallationSummary();
-            
         } catch (Exception $e) {
             $this->errors[] = "Installation failed: " . $e->getMessage();
             return $this->getInstallationSummary();
@@ -130,9 +129,9 @@ class CodeForgeInstaller
 if (basename($_SERVER['PHP_SELF']) === 'install.php') {
     $installer = new CodeForgeInstaller();
     $result = $installer->install();
-    
+
     echo "<h1>CodeForge Database Studio Installation</h1>";
-    
+
     if ($result['success']) {
         echo "<div style='color: green; background: #d4edda; padding: 15px; border-radius: 5px; margin: 10px 0;'>";
         echo "<h3>✅ Installation Successful!</h3>";
@@ -140,12 +139,12 @@ if (basename($_SERVER['PHP_SELF']) === 'install.php') {
         echo "<div style='color: red; background: #f8d7da; padding: 15px; border-radius: 5px; margin: 10px 0;'>";
         echo "<h3>❌ Installation Failed</h3>";
     }
-    
+
     foreach ($result['messages'] as $message) {
         echo "<p>• $message</p>";
     }
     echo "</div>";
-    
+
     if ($result['success']) {
         echo "<div style='background: #cce5ff; padding: 15px; border-radius: 5px; margin: 10px 0;'>";
         echo "<h3>📋 Next Steps:</h3>";
