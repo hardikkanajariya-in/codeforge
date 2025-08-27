@@ -1,30 +1,17 @@
-# HkDevs CodeForge Database Studio
+# CodeForge Database Studio
 
 A comprehensive database management and code generation suite for Laravel applications using FilamentPHP. This plugin provides advanced database management capabilities including schema visualization, migration management, health monitoring, smart seeding, automated documentation, and intelligent code generation.
 
 **Navigation**: The plugin automatically organizes features into logical navigation groups (Database Overview, Database Tools, Database Management, etc.) for optimal user experience.
 
 [![Stable Release](https://img.shields.io/badge/Version-1.0.0-green.svg?style=flat-square)](#)
-[![Commercial License](https://img.shields.io/badge/License-Commercial-blue.svg?style=flat-square)](#license)
-[![Professional Support](https://img.shields.io/badge/Support-Professional-green.svg?style=flat-square)](mailto:contact@hardikkanajariya.in)
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](#license)
+[![Laravel](https://img.shields.io/badge/Laravel-10+-red.svg?style=flat-square)](https://laravel.com)
+[![FilamentPHP](https://img.shields.io/badge/FilamentPHP-3.x-yellow.svg?style=flat-square)](https://filamentphp.com)
 
-## 💰 Purchase & Licensing
+## ✨ Features Overview
 
-**Commercial Plugin** - Choose the license that fits your needs:
-
-- **💳 Single License** - $99.00
-  - Use on one (1) project
-  - Source code access and modification rights  
-  - 6 months of updates and support
-  - Standard email support
-  - Installation and configuration guidance
-
-- **👑 Extended License** - $349.00  
-  - Use on unlimited projects
-  - Source code access and modification rights
-  - 12 months of updates and support
-  - Priority email support
-  - Extended customer support and consultation
+This plugin provides a complete database management solution with the following key capabilities:
 
 ## 🚀 Key Features
 
@@ -84,47 +71,15 @@ A comprehensive database management and code generation suite for Laravel applic
 
 ## 🛠️ Installation
 
-### 1. Download Plugin Files
+### 1. Install via Composer
 
-Download the plugin files from your purchase confirmation email after completing your order.
-
-### 2. Install via Composer
-
-**Option A: Extract to Vendor Directory**
+Add the plugin to your Laravel project:
 
 ```bash
-# Create the vendor directory structure
-mkdir -p vendor/hkdevs
-cd vendor/hkdevs
-
-# Extract the downloaded plugin files
-unzip /path/to/downloaded/codeforge-database-studio.zip
+composer require hkdevs/codeforge-database-studio
 ```
 
-**Option B: Add Local Path to Composer**
-
-Add the plugin as a local path dependency in your `composer.json`:
-
-```json
-{
-    "repositories": [
-        {
-            "type": "path",
-            "url": "./packages/codeforge-database-studio"
-        }
-    ],
-    "require": {
-        "hkdevs/codeforge-database-studio": "^1.0"
-    }
-}
-```
-
-Then run:
-```bash
-composer install
-```
-
-### 3. Publish Configuration and Assets
+### 2. Publish Configuration and Assets
 
 ```bash
 # Publish configuration file
@@ -955,23 +910,23 @@ LOG_LEVEL=debug
 ### Getting Support
 
 1. **Documentation**: Check `/docs` route in your application for detailed documentation
-2. **Community Support**: Join our community forum for peer assistance
-3. **Professional Support**: Contact [contact@hardikkanajariya.in](mailto:contact@hardikkanajariya.in) for priority assistance
-4. **Bug Reports**: Submit issues through our support portal with detailed reproduction steps
+2. **GitHub Issues**: Submit issues through GitHub for bug reports and feature requests
+3. **Community Support**: Join our community discussions for peer assistance
+4. **Contributing**: We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
 
 ## 📝 License
 
-This plugin is a commercial product licensed under the HkDevs Commercial License. Usage requires a valid license purchased from [HkDevs](https://codeforge.hardikkanajariya.in). See [License Terms](https://codeforge.hardikkanajariya.in/license) for complete details.
+This plugin is released under the MIT License. See [LICENSE](LICENSE) file for complete details.
 
 ### License Features
+- **Open Source**: Free to use and modify
 - **Production Use**: Licensed for production environments
-- **Multiple Projects**: Use across multiple projects with appropriate license tier
-- **Updates & Support**: Includes 12 months of updates and support
 - **Source Code Access**: Full source code provided for customization
+- **Community Support**: Community-driven support and contributions
 
 ## 👥 Credits
 
-- **Development**: [HkDevs](https://codeforge.hardikkanajariya.in) - Professional Laravel Developer
+- **Development**: HkDevs - Professional Laravel Developer
 - **Framework**: Built on [FilamentPHP](https://filamentphp.com) - The elegant admin panel framework
 - **Testing**: Comprehensive test coverage with PHPUnit
 - **Quality Assurance**: Code review and quality assurance by senior developers
@@ -1013,6 +968,6 @@ This plugin is a commercial product licensed under the HkDevs Commercial License
 
 ---
 
-**Professional Database Management Plugin by HkDevs - Elevate Your Laravel Development Experience**
+**Professional Database Management Plugin for Laravel - Enhance Your Development Experience**
 
-*For technical support, feature requests, or partnership inquiries, contact us at [contact@hardikkanajariya.in](mailto:contact@hardikkanajariya.in)*
+*For technical support and feature requests, please create an issue on GitHub*

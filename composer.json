@@ -1,12 +1,12 @@
 {
     "name": "hkdevs/codeforge-database-studio",
-    "description": "Premium Database Schema Manager Plugin for FilamentPHP",
+    "description": "Comprehensive Database Management and Code Generation Suite for FilamentPHP",
     "type": "library",
-    "license": "proprietary",
+    "license": "MIT",
     "authors": [
         {
             "name": "HkDevs",
-            "email": "contact@hardikkanajariya.in"
+            "email": "support@example.com"
         }
     ],
     "require": {

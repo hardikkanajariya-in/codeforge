@@ -2,13 +2,12 @@
 
 ## 🚀 Quick Installation (Recommended)
 
-### Method 1: Automated Installation
-1. Upload the plugin files to your Laravel project
-2. Run the automated installer:
+### Method 1: Composer Installation
+1. Install via Composer:
    ```bash
-   php install.php
+   composer require hkdevs/codeforge-database-studio
    ```
-3. Add the plugin to your Filament panel:
+2. Add the plugin to your Filament panel:
    ```php
    // app/Providers/Filament/AdminPanelProvider.php
    use HkDevs\CodeForgeStudio\CodeForgeStudioPlugin;
@@ -60,6 +59,6 @@ chmod -R 755 storage/ bootstrap/cache/
 ```
 
 ## 📞 Support
-- **Email:** contact@hardikkanajariya.in
+- **GitHub Issues:** Submit bug reports and feature requests
 - **Documentation:** Comprehensive guides included
-- **Response Time:** Within 24 hours
+- **Community:** Join discussions on GitHub

@@ -132,8 +132,7 @@ class InstallCommandTest extends TestCase
         $command = new InstallCommand();
         $reflection = new \ReflectionClass($command);
 
-        // We need to access the private method to test the migration file names
-        // This is a bit of a hack but necessary for thorough testing
+        // Access private method using reflection for testing migration file names
         $expectedMigrationFiles = [
             "2024_01_01_000001_create_database_manager_logs_table.php",
             "2024_01_01_000002_create_migration_histories_table.php",

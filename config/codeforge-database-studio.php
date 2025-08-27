@@ -3,21 +3,6 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | License Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Configure your license for CodeForge Database Studio.
-    |
-    */
-    'license_key' => env('CODEFORGE_LICENSE_KEY'),
-    'license_validation' => [
-        'enabled' => env('CODEFORGE_LICENSE_VALIDATION', false),
-        'cache_duration' => 3600, // 1 hour
-        'grace_period' => 7, // Days to allow usage after license expiry
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Auto Registration
     |--------------------------------------------------------------------------
     |

@@ -1,29 +1,42 @@
-HkDevs CodeForge Database Studio - Commercial License Agreement
+MIT License
 
-Copyright (c) 2025-2026 HkDevs (https://codeforge.hardikkanajariya.in)
-All rights reserved.
+Copyright (c) 2025 HkDevs CodeForge Database Studio
 
-COMMERCIAL LICENSE AGREEMENT
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-This Commercial License Agreement ("Agreement") is entered into between HkDevs ("Licensor") and the purchaser of this software ("Licensee") regarding the use of HkDevs CodeForge Database Studio ("Software").
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-BY PURCHASING, DOWNLOADING, INSTALLING, OR USING THE SOFTWARE, LICENSEE AGREES TO BE BOUND BY THE TERMS OF THIS AGREEMENT.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
-1. GRANT OF LICENSE
+---
 
-Subject to the terms and conditions of this Agreement and upon payment of the applicable license fees, Licensor grants Licensee a non-exclusive, non-transferable license to:
+CodeCanyon Regular License
 
-a) Use the Software in accordance with the purchased license tier
+This plugin is licensed under the CodeCanyon Regular License.
+For more information about the license terms, please visit:
+https://codecanyon.net/licenses/terms/regular
 
-b) Modify the Software source code for internal use
+This license allows:
+- Use in a single end product
+- Modification of the source code for your own use
+- Use in commercial projects
 
-c) Deploy the Software in production environments
-
-d) Create derivative works based on the Software for internal use
-
-2. LICENSE TIERS
-
-2.1 REGULAR LICENSE ($99)
+This license does not allow:
+- Redistribution of the source code
+- Use in multiple end products without additional licenses
+- Sublicensing or resale of the plugin
 - Use on one (1) commercial project or personal project
 - Single end product for client or personal use
 - Source code access and modification rights

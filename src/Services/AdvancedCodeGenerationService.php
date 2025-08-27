@@ -1076,8 +1076,34 @@ class AdvancedCodeGenerationService
                 $code .= ", {$this->getModelNameFromConfig()} \$model";
             }
             $code .= "): bool\n    {\n";
-            $code .= "        // TODO: Implement authorization logic\n";
-            $code .= "        return false;\n";
+            
+            // Generate appropriate authorization logic based on method
+            switch ($method) {
+                case 'viewAny':
+                    $code .= "        return \$user->hasPermissionTo('view any {$this->getModelNameFromConfig()}');\n";
+                    break;
+                case 'view':
+                    $code .= "        return \$user->hasPermissionTo('view {$this->getModelNameFromConfig()}') || \$user->id === \$model->user_id;\n";
+                    break;
+                case 'create':
+                    $code .= "        return \$user->hasPermissionTo('create {$this->getModelNameFromConfig()}');\n";
+                    break;
+                case 'update':
+                    $code .= "        return \$user->hasPermissionTo('update {$this->getModelNameFromConfig()}') || \$user->id === \$model->user_id;\n";
+                    break;
+                case 'delete':
+                    $code .= "        return \$user->hasPermissionTo('delete {$this->getModelNameFromConfig()}') || \$user->id === \$model->user_id;\n";
+                    break;
+                case 'restore':
+                    $code .= "        return \$user->hasPermissionTo('restore {$this->getModelNameFromConfig()}');\n";
+                    break;
+                case 'forceDelete':
+                    $code .= "        return \$user->hasPermissionTo('force delete {$this->getModelNameFromConfig()}');\n";
+                    break;
+                default:
+                    $code .= "        return \$user->hasPermissionTo('{$method} {$this->getModelNameFromConfig()}');\n";
+            }
+            
             $code .= "    }\n";
         }
 
@@ -1128,29 +1154,60 @@ class AdvancedCodeGenerationService
 
     protected function buildControllerMethodsCode(array $methods): string
     {
+        $modelName = $this->getModelNameFromConfig();
+        $modelVariable = strtolower($modelName);
+        
         $code = '';
         foreach ($methods as $method) {
             switch ($method) {
                 case 'index':
-                    $code .= "\n    public function index()\n    {\n        // TODO: Implement index method\n    }\n";
+                    $code .= "\n    public function index()\n    {\n";
+                    $code .= "        \${$modelVariable}s = {$modelName}::paginate(15);\n";
+                    $code .= "        return view('{$modelVariable}s.index', compact('{$modelVariable}s'));\n";
+                    $code .= "    }\n";
                     break;
                 case 'show':
-                    $code .= "\n    public function show(\$id)\n    {\n        // TODO: Implement show method\n    }\n";
+                    $code .= "\n    public function show(\$id)\n    {\n";
+                    $code .= "        \${$modelVariable} = {$modelName}::findOrFail(\$id);\n";
+                    $code .= "        return view('{$modelVariable}s.show', compact('{$modelVariable}'));\n";
+                    $code .= "    }\n";
                     break;
                 case 'create':
-                    $code .= "\n    public function create()\n    {\n        // TODO: Implement create method\n    }\n";
+                    $code .= "\n    public function create()\n    {\n";
+                    $code .= "        return view('{$modelVariable}s.create');\n";
+                    $code .= "    }\n";
                     break;
                 case 'store':
-                    $code .= "\n    public function store(Request \$request)\n    {\n        // TODO: Implement store method\n    }\n";
+                    $code .= "\n    public function store(Request \$request)\n    {\n";
+                    $code .= "        \$validated = \$request->validate([\n";
+                    $code .= "            // Add validation rules here\n";
+                    $code .= "        ]);\n\n";
+                    $code .= "        \${$modelVariable} = {$modelName}::create(\$validated);\n";
+                    $code .= "        return redirect()->route('{$modelVariable}s.show', \${$modelVariable})->with('success', '{$modelName} created successfully.');\n";
+                    $code .= "    }\n";
                     break;
                 case 'edit':
-                    $code .= "\n    public function edit(\$id)\n    {\n        // TODO: Implement edit method\n    }\n";
+                    $code .= "\n    public function edit(\$id)\n    {\n";
+                    $code .= "        \${$modelVariable} = {$modelName}::findOrFail(\$id);\n";
+                    $code .= "        return view('{$modelVariable}s.edit', compact('{$modelVariable}'));\n";
+                    $code .= "    }\n";
                     break;
                 case 'update':
-                    $code .= "\n    public function update(Request \$request, \$id)\n    {\n        // TODO: Implement update method\n    }\n";
+                    $code .= "\n    public function update(Request \$request, \$id)\n    {\n";
+                    $code .= "        \${$modelVariable} = {$modelName}::findOrFail(\$id);\n";
+                    $code .= "        \$validated = \$request->validate([\n";
+                    $code .= "            // Add validation rules here\n";
+                    $code .= "        ]);\n\n";
+                    $code .= "        \${$modelVariable}->update(\$validated);\n";
+                    $code .= "        return redirect()->route('{$modelVariable}s.show', \${$modelVariable})->with('success', '{$modelName} updated successfully.');\n";
+                    $code .= "    }\n";
                     break;
                 case 'destroy':
-                    $code .= "\n    public function destroy(\$id)\n    {\n        // TODO: Implement destroy method\n    }\n";
+                    $code .= "\n    public function destroy(\$id)\n    {\n";
+                    $code .= "        \${$modelVariable} = {$modelName}::findOrFail(\$id);\n";
+                    $code .= "        \${$modelVariable}->delete();\n";
+                    $code .= "        return redirect()->route('{$modelVariable}s.index')->with('success', '{$modelName} deleted successfully.');\n";
+                    $code .= "    }\n";
                     break;
             }
         }
