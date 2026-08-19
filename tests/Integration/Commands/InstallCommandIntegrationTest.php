@@ -8,14 +8,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Schema;
-use Orchestra\Testbench\TestCase as BaseTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class InstallCommandIntegrationTest extends TestCase
 {
     use RefreshDatabase;
 
     protected string $tempConfigPath;
+
     protected string $tempMigrationPath;
 
     protected function setUp(): void
@@ -23,8 +23,8 @@ class InstallCommandIntegrationTest extends TestCase
         parent::setUp();
 
         // Create temporary directories for testing file operations
-        $this->tempConfigPath = sys_get_temp_dir() . '/codeforge-test-config';
-        $this->tempMigrationPath = sys_get_temp_dir() . '/codeforge-test-migrations';
+        $this->tempConfigPath = sys_get_temp_dir().'/codeforge-test-config';
+        $this->tempMigrationPath = sys_get_temp_dir().'/codeforge-test-migrations';
 
         // Clean up any existing temp directories
         if (File::exists($this->tempConfigPath)) {
@@ -52,7 +52,7 @@ class InstallCommandIntegrationTest extends TestCase
         parent::tearDown();
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_full_installation_process()
     {
         // Test the complete installation process
@@ -70,7 +70,7 @@ class InstallCommandIntegrationTest extends TestCase
         $this->assertStringContainsString('Running migrations...', $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_installation_with_force_flag()
     {
         // First installation
@@ -85,7 +85,7 @@ class InstallCommandIntegrationTest extends TestCase
         $this->assertStringContainsString('✅ Filament CodeForge Studio installed successfully!', $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_installation_idempotency()
     {
         // Run installation multiple times to ensure it's idempotent
@@ -98,7 +98,7 @@ class InstallCommandIntegrationTest extends TestCase
         $this->assertStringContainsString('✅ Filament CodeForge Studio installed successfully!', $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_file_detection()
     {
         // Run installation
@@ -119,7 +119,7 @@ class InstallCommandIntegrationTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_table_existence_checking()
     {
         // Run installation
@@ -137,7 +137,7 @@ class InstallCommandIntegrationTest extends TestCase
         $this->assertStringContainsString('✅ Filament CodeForge Studio installed successfully!', $secondOutput);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_error_handling_in_migration_process()
     {
         // This test ensures the command handles migration errors gracefully
@@ -151,7 +151,7 @@ class InstallCommandIntegrationTest extends TestCase
         $this->assertStringContainsString('✅ Filament CodeForge Studio installed successfully!', $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_configuration_publishing()
     {
         // Run installation
@@ -165,7 +165,7 @@ class InstallCommandIntegrationTest extends TestCase
         $this->assertStringContainsString('config/codeforge-database-studio.php', $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_publishing()
     {
         // Run installation
@@ -181,7 +181,7 @@ class InstallCommandIntegrationTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_installation_provides_clear_next_steps()
     {
         // Run installation
@@ -197,7 +197,7 @@ class InstallCommandIntegrationTest extends TestCase
         $this->assertStringContainsString("\n", $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_output_structure()
     {
         // Run installation
@@ -206,7 +206,7 @@ class InstallCommandIntegrationTest extends TestCase
 
         // Verify output has logical structure and flow
         $outputLines = explode("\n", $output);
-        $cleanLines = array_filter($outputLines, fn($line) => trim($line) !== '');
+        $cleanLines = array_filter($outputLines, fn ($line) => trim($line) !== '');
 
         // Should have multiple informational lines
         $this->assertGreaterThan(5, count($cleanLines));
@@ -232,7 +232,7 @@ class InstallCommandIntegrationTest extends TestCase
         $this->assertTrue($foundSuccess, 'Should contain success message');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_force_flag_behavior()
     {
         // Install without force flag first
@@ -252,7 +252,7 @@ class InstallCommandIntegrationTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_missing_tables_detection()
     {
         // This test verifies the command properly detects missing database tables
@@ -269,7 +269,7 @@ class InstallCommandIntegrationTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_step_by_step_migration_execution()
     {
         // Run installation
@@ -282,7 +282,7 @@ class InstallCommandIntegrationTest extends TestCase
         $this->assertStringContainsString('Running migrations...', $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_handles_edge_cases()
     {
         // Test multiple rapid installations

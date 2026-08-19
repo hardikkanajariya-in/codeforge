@@ -2,9 +2,9 @@
 
 namespace HkDevs\CodeForgeStudio\Resources\QueryPerformanceLogResource\Pages;
 
-use HkDevs\CodeForgeStudio\Resources\QueryPerformanceLogResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
+use HkDevs\CodeForgeStudio\Resources\QueryPerformanceLogResource;
 
 class ViewQueryPerformanceLog extends ViewRecord
 {

@@ -2,21 +2,22 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Unit;
 
+use Filament\Widgets\StatsOverviewWidget\Stat;
 use HkDevs\CodeForgeStudio\Models\DatabaseHealthMetric;
-use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
 use HkDevs\CodeForgeStudio\Models\MigrationHistory;
-use HkDevs\CodeForgeStudio\Widgets\DatabaseStatsWidget;
-use HkDevs\CodeForgeStudio\Widgets\DatabaseHealthWidget;
-use HkDevs\CodeForgeStudio\Widgets\DatabaseHealthMetricsWidget;
-use HkDevs\CodeForgeStudio\Widgets\MigrationStatsWidget;
+use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
 use HkDevs\CodeForgeStudio\Tests\TestCase;
+use HkDevs\CodeForgeStudio\Widgets\DatabaseHealthMetricsWidget;
+use HkDevs\CodeForgeStudio\Widgets\DatabaseHealthWidget;
+use HkDevs\CodeForgeStudio\Widgets\DatabaseStatsWidget;
+use HkDevs\CodeForgeStudio\Widgets\MigrationStatsWidget;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /**
  * Test Cases for Widget Functionality
- * 
+ *
  * Based on TC-WID-001 and TC-WID-002 from COMPREHENSIVE_TEST_CASES_FOR_USER.md
  * These tests verify widget display functionality, data accuracy, and responsive design.
  */
@@ -29,7 +30,7 @@ class WidgetFunctionalityTest extends TestCase
         parent::setUp();
 
         // Set up view paths for Filament widgets to avoid view finder issues
-        $this->app['view']->addNamespace('filament-widgets', __DIR__ . '/../../vendor/filament/widgets/resources/views');
+        $this->app['view']->addNamespace('filament-widgets', __DIR__.'/../../vendor/filament/widgets/resources/views');
 
         // Create test tables for widget testing
         $this->createTestTables();
@@ -39,7 +40,7 @@ class WidgetFunctionalityTest extends TestCase
 
     /**
      * TC-WID-001: Database Stats Widget
-     * 
+     *
      * Purpose: Test database statistics widget on dashboard
      * Steps:
      * 1. Add DatabaseStatsWidget to dashboard
@@ -50,7 +51,7 @@ class WidgetFunctionalityTest extends TestCase
     public function test_database_stats_widget_functionality(): void
     {
         // Step 1: Initialize widget
-        $widget = new DatabaseStatsWidget();
+        $widget = new DatabaseStatsWidget;
 
         // Step 2: Use reflection to access protected getStats method
         $reflection = new \ReflectionClass($widget);
@@ -63,7 +64,7 @@ class WidgetFunctionalityTest extends TestCase
 
         // Verify each stat has required properties
         foreach ($stats as $stat) {
-            $this->assertInstanceOf(\Filament\Widgets\StatsOverviewWidget\Stat::class, $stat);
+            $this->assertInstanceOf(Stat::class, $stat);
         }
 
         // Step 3: Test widget data accuracy
@@ -83,7 +84,7 @@ class WidgetFunctionalityTest extends TestCase
 
     /**
      * TC-WID-002: Recent Migrations Widget
-     * 
+     *
      * Purpose: Test recent migrations display widget
      * Steps:
      * 1. Run several migrations
@@ -97,7 +98,7 @@ class WidgetFunctionalityTest extends TestCase
         $this->createMigrationHistoryData();
 
         // Step 2: Initialize widget
-        $widget = new MigrationStatsWidget();
+        $widget = new MigrationStatsWidget;
 
         // Use reflection to access protected getStats method
         $reflection = new \ReflectionClass($widget);
@@ -110,7 +111,7 @@ class WidgetFunctionalityTest extends TestCase
 
         // Step 3: Verify widget shows recent migration history
         foreach ($stats as $stat) {
-            $this->assertInstanceOf(\Filament\Widgets\StatsOverviewWidget\Stat::class, $stat);
+            $this->assertInstanceOf(Stat::class, $stat);
         }
 
         // Step 4: Test sorting and data accuracy
@@ -127,7 +128,7 @@ class WidgetFunctionalityTest extends TestCase
 
     /**
      * Test Database Health Widget
-     * 
+     *
      * Purpose: Test database health monitoring widget
      */
     public function test_database_health_widget_functionality(): void
@@ -136,7 +137,7 @@ class WidgetFunctionalityTest extends TestCase
         $this->createHealthMetrics();
 
         // Initialize widget
-        $widget = new DatabaseHealthWidget();
+        $widget = new DatabaseHealthWidget;
         $viewData = $widget->getViewData();
 
         // Verify widget data structure
@@ -161,7 +162,7 @@ class WidgetFunctionalityTest extends TestCase
 
     /**
      * Test Database Health Metrics Widget
-     * 
+     *
      * Purpose: Test database health metrics overview widget
      */
     public function test_database_health_metrics_widget_functionality(): void
@@ -170,7 +171,7 @@ class WidgetFunctionalityTest extends TestCase
         $this->createPerformanceTestData();
 
         // Initialize widget
-        $widget = new DatabaseHealthMetricsWidget();
+        $widget = new DatabaseHealthMetricsWidget;
 
         // Use reflection to access protected getStats method
         $reflection = new \ReflectionClass($widget);
@@ -183,40 +184,40 @@ class WidgetFunctionalityTest extends TestCase
 
         // Verify each stat
         foreach ($stats as $stat) {
-            $this->assertInstanceOf(\Filament\Widgets\StatsOverviewWidget\Stat::class, $stat);
+            $this->assertInstanceOf(Stat::class, $stat);
         }
     }
 
     /**
      * Test Widget Responsive Design
-     * 
+     *
      * Purpose: Test widget responsiveness and layout
      */
     public function test_widget_responsive_design(): void
     {
         // Test widget column spans
-        $databaseStatsWidget = new DatabaseStatsWidget();
+        $databaseStatsWidget = new DatabaseStatsWidget;
         $databaseSpan = $databaseStatsWidget->getColumnSpan() ?? 1;
         $this->assertTrue($databaseSpan === 'full' || is_numeric($databaseSpan));
 
-        $healthWidget = new DatabaseHealthWidget();
+        $healthWidget = new DatabaseHealthWidget;
         $columnSpan = $healthWidget->getColumnSpan();
         $this->assertTrue($columnSpan === 'full' || is_numeric($columnSpan));
 
-        $healthMetricsWidget = new DatabaseHealthMetricsWidget();
+        $healthMetricsWidget = new DatabaseHealthMetricsWidget;
         $metricSpan = $healthMetricsWidget->getColumnSpan() ?? 1;
         $this->assertTrue($metricSpan === 'full' || is_numeric($metricSpan));
     }
 
     /**
      * Test Widget Data Refresh
-     * 
+     *
      * Purpose: Test widget real-time data updates
      */
     public function test_widget_data_refresh(): void
     {
         // Test initial state
-        $widget = new DatabaseStatsWidget();
+        $widget = new DatabaseStatsWidget;
 
         // Use reflection to access protected getStats method
         $reflection = new \ReflectionClass($widget);
@@ -228,7 +229,7 @@ class WidgetFunctionalityTest extends TestCase
         $this->addMoreTestData();
 
         // Test updated state
-        $newWidget = new DatabaseStatsWidget();
+        $newWidget = new DatabaseStatsWidget;
         $updatedStats = $getStatsMethod->invoke($newWidget);
 
         // Both should return valid arrays
@@ -240,13 +241,13 @@ class WidgetFunctionalityTest extends TestCase
 
     /**
      * Test Widget Error Handling
-     * 
+     *
      * Purpose: Test widget behavior when encountering errors
      */
     public function test_widget_error_handling(): void
     {
         // Test with invalid database state
-        $widget = new DatabaseStatsWidget();
+        $widget = new DatabaseStatsWidget;
 
         try {
             // Use reflection to access protected getStats method
@@ -261,7 +262,7 @@ class WidgetFunctionalityTest extends TestCase
             $this->assertGreaterThan(0, count($stats));
         } catch (\Exception $e) {
             // If an exception occurs, it should be handled gracefully
-            $this->fail('Widget should handle errors gracefully: ' . $e->getMessage());
+            $this->fail('Widget should handle errors gracefully: '.$e->getMessage());
         }
     }
 
@@ -329,7 +330,7 @@ class WidgetFunctionalityTest extends TestCase
         // Create some performance logs for widgets
         for ($i = 0; $i < 10; $i++) {
             QueryPerformanceLog::create([
-                'query' => "SELECT * FROM test_users WHERE id = ?",
+                'query' => 'SELECT * FROM test_users WHERE id = ?',
                 'query_hash' => md5("widget_test_query_{$i}"),
                 'bindings' => json_encode([$i + 1]),
                 'execution_time' => rand(10, 100),
@@ -394,7 +395,7 @@ class WidgetFunctionalityTest extends TestCase
         // Create performance logs for the last 24 hours
         for ($i = 0; $i < 20; $i++) {
             QueryPerformanceLog::create([
-                'query' => "SELECT * FROM test_posts WHERE user_id = ?",
+                'query' => 'SELECT * FROM test_posts WHERE user_id = ?',
                 'query_hash' => md5("perf_test_{$i}"),
                 'bindings' => json_encode([1]),
                 'execution_time' => rand(10, 200),
@@ -410,7 +411,7 @@ class WidgetFunctionalityTest extends TestCase
         // Add a few slow queries
         for ($i = 0; $i < 3; $i++) {
             QueryPerformanceLog::create([
-                'query' => "SELECT * FROM test_posts ORDER BY created_at DESC",
+                'query' => 'SELECT * FROM test_posts ORDER BY created_at DESC',
                 'query_hash' => md5("slow_query_{$i}"),
                 'bindings' => json_encode([]),
                 'execution_time' => rand(1000, 3000),
@@ -443,6 +444,7 @@ class WidgetFunctionalityTest extends TestCase
     protected function getTablesCount(): int
     {
         $tables = Schema::getAllTables();
+
         return count($tables);
     }
 

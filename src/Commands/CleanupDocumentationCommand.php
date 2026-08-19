@@ -2,17 +2,17 @@
 
 namespace HkDevs\CodeForgeStudio\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 use HkDevs\CodeForgeStudio\Models\DocumentationGeneration;
 use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * CleanupDocumentationCommand
- * 
+ *
  * Comprehensive documentation file and record cleanup utility for CodeForge Database Studio.
  * Maintains optimal performance by removing old, unused, or failed documentation generations.
- * 
+ *
  * Features:
  * - Age-based cleanup with configurable retention period
  * - Selective cleanup of failed generations only
@@ -21,34 +21,35 @@ use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
  * - Comprehensive file system and database record cleanup
  * - Detailed reporting of cleanup operations
  * - Safe removal of associated files and metadata
- * 
+ *
  * Use Cases:
  * - Regular maintenance to prevent storage bloat
  * - Cleaning up after failed documentation generation attempts
  * - Preparing for major documentation regeneration
  * - Maintaining optimal system performance
- * 
+ *
  * Safety Features:
  * - Confirmation prompts for destructive operations
  * - Dry-run mode for risk-free preview
  * - Detailed logging of all cleanup operations
  * - Preservation of recent and successful generations
- * 
- * @package HkDevs\CodeForgeStudio\Commands
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * # Remove documentation files older than 30 days
  * php artisan codeforge:cleanup-docs --days=30
- * 
+ *
  * # Preview cleanup without deleting files
  * php artisan codeforge:cleanup-docs --dry-run
- * 
+ *
  * # Clean only failed generations
  * php artisan codeforge:cleanup-docs --failed-only
- * 
+ *
  * # Force cleanup without confirmation
  * php artisan codeforge:cleanup-docs --force
  */
@@ -93,6 +94,7 @@ class CleanupDocumentationCommand extends Command
 
             if ($generations->isEmpty()) {
                 $this->info('No documentation files found for cleanup.');
+
                 return self::SUCCESS;
             }
 
@@ -114,11 +116,12 @@ class CleanupDocumentationCommand extends Command
             }
 
             $this->line('');
-            $this->line("Total: {$fileCount} files, " . $this->formatBytes($totalSize));
+            $this->line("Total: {$fileCount} files, ".$this->formatBytes($totalSize));
 
-            if (!$dryRun) {
-                if (!$force && !$this->confirm('Do you want to proceed with the cleanup?')) {
+            if (! $dryRun) {
+                if (! $force && ! $this->confirm('Do you want to proceed with the cleanup?')) {
                     $this->info('Cleanup cancelled.');
+
                     return self::SUCCESS;
                 }
 
@@ -141,7 +144,7 @@ class CleanupDocumentationCommand extends Command
                     }
                 }
 
-                $this->info("✅ Cleanup completed!");
+                $this->info('✅ Cleanup completed!');
                 $this->line("Deleted {$deletedFiles} files and {$deletedRecords} records");
             }
 
@@ -152,7 +155,7 @@ class CleanupDocumentationCommand extends Command
 
             return self::SUCCESS;
         } catch (\Exception $e) {
-            $this->error('Cleanup failed: ' . $e->getMessage());
+            $this->error('Cleanup failed: '.$e->getMessage());
 
             if ($this->option('verbose')) {
                 $this->line($e->getTraceAsString());
@@ -172,6 +175,7 @@ class CleanupDocumentationCommand extends Command
 
         if ($snapshots->isEmpty()) {
             $this->line('No old schema snapshots found for cleanup.');
+
             return;
         }
 
@@ -182,9 +186,10 @@ class CleanupDocumentationCommand extends Command
             $this->line("  📸 {$snapshot->name} - {$snapshot->captured_at->format('Y-m-d H:i:s')}{$baseline}");
         }
 
-        if (!$dryRun) {
-            if (!$force && !$this->confirm('Do you want to delete these schema snapshots?')) {
+        if (! $dryRun) {
+            if (! $force && ! $this->confirm('Do you want to delete these schema snapshots?')) {
                 $this->line('Schema snapshot cleanup cancelled.');
+
                 return;
             }
 
@@ -211,6 +216,6 @@ class CleanupDocumentationCommand extends Command
             $bytes /= 1024;
         }
 
-        return round($bytes, 2) . ' ' . $units[$i];
+        return round($bytes, 2).' '.$units[$i];
     }
 }

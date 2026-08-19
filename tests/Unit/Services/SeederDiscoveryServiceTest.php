@@ -4,15 +4,12 @@ namespace HkDevs\CodeForgeStudio\Tests\Unit\Services;
 
 use HkDevs\CodeForgeStudio\Services\SeederDiscoveryService;
 use HkDevs\CodeForgeStudio\Tests\TestCase;
-use Illuminate\Support\Facades\File;
 
 /**
  * SeederDiscoveryServiceTest
- * 
+ *
  * Unit tests for the SeederDiscoveryService class.
  * Tests seeder discovery, validation, and metadata extraction functionality.
- * 
- * @package HkDevs\CodeForgeStudio\Tests\Unit\Services
  */
 class SeederDiscoveryServiceTest extends TestCase
 {
@@ -21,7 +18,7 @@ class SeederDiscoveryServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service = new SeederDiscoveryService();
+        $this->service = new SeederDiscoveryService;
     }
 
     /** @test */
@@ -33,7 +30,7 @@ class SeederDiscoveryServiceTest extends TestCase
         $this->assertNotEmpty($seeders);
 
         // Check structure of first seeder
-        if (!empty($seeders)) {
+        if (! empty($seeders)) {
             $seeder = $seeders[0];
             $this->assertArrayHasKey('name', $seeder);
             $this->assertArrayHasKey('class_name', $seeder);
@@ -63,7 +60,7 @@ class SeederDiscoveryServiceTest extends TestCase
     {
         $seeders = $this->service->discoverSeeders();
 
-        if (!empty($seeders)) {
+        if (! empty($seeders)) {
             $seeder = $seeders[0];
             $className = $seeder['class_name'];
             $expectedPath = $seeder['file_path'];

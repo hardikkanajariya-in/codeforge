@@ -2,29 +2,30 @@
 
 namespace HkDevs\CodeForgeStudio\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 
 /**
  * Schema Version Model
- * 
+ *
  * Manages versioned schema designs for the CodeForge Database Studio.
  * Allows users to save, load, and manage different versions of their database schemas.
- * 
+ *
  * Features:
  * ✨ Version Management - Save multiple versions of schema designs
  * 🔄 Schema Persistence - Store complete schema data as JSON
  * 👤 User Association - Link schema versions to specific users
  * 🗄️ Connection Tracking - Track which database connection the schema belongs to
  * 📊 Metadata Storage - Store additional metadata about schema changes
- * 
- * @package HkDevs\CodeForgeStudio\Models
+ *
  * @author hardikkanajariya.in
+ *
  * @version 2.0.0
+ *
  * @since 1.0.0
  */
 class SchemaVersion extends Model
@@ -86,7 +87,7 @@ class SchemaVersion extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 
     /**
@@ -176,7 +177,7 @@ class SchemaVersion extends Model
             'tables' => count($schemaData['tables'] ?? []),
             'relationships' => count($schemaData['relationships'] ?? []),
             'columns' => collect($schemaData['tables'] ?? [])
-                ->sum(fn($table) => count($table['columns'] ?? [])),
+                ->sum(fn ($table) => count($table['columns'] ?? [])),
         ];
     }
 
@@ -271,12 +272,14 @@ class SchemaVersion extends Model
 
         // Add indexes
         foreach ($table['indexes'] ?? [] as $index) {
-            if ($index['type'] === 'primary') continue; // Primary key is handled by id() method
+            if ($index['type'] === 'primary') {
+                continue;
+            } // Primary key is handled by id() method
 
             if ($index['unique']) {
-                $code .= "            \$table->unique(['" . implode("', '", $index['columns']) . "']);\n";
+                $code .= "            \$table->unique(['".implode("', '", $index['columns'])."']);\n";
             } else {
-                $code .= "            \$table->index(['" . implode("', '", $index['columns']) . "']);\n";
+                $code .= "            \$table->index(['".implode("', '", $index['columns'])."']);\n";
             }
         }
 
@@ -309,21 +312,21 @@ class SchemaVersion extends Model
         $laravelType = $typeMap[$type] ?? 'string';
 
         if ($name === 'id' && ($column['autoIncrement'] ?? false)) {
-            $code = "            \$table->id()";
+            $code = '            $table->id()';
         } else {
             $code = "            \$table->{$laravelType}('{$name}')";
         }
 
         if ($column['nullable'] ?? false) {
-            $code .= "->nullable()";
+            $code .= '->nullable()';
         }
 
-        if (!empty($column['default'])) {
+        if (! empty($column['default'])) {
             $code .= "->default('{$column['default']}')";
         }
 
         if ($column['unique'] ?? false) {
-            $code .= "->unique()";
+            $code .= '->unique()';
         }
 
         $code .= ";\n";

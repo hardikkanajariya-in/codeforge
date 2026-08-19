@@ -2,23 +2,22 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Feature\HealthMonitoring;
 
+use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
 use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Artisan;
 
 /**
  * Health Monitoring Test Suite Runner
- * 
+ *
  * This class runs all health monitoring test suites and provides comprehensive
  * test coverage reporting for the Database Health Monitoring functionality.
- * 
+ *
  * Test Suites Included:
  * - ComprehensiveDatabaseHealthMonitoringTest (TC-HEALTH-001 through TC-HEALTH-007)
  * - HealthMonitoringCommandsTest (TC-CMD-003)
  * - HealthMonitoringWidgetsTest (TC-WID-001, TC-WID-002)
  * - HealthMonitoringPerformanceTest (TC-PERF-001, TC-PERF-002, TC-PERF-003)
- * 
- * @package HkDevs\CodeForgeStudio\Tests\Feature\HealthMonitoring
+ *
  * @author HkDevs (hardikkanajariya.in)
  */
 class HealthMonitoringTestSuite extends TestCase
@@ -27,7 +26,7 @@ class HealthMonitoringTestSuite extends TestCase
 
     /**
      * Test Suite Overview
-     * 
+     *
      * This test provides an overview of all health monitoring test coverage
      * and can be used to run a quick validation of the entire health monitoring system.
      */
@@ -74,7 +73,7 @@ class HealthMonitoringTestSuite extends TestCase
 
     /**
      * Quick Integration Test
-     * 
+     *
      * Runs a quick integration test to verify basic health monitoring functionality
      */
     public function test_health_monitoring_quick_integration_test(): void
@@ -86,9 +85,9 @@ class HealthMonitoringTestSuite extends TestCase
         );
 
         // Test basic service availability
-        $healthService = app(\HkDevs\CodeForgeStudio\Services\DatabaseHealthService::class);
+        $healthService = app(DatabaseHealthService::class);
         $this->assertInstanceOf(
-            \HkDevs\CodeForgeStudio\Services\DatabaseHealthService::class,
+            DatabaseHealthService::class,
             $healthService
         );
 
@@ -102,7 +101,7 @@ class HealthMonitoringTestSuite extends TestCase
 
     /**
      * Test Documentation Compliance
-     * 
+     *
      * Verifies that the implemented tests match the documentation requirements
      */
     public function test_documentation_compliance(): void
@@ -135,7 +134,7 @@ class HealthMonitoringTestSuite extends TestCase
 
         foreach ($testMethods as $method) {
             $this->assertTrue(
-                method_exists(\HkDevs\CodeForgeStudio\Tests\Feature\HealthMonitoring\ComprehensiveDatabaseHealthMonitoringTest::class, $method),
+                method_exists(ComprehensiveDatabaseHealthMonitoringTest::class, $method),
                 "Test method {$method} should exist"
             );
         }

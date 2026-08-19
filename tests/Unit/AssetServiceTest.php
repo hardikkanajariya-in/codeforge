@@ -8,10 +8,8 @@ use Illuminate\Support\Facades\File;
 
 /**
  * Asset Service Test
- * 
+ *
  * Tests the asset serving functionality with fallbacks
- * 
- * @package HkDevs\CodeForgeStudio\Tests\Unit
  */
 class AssetServiceTest extends TestCase
 {
@@ -62,8 +60,8 @@ class AssetServiceTest extends TestCase
      */
     public function test_package_asset_existence(): void
     {
-        $packageCssPath = __DIR__ . '/../../../resources/css/schema-designer-v2.css';
-        $packageJsPath = __DIR__ . '/../../../resources/js/schema-designer-v2.js';
+        $packageCssPath = __DIR__.'/../../../resources/css/schema-designer-v2.css';
+        $packageJsPath = __DIR__.'/../../../resources/js/schema-designer-v2.js';
 
         $this->assertTrue(File::exists($packageCssPath), 'Package CSS file should exist');
         $this->assertTrue(File::exists($packageJsPath), 'Package JS file should exist');

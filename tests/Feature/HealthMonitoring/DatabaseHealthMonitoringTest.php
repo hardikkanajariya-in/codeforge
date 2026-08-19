@@ -4,8 +4,9 @@ namespace HkDevs\CodeForgeStudio\Tests\Feature\HealthMonitoring;
 
 use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Test Case: TC-HEALTH-001 - Database Health Monitoring
@@ -20,7 +21,7 @@ class DatabaseHealthMonitoringTest extends TestCase
         parent::setUp();
 
         // Create health metrics table for testing
-        if (!Schema::hasTable('database_health_metrics')) {
+        if (! Schema::hasTable('database_health_metrics')) {
             Schema::create('database_health_metrics', function ($table) {
                 $table->id();
                 $table->string('metric_name');
@@ -33,7 +34,7 @@ class DatabaseHealthMonitoringTest extends TestCase
         }
 
         // Create query performance logs table
-        if (!Schema::hasTable('query_performance_logs')) {
+        if (! Schema::hasTable('query_performance_logs')) {
             Schema::create('query_performance_logs', function ($table) {
                 $table->id();
                 $table->text('query');
@@ -45,7 +46,7 @@ class DatabaseHealthMonitoringTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_database_connection_health()
     {
         // Test basic database connectivity
@@ -60,7 +61,7 @@ class DatabaseHealthMonitoringTest extends TestCase
                 'threshold' => 1,
                 'status' => 'healthy',
                 'measured_at' => now(),
-                'created_at' => now()
+                'created_at' => now(),
             ]);
 
             $metric = DB::table('database_health_metrics')
@@ -70,11 +71,11 @@ class DatabaseHealthMonitoringTest extends TestCase
             $this->assertNotNull($metric);
             $this->assertEquals('healthy', $metric->status);
         } catch (\Exception $e) {
-            $this->fail('Database connection test failed: ' . $e->getMessage());
+            $this->fail('Database connection test failed: '.$e->getMessage());
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_query_performance_monitoring()
     {
         // Create test table for performance testing
@@ -93,7 +94,7 @@ class DatabaseHealthMonitoringTest extends TestCase
                 'name' => "Test Record {$i}",
                 'description' => "Test description for record {$i}",
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
 
@@ -106,7 +107,7 @@ class DatabaseHealthMonitoringTest extends TestCase
             'execution_time' => $executionTime,
             'memory_usage' => memory_get_usage(),
             'connection_name' => 'testing',
-            'created_at' => now()
+            'created_at' => now(),
         ]);
 
         $performanceLog = DB::table('query_performance_logs')
@@ -118,7 +119,7 @@ class DatabaseHealthMonitoringTest extends TestCase
         $this->assertGreaterThan(0, $performanceLog->memory_usage);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_table_size_monitoring()
     {
         // Create test table
@@ -135,7 +136,7 @@ class DatabaseHealthMonitoringTest extends TestCase
             DB::table('size_test_table')->insert([
                 'large_content' => $largeContent,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
 
@@ -150,7 +151,7 @@ class DatabaseHealthMonitoringTest extends TestCase
             'threshold' => 1000,
             'status' => $recordCount > 1000 ? 'warning' : 'healthy',
             'measured_at' => now(),
-            'created_at' => now()
+            'created_at' => now(),
         ]);
 
         $sizeMetric = DB::table('database_health_metrics')
@@ -162,7 +163,7 @@ class DatabaseHealthMonitoringTest extends TestCase
         $this->assertEquals('healthy', $sizeMetric->status);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_slow_query_detection()
     {
         // Simulate a slow query
@@ -182,7 +183,7 @@ class DatabaseHealthMonitoringTest extends TestCase
                 'name' => "Record {$i}",
                 'value' => $i,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
 
@@ -201,7 +202,7 @@ class DatabaseHealthMonitoringTest extends TestCase
             'execution_time' => $executionTime,
             'memory_usage' => memory_get_usage(),
             'connection_name' => 'testing',
-            'created_at' => now()
+            'created_at' => now(),
         ]);
 
         // Test slow query detection
@@ -217,13 +218,13 @@ class DatabaseHealthMonitoringTest extends TestCase
             'threshold' => 5,
             'status' => $slowQueries > 5 ? 'warning' : 'healthy',
             'measured_at' => now(),
-            'created_at' => now()
+            'created_at' => now(),
         ]);
 
         $this->assertGreaterThanOrEqual(0, $slowQueries);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_database_space_monitoring()
     {
         // Test database space usage monitoring
@@ -241,7 +242,7 @@ class DatabaseHealthMonitoringTest extends TestCase
                 'threshold' => 1000, // 1GB threshold
                 'status' => 'healthy',
                 'measured_at' => now(),
-                'created_at' => now()
+                'created_at' => now(),
             ]);
 
             $spaceMetric = DB::table('database_health_metrics')
@@ -255,7 +256,7 @@ class DatabaseHealthMonitoringTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_connection_pool_monitoring()
     {
         // Test connection pool health
@@ -269,7 +270,7 @@ class DatabaseHealthMonitoringTest extends TestCase
             'threshold' => 100,
             'status' => 'healthy',
             'measured_at' => now(),
-            'created_at' => now()
+            'created_at' => now(),
         ]);
 
         DB::table('database_health_metrics')->insert([
@@ -278,7 +279,7 @@ class DatabaseHealthMonitoringTest extends TestCase
             'threshold' => 80,
             'status' => 'healthy',
             'measured_at' => now(),
-            'created_at' => now()
+            'created_at' => now(),
         ]);
 
         $connectionMetrics = DB::table('database_health_metrics')
@@ -288,7 +289,7 @@ class DatabaseHealthMonitoringTest extends TestCase
         $this->assertCount(2, $connectionMetrics);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_health_threshold_alerts()
     {
         // Test health threshold monitoring
@@ -312,7 +313,7 @@ class DatabaseHealthMonitoringTest extends TestCase
                 'threshold' => $metric['threshold'],
                 'status' => $status,
                 'measured_at' => now(),
-                'created_at' => now()
+                'created_at' => now(),
             ]);
 
             $savedMetric = DB::table('database_health_metrics')
@@ -323,7 +324,7 @@ class DatabaseHealthMonitoringTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_health_metrics_cleanup()
     {
         // Test old health metrics cleanup
@@ -335,7 +336,7 @@ class DatabaseHealthMonitoringTest extends TestCase
             'threshold' => 100,
             'status' => 'healthy',
             'measured_at' => now()->subDays(30),
-            'created_at' => now()->subDays(30)
+            'created_at' => now()->subDays(30),
         ]);
 
         // Insert recent metrics
@@ -345,7 +346,7 @@ class DatabaseHealthMonitoringTest extends TestCase
             'threshold' => 100,
             'status' => 'healthy',
             'measured_at' => now(),
-            'created_at' => now()
+            'created_at' => now(),
         ]);
 
         // Test cleanup query (simulate)
@@ -361,7 +362,7 @@ class DatabaseHealthMonitoringTest extends TestCase
         $this->assertEquals(1, $recentMetricsCount);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_health_dashboard_data()
     {
         // Insert various health metrics for dashboard
@@ -370,7 +371,7 @@ class DatabaseHealthMonitoringTest extends TestCase
             'query_per_second' => 45.5,
             'average_response_time' => 0.25,
             'error_rate_percent' => 0.1,
-            'cache_hit_ratio' => 85.7
+            'cache_hit_ratio' => 85.7,
         ];
 
         foreach ($dashboardMetrics as $name => $value) {
@@ -380,7 +381,7 @@ class DatabaseHealthMonitoringTest extends TestCase
                 'threshold' => $name === 'error_rate_percent' ? 1.0 : 100,
                 'status' => 'healthy',
                 'measured_at' => now(),
-                'created_at' => now()
+                'created_at' => now(),
             ]);
         }
 
@@ -397,7 +398,7 @@ class DatabaseHealthMonitoringTest extends TestCase
         $this->assertEquals(0.1, $errorRateMetric->metric_value);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_automated_health_checks()
     {
         // Simulate automated health check routine
@@ -414,7 +415,7 @@ class DatabaseHealthMonitoringTest extends TestCase
                 'threshold' => 1,
                 'status' => $result['status'],
                 'measured_at' => now(),
-                'created_at' => now()
+                'created_at' => now(),
             ]);
         }
 
@@ -432,6 +433,7 @@ class DatabaseHealthMonitoringTest extends TestCase
     {
         try {
             DB::select('SELECT 1');
+
             return ['value' => 1, 'status' => 'healthy'];
         } catch (\Exception $e) {
             return ['value' => 0, 'status' => 'critical'];
@@ -445,7 +447,7 @@ class DatabaseHealthMonitoringTest extends TestCase
             $allTablesExist = true;
 
             foreach ($tables as $table) {
-                if (!Schema::hasTable($table)) {
+                if (! Schema::hasTable($table)) {
                     $allTablesExist = false;
                     break;
                 }
@@ -469,7 +471,7 @@ class DatabaseHealthMonitoringTest extends TestCase
 
             return [
                 'value' => $executionTime,
-                'status' => $isHealthy ? 'healthy' : 'warning'
+                'status' => $isHealthy ? 'healthy' : 'warning',
             ];
         } catch (\Exception $e) {
             return ['value' => 999, 'status' => 'critical'];

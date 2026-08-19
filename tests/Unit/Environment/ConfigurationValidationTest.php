@@ -3,8 +3,9 @@
 namespace HkDevs\CodeForgeStudio\Tests\Unit\Environment;
 
 use HkDevs\CodeForgeStudio\Tests\TestCase;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Test Case: TC-ENV-004 - Configuration File Validation
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Artisan;
  */
 class ConfigurationValidationTest extends TestCase
 {
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_configuration_file_structure()
     {
         $config = config('codeforge-database-studio');
@@ -21,7 +22,7 @@ class ConfigurationValidationTest extends TestCase
         $this->assertNotEmpty($config, 'Configuration should not be empty');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_features_configuration()
     {
         $features = config('codeforge-database-studio.features');
@@ -33,7 +34,7 @@ class ConfigurationValidationTest extends TestCase
             'schema_designer',
             'migration_manager',
             'health_monitoring',
-            'smart_seeding'
+            'smart_seeding',
         ];
 
         foreach ($expectedFeatures as $feature) {
@@ -49,7 +50,7 @@ class ConfigurationValidationTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_navigation_configuration()
     {
         $navigation = config('codeforge-database-studio.navigation');
@@ -67,7 +68,7 @@ class ConfigurationValidationTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_database_configuration()
     {
         $connections = config('codeforge-database-studio.connections');
@@ -79,7 +80,7 @@ class ConfigurationValidationTest extends TestCase
         $this->assertIsArray($connections['allowed'], 'Allowed connections should be an array');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_logging_configuration()
     {
         $queryLogging = config('codeforge-database-studio.query_logging');
@@ -92,7 +93,7 @@ class ConfigurationValidationTest extends TestCase
         $this->assertIsBool($queryLogging['log_all_queries'], 'Log all queries should be a boolean');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_cache_configuration()
     {
         $schemaDesigner = config('codeforge-database-studio.schema_designer');
@@ -105,7 +106,7 @@ class ConfigurationValidationTest extends TestCase
         $this->assertGreaterThan(0, $schemaDesigner['auto_save_interval'], 'Auto save interval should be positive');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_security_configuration()
     {
         $security = config('codeforge-database-studio.security');
@@ -123,7 +124,7 @@ class ConfigurationValidationTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_configuration_modification()
     {
         // Test that configuration can be modified at runtime
@@ -140,7 +141,7 @@ class ConfigurationValidationTest extends TestCase
         Config::set('codeforge-database-studio.features.schema_designer', $originalValue);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_configuration_validation_for_required_keys()
     {
         $config = config('codeforge-database-studio');
@@ -156,7 +157,7 @@ class ConfigurationValidationTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_configuration_default_values()
     {
         // Test that default values are sensible
@@ -170,7 +171,7 @@ class ConfigurationValidationTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_configuration_environment_override()
     {
         // Test that configuration can be overridden by environment variables
@@ -187,7 +188,7 @@ class ConfigurationValidationTest extends TestCase
         putenv('CODEFORGE_SCHEMA_DESIGNER_ENABLED');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_configuration_caching()
     {
         // Test configuration caching behavior
@@ -206,7 +207,7 @@ class ConfigurationValidationTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_configuration_merge_behavior()
     {
         // Test that default configuration merges correctly with custom values
@@ -214,7 +215,7 @@ class ConfigurationValidationTest extends TestCase
             'features' => [
                 'schema_designer' => false,
                 'custom_feature' => true,
-            ]
+            ],
         ];
 
         // Use array_replace_recursive to properly override values while preserving structure
@@ -229,7 +230,7 @@ class ConfigurationValidationTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_configuration_type_validation()
     {
         $config = config('codeforge-database-studio');
@@ -239,13 +240,13 @@ class ConfigurationValidationTest extends TestCase
             foreach ($config['features'] as $feature => $value) {
                 $this->assertIsBool(
                     $value,
-                    "Feature '{$feature}' should be a boolean value, got " . gettype($value)
+                    "Feature '{$feature}' should be a boolean value, got ".gettype($value)
                 );
             }
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_configuration_completeness()
     {
         $config = config('codeforge-database-studio');

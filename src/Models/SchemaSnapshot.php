@@ -2,16 +2,16 @@
 
 namespace HkDevs\CodeForgeStudio\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * SchemaSnapshot
- * 
+ *
  * Eloquent model for capturing and managing comprehensive database schema
  * snapshots with versioning, relationships, and change tracking capabilities.
- * 
+ *
  * Key Features:
  * - Complete database schema capture with table structure and relationships
  * - Version management with baseline and incremental snapshot support
@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * - Hash-based change detection for efficient comparison
  * - Multi-connection support for complex database architectures
  * - Documentation generation integration with schema history
- * 
+ *
  * Database Fields:
  * - name: Snapshot identifier and descriptive name
  * - description: Snapshot purpose and context information
@@ -36,15 +36,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * - is_baseline: Baseline snapshot flag for versioning reference
  * - captured_at: Timestamp of schema capture
  * - captured_by: User attribution for audit trails
- * 
+ *
  * Relationships:
  * - DocumentationGeneration: HasMany for schema-based documentation
  * - Change tracking and comparison with other snapshots
  * - Version history for schema evolution analysis
- * 
- * @package HkDevs\CodeForgeStudio\Models
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class SchemaSnapshot extends Model
@@ -155,7 +156,7 @@ class SchemaSnapshot extends Model
             ->orderBy('captured_at', 'desc')
             ->first();
 
-        if (!$previous) {
+        if (! $previous) {
             return null;
         }
 

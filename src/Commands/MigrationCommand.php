@@ -5,15 +5,15 @@ namespace HkDevs\CodeForgeStudio\Commands;
 use HkDevs\CodeForgeStudio\Models\MigrationHistory;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * MigrationCommand
- * 
+ *
  * Enhanced database migration utility with comprehensive history logging and tracking for CodeForge Database Studio.
  * Extends Laravel's migration system with detailed operation logging and advanced management features.
- * 
+ *
  * Features:
  * - Comprehensive migration history logging with execution metrics
  * - Multiple migration operation modes (run, rollback, refresh, reset)
@@ -22,72 +22,74 @@ use Illuminate\Support\Facades\Auth;
  * - Detailed timing and performance metrics collection
  * - User attribution for multi-developer environments
  * - Error handling with detailed failure logging
- * 
+ *
  * Migration Operations:
  * - Standard Migration: Execute pending migrations with full logging
  * - Rollback: Reverse migrations with configurable step limits
  * - Refresh: Complete database reset and re-migration
  * - Reset: Full database reset to initial state
  * - Custom Path: Execute migrations from specific directories
- * 
+ *
  * History Tracking:
  * - Execution timing and performance metrics
  * - User attribution and environment tracking
  * - Success/failure status with detailed error logs
  * - Migration batch tracking and rollback points
  * - Database state snapshots for recovery
- * 
+ *
  * Advanced Features:
  * - Step-by-step migration control for safe deployments
  * - Custom migration path support for plugin architectures
  * - Detailed execution metrics for performance optimization
  * - Integration with CodeForge monitoring systems
  * - Automated backup creation before destructive operations
- * 
+ *
  * Safety Features:
  * - Confirmation prompts for destructive operations
  * - Backup recommendations for production environments
  * - Rollback point creation for safe recovery
  * - Error recovery with detailed diagnostics
  * - Database integrity validation
- * 
+ *
  * Monitoring Integration:
  * - Real-time execution progress tracking
  * - Performance metrics collection
  * - Historical execution analysis
  * - Failure pattern identification
  * - Automated alerting for critical failures
- * 
+ *
  * Team Development:
  * - Multi-user operation attribution
  * - Collaborative migration history
  * - Conflict detection and resolution
  * - Environment-specific migration tracking
- * 
- * @package HkDevs\CodeForgeStudio\Commands
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * # Execute pending migrations with logging
  * php artisan codeforge:migrate
- * 
+ *
  * # Rollback last 3 migrations
  * php artisan codeforge:migrate --rollback --step=3
- * 
+ *
  * # Refresh entire database
  * php artisan codeforge:migrate --refresh
- * 
+ *
  * # Execute migrations from custom path
  * php artisan codeforge:migrate --path=database/custom_migrations
- * 
+ *
  * # Reset database to initial state
  * php artisan codeforge:migrate --reset
  */
 class MigrationCommand extends Command
 {
     protected $signature = 'codeforge:migrate {--rollback : Rollback migrations} {--refresh : Refresh migrations} {--reset : Reset migrations} {--step= : Number of migrations to rollback} {--path= : Path to migration files}';
+
     protected $description = 'Run database migrations with history logging';
 
     public function handle()
@@ -108,7 +110,7 @@ class MigrationCommand extends Command
             $this->logMigrationHistory($action, $status, $executionTime);
 
             if ($status === 'success') {
-                $this->info("Migration {$action} completed successfully in " . round($executionTime, 2) . " seconds.");
+                $this->info("Migration {$action} completed successfully in ".round($executionTime, 2).' seconds.');
             } else {
                 $this->error("Migration {$action} failed.");
             }
@@ -119,7 +121,8 @@ class MigrationCommand extends Command
 
             $this->logMigrationHistory($action, 'failed', $executionTime, $e->getMessage());
 
-            $this->error("Migration {$action} failed: " . $e->getMessage());
+            $this->error("Migration {$action} failed: ".$e->getMessage());
+
             return 1;
         }
     }
@@ -181,7 +184,7 @@ class MigrationCommand extends Command
             }
 
             MigrationHistory::create([
-                'migration' => $action === 'migrate' ? 'batch_' . $batch : $action,
+                'migration' => $action === 'migrate' ? 'batch_'.$batch : $action,
                 'batch' => $batch,
                 'action' => $action,
                 'executed_by' => Auth::user()->name ?? 'System',
@@ -191,7 +194,7 @@ class MigrationCommand extends Command
                 'executed_at' => now(),
             ]);
         } catch (\Exception $e) {
-            $this->warn("Failed to log migration history: " . $e->getMessage());
+            $this->warn('Failed to log migration history: '.$e->getMessage());
         }
     }
 }

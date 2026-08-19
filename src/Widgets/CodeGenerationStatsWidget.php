@@ -2,6 +2,7 @@
 
 namespace HkDevs\CodeForgeStudio\Widgets;
 
+use Carbon\Carbon;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use HkDevs\CodeForgeStudio\Services\CodeGenerationService;
@@ -43,7 +44,8 @@ class CodeGenerationStatsWidget extends BaseWidget
             $history = $service->getGenerationHistory(1000);
 
             $recent = collect($history)->filter(function ($item) {
-                $createdAt = \Carbon\Carbon::parse($item['created_at']);
+                $createdAt = Carbon::parse($item['created_at']);
+
                 return $createdAt->isAfter(now()->subDays(7));
             })->count();
 

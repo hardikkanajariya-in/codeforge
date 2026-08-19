@@ -3,10 +3,10 @@
 namespace HkDevs\CodeForgeStudio\Resources\SchemaSnapshotResource\Pages;
 
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use HkDevs\CodeForgeStudio\Resources\SchemaSnapshotResource;
 use HkDevs\CodeForgeStudio\Services\SchemaDocumentationService;
-use Filament\Notifications\Notification;
 
 class ListSchemaSnapshots extends ListRecords
 {
@@ -25,7 +25,7 @@ class ListSchemaSnapshots extends ListRecords
                     try {
                         $service = app(SchemaDocumentationService::class);
                         $snapshot = $service->generateSchemaSnapshot(
-                            'Auto-generated snapshot ' . now()->format('Y-m-d H:i:s'),
+                            'Auto-generated snapshot '.now()->format('Y-m-d H:i:s'),
                             'Automatically generated schema snapshot'
                         );
 

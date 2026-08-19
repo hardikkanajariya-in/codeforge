@@ -2,31 +2,33 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Feature\VisualSchemaDesigner;
 
-use HkDevs\CodeForgeStudio\Tests\TestCase;
+use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
 use HkDevs\CodeForgeStudio\Pages\SchemaDesigner;
 use HkDevs\CodeForgeStudio\Services\SchemaDocumentationService;
-use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
+use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use Livewire\Livewire;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Comprehensive Visual Schema Designer Test Suite
- * 
+ *
  * This test class implements all test cases from the Comprehensive Test Cases Documentation
  * for Visual Schema Designer functionality, ensuring complete coverage of:
- * 
+ *
  * - TC-SCHEMA-001: Interactive Schema Visualization Interface
  * - TC-SCHEMA-002: Visual Relationship Mapping
  * - TC-SCHEMA-003: Schema Documentation Generation
  * - TC-SCHEMA-004: Migration & Documentation Export
  * - TC-SCHEMA-005: Documentation Export
- * 
- * @package HkDevs\CodeForgeStudio\Tests\Feature\VisualSchemaDesigner
+ *
  * @author HkDevs (hardikkanajariya.in)
+ *
  * @version 1.0.0
  */
 class ComprehensiveVisualSchemaDesignerTest extends TestCase
@@ -34,6 +36,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     private SchemaDocumentationService $documentationService;
+
     private array $testTablesCreated = [];
 
     protected function setUp(): void
@@ -65,7 +68,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
      * TC-SCHEMA-003: Schema Documentation Generation
      * Purpose: Test automatic generation of visual database diagrams
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_schema_documentation_generation()
     {
         // Step 1: Design complex schema with relationships
@@ -117,7 +120,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
      * TC-SCHEMA-004: Migration & Documentation Export
      * Purpose: Test generation of migration files and documentation from visual designs
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_and_documentation_export()
     {
         // Step 1: Create complete schema design with relationships
@@ -176,7 +179,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
      * TC-SCHEMA-005: Documentation Export
      * Purpose: Test schema documentation generation
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_documentation_export()
     {
         // Step 1: Create documented schema with comments
@@ -241,7 +244,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
     /**
      * Test schema designer page accessibility and performance
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_schema_designer_page_accessibility_and_performance()
     {
         $startTime = microtime(true);
@@ -272,7 +275,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
     /**
      * Test error handling in schema designer
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_schema_designer_error_handling()
     {
         $component = Livewire::test(SchemaDesigner::class);
@@ -291,7 +294,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
         $this->assertContains($currentView, ['diagram', 'erd', 'dependencies']);
 
         // Test error handling with corrupted cache
-        Cache::put('schema_visualization_' . config('database.default'), 'invalid_data');
+        Cache::put('schema_visualization_'.config('database.default'), 'invalid_data');
 
         $component->call('loadVisualizationData');
 
@@ -302,7 +305,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
     /**
      * Test integration with different database types
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_schema_designer_database_integration()
     {
         // Test with current database connection
@@ -313,10 +316,10 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
 
         foreach ($availableConnections as $connection) {
             try {
-                
+
             } catch (\Exception $e) {
                 // Log the error but don't fail the test for unavailable connections
-                $this->markTestSkipped("Connection {$connection} not available: " . $e->getMessage());
+                $this->markTestSkipped("Connection {$connection} not available: ".$e->getMessage());
             }
         }
     }
@@ -329,7 +332,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
     private function createTestSchemaForVisualization(): void
     {
         // Create users table
-        if (!Schema::hasTable('test_users')) {
+        if (! Schema::hasTable('test_users')) {
             Schema::create('test_users', function ($table) {
                 $table->id();
                 $table->string('name');
@@ -343,7 +346,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
         }
 
         // Create posts table with foreign key
-        if (!Schema::hasTable('test_posts')) {
+        if (! Schema::hasTable('test_posts')) {
             Schema::create('test_posts', function ($table) {
                 $table->id();
                 $table->string('title');
@@ -356,7 +359,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
         }
 
         // Create comments table
-        if (!Schema::hasTable('test_comments')) {
+        if (! Schema::hasTable('test_comments')) {
             Schema::create('test_comments', function ($table) {
                 $table->id();
                 $table->text('content');
@@ -374,7 +377,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
     private function createRelatedTablesForTesting(): void
     {
         // Create categories table
-        if (!Schema::hasTable('test_categories')) {
+        if (! Schema::hasTable('test_categories')) {
             Schema::create('test_categories', function ($table) {
                 $table->id();
                 $table->string('name');
@@ -386,7 +389,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
         }
 
         // Create products table with multiple relationships
-        if (!Schema::hasTable('test_products')) {
+        if (! Schema::hasTable('test_products')) {
             Schema::create('test_products', function ($table) {
                 $table->id();
                 $table->string('name');
@@ -401,7 +404,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
         }
 
         // Create tags table for many-to-many relationship
-        if (!Schema::hasTable('test_tags')) {
+        if (! Schema::hasTable('test_tags')) {
             Schema::create('test_tags', function ($table) {
                 $table->id();
                 $table->string('name');
@@ -412,7 +415,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
         }
 
         // Create pivot table for products and tags
-        if (!Schema::hasTable('test_product_tags')) {
+        if (! Schema::hasTable('test_product_tags')) {
             Schema::create('test_product_tags', function ($table) {
                 $table->id();
                 $table->foreignId('product_id')->constrained('test_products')->onDelete('cascade');
@@ -433,7 +436,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
         $this->createRelatedTablesForTesting();
 
         // Add additional complex tables
-        if (!Schema::hasTable('test_orders')) {
+        if (! Schema::hasTable('test_orders')) {
             Schema::create('test_orders', function ($table) {
                 $table->id();
                 $table->string('order_number')->unique();
@@ -446,7 +449,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
             $this->testTablesCreated[] = 'test_orders';
         }
 
-        if (!Schema::hasTable('test_order_items')) {
+        if (! Schema::hasTable('test_order_items')) {
             Schema::create('test_order_items', function ($table) {
                 $table->id();
                 $table->foreignId('order_id')->constrained('test_orders')->onDelete('cascade');
@@ -468,7 +471,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
         $this->createComplexSchemaForDocumentation();
 
         // Add additional tables for complete design
-        if (!Schema::hasTable('test_reviews')) {
+        if (! Schema::hasTable('test_reviews')) {
             Schema::create('test_reviews', function ($table) {
                 $table->id();
                 $table->foreignId('product_id')->constrained('test_products');
@@ -481,7 +484,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
             $this->testTablesCreated[] = 'test_reviews';
         }
 
-        if (!Schema::hasTable('test_addresses')) {
+        if (! Schema::hasTable('test_addresses')) {
             Schema::create('test_addresses', function ($table) {
                 $table->id();
                 $table->foreignId('user_id')->constrained('test_users');
@@ -527,7 +530,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
         return [
             'format' => $format,
             'content' => $this->generateERDContent($erdData, $format),
-            'filename' => 'schema_erd_' . date('Y-m-d_H-i-s') . '.' . $format,
+            'filename' => 'schema_erd_'.date('Y-m-d_H-i-s').'.'.$format,
             'size' => rand(1024, 1024 * 1024), // 1KB to 1MB
         ];
     }
@@ -575,7 +578,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
      */
     private function generateMigrationContent(array $table): string
     {
-        $className = 'Create' . ucfirst(\Illuminate\Support\Str::camel($table['name'])) . 'Table';
+        $className = 'Create'.ucfirst(Str::camel($table['name'])).'Table';
         $tableName = $table['name'];
 
         $content = "<?php\n\n";
@@ -591,7 +594,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
         foreach ($table['columns'] as $column) {
             $content .= "            \$table->{$column['type']}('{$column['name']}')";
             if ($column['nullable']) {
-                $content .= "->nullable()";
+                $content .= '->nullable()';
             }
             $content .= ";\n";
         }
@@ -633,7 +636,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
         return [
             'format' => $format,
             'content' => $this->generateDocumentationContent($visualizationData, $format),
-            'filename' => 'schema_documentation_' . date('Y-m-d_H-i-s') . '.' . $this->getFileExtension($format),
+            'filename' => 'schema_documentation_'.date('Y-m-d_H-i-s').'.'.$this->getFileExtension($format),
         ];
     }
 
@@ -660,7 +663,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
     private function generateMarkdownDocumentation(array $visualizationData): string
     {
         $content = "# Database Schema Documentation\n\n";
-        $content .= "Generated on: " . now()->format('Y-m-d H:i:s') . "\n\n";
+        $content .= 'Generated on: '.now()->format('Y-m-d H:i:s')."\n\n";
 
         $statistics = $visualizationData['statistics'];
         $content .= "## Overview\n\n";
@@ -706,6 +709,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
         }
 
         $html .= "</body>\n</html>";
+
         return $html;
     }
 
@@ -714,14 +718,14 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
      */
     private function generateMarkdownTemplate(SchemaSnapshot $snapshot): string
     {
-        return "# Schema Snapshot: {$snapshot->name}\n\nGenerated: {$snapshot->created_at}\n\n" .
+        return "# Schema Snapshot: {$snapshot->name}\n\nGenerated: {$snapshot->created_at}\n\n".
             "Description: {$snapshot->description}\n\n";
     }
 
     private function generateHTMLTemplate(SchemaSnapshot $snapshot): string
     {
-        return "<h1>Schema Snapshot: {$snapshot->name}</h1>" .
-            "<p>Generated: {$snapshot->created_at}</p>" .
+        return "<h1>Schema Snapshot: {$snapshot->name}</h1>".
+            "<p>Generated: {$snapshot->created_at}</p>".
             "<p>Description: {$snapshot->description}</p>";
     }
 
@@ -754,6 +758,7 @@ class ComprehensiveVisualSchemaDesignerTest extends TestCase
     private function getAvailableConnections(): array
     {
         $connections = config('database.connections', []);
+
         return array_keys($connections);
     }
 

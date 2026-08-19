@@ -2,16 +2,16 @@
 
 namespace HkDevs\CodeForgeStudio\Services;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 
 /**
  * MigrationGeneratorService
- * 
+ *
  * Advanced Laravel migration generation service for CodeForge Database Studio.
  * Creates intelligent, optimized database migrations with comprehensive schema management capabilities.
- * 
+ *
  * Features:
  * - Intelligent migration generation with optimal column ordering and indexing
  * - Comprehensive support for all Laravel migration column types and modifiers
@@ -21,7 +21,7 @@ use Carbon\Carbon;
  * - Schema modification detection with smart alter table generation
  * - Performance optimization with query-efficient migration structures
  * - Cross-database compatibility with platform-specific optimizations
- * 
+ *
  * Migration Generation Capabilities:
  * - Table Creation: Complete table creation with columns, indexes, and constraints
  * - Table Modification: Intelligent alter table operations with change detection
@@ -30,7 +30,7 @@ use Carbon\Carbon;
  * - Relationship Setup: Foreign key constraints with cascading and referential integrity
  * - Data Seeding: Optional data insertion with migration generation
  * - Schema Validation: Pre-generation validation and conflict detection
- * 
+ *
  * Advanced Features:
  * - Smart Column Ordering: Optimal column arrangement for performance and readability
  * - Index Optimization: Automatic index recommendation based on column types and usage
@@ -39,7 +39,7 @@ use Carbon\Carbon;
  * - Rollback Safety: Proper down method generation with data preservation strategies
  * - Schema Diffing: Migration generation based on schema differences
  * - Performance Analysis: Migration impact assessment and optimization recommendations
- * 
+ *
  * Column Type Management:
  * - Complete Laravel column type support with all available modifiers
  * - Custom column type integration with user-defined specifications
@@ -48,7 +48,7 @@ use Carbon\Carbon;
  * - Length and precision management with validation and recommendations
  * - Nullable and default value handling with intelligent suggestions
  * - Enum and set type management with value validation
- * 
+ *
  * Relationship Handling:
  * - Foreign Key Generation: Automatic foreign key constraint creation
  * - Cascade Configuration: Intelligent cascade option selection and validation
@@ -57,7 +57,7 @@ use Carbon\Carbon;
  * - Constraint Naming: Consistent and descriptive constraint naming conventions
  * - Circular Dependency Detection: Prevention of circular foreign key references
  * - Multi-Table Relationships: Support for complex multi-table relationship scenarios
- * 
+ *
  * Performance Optimization:
  * - Query-Efficient Structures: Migration generation optimized for query performance
  * - Index Strategy: Intelligent index creation based on expected usage patterns
@@ -65,7 +65,7 @@ use Carbon\Carbon;
  * - Migration Batching: Optimized batch processing for large schema changes
  * - Resource Management: Memory-efficient migration generation and execution
  * - Parallel Processing: Support for parallel migration execution where safe
- * 
+ *
  * Quality Assurance:
  * - Migration Validation: Comprehensive validation of generated migration syntax
  * - Rollback Testing: Automatic validation of rollback method functionality
@@ -73,7 +73,7 @@ use Carbon\Carbon;
  * - Conflict Detection: Prevention of conflicting migration operations
  * - Best Practice Enforcement: Adherence to Laravel migration best practices
  * - Documentation Generation: Automatic generation of migration documentation
- * 
+ *
  * Integration Features:
  * - Laravel Integration: Seamless integration with Laravel's migration system
  * - Artisan Command: Full compatibility with Laravel Artisan migration commands
@@ -81,7 +81,7 @@ use Carbon\Carbon;
  * - Model Integration: Automatic integration with Eloquent model generation
  * - Testing Integration: Migration testing utilities and validation frameworks
  * - Version Control: Git-friendly migration naming and organization strategies
- * 
+ *
  * Customization Options:
  * - Template System: Customizable migration templates with user-defined patterns
  * - Naming Conventions: Configurable naming strategies for migrations and constraints
@@ -89,12 +89,13 @@ use Carbon\Carbon;
  * - Custom Types: Support for custom column types and database-specific features
  * - Extension Points: Plugin architecture for custom migration generation logic
  * - Configuration Management: Flexible configuration options for generation behavior
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $service = app(MigrationGeneratorService::class);
  * $result = $service->generateMigration([
@@ -110,6 +111,7 @@ use Carbon\Carbon;
 class MigrationGeneratorService
 {
     protected string $migrationsPath;
+
     protected array $columnTypes = [
         'id' => 'id',
         'bigId' => 'bigIncrements',
@@ -169,7 +171,7 @@ class MigrationGeneratorService
 
         $content = $this->generateMigrationContent($className, $migrationData);
 
-        $filePath = $this->migrationsPath . '/' . $fileName;
+        $filePath = $this->migrationsPath.'/'.$fileName;
 
         // Check if file already exists
         if (File::exists($filePath)) {
@@ -185,7 +187,7 @@ class MigrationGeneratorService
             'class_name' => $className,
             'migration_name' => $migrationName,
             'content' => $content,
-            'success' => true
+            'success' => true,
         ];
     }
 
@@ -205,7 +207,7 @@ class MigrationGeneratorService
             'class_name' => $className,
             'migration_name' => $migrationName,
             'content' => $content,
-            'preview' => true
+            'preview' => true,
         ];
     }
 
@@ -220,7 +222,7 @@ class MigrationGeneratorService
             'migration' => [
                 'content' => $preview['content'],
                 'file_name' => $preview['file_name'],
-                'file_path' => 'database/migrations/' . $preview['file_name'],
+                'file_path' => 'database/migrations/'.$preview['file_name'],
             ],
         ];
     }
@@ -239,7 +241,7 @@ class MigrationGeneratorService
 
         if (empty($migrationData['table_name'])) {
             $errors[] = 'Table name is required';
-        } elseif (!$this->isValidTableName($migrationData['table_name'])) {
+        } elseif (! $this->isValidTableName($migrationData['table_name'])) {
             $errors[] = 'Invalid table name format';
         }
 
@@ -249,7 +251,7 @@ class MigrationGeneratorService
         }
 
         // Validate individual columns
-        if (!empty($migrationData['columns'])) {
+        if (! empty($migrationData['columns'])) {
             foreach ($migrationData['columns'] as $index => $column) {
                 $columnErrors = $this->validateColumn($column, $index);
                 $errors = array_merge($errors, $columnErrors);
@@ -257,7 +259,7 @@ class MigrationGeneratorService
         }
 
         // Validate indexes
-        if (!empty($migrationData['indexes'])) {
+        if (! empty($migrationData['indexes'])) {
             foreach ($migrationData['indexes'] as $index => $indexData) {
                 $indexErrors = $this->validateIndex($indexData, $index);
                 $errors = array_merge($errors, $indexErrors);
@@ -265,7 +267,7 @@ class MigrationGeneratorService
         }
 
         // Validate foreign keys
-        if (!empty($migrationData['foreign_keys'])) {
+        if (! empty($migrationData['foreign_keys'])) {
             foreach ($migrationData['foreign_keys'] as $index => $fk) {
                 $fkErrors = $this->validateForeignKey($fk, $index);
                 $errors = array_merge($errors, $fkErrors);
@@ -274,7 +276,7 @@ class MigrationGeneratorService
 
         return [
             'valid' => empty($errors),
-            'errors' => $errors
+            'errors' => $errors,
         ];
     }
 
@@ -330,10 +332,11 @@ PHP;
             case 'drop':
                 return "        Schema::dropIfExists('{$tableName}');";
             case 'rename':
-                $newName = $migrationData['new_table_name'] ?? $tableName . '_renamed';
+                $newName = $migrationData['new_table_name'] ?? $tableName.'_renamed';
+
                 return "        Schema::rename('{$tableName}', '{$newName}');";
             default:
-                return "        // Custom migration logic here";
+                return '        // Custom migration logic here';
         }
     }
 
@@ -346,14 +349,15 @@ PHP;
             case 'create':
                 return "        Schema::dropIfExists('{$tableName}');";
             case 'modify':
-                return "        // Reverse the table modifications";
+                return '        // Reverse the table modifications';
             case 'drop':
-                return "        // Cannot reverse drop operation automatically";
+                return '        // Cannot reverse drop operation automatically';
             case 'rename':
-                $newName = $migrationData['new_table_name'] ?? $tableName . '_renamed';
+                $newName = $migrationData['new_table_name'] ?? $tableName.'_renamed';
+
                 return "        Schema::rename('{$newName}', '{$tableName}');";
             default:
-                return "        // Reverse custom migration logic here";
+                return '        // Reverse custom migration logic here';
         }
     }
 
@@ -366,25 +370,25 @@ PHP;
         $lines[] = "        Schema::create('{$tableName}', function (Blueprint \$table) {";
 
         // Add columns
-        if (!empty($migrationData['columns'])) {
+        if (! empty($migrationData['columns'])) {
             foreach ($migrationData['columns'] as $column) {
                 $lines[] = $this->generateColumnDefinition($column);
             }
         }
 
         // Add indexes
-        if (!empty($migrationData['indexes'])) {
-            $lines[] = "";
-            $lines[] = "            // Indexes";
+        if (! empty($migrationData['indexes'])) {
+            $lines[] = '';
+            $lines[] = '            // Indexes';
             foreach ($migrationData['indexes'] as $index) {
                 $lines[] = $this->generateIndexDefinition($index);
             }
         }
 
         // Add foreign keys
-        if (!empty($migrationData['foreign_keys'])) {
-            $lines[] = "";
-            $lines[] = "            // Foreign Keys";
+        if (! empty($migrationData['foreign_keys'])) {
+            $lines[] = '';
+            $lines[] = '            // Foreign Keys';
             foreach ($migrationData['foreign_keys'] as $fk) {
                 $lines[] = $this->generateForeignKeyDefinition($fk);
             }
@@ -392,16 +396,16 @@ PHP;
 
         // Add timestamps if specified
         if ($migrationData['timestamps'] ?? false) {
-            $lines[] = "";
-            $lines[] = "            \$table->timestamps();";
+            $lines[] = '';
+            $lines[] = '            $table->timestamps();';
         }
 
         // Add soft deletes if specified
         if ($migrationData['soft_deletes'] ?? false) {
-            $lines[] = "            \$table->softDeletes();";
+            $lines[] = '            $table->softDeletes();';
         }
 
-        $lines[] = "        });";
+        $lines[] = '        });';
 
         return implode("\n", $lines);
     }
@@ -415,7 +419,7 @@ PHP;
         $lines[] = "        Schema::table('{$tableName}', function (Blueprint \$table) {";
 
         // Add new columns
-        if (!empty($migrationData['columns'])) {
+        if (! empty($migrationData['columns'])) {
             foreach ($migrationData['columns'] as $column) {
                 if (($column['action'] ?? 'add') === 'add') {
                     $lines[] = $this->generateColumnDefinition($column);
@@ -423,22 +427,22 @@ PHP;
             }
         }
 
-        $lines[] = "        });";
+        $lines[] = '        });';
 
         // Handle column modifications and drops in separate schema calls
-        if (!empty($migrationData['columns'])) {
+        if (! empty($migrationData['columns'])) {
             foreach ($migrationData['columns'] as $column) {
                 $action = $column['action'] ?? 'add';
                 if ($action === 'modify') {
-                    $lines[] = "";
+                    $lines[] = '';
                     $lines[] = "        Schema::table('{$tableName}', function (Blueprint \$table) {";
                     $lines[] = $this->generateColumnDefinition($column, true);
-                    $lines[] = "        });";
+                    $lines[] = '        });';
                 } elseif ($action === 'drop') {
-                    $lines[] = "";
+                    $lines[] = '';
                     $lines[] = "        Schema::table('{$tableName}', function (Blueprint \$table) {";
                     $lines[] = "            \$table->dropColumn('{$column['name']}');";
-                    $lines[] = "        });";
+                    $lines[] = '        });';
                 }
             }
         }
@@ -465,14 +469,14 @@ PHP;
         $index = $column['index'] ?? false;
         $comment = $column['comment'] ?? null;
 
-        $definition = "            \$table->";
+        $definition = '            $table->';
 
         // Handle column type
         if (isset($this->columnTypes[$type])) {
             $method = $this->columnTypes[$type];
 
-            if ($type === 'enum' && !empty($column['enum_values'])) {
-                $enumValues = "'" . implode("', '", $column['enum_values']) . "'";
+            if ($type === 'enum' && ! empty($column['enum_values'])) {
+                $enumValues = "'".implode("', '", $column['enum_values'])."'";
                 $definition .= "{$method}('{$name}', [{$enumValues}])";
             } elseif (in_array($type, ['string', 'char']) && $length) {
                 $definition .= "{$method}('{$name}', {$length})";
@@ -487,37 +491,37 @@ PHP;
 
         // Add modifiers
         if ($unsigned) {
-            $definition .= "->unsigned()";
+            $definition .= '->unsigned()';
         }
 
         if ($nullable) {
-            $definition .= "->nullable()";
+            $definition .= '->nullable()';
         }
 
         if ($default !== null) {
             if (is_string($default)) {
                 $definition .= "->default('{$default}')";
             } elseif (is_bool($default)) {
-                $definition .= $default ? "->default(true)" : "->default(false)";
+                $definition .= $default ? '->default(true)' : '->default(false)';
             } else {
                 $definition .= "->default({$default})";
             }
         }
 
         if ($autoIncrement) {
-            $definition .= "->autoIncrement()";
+            $definition .= '->autoIncrement()';
         }
 
         if ($primary) {
-            $definition .= "->primary()";
+            $definition .= '->primary()';
         }
 
         if ($unique) {
-            $definition .= "->unique()";
+            $definition .= '->unique()';
         }
 
         if ($index) {
-            $definition .= "->index()";
+            $definition .= '->index()';
         }
 
         if ($comment) {
@@ -525,10 +529,10 @@ PHP;
         }
 
         if ($isModify) {
-            $definition .= "->change()";
+            $definition .= '->change()';
         }
 
-        $definition .= ";";
+        $definition .= ';';
 
         return $definition;
     }
@@ -542,7 +546,7 @@ PHP;
         $type = $index['type'] ?? 'index';
         $name = $index['name'] ?? null;
 
-        $columnsStr = "'" . implode("', '", $columns) . "'";
+        $columnsStr = "'".implode("', '", $columns)."'";
 
         if (count($columns) === 1) {
             $columnsStr = "'{$columns[0]}'";
@@ -556,7 +560,7 @@ PHP;
             $definition .= ", '{$name}'";
         }
 
-        $definition .= ");";
+        $definition .= ');';
 
         return $definition;
     }
@@ -582,7 +586,7 @@ PHP;
             $definition .= "->onUpdate('{$onUpdate}')";
         }
 
-        $definition .= ";";
+        $definition .= ';';
 
         return $definition;
     }
@@ -616,7 +620,7 @@ PHP;
             default => 'Update'
         };
 
-        return $action . Str::studly($tableName) . 'Table';
+        return $action.Str::studly($tableName).'Table';
     }
 
     /**
@@ -625,6 +629,7 @@ PHP;
     protected function generateFileName(string $migrationName): string
     {
         $timestamp = Carbon::now()->format('Y_m_d_His');
+
         return "{$timestamp}_{$migrationName}.php";
     }
 
@@ -645,13 +650,13 @@ PHP;
 
         if (empty($column['name'])) {
             $errors[] = "Column {$index}: Name is required";
-        } elseif (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $column['name'])) {
+        } elseif (! preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $column['name'])) {
             $errors[] = "Column {$index}: Invalid name format";
         }
 
         if (empty($column['type'])) {
             $errors[] = "Column {$index}: Type is required";
-        } elseif (!isset($this->columnTypes[$column['type']])) {
+        } elseif (! isset($this->columnTypes[$column['type']])) {
             $errors[] = "Column {$index}: Invalid column type";
         }
 
@@ -681,7 +686,7 @@ PHP;
         }
 
         $validTypes = ['index', 'unique', 'primary', 'fulltext', 'spatial'];
-        if (!empty($index['type']) && !in_array($index['type'], $validTypes)) {
+        if (! empty($index['type']) && ! in_array($index['type'], $validTypes)) {
             $errors[] = "Index {$indexNum}: Invalid index type";
         }
 
@@ -704,11 +709,11 @@ PHP;
         }
 
         $validActions = ['restrict', 'cascade', 'set null', 'no action'];
-        if (!empty($fk['on_delete'] ?? '') && !in_array(strtolower($fk['on_delete']), $validActions)) {
+        if (! empty($fk['on_delete'] ?? '') && ! in_array(strtolower($fk['on_delete']), $validActions)) {
             $errors[] = "Foreign Key {$fkNum}: Invalid on delete action";
         }
 
-        if (!empty($fk['on_update'] ?? '') && !in_array(strtolower($fk['on_update']), $validActions)) {
+        if (! empty($fk['on_update'] ?? '') && ! in_array(strtolower($fk['on_update']), $validActions)) {
             $errors[] = "Foreign Key {$fkNum}: Invalid on update action";
         }
 
@@ -758,7 +763,7 @@ PHP;
     public function getExistingMigrations(): array
     {
         $migrations = [];
-        $files = File::glob($this->migrationsPath . '/*.php');
+        $files = File::glob($this->migrationsPath.'/*.php');
 
         foreach ($files as $file) {
             $fileName = basename($file);
@@ -766,7 +771,7 @@ PHP;
                 'file_name' => $fileName,
                 'file_path' => $file,
                 'created_at' => File::lastModified($file),
-                'size' => File::size($file)
+                'size' => File::size($file),
             ];
         }
 

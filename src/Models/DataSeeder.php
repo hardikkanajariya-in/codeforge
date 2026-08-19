@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * DataSeeder
- * 
+ *
  * Eloquent model for managing database seeders with execution tracking,
  * configuration management, and automated seeding capabilities.
- * 
+ *
  * Key Features:
  * - Comprehensive seeder configuration and metadata storage
  * - Execution history tracking with detailed logging
@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * - Auto-run capability for automated database seeding
  * - Status tracking for seeder health and execution state
  * - Integration with SeederExecutionLog for audit trails
- * 
+ *
  * Database Fields:
  * - name: Seeder identifier and class reference
  * - description: Seeder purpose and functionality description
@@ -29,15 +29,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * - type: Seeder type (data, structure, test, production)
  * - priority: Execution order priority for dependency management
  * - auto_run: Automatic execution flag for deployment pipelines
- * 
+ *
  * Relationships:
  * - executionLogs: HasMany relationship with SeederExecutionLog
  * - Latest execution tracking for status monitoring
  * - Success rate analytics and failure investigation
- * 
- * @package HkDevs\CodeForgeStudio\Models
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class DataSeeder extends Model

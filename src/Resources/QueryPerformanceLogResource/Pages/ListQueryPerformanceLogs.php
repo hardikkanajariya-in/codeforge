@@ -2,8 +2,8 @@
 
 namespace HkDevs\CodeForgeStudio\Resources\QueryPerformanceLogResource\Pages;
 
-use HkDevs\CodeForgeStudio\Resources\QueryPerformanceLogResource;
 use Filament\Resources\Pages\ListRecords;
+use HkDevs\CodeForgeStudio\Resources\QueryPerformanceLogResource;
 
 class ListQueryPerformanceLogs extends ListRecords
 {

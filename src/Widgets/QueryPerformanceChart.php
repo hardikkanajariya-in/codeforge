@@ -2,14 +2,15 @@
 
 namespace HkDevs\CodeForgeStudio\Widgets;
 
-use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
 use Filament\Widgets\ChartWidget;
+use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
 use Illuminate\Support\Carbon;
 
 class QueryPerformanceChart extends ChartWidget
 {
     protected ?string $heading = 'Query Performance (24 Hours)';
-    protected int | string | array $columnSpan = 'full';
+
+    protected int|string|array $columnSpan = 'full';
 
     protected function getData(): array
     {
@@ -26,11 +27,13 @@ class QueryPerformanceChart extends ChartWidget
 
         $avgTimes = $hours->map(function ($hour, $index) use ($queryData) {
             $hourIndex = 23 - $index;
+
             return $queryData->get($hourIndex)?->avg_time ?? 0;
         });
 
         $queryCounts = $hours->map(function ($hour, $index) use ($queryData) {
             $hourIndex = 23 - $index;
+
             return $queryData->get($hourIndex)?->query_count ?? 0;
         });
 

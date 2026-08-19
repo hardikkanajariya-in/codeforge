@@ -1,16 +1,14 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources\DataSeederResource\Pages;
-use HkDevs\CodeForgeStudio\Support\Section;
-use Filament\Schemas\Schema;
 
+use Filament\Actions;
+use Filament\Infolists\Components;
+use Filament\Notifications\Notification;
+use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Schema;
 use HkDevs\CodeForgeStudio\Resources\DataSeederResource;
 use HkDevs\CodeForgeStudio\Services\SeederExecutionService;
-use Filament\Actions;
-use Filament\Resources\Pages\ViewRecord;
-use Filament\Notifications\Notification;
-
-use Filament\Infolists\Components;
 
 class ViewDataSeeder extends ViewRecord
 {
@@ -25,7 +23,7 @@ class ViewDataSeeder extends ViewRecord
                 ->color('success')
                 ->requiresConfirmation()
                 ->modalHeading('Execute Seeder')
-                ->modalDescription(fn() => "Are you sure you want to execute '{$this->record->name}'?")
+                ->modalDescription(fn () => "Are you sure you want to execute '{$this->record->name}'?")
                 ->action(function () {
                     try {
                         $service = app(SeederExecutionService::class);
@@ -51,7 +49,7 @@ class ViewDataSeeder extends ViewRecord
                             ->send();
                     }
                 })
-                ->visible(fn() => $this->record->canExecute()),
+                ->visible(fn () => $this->record->canExecute()),
 
             Actions\EditAction::make(),
         ];
@@ -74,7 +72,7 @@ class ViewDataSeeder extends ViewRecord
                     ->schema([
                         Components\TextEntry::make('type')
                             ->badge()
-                            ->color(fn(string $state): string => match ($state) {
+                            ->color(fn (string $state): string => match ($state) {
                                 'laravel' => 'primary',
                                 'generated' => 'success',
                                 'custom' => 'warning',
@@ -83,7 +81,7 @@ class ViewDataSeeder extends ViewRecord
 
                         Components\TextEntry::make('status')
                             ->badge()
-                            ->color(fn(string $state): string => match ($state) {
+                            ->color(fn (string $state): string => match ($state) {
                                 'active' => 'success',
                                 'inactive' => 'gray',
                                 'draft' => 'warning',
@@ -102,7 +100,7 @@ class ViewDataSeeder extends ViewRecord
                         Components\TextEntry::make('latest_execution.status')
                             ->label('Last Execution Status')
                             ->badge()
-                            ->color(fn(?string $state): string => match ($state) {
+                            ->color(fn (?string $state): string => match ($state) {
                                 'completed' => 'success',
                                 'failed' => 'danger',
                                 'started' => 'warning',
@@ -131,6 +129,7 @@ class ViewDataSeeder extends ViewRecord
                                 }
 
                                 $rate = round(($successful / $total) * 100, 1);
+
                                 return "{$successful}/{$total} ({$rate}%)";
                             }),
                     ])

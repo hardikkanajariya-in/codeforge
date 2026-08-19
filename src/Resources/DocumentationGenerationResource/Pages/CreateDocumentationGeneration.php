@@ -2,9 +2,11 @@
 
 namespace HkDevs\CodeForgeStudio\Resources\DocumentationGenerationResource\Pages;
 
-use Filament\Resources\Pages\CreateRecord;
-use HkDevs\CodeForgeStudio\Resources\DocumentationGenerationResource;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\CreateRecord;
+use HkDevs\CodeForgeStudio\Models\DocumentationGeneration;
+use HkDevs\CodeForgeStudio\Resources\DocumentationGenerationResource;
 use HkDevs\CodeForgeStudio\Services\DocumentationGenerationService;
 
 class CreateDocumentationGeneration extends CreateRecord
@@ -16,7 +18,7 @@ class CreateDocumentationGeneration extends CreateRecord
         // Fix for Laravel bug where lastInsertId() returns wrong value
         // Find the actual record by name and use its real ID
         if ($this->record && $this->record->name) {
-            $actualRecord = \HkDevs\CodeForgeStudio\Models\DocumentationGeneration::where('name', $this->record->name)
+            $actualRecord = DocumentationGeneration::where('name', $this->record->name)
                 ->orderBy('id', 'desc')
                 ->first();
 
@@ -63,7 +65,7 @@ class CreateDocumentationGeneration extends CreateRecord
         return [
             $this->getCreateFormAction(),
 
-            \Filament\Actions\Action::make('create_and_generate')
+            Action::make('create_and_generate')
                 ->label('Create & Generate')
                 ->color('success')
                 ->action(function () {

@@ -6,22 +6,23 @@ use Filament\Forms\Components\Textarea;
 
 /**
  * JsonEditor
- * 
+ *
  * A specialized Filament textarea component for editing JSON data with validation and formatting.
  * Extends the base Textarea component with JSON-specific features and monospace styling.
- * 
+ *
  * Features:
  * - Monospace font styling for better JSON readability
  * - Automatic JSON pretty-printing on display
  * - Real-time JSON validation with error messages
  * - Seamless conversion between JSON strings and PHP arrays
  * - Graceful handling of empty/invalid JSON states
- * 
- * @package HkDevs\CodeForgeStudio\Filament\Components
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * JsonEditor::make('configuration')
  *     ->label('JSON Configuration')
@@ -42,13 +43,14 @@ class JsonEditor extends Textarea
                 'class' => 'json-editor',
             ])
             ->formatStateUsing(function (?array $state): string {
-                if (!$state) {
+                if (! $state) {
                     return '{}';
                 }
+
                 return json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
             })
             ->dehydrateStateUsing(function (?string $state): ?array {
-                if (!$state || trim($state) === '' || trim($state) === '{}') {
+                if (! $state || trim($state) === '' || trim($state) === '{}') {
                     return [];
                 }
 
@@ -57,6 +59,7 @@ class JsonEditor extends Textarea
                     // Return the original state if JSON is invalid, validation will catch it
                     return [];
                 }
+
                 return $decoded ?? [];
             })
             ->rules([
@@ -65,7 +68,7 @@ class JsonEditor extends Textarea
                         if ($value && trim($value) !== '' && trim($value) !== '{}') {
                             json_decode($value);
                             if (json_last_error() !== JSON_ERROR_NONE) {
-                                $fail('Must be valid JSON: ' . json_last_error_msg());
+                                $fail('Must be valid JSON: '.json_last_error_msg());
                             }
                         }
                     };

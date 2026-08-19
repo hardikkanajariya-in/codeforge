@@ -2,12 +2,13 @@
 
 namespace HkDevs\CodeForgeStudio\Resources\DataSeederResource\Pages;
 
+use Filament\Actions;
+use Filament\Notifications\Notification;
+use Filament\Resources\Pages\ListRecords;
+use HkDevs\CodeForgeStudio\Models\DataSeeder;
 use HkDevs\CodeForgeStudio\Resources\DataSeederResource;
 use HkDevs\CodeForgeStudio\Services\SeederExecutionService;
 use HkDevs\CodeForgeStudio\Widgets\SeederStatsWidget;
-use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
-use Filament\Notifications\Notification;
 
 class ListDataSeeders extends ListRecords
 {
@@ -30,11 +31,11 @@ class ListDataSeeders extends ListRecords
 
                         foreach ($discovered as $seederData) {
                             // Check if seeder already exists
-                            $existingSeeder = \HkDevs\CodeForgeStudio\Models\DataSeeder::where('class_name', $seederData['class_name'])->first();
+                            $existingSeeder = DataSeeder::where('class_name', $seederData['class_name'])->first();
 
-                            if (!$existingSeeder) {
+                            if (! $existingSeeder) {
                                 // Create new seeder
-                                \HkDevs\CodeForgeStudio\Models\DataSeeder::create($seederData);
+                                DataSeeder::create($seederData);
                                 $count++;
                             } else {
                                 // Update existing seeder with correct file path if it's different
@@ -88,10 +89,10 @@ class ListDataSeeders extends ListRecords
                 ->action(function () {
                     try {
                         $invalidSeeders = collect();
-                        $allSeeders = \HkDevs\CodeForgeStudio\Models\DataSeeder::all();
+                        $allSeeders = DataSeeder::all();
 
                         foreach ($allSeeders as $seeder) {
-                            if (!$seeder->exists() || !class_exists($seeder->class_name)) {
+                            if (! $seeder->exists() || ! class_exists($seeder->class_name)) {
                                 $invalidSeeders->push($seeder);
                             }
                         }
@@ -102,6 +103,7 @@ class ListDataSeeders extends ListRecords
                                 ->body('All registered seeders are valid')
                                 ->info()
                                 ->send();
+
                             return;
                         }
 
@@ -135,7 +137,7 @@ class ListDataSeeders extends ListRecords
                 ->modalDescription('This will execute all seeders marked for auto-run in priority order.')
                 ->action(function () {
                     try {
-                        $autoSeeders = \HkDevs\CodeForgeStudio\Models\DataSeeder::active()
+                        $autoSeeders = DataSeeder::active()
                             ->autoRun()
                             ->byPriority()
                             ->get();
@@ -146,6 +148,7 @@ class ListDataSeeders extends ListRecords
                                 ->body('No seeders are configured for auto-run')
                                 ->info()
                                 ->send();
+
                             return;
                         }
 

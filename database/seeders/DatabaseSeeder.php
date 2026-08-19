@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 
 /**
  * DatabaseSeeder
- * 
+ *
  * Main database seeder that calls other seeders.
  * This is the default Laravel seeder entry point.
  */
@@ -17,6 +17,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([ ]);
+        $this->call([]);
     }
 }

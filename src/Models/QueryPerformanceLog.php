@@ -2,15 +2,15 @@
 
 namespace HkDevs\CodeForgeStudio\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * QueryPerformanceLog
- * 
+ *
  * Eloquent model for comprehensive database query performance monitoring
  * and analysis with detailed execution metrics and optimization insights.
- * 
+ *
  * Key Features:
  * - Real-time query performance tracking with microsecond precision
  * - Query hash generation for duplicate query detection
@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * - Query binding capture for security and debugging analysis
  * - User attribution and context tracking
  * - Performance trend analysis and optimization recommendations
- * 
+ *
  * Database Fields:
  * - connection: Database connection identifier
  * - query: Complete SQL query with parameter placeholders
@@ -32,16 +32,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * - error_message: Detailed error information for failed queries
  * - user_id: User context for query attribution
  * - executed_at: Precise timestamp of query execution
- * 
+ *
  * Performance Analysis:
  * - Automatic execution time formatting (μs, ms, seconds)
  * - Slow query detection and alerting
  * - Query pattern analysis for optimization opportunities
  * - Resource usage tracking and reporting
- * 
- * @package HkDevs\CodeForgeStudio\Models
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class QueryPerformanceLog extends Model
@@ -74,11 +75,11 @@ class QueryPerformanceLog extends Model
     public function getFormattedExecutionTimeAttribute(): string
     {
         if ($this->execution_time < 1) {
-            return number_format($this->execution_time * 1000, 2) . ' μs';
+            return number_format($this->execution_time * 1000, 2).' μs';
         } elseif ($this->execution_time < 1000) {
-            return number_format($this->execution_time, 2) . ' ms';
+            return number_format($this->execution_time, 2).' ms';
         } else {
-            return number_format($this->execution_time / 1000, 2) . ' s';
+            return number_format($this->execution_time / 1000, 2).' s';
         }
     }
 
@@ -135,13 +136,13 @@ class QueryPerformanceLog extends Model
             if ($binding === null) {
                 $value = 'NULL';
             } elseif (is_string($binding)) {
-                $value = "'" . str_replace("'", "''", $binding) . "'";
+                $value = "'".str_replace("'", "''", $binding)."'";
             } elseif (is_bool($binding)) {
                 $value = $binding ? '1' : '0';
             } elseif (is_numeric($binding)) {
                 $value = (string) $binding;
             } else {
-                $value = "'" . str_replace("'", "''", (string) $binding) . "'";
+                $value = "'".str_replace("'", "''", (string) $binding)."'";
             }
 
             // Replace the first occurrence of ? with the formatted value
@@ -185,11 +186,11 @@ class QueryPerformanceLog extends Model
             'BETWEEN',
             'LIKE',
             'IS NULL',
-            'IS NOT NULL'
+            'IS NOT NULL',
         ];
 
         foreach ($keywords as $keyword) {
-            $sql = preg_replace('/\b' . preg_quote($keyword, '/') . '\b/i', strtoupper($keyword), $sql);
+            $sql = preg_replace('/\b'.preg_quote($keyword, '/').'\b/i', strtoupper($keyword), $sql);
         }
 
         return $sql;

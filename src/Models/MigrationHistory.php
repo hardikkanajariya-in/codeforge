@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * MigrationHistory
- * 
+ *
  * Eloquent model for tracking detailed migration execution history
  * with comprehensive audit trails and performance monitoring.
- * 
+ *
  * Key Features:
  * - Complete migration execution audit trail
  * - Performance tracking with execution timing
@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * - Action-specific tracking (migrate, rollback, reset)
  * - Error logging and failure analysis
  * - Query scopes for efficient data filtering
- * 
+ *
  * Database Fields:
  * - migration: Migration file name and identifier
  * - batch: Migration batch number for grouping
@@ -27,16 +27,17 @@ use Illuminate\Database\Eloquent\Model;
  * - status: Execution status (success, failed, partial)
  * - error_message: Detailed error information for failures
  * - executed_at: Timestamp of migration execution
- * 
+ *
  * Query Scopes:
  * - recent(): Latest migration operations
  * - byAction(): Filter by operation type
  * - successful(): Successful executions only
  * - failed(): Failed executions for troubleshooting
- * 
- * @package HkDevs\CodeForgeStudio\Models
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class MigrationHistory extends Model

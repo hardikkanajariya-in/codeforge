@@ -7,11 +7,10 @@ use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
 use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
 use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Test Cases for Database Health Monitoring Features
- * 
+ *
  * Comprehensive tests covering real-time query performance tracking,
  * slow query detection, health metrics collection, and connection monitoring.
  */
@@ -30,7 +29,7 @@ class DatabaseHealthMonitoringTest extends TestCase
 
     /**
      * Test Real-time Query Performance Tracking
-     * 
+     *
      * Purpose: Test continuous query performance monitoring system
      */
     public function test_real_time_query_performance_tracking(): void
@@ -60,7 +59,7 @@ class DatabaseHealthMonitoringTest extends TestCase
 
     /**
      * Test Slow Query Detection & Analysis
-     * 
+     *
      * Purpose: Test automatic identification and logging of performance bottlenecks
      */
     public function test_slow_query_detection_and_analysis(): void
@@ -89,7 +88,7 @@ class DatabaseHealthMonitoringTest extends TestCase
 
     /**
      * Test Health Metrics Collection
-     * 
+     *
      * Purpose: Test automated health data collection and storage
      */
     public function test_health_metrics_collection(): void
@@ -106,7 +105,7 @@ class DatabaseHealthMonitoringTest extends TestCase
         $this->assertDatabaseHas('database_health_metrics', [
             'connection' => 'testing',
             'metric_type' => 'connection_status',
-            'metric_name' => 'response_time'
+            'metric_name' => 'response_time',
         ]);
 
         // Test multiple connection status
@@ -117,7 +116,7 @@ class DatabaseHealthMonitoringTest extends TestCase
 
     /**
      * Test Connection Status & Health Checks
-     * 
+     *
      * Purpose: Test real-time database connection health monitoring
      */
     public function test_connection_status_and_health_checks(): void
@@ -145,7 +144,7 @@ class DatabaseHealthMonitoringTest extends TestCase
 
     /**
      * Test Performance Alerts & Thresholds
-     * 
+     *
      * Purpose: Test configurable performance warning system
      */
     public function test_performance_alerts_and_thresholds(): void
@@ -171,7 +170,7 @@ class DatabaseHealthMonitoringTest extends TestCase
 
     /**
      * Test Health Report Generation
-     * 
+     *
      * Purpose: Test comprehensive health report creation
      */
     public function test_health_report_generation(): void
@@ -200,7 +199,7 @@ class DatabaseHealthMonitoringTest extends TestCase
 
     /**
      * Test Query Performance Analysis
-     * 
+     *
      * Purpose: Test detailed query performance analysis
      */
     public function test_query_performance_analysis(): void
@@ -230,7 +229,7 @@ class DatabaseHealthMonitoringTest extends TestCase
 
     /**
      * Test Database Metrics Collection
-     * 
+     *
      * Purpose: Test database-specific metrics gathering
      */
     public function test_database_metrics_collection(): void
@@ -245,7 +244,7 @@ class DatabaseHealthMonitoringTest extends TestCase
         $this->assertIsArray($databaseMetrics);
 
         // For SQLite (testing), we should have database_size
-        if (!isset($databaseMetrics['error'])) {
+        if (! isset($databaseMetrics['error'])) {
             // Check for expected metrics based on database type
             $this->assertTrue(
                 isset($databaseMetrics['database_size']) ||
@@ -257,7 +256,7 @@ class DatabaseHealthMonitoringTest extends TestCase
 
     /**
      * Test Query Logging
-     * 
+     *
      * Purpose: Test query performance logging functionality
      */
     public function test_query_logging(): void
@@ -275,7 +274,7 @@ class DatabaseHealthMonitoringTest extends TestCase
         $this->assertDatabaseHas('query_performance_logs', [
             'connection' => 'testing',
             'execution_time' => 25.5,
-            'status' => 'success'
+            'status' => 'success',
         ]);
 
         // Test error logging
@@ -291,7 +290,7 @@ class DatabaseHealthMonitoringTest extends TestCase
         $this->assertDatabaseHas('query_performance_logs', [
             'connection' => 'testing',
             'status' => 'error',
-            'error_message' => 'Table does not exist'
+            'error_message' => 'Table does not exist',
         ]);
     }
 
@@ -302,7 +301,7 @@ class DatabaseHealthMonitoringTest extends TestCase
     {
         for ($i = 0; $i < 10; $i++) {
             QueryPerformanceLog::create([
-                'query' => "SELECT * FROM users WHERE id = ?",
+                'query' => 'SELECT * FROM users WHERE id = ?',
                 'query_hash' => md5("test_query_{$i}"),
                 'bindings' => json_encode([$i + 1]),
                 'execution_time' => rand(10, 200),
@@ -327,7 +326,7 @@ class DatabaseHealthMonitoringTest extends TestCase
         // Create slow queries
         for ($i = 0; $i < 3; $i++) {
             QueryPerformanceLog::create([
-                'query' => "SELECT * FROM posts ORDER BY created_at DESC",
+                'query' => 'SELECT * FROM posts ORDER BY created_at DESC',
                 'query_hash' => md5("slow_query_{$i}"),
                 'bindings' => json_encode([]),
                 'execution_time' => rand(1000, 5000), // > 1000ms threshold

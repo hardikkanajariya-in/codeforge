@@ -4,18 +4,18 @@ namespace HkDevs\CodeForgeStudio\Services;
 
 use HkDevs\CodeForgeStudio\Models\DataSeeder;
 use HkDevs\CodeForgeStudio\Models\SeederExecutionLog;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Database\Seeder;
 use Throwable;
 
 /**
  * SeederExecutionService
- * 
+ *
  * Advanced database seeder execution and management service for CodeForge Database Studio.
  * Provides intelligent seeder execution with comprehensive logging, dependency resolution, and error handling.
- * 
+ *
  * Features:
  * - Intelligent seeder execution with dependency resolution and optimal ordering
  * - Comprehensive execution logging with detailed metrics and performance tracking
@@ -25,7 +25,7 @@ use Throwable;
  * - Data validation and integrity checking before and after seeder execution
  * - User attribution and audit trail for multi-developer environments
  * - Integration with Laravel's native seeding system with enhanced capabilities
- * 
+ *
  * Execution Management:
  * - Individual Seeder Execution: Execute specific seeders with detailed logging
  * - Batch Execution: Run multiple seeders with dependency resolution
@@ -34,7 +34,7 @@ use Throwable;
  * - Priority-based Execution: Seeder execution ordering based on priority levels
  * - Dependency Resolution: Automatic resolution of seeder dependencies
  * - Rollback Support: Safe rollback of seeder operations with data preservation
- * 
+ *
  * Advanced Features:
  * - Execution Validation: Pre-execution validation of seeder classes and dependencies
  * - Data Integrity Checking: Validation of data integrity before and after execution
@@ -43,7 +43,7 @@ use Throwable;
  * - Progress Tracking: Real-time progress monitoring for long-running seeders
  * - Error Recovery: Intelligent error recovery with retry mechanisms and fallback strategies
  * - Resource Optimization: CPU and I/O optimization for seeder execution
- * 
+ *
  * Logging and Monitoring:
  * - Comprehensive Logging: Detailed execution logs with success/failure tracking
  * - Performance Metrics: Execution time, memory usage, and resource utilization tracking
@@ -52,7 +52,7 @@ use Throwable;
  * - Audit Trail: Complete audit trail of seeder executions with historical analysis
  * - Status Monitoring: Real-time status monitoring with progress indicators
  * - Notification Integration: Integration with notification systems for execution alerts
- * 
+ *
  * Data Validation:
  * - Pre-execution Validation: Validation of seeder prerequisites and data state
  * - Post-execution Validation: Verification of seeder results and data integrity
@@ -61,7 +61,7 @@ use Throwable;
  * - Rollback Validation: Validation of rollback operations and data restoration
  * - Dependency Validation: Verification of seeder dependencies and prerequisites
  * - Business Rule Validation: Validation of business rules and logic compliance
- * 
+ *
  * Error Handling:
  * - Graceful Error Handling: Comprehensive error handling with graceful degradation
  * - Retry Mechanisms: Intelligent retry strategies for transient failures
@@ -70,7 +70,7 @@ use Throwable;
  * - Recovery Strategies: Automated recovery strategies for common failure scenarios
  * - Notification Integration: Real-time error notifications and alerting
  * - Debug Support: Enhanced debugging capabilities for seeder development
- * 
+ *
  * Integration Features:
  * - Laravel Integration: Seamless integration with Laravel's seeding system
  * - Artisan Command Integration: Full compatibility with Laravel Artisan commands
@@ -79,7 +79,7 @@ use Throwable;
  * - Event Integration: Laravel event system integration for seeder workflows
  * - Testing Integration: Integration with testing frameworks for seeder validation
  * - CI/CD Support: Automated seeder execution in deployment pipelines
- * 
+ *
  * Performance Optimization:
  * - Batch Processing: Optimized batch processing for large datasets
  * - Memory Management: Efficient memory usage for resource-intensive seeders
@@ -88,7 +88,7 @@ use Throwable;
  * - Resource Monitoring: Real-time monitoring of resource usage and optimization
  * - Caching Integration: Intelligent caching strategies for improved performance
  * - Background Processing: Asynchronous execution for long-running seeders
- * 
+ *
  * Quality Assurance:
  * - Execution Validation: Comprehensive validation of seeder execution results
  * - Data Integrity Verification: Validation of data integrity and consistency
@@ -97,12 +97,13 @@ use Throwable;
  * - Rollback Testing: Validation of rollback operations and data restoration
  * - Compliance Checking: Validation of compliance requirements and constraints
  * - Documentation Generation: Automatic generation of execution documentation
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $service = app(SeederExecutionService::class);
  * $log = $service->executeSeeder($seeder, ['validate' => true]);
@@ -193,7 +194,7 @@ class SeederExecutionService
         $discovered = [];
         $seederPath = database_path('seeders');
 
-        if (!File::exists($seederPath)) {
+        if (! File::exists($seederPath)) {
             return $discovered;
         }
 
@@ -237,7 +238,7 @@ class SeederExecutionService
                 'seeder_name' => $seeder->name,
                 'seeder_class' => $seeder->class_name,
                 'status' => 'failed',
-                'error_message' => 'Failed to create execution log: ' . $e->getMessage(),
+                'error_message' => 'Failed to create execution log: '.$e->getMessage(),
                 'executed_by' => Auth::check() ? Auth::user()->name ?? Auth::user()->email : 'Console',
                 'started_at' => now(),
                 'completed_at' => now(),
@@ -257,10 +258,6 @@ class SeederExecutionService
 
     /**
      * Update execution log safely, handling both database and in-memory logs
-     * 
-     * @param SeederExecutionLog $log
-     * @param array $data
-     * @return void
      */
     protected function updateExecutionLog(SeederExecutionLog $log, array $data): void
     {
@@ -299,7 +296,7 @@ class SeederExecutionService
                 throw new \Exception("Seeder execution failed with exit code: {$exitCode}");
             }
 
-            return $output . $bufferOutput;
+            return $output.$bufferOutput;
         } catch (Throwable $e) {
             ob_end_clean();
             throw $e;
@@ -328,13 +325,14 @@ class SeederExecutionService
     protected function isSeederClass(string $className): bool
     {
         try {
-            if (!class_exists($className)) {
+            if (! class_exists($className)) {
                 return false;
             }
 
             $reflection = new \ReflectionClass($className);
+
             return $reflection->isSubclassOf(Seeder::class) ||
-                $reflection->implementsInterface(\Illuminate\Database\Seeder::class);
+                $reflection->implementsInterface(Seeder::class);
         } catch (Throwable $e) {
             return false;
         }
@@ -342,8 +340,7 @@ class SeederExecutionService
 
     /**
      * Enhanced seeder validation with detailed error messages
-     * 
-     * @param DataSeeder $seeder
+     *
      * @throws \Exception
      */
     protected function validateSeederExecution(DataSeeder $seeder): void
@@ -354,19 +351,19 @@ class SeederExecutionService
         }
 
         // Check if file exists
-        if (!$seeder->exists()) {
+        if (! $seeder->exists()) {
             throw new \Exception("Seeder file not found at path: {$seeder->file_path}");
         }
 
         // Check if class exists and is loadable
-        if (!class_exists($seeder->class_name)) {
+        if (! class_exists($seeder->class_name)) {
             throw new \Exception("Seeder class '{$seeder->class_name}' not found. Check if the file has syntax errors or the class name is correct.");
         }
 
         // Check if it's a valid seeder class
         try {
             $reflection = new \ReflectionClass($seeder->class_name);
-            if (!$reflection->isSubclassOf(Seeder::class)) {
+            if (! $reflection->isSubclassOf(Seeder::class)) {
                 throw new \Exception("Class '{$seeder->class_name}' is not a valid seeder class. It must extend Illuminate\\Database\\Seeder.");
             }
         } catch (\ReflectionException $e) {
@@ -376,7 +373,7 @@ class SeederExecutionService
         // Check if class is instantiable
         try {
             $reflection = new \ReflectionClass($seeder->class_name);
-            if (!$reflection->isInstantiable()) {
+            if (! $reflection->isInstantiable()) {
                 throw new \Exception("Seeder class '{$seeder->class_name}' is not instantiable. Check if it's abstract or has missing dependencies.");
             }
         } catch (\ReflectionException $e) {

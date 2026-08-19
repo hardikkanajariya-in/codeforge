@@ -2,33 +2,29 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Feature\HealthMonitoring;
 
-use HkDevs\CodeForgeStudio\Tests\TestCase;
-use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
-use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
-use HkDevs\CodeForgeStudio\Models\DatabaseHealthMetric;
 use HkDevs\CodeForgeStudio\Listeners\QueryPerformanceListener;
+use HkDevs\CodeForgeStudio\Models\DatabaseHealthMetric;
+use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
+use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
+use HkDevs\CodeForgeStudio\Tests\TestCase;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Database\Events\QueryExecuted;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * Health Monitoring Performance and Load Testing Suite
- * 
+ *
  * This test class implements performance and scalability tests for the health monitoring system:
- * 
+ *
  * - TC-PERF-001: Large Database Handling
  * - TC-PERF-002: Concurrent User Testing
  * - TC-PERF-003: Memory Usage Optimization
  * - High-volume query logging performance
  * - Health metrics collection under load
  * - Widget performance with large datasets
- * 
- * @package HkDevs\CodeForgeStudio\Tests\Feature\HealthMonitoring
+ *
  * @author HkDevs (hardikkanajariya.in)
  */
 class HealthMonitoringPerformanceTest extends TestCase
@@ -36,6 +32,7 @@ class HealthMonitoringPerformanceTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     private DatabaseHealthService $healthService;
+
     private QueryPerformanceListener $queryListener;
 
     protected function setUp(): void
@@ -44,7 +41,7 @@ class HealthMonitoringPerformanceTest extends TestCase
 
         // Initialize services
         $this->healthService = app(DatabaseHealthService::class);
-        $this->queryListener = new QueryPerformanceListener();
+        $this->queryListener = new QueryPerformanceListener;
 
         // Configure for performance testing
         Config::set('codeforge-database-studio.enable_query_logging', true);
@@ -59,7 +56,7 @@ class HealthMonitoringPerformanceTest extends TestCase
      */
     private function runPluginMigrations(): void
     {
-        if (!Schema::hasTable('database_health_metrics')) {
+        if (! Schema::hasTable('database_health_metrics')) {
             Schema::create('database_health_metrics', function ($table) {
                 $table->id();
                 $table->string('connection');
@@ -77,7 +74,7 @@ class HealthMonitoringPerformanceTest extends TestCase
             });
         }
 
-        if (!Schema::hasTable('query_performance_logs')) {
+        if (! Schema::hasTable('query_performance_logs')) {
             Schema::create('query_performance_logs', function ($table) {
                 $table->id();
                 $table->string('connection');
@@ -398,8 +395,8 @@ class HealthMonitoringPerformanceTest extends TestCase
         $this->assertLessThan(1, $queryTime, 'Database queries should be optimized');
 
         // Verify results
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Collection::class, $slowQueries);
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Collection::class, $recentQueries);
+        $this->assertInstanceOf(Collection::class, $slowQueries);
+        $this->assertInstanceOf(Collection::class, $recentQueries);
     }
 
     /**
@@ -444,7 +441,7 @@ class HealthMonitoringPerformanceTest extends TestCase
             QueryPerformanceLog::create([
                 'connection' => 'testing',
                 'query' => $query,
-                'query_hash' => md5($query . $i),
+                'query_hash' => md5($query.$i),
                 'execution_time' => $this->faker->numberBetween(10, 2000),
                 'type' => strtolower(explode(' ', $query)[0]),
                 'status' => $this->faker->randomElement(['success', 'success', 'success', 'error']),
@@ -510,7 +507,7 @@ class HealthMonitoringPerformanceTest extends TestCase
             'metrics_collection',
             'query_logging',
             'health_assessment',
-            'performance_analysis'
+            'performance_analysis',
         ];
 
         foreach ($operations as $operation) {
@@ -557,7 +554,7 @@ class HealthMonitoringPerformanceTest extends TestCase
     /**
      * Test batch processing memory
      */
-    private function testBatchProcessingMemory(): void
+    private function test_batch_processing_memory(): void
     {
         // Simulate batch processing operations
         $batches = QueryPerformanceLog::where('connection', 'testing')
@@ -590,7 +587,7 @@ class HealthMonitoringPerformanceTest extends TestCase
                 QueryPerformanceLog::create([
                     'connection' => 'testing',
                     'query' => $pattern['query'],
-                    'query_hash' => md5($pattern['query'] . $i),
+                    'query_hash' => md5($pattern['query'].$i),
                     'execution_time' => $pattern['time'] + $this->faker->numberBetween(-10, 10),
                     'type' => $pattern['type'],
                     'status' => 'success',

@@ -2,19 +2,19 @@
 
 namespace HkDevs\CodeForgeStudio\Services;
 
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use HkDevs\CodeForgeStudio\Models\DocumentationGeneration;
 use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 
 /**
  * DocumentationGenerationService
- * 
+ *
  * Professional database documentation generation service for CodeForge Database Studio.
  * Creates comprehensive, multi-format documentation with advanced formatting and customization options.
- * 
+ *
  * Features:
  * - Multi-format documentation generation (Markdown, HTML, PDF)
  * - Comprehensive schema documentation with tables, relationships, and constraints
@@ -24,14 +24,14 @@ use Dompdf\Options;
  * - Interactive HTML documentation with search and filtering capabilities
  * - Professional PDF generation with print-optimized layouts
  * - Schema snapshot integration for versioned documentation
- * 
+ *
  * Documentation Formats:
  * - Markdown: Developer-friendly format with Git integration and collaboration support
  * - HTML: Interactive web documentation with responsive design and navigation
  * - PDF: Professional print-ready documentation with customizable styling
  * - JSON: Structured data export for API documentation and integration
  * - XML: Schema export for external tools and documentation systems
- * 
+ *
  * Content Generation:
  * - Table Structure: Comprehensive column definitions with types and constraints
  * - Relationship Mapping: Foreign key relationships with visual representation
@@ -40,7 +40,7 @@ use Dompdf\Options;
  * - Data Dictionary: Detailed field descriptions and business logic documentation
  * - Schema Statistics: Database metrics and structural analysis
  * - Change History: Schema evolution tracking with diff generation
- * 
+ *
  * Customization Features:
  * - Template System: Customizable documentation templates with theme support
  * - Branding Options: Custom logos, colors, and styling integration
@@ -49,7 +49,7 @@ use Dompdf\Options;
  * - Internationalization: Multi-language documentation support
  * - Custom Styling: CSS customization for HTML and PDF outputs
  * - Layout Options: Multiple layout templates for different use cases
- * 
+ *
  * Advanced Features:
  * - Schema Snapshot Integration: Version-controlled documentation generation
  * - Diff Generation: Schema change documentation between versions
@@ -58,7 +58,7 @@ use Dompdf\Options;
  * - Cross-References: Automatic linking between related tables and sections
  * - Export Options: Multiple download formats and delivery methods
  * - Batch Generation: Automated documentation for multiple schemas
- * 
+ *
  * Integration Capabilities:
  * - Laravel Integration: Seamless integration with Laravel applications
  * - Storage Integration: Multiple storage backends with cloud support
@@ -67,7 +67,7 @@ use Dompdf\Options;
  * - API Integration: REST endpoints for external documentation requests
  * - Webhook Support: Real-time documentation updates with external triggers
  * - Team Collaboration: Shared documentation generation and review workflows
- * 
+ *
  * Performance Optimization:
  * - Lazy Loading: Progressive content loading for large schemas
  * - Caching Strategies: Intelligent caching of generated content and assets
@@ -75,7 +75,7 @@ use Dompdf\Options;
  * - Memory Management: Efficient memory usage for complex schema processing
  * - Streaming Generation: Progressive output for real-time feedback
  * - Batch Processing: Optimized processing for multiple table documentation
- * 
+ *
  * Quality Assurance:
  * - Content Validation: Comprehensive validation of generated documentation
  * - Link Checking: Automatic validation of internal and external links
@@ -83,12 +83,13 @@ use Dompdf\Options;
  * - Accessibility: WCAG-compliant HTML generation with screen reader support
  * - SEO Optimization: Search engine optimized HTML documentation
  * - Print Optimization: PDF layouts optimized for professional printing
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $generation = DocumentationGeneration::create([
  *     'format' => 'html',
@@ -101,7 +102,9 @@ use Dompdf\Options;
 class DocumentationGenerationService
 {
     protected DocumentationGeneration $generation;
+
     protected SchemaSnapshot $snapshot;
+
     protected array $options;
 
     public function __construct(DocumentationGeneration $generation)
@@ -166,9 +169,10 @@ class DocumentationGenerationService
 
         // Create new snapshot
         $service = app(SchemaDocumentationService::class);
+
         return $service->generateSchemaSnapshot(
             "Auto-generated for documentation: {$this->generation->title}",
-            "Snapshot created for documentation generation"
+            'Snapshot created for documentation generation'
         );
     }
 
@@ -201,25 +205,28 @@ class DocumentationGenerationService
                 'snapshot_name' => $this->snapshot->name,
                 'captured_at' => $this->snapshot->captured_at,
                 'database_connection' => $this->snapshot->database_connection,
-            ]
+            ],
         ];
     }
 
     protected function filterSelectedTables(array $allTables): array
     {
         $includedTables = $this->generation->included_tables ?? [];
+
         return array_intersect_key($allTables, array_flip($includedTables));
     }
 
     protected function filterSingleTable(array $allTables): array
     {
         $tableName = ($this->generation->included_tables ?? [])[0] ?? null;
+
         return $tableName && isset($allTables[$tableName]) ? [$tableName => $allTables[$tableName]] : [];
     }
 
     protected function filterModelTables(array $allTables, array $allModels): array
     {
         $modelTables = array_keys($allModels);
+
         return array_intersect_key($allTables, array_flip($modelTables));
     }
 
@@ -327,11 +334,11 @@ MARKDOWN;
             $markdown .= "**Model:** `{$model['class']}`\n\n";
         }
 
-        if (!empty($table['row_count'])) {
+        if (! empty($table['row_count'])) {
             $markdown .= "**Records:** {$table['row_count']}\n";
         }
 
-        if (!empty($table['size_mb'])) {
+        if (! empty($table['size_mb'])) {
             $markdown .= "**Size:** {$table['size_mb']} MB\n";
         }
 
@@ -349,7 +356,7 @@ MARKDOWN;
         }
 
         // Indexes
-        if (!empty($table['indexes'])) {
+        if (! empty($table['indexes'])) {
             $markdown .= "\n#### Indexes\n\n";
             $markdown .= "| Name | Type | Columns |\n";
             $markdown .= "|------|------|----------|\n";
@@ -362,7 +369,7 @@ MARKDOWN;
         }
 
         // Foreign Keys
-        if (!empty($table['foreign_keys'])) {
+        if (! empty($table['foreign_keys'])) {
             $markdown .= "\n#### Foreign Keys\n\n";
             $markdown .= "| Constraint | Column | References |\n";
             $markdown .= "|------------|--------|-----------|\n";
@@ -377,12 +384,12 @@ MARKDOWN;
         if ($model) {
             $markdown .= "\n#### Model Information\n\n";
 
-            if (!empty($model['fillable'])) {
+            if (! empty($model['fillable'])) {
                 $fillable = implode(', ', $model['fillable']);
                 $markdown .= "**Fillable:** `{$fillable}`\n\n";
             }
 
-            if (!empty($model['relationships'])) {
+            if (! empty($model['relationships'])) {
                 $markdown .= "**Relationships:**\n";
                 foreach ($model['relationships'] as $relationship) {
                     $markdown .= "- `{$relationship['method']}()` - {$relationship['type']}\n";
@@ -399,7 +406,7 @@ MARKDOWN;
     protected function generateMarkdownRelationships(array $data): string
     {
         if (empty($data['relationships'])) {
-            return "";
+            return '';
         }
 
         $markdown = "## Relationships\n\n";
@@ -418,7 +425,7 @@ MARKDOWN;
     protected function generateMarkdownModels(array $data): string
     {
         if (empty($data['models'])) {
-            return "";
+            return '';
         }
 
         $markdown = "## Models\n\n";
@@ -427,10 +434,10 @@ MARKDOWN;
             $markdown .= "### {$model['class']}\n\n";
             $markdown .= "**Table:** `{$tableName}`\n\n";
 
-            if (!empty($model['methods'])) {
+            if (! empty($model['methods'])) {
                 $markdown .= "#### Custom Methods\n\n";
                 foreach ($model['methods'] as $method) {
-                    $params = array_map(fn($p) => ($p['type'] ?? '') . ' $' . $p['name'], $method['parameters']);
+                    $params = array_map(fn ($p) => ($p['type'] ?? '').' $'.$p['name'], $method['parameters']);
                     $paramStr = implode(', ', $params);
                     $returnType = $method['return_type'] ? ": {$method['return_type']}" : '';
 
@@ -451,6 +458,7 @@ MARKDOWN;
     protected function generateHtml(array $data): string
     {
         $markdown = $this->generateMarkdown($data);
+
         return $this->convertMarkdownToHtml($markdown, $data);
     }
 
@@ -490,7 +498,7 @@ MARKDOWN;
 
         foreach ($lines as $line) {
             if (preg_match('/^\|(.+)\|$/', $line, $matches)) {
-                if (!$inTable) {
+                if (! $inTable) {
                     $result[] = '<table class="table table-striped">';
                     $inTable = true;
                 }
@@ -504,10 +512,10 @@ MARKDOWN;
                 $result[] = $row;
             } elseif (preg_match('/^\|[-\s\|]+\|$/', $line)) {
                 // Table separator line - convert previous row to header
-                if (!empty($result) && $inTable) {
+                if (! empty($result) && $inTable) {
                     $lastRow = array_pop($result);
                     $headerRow = str_replace(['<td>', '</td>'], ['<th>', '</th>'], $lastRow);
-                    $result[] = '<thead>' . $headerRow . '</thead><tbody>';
+                    $result[] = '<thead>'.$headerRow.'</thead><tbody>';
                 }
             } else {
                 if ($inTable) {
@@ -575,14 +583,14 @@ HTML;
      */
     protected function generatePdf(array $data): string
     {
-        if (!class_exists('Dompdf\Dompdf')) {
+        if (! class_exists('Dompdf\Dompdf')) {
             throw new \RuntimeException('PDF generation requires dompdf/dompdf package. Install it via: composer require dompdf/dompdf');
         }
 
         $html = $this->generateHtml($data);
 
         // Configure Dompdf
-        $options = new Options();
+        $options = new Options;
         $options->set('defaultFont', 'Arial');
         $options->set('isRemoteEnabled', false);
         $options->set('isHtml5ParserEnabled', true);
@@ -601,12 +609,12 @@ HTML;
     protected function saveGeneratedFile(string $content): string
     {
         $filename = $this->generateFilename();
-        $directory = 'documentation-generations/' . date('Y/m');
+        $directory = 'documentation-generations/'.date('Y/m');
 
         // Ensure directory exists
         Storage::disk('local')->makeDirectory($directory);
 
-        $fullPath = $directory . '/' . $filename;
+        $fullPath = $directory.'/'.$filename;
         Storage::disk('local')->put($fullPath, $content);
 
         return $fullPath;

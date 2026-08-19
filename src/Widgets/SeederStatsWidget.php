@@ -2,10 +2,10 @@
 
 namespace HkDevs\CodeForgeStudio\Widgets;
 
-use HkDevs\CodeForgeStudio\Models\DataSeeder;
-use HkDevs\CodeForgeStudio\Models\SeederExecutionLog;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use HkDevs\CodeForgeStudio\Models\DataSeeder;
+use HkDevs\CodeForgeStudio\Models\SeederExecutionLog;
 
 class SeederStatsWidget extends BaseWidget
 {
@@ -26,7 +26,7 @@ class SeederStatsWidget extends BaseWidget
             $active = DataSeeder::active()->count();
 
             return Stat::make('Total Seeders', $total)
-                ->description($active . ' active')
+                ->description($active.' active')
                 ->descriptionIcon('heroicon-m-play')
                 ->color('primary');
         } catch (\Exception $e) {
@@ -44,7 +44,7 @@ class SeederStatsWidget extends BaseWidget
             $autoRun = DataSeeder::active()->autoRun()->count();
 
             $color = $active > 0 ? 'success' : 'warning';
-            $description = $autoRun > 0 ? $autoRun . ' auto-run' : 'None set for auto-run';
+            $description = $autoRun > 0 ? $autoRun.' auto-run' : 'None set for auto-run';
 
             return Stat::make('Active Seeders', $active)
                 ->description($description)
@@ -65,10 +65,10 @@ class SeederStatsWidget extends BaseWidget
             $today = SeederExecutionLog::where('started_at', '>=', today())->count();
 
             $color = $recent > 0 ? 'info' : 'gray';
-            $description = $today > 0 ? $today . ' today' : 'None today';
+            $description = $today > 0 ? $today.' today' : 'None today';
 
             return Stat::make('Recent Executions', $recent)
-                ->description($description . ' (7 days)')
+                ->description($description.' (7 days)')
                 ->descriptionIcon('heroicon-m-clock')
                 ->color($color);
         } catch (\Exception $e) {
@@ -101,8 +101,8 @@ class SeederStatsWidget extends BaseWidget
                 default => 'danger',
             };
 
-            return Stat::make('Success Rate', $rate . '%')
-                ->description($failed . ' failed (30 days)')
+            return Stat::make('Success Rate', $rate.'%')
+                ->description($failed.' failed (30 days)')
                 ->descriptionIcon('heroicon-m-chart-bar')
                 ->color($color);
         } catch (\Exception $e) {

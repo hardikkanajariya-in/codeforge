@@ -7,11 +7,10 @@ use Illuminate\Support\Facades\Response;
 
 /**
  * Asset Service for CodeForge Studio
- * 
+ *
  * Handles asset serving with fallback to package directory
  * if assets are not published to public directory.
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
  */
 class AssetService
@@ -37,9 +36,9 @@ class AssetService
      */
     public static function serveAsset(string $path)
     {
-        $packagePath = __DIR__ . "/../../resources/{$path}";
+        $packagePath = __DIR__."/../../resources/{$path}";
 
-        if (!File::exists($packagePath)) {
+        if (! File::exists($packagePath)) {
             abort(404, 'Asset not found');
         }
 
@@ -49,7 +48,7 @@ class AssetService
         return Response::make($content, 200, [
             'Content-Type' => $mimeType,
             'Cache-Control' => 'public, max-age=31536000', // 1 year cache
-            'Expires' => gmdate('D, d M Y H:i:s', time() + 31536000) . ' GMT',
+            'Expires' => gmdate('D, d M Y H:i:s', time() + 31536000).' GMT',
         ]);
     }
 
@@ -93,11 +92,11 @@ class AssetService
         return [
             'published_css' => public_path('vendor/codeforge/css/schema-designer-v2.css'),
             'published_js' => public_path('vendor/codeforge/js/schema-designer-v2.js'),
-            'package_css' => __DIR__ . '/../../resources/css/schema-designer-v2.css',
-            'package_js' => __DIR__ . '/../../resources/js/schema-designer-v2.js',
+            'package_css' => __DIR__.'/../../resources/css/schema-designer-v2.css',
+            'package_js' => __DIR__.'/../../resources/js/schema-designer-v2.js',
             'published_exists' => self::areAssetsPublished(),
-            'package_exists' => File::exists(__DIR__ . '/../../resources/css/schema-designer-v2.css') &&
-                File::exists(__DIR__ . '/../../resources/js/schema-designer-v2.js'),
+            'package_exists' => File::exists(__DIR__.'/../../resources/css/schema-designer-v2.css') &&
+                File::exists(__DIR__.'/../../resources/js/schema-designer-v2.js'),
         ];
     }
 }

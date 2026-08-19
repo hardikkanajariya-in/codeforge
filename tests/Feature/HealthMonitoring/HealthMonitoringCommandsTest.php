@@ -2,31 +2,25 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Feature\HealthMonitoring;
 
-use HkDevs\CodeForgeStudio\Tests\TestCase;
-use HkDevs\CodeForgeStudio\Commands\CollectHealthMetricsCommand;
-use HkDevs\CodeForgeStudio\Commands\ToggleQueryLoggingCommand;
-use HkDevs\CodeForgeStudio\Commands\CleanupLogsCommand;
-use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
 use HkDevs\CodeForgeStudio\Models\DatabaseHealthMetric;
+use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
+use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * Health Monitoring Commands Test Suite
- * 
+ *
  * This test class specifically focuses on testing the health monitoring Artisan commands:
  * - database-manager:collect-metrics
  * - database-manager:toggle-query-logging
  * - database-manager:cleanup-logs
- * 
+ *
  * Implements test cases TC-CMD-003 from the comprehensive test documentation.
- * 
- * @package HkDevs\CodeForgeStudio\Tests\Feature\HealthMonitoring
+ *
  * @author HkDevs (hardikkanajariya.in)
  */
 class HealthMonitoringCommandsTest extends TestCase
@@ -50,7 +44,7 @@ class HealthMonitoringCommandsTest extends TestCase
      */
     private function runPluginMigrations(): void
     {
-        if (!Schema::hasTable('database_health_metrics')) {
+        if (! Schema::hasTable('database_health_metrics')) {
             Schema::create('database_health_metrics', function ($table) {
                 $table->id();
                 $table->string('connection');
@@ -65,7 +59,7 @@ class HealthMonitoringCommandsTest extends TestCase
             });
         }
 
-        if (!Schema::hasTable('query_performance_logs')) {
+        if (! Schema::hasTable('query_performance_logs')) {
             Schema::create('query_performance_logs', function ($table) {
                 $table->id();
                 $table->string('connection');
@@ -83,7 +77,7 @@ class HealthMonitoringCommandsTest extends TestCase
             });
         }
 
-        if (!Schema::hasTable('database_manager_logs')) {
+        if (! Schema::hasTable('database_manager_logs')) {
             Schema::create('database_manager_logs', function ($table) {
                 $table->id();
                 $table->string('operation');
@@ -113,7 +107,7 @@ class HealthMonitoringCommandsTest extends TestCase
         // Verify metrics were created in database
         $this->assertDatabaseHas('database_health_metrics', [
             'connection' => 'testing',
-            'metric_type' => 'connection_status'
+            'metric_type' => 'connection_status',
         ]);
     }
 
@@ -124,7 +118,7 @@ class HealthMonitoringCommandsTest extends TestCase
     {
         // Test command with specific connection
         $exitCode = Artisan::call('database-manager:collect-metrics', [
-            '--connection' => 'testing'
+            '--connection' => 'testing',
         ]);
 
         $this->assertEquals(0, $exitCode, 'Command with connection option should execute successfully');
@@ -144,7 +138,7 @@ class HealthMonitoringCommandsTest extends TestCase
     {
         // Test command in test mode (dry run)
         $exitCode = Artisan::call('database-manager:collect-metrics', [
-            '--test' => true
+            '--test' => true,
         ]);
 
         $this->assertEquals(0, $exitCode, 'Test mode should execute successfully');
@@ -161,7 +155,7 @@ class HealthMonitoringCommandsTest extends TestCase
     {
         // Test enabling query logging
         $exitCode = Artisan::call('database-manager:toggle-query-logging', [
-            '--enable' => true
+            '--enable' => true,
         ]);
 
         $this->assertEquals(0, $exitCode, 'Enable query logging should execute successfully');
@@ -171,7 +165,7 @@ class HealthMonitoringCommandsTest extends TestCase
 
         // Test disabling query logging
         $exitCode = Artisan::call('database-manager:toggle-query-logging', [
-            '--disable' => true
+            '--disable' => true,
         ]);
 
         $this->assertEquals(0, $exitCode, 'Disable query logging should execute successfully');
@@ -226,7 +220,7 @@ class HealthMonitoringCommandsTest extends TestCase
 
         // Test cleanup with specific retention period
         $exitCode = Artisan::call('database-manager:cleanup-logs', [
-            '--days' => 7
+            '--days' => 7,
         ]);
 
         $this->assertEquals(0, $exitCode, 'Cleanup with days option should execute successfully');
@@ -251,7 +245,7 @@ class HealthMonitoringCommandsTest extends TestCase
         // Test dry run (should not actually delete)
         $exitCode = Artisan::call('database-manager:cleanup-logs', [
             '--dry-run' => true,
-            '--days' => 7
+            '--days' => 7,
         ]);
 
         $this->assertEquals(0, $exitCode, 'Dry run should execute successfully');
@@ -272,7 +266,7 @@ class HealthMonitoringCommandsTest extends TestCase
     {
         // Test command with verbose output
         $exitCode = Artisan::call('database-manager:collect-metrics', [
-            '--connection' => 'testing'
+            '--connection' => 'testing',
         ]);
 
         $output = Artisan::output();
@@ -291,7 +285,7 @@ class HealthMonitoringCommandsTest extends TestCase
     {
         // Test command with invalid connection
         $exitCode = Artisan::call('database-manager:collect-metrics', [
-            '--connection' => 'invalid_connection'
+            '--connection' => 'invalid_connection',
         ]);
 
         // Command should still exit successfully but report the error
@@ -448,7 +442,7 @@ class HealthMonitoringCommandsTest extends TestCase
             QueryPerformanceLog::create([
                 'connection' => 'testing',
                 'query' => 'SELECT * FROM dated_test',
-                'query_hash' => md5('SELECT * FROM dated_test' . $date->timestamp),
+                'query_hash' => md5('SELECT * FROM dated_test'.$date->timestamp),
                 'execution_time' => $this->faker->numberBetween(10, 200),
                 'type' => 'select',
                 'status' => 'success',

@@ -3,17 +3,17 @@
 namespace HkDevs\CodeForgeStudio\Services;
 
 use HkDevs\CodeForgeStudio\Models\CodeGenerationHistory;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 /**
  * AdvancedCodeGenerationService
- * 
+ *
  * Comprehensive code generation orchestration service for CodeForge Database Studio.
  * Provides intelligent, multi-file code generation with dependency resolution and validation.
- * 
+ *
  * Features:
  * - Multi-file generation with dependency awareness and proper ordering
  * - Comprehensive configuration validation and sanitization
@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Auth;
  * - Generation history tracking with complete audit trails
  * - User attribution and environment-aware generation
  * - Intelligent conflict detection and resolution strategies
- * 
+ *
  * Code Generation Capabilities:
  * - Laravel Models with relationships, accessors, and mutators
  * - Database Migrations with foreign keys and index optimization
@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\Auth;
  * - Policy Classes with resource-based authorization logic
  * - Resource Controllers with RESTful method implementations
  * - API Resources with field transformation and filtering
- * 
+ *
  * Advanced Features:
  * - Configuration-driven generation with flexible parameter systems
  * - Multi-template support for different coding standards
@@ -42,7 +42,7 @@ use Illuminate\Support\Facades\Auth;
  * - Code style enforcement and formatting standards
  * - Custom stub template creation and management
  * - Generation pattern recognition and optimization
- * 
+ *
  * Validation and Safety:
  * - Pre-generation configuration validation with detailed error reporting
  * - File conflict detection with merge and overwrite strategies
@@ -50,7 +50,7 @@ use Illuminate\Support\Facades\Auth;
  * - Rollback capabilities for failed or incomplete generations
  * - Comprehensive error logging and diagnostic information
  * - Generation impact analysis and preview capabilities
- * 
+ *
  * Integration Features:
  * - Seamless integration with Laravel's native code generation
  * - Support for custom stub templates and generation patterns
@@ -58,26 +58,27 @@ use Illuminate\Support\Facades\Auth;
  * - Batch generation support for large-scale code creation
  * - CI/CD pipeline integration for automated code generation
  * - Team collaboration features with shared generation templates
- * 
+ *
  * Performance Optimization:
  * - Lazy loading of generation dependencies and templates
  * - Intelligent caching of frequently used generation patterns
  * - Batch processing for multiple file generation operations
  * - Memory-efficient handling of large generation sets
  * - Optimized file I/O operations with streaming support
- * 
+ *
  * Monitoring and Analytics:
  * - Detailed generation metrics and performance tracking
  * - Historical analysis of generation patterns and success rates
  * - User activity tracking and generation attribution
  * - Error pattern analysis and prevention recommendations
  * - Generation impact assessment and optimization suggestions
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $service = app(AdvancedCodeGenerationService::class);
  * $result = $service->generateFiles([
@@ -89,8 +90,11 @@ use Illuminate\Support\Facades\Auth;
 class AdvancedCodeGenerationService
 {
     protected StubTemplateService $stubService;
+
     protected LaravelTypesService $typesService;
+
     protected MigrationGeneratorService $migrationGenerator;
+
     protected ModelGeneratorService $modelGenerator;
 
     public function __construct(
@@ -126,8 +130,9 @@ class AdvancedCodeGenerationService
         try {
             // Validate configuration first
             $validationErrors = $this->validateConfiguration($config);
-            if (!empty($validationErrors)) {
+            if (! empty($validationErrors)) {
                 $results['errors'] = $validationErrors;
+
                 return $results;
             }
 
@@ -175,7 +180,7 @@ class AdvancedCodeGenerationService
             // Clean up any partially created files
             $this->cleanupFailedGeneration($results['files_created']);
 
-            $results['errors'][] = 'Generation failed: ' . $e->getMessage();
+            $results['errors'][] = 'Generation failed: '.$e->getMessage();
             $results['generation_time_ms'] = round((microtime(true) - $startTime) * 1000, 2);
         }
 
@@ -244,6 +249,7 @@ class AdvancedCodeGenerationService
 
         if (empty($enabledComponents)) {
             $errors[] = 'At least one component must be enabled for generation.';
+
             return $errors;
         }
 
@@ -260,19 +266,19 @@ class AdvancedCodeGenerationService
         }
 
         // Validate dependencies
-        if ($config['factory']['enabled'] && !($config['model']['enabled'] ?? false)) {
+        if ($config['factory']['enabled'] && ! ($config['model']['enabled'] ?? false)) {
             $errors[] = 'Factory generation requires model to be enabled.';
         }
 
-        if ($config['seeder']['enabled'] && !($config['model']['enabled'] ?? false)) {
+        if ($config['seeder']['enabled'] && ! ($config['model']['enabled'] ?? false)) {
             $errors[] = 'Seeder generation requires model to be enabled.';
         }
 
-        if ($config['policy']['enabled'] && !($config['model']['enabled'] ?? false)) {
+        if ($config['policy']['enabled'] && ! ($config['model']['enabled'] ?? false)) {
             $errors[] = 'Policy generation requires model to be enabled.';
         }
 
-        if ($config['resource']['enabled'] && !($config['model']['enabled'] ?? false)) {
+        if ($config['resource']['enabled'] && ! ($config['model']['enabled'] ?? false)) {
             $errors[] = 'Filament Resource generation requires model to be enabled.';
         }
 
@@ -284,9 +290,9 @@ class AdvancedCodeGenerationService
      */
     protected function generateMigration(array $config, string $generationId): array
     {
-        $className = 'Create' . Str::studly($config['table_name']) . 'Table';
-        $fileName = date('Y_m_d_His') . '_' . Str::snake($className) . '.php';
-        $filePath = database_path('migrations/' . $fileName);
+        $className = 'Create'.Str::studly($config['table_name']).'Table';
+        $fileName = date('Y_m_d_His').'_'.Str::snake($className).'.php';
+        $filePath = database_path('migrations/'.$fileName);
 
         $stub = $this->stubService->getStub('migration.create');
         $content = $this->stubService->populateStub($stub, [
@@ -319,8 +325,8 @@ class AdvancedCodeGenerationService
     protected function generateModel(array $config, string $generationId): array
     {
         $className = $config['name'];
-        $fileName = $className . '.php';
-        $filePath = app_path('Models/' . $fileName);
+        $fileName = $className.'.php';
+        $filePath = app_path('Models/'.$fileName);
 
         $stub = $this->stubService->getStub('model.advanced');
         $content = $this->stubService->populateStub($stub, [
@@ -362,8 +368,8 @@ class AdvancedCodeGenerationService
     protected function generateFactory(array $config, string $generationId): array
     {
         $className = $config['class_name'];
-        $fileName = $className . '.php';
-        $filePath = database_path('factories/' . $fileName);
+        $fileName = $className.'.php';
+        $filePath = database_path('factories/'.$fileName);
 
         $stub = $this->stubService->getStub('factory.advanced');
         $content = $this->stubService->populateStub($stub, [
@@ -398,8 +404,8 @@ class AdvancedCodeGenerationService
     protected function generateSeeder(array $config, string $generationId): array
     {
         $className = $config['class_name'];
-        $fileName = $className . '.php';
-        $filePath = database_path('seeders/' . $fileName);
+        $fileName = $className.'.php';
+        $filePath = database_path('seeders/'.$fileName);
 
         $stub = $this->stubService->getStub('seeder.advanced');
         $content = $this->stubService->populateStub($stub, [
@@ -409,7 +415,7 @@ class AdvancedCodeGenerationService
             'COUNT' => $config['count'] ?? 10,
             'FACTORY_USAGE' => $this->buildFactoryUsageCode($config),
             'MANUAL_DATA' => $this->buildManualDataCode($config['manual_data'] ?? [], $config),
-            'TRUNCATE_TABLE' => $config['truncate_table'] ? 'DB::table(\'' . Str::snake(Str::plural($config['model'])) . '\')->truncate();' : '',
+            'TRUNCATE_TABLE' => $config['truncate_table'] ? 'DB::table(\''.Str::snake(Str::plural($config['model'])).'\')->truncate();' : '',
             'DISABLE_FOREIGN_KEYS' => $config['disable_foreign_keys'] ? 'Schema::disableForeignKeyConstraints();' : '',
             'ENABLE_FOREIGN_KEYS' => $config['disable_foreign_keys'] ? 'Schema::enableForeignKeyConstraints();' : '',
         ]);
@@ -435,8 +441,8 @@ class AdvancedCodeGenerationService
     protected function generatePolicy(array $config, string $generationId): array
     {
         $className = $config['class_name'];
-        $fileName = $className . '.php';
-        $filePath = app_path('Policies/' . $fileName);
+        $fileName = $className.'.php';
+        $filePath = app_path('Policies/'.$fileName);
 
         $stub = $this->stubService->getStub('policy.advanced');
         $content = $this->stubService->populateStub($stub, [
@@ -468,8 +474,8 @@ class AdvancedCodeGenerationService
     protected function generateFilamentResource(array $config, string $generationId): array
     {
         $className = $config['class_name'];
-        $fileName = $className . '.php';
-        $filePath = app_path('Filament/Resources/' . $fileName);
+        $fileName = $className.'.php';
+        $filePath = app_path('Filament/Resources/'.$fileName);
 
         $stub = $this->stubService->getStub('filament.resource');
         $content = $this->stubService->populateStub($stub, [
@@ -508,8 +514,8 @@ class AdvancedCodeGenerationService
     protected function generateController(array $config, string $generationId): array
     {
         $className = $config['class_name'];
-        $fileName = $className . '.php';
-        $filePath = app_path('Http/Controllers/' . $fileName);
+        $fileName = $className.'.php';
+        $filePath = app_path('Http/Controllers/'.$fileName);
 
         $stubType = match ($config['type'] ?? 'resource') {
             'api' => 'controller.api',
@@ -562,9 +568,9 @@ class AdvancedCodeGenerationService
 
     protected function generateFeatureTest(array $config, string $generationId): array
     {
-        $className = ($config['model'] ?? 'Example') . 'Test';
-        $fileName = $className . '.php';
-        $filePath = base_path('tests/Feature/' . $fileName);
+        $className = ($config['model'] ?? 'Example').'Test';
+        $fileName = $className.'.php';
+        $filePath = base_path('tests/Feature/'.$fileName);
 
         $stub = $this->stubService->getStub('test.feature');
         $content = $this->stubService->populateStub($stub, [
@@ -589,9 +595,9 @@ class AdvancedCodeGenerationService
 
     protected function generateUnitTest(array $config, string $generationId): array
     {
-        $className = ($config['model'] ?? 'Example') . 'UnitTest';
-        $fileName = $className . '.php';
-        $filePath = base_path('tests/Unit/' . $fileName);
+        $className = ($config['model'] ?? 'Example').'UnitTest';
+        $fileName = $className.'.php';
+        $filePath = base_path('tests/Unit/'.$fileName);
 
         $stub = $this->stubService->getStub('test.unit');
         $content = $this->stubService->populateStub($stub, [
@@ -617,7 +623,7 @@ class AdvancedCodeGenerationService
     // Preview methods (return content without creating files)
     protected function previewMigration(array $config): array
     {
-        $className = 'Create' . Str::studly($config['table_name']) . 'Table';
+        $className = 'Create'.Str::studly($config['table_name']).'Table';
         $stub = $this->stubService->getStub('migration.create');
         $content = $this->stubService->populateStub($stub, [
             'CLASS_NAME' => $className,
@@ -630,8 +636,8 @@ class AdvancedCodeGenerationService
         ]);
 
         return [
-            'class_name' => $className . '.php',
-            'content' => $content
+            'class_name' => $className.'.php',
+            'content' => $content,
         ];
     }
 
@@ -658,8 +664,8 @@ class AdvancedCodeGenerationService
         ]);
 
         return [
-            'class_name' => $className . '.php',
-            'content' => $content
+            'class_name' => $className.'.php',
+            'content' => $content,
         ];
     }
 
@@ -679,8 +685,8 @@ class AdvancedCodeGenerationService
         ]);
 
         return [
-            'class_name' => $className . '.php',
-            'content' => $content
+            'class_name' => $className.'.php',
+            'content' => $content,
         ];
     }
 
@@ -695,14 +701,14 @@ class AdvancedCodeGenerationService
             'COUNT' => $config['count'] ?? 10,
             'FACTORY_USAGE' => $this->buildFactoryUsageCode($config),
             'MANUAL_DATA' => $this->buildManualDataCode($config['manual_data'] ?? [], $config),
-            'TRUNCATE_TABLE' => $config['truncate_table'] ? 'DB::table(\'' . Str::snake(Str::plural($config['model'])) . '\')->truncate();' : '',
+            'TRUNCATE_TABLE' => $config['truncate_table'] ? 'DB::table(\''.Str::snake(Str::plural($config['model'])).'\')->truncate();' : '',
             'DISABLE_FOREIGN_KEYS' => $config['disable_foreign_keys'] ? 'Schema::disableForeignKeyConstraints();' : '',
             'ENABLE_FOREIGN_KEYS' => $config['disable_foreign_keys'] ? 'Schema::enableForeignKeyConstraints();' : '',
         ]);
 
         return [
-            'class_name' => $className . '.php',
-            'content' => $content
+            'class_name' => $className.'.php',
+            'content' => $content,
         ];
     }
 
@@ -719,8 +725,8 @@ class AdvancedCodeGenerationService
         ]);
 
         return [
-            'class_name' => $className . '.php',
-            'content' => $content
+            'class_name' => $className.'.php',
+            'content' => $content,
         ];
     }
 
@@ -744,8 +750,8 @@ class AdvancedCodeGenerationService
         ]);
 
         return [
-            'class_name' => $className . '.php',
-            'content' => $content
+            'class_name' => $className.'.php',
+            'content' => $content,
         ];
     }
 
@@ -769,8 +775,8 @@ class AdvancedCodeGenerationService
         ]);
 
         return [
-            'class_name' => $className . '.php',
-            'content' => $content
+            'class_name' => $className.'.php',
+            'content' => $content,
         ];
     }
 
@@ -781,7 +787,7 @@ class AdvancedCodeGenerationService
 
         if (empty($config['table_name'])) {
             $errors[] = 'Migration table name is required.';
-        } elseif (!preg_match('/^[a-z_][a-z0-9_]*$/', $config['table_name'])) {
+        } elseif (! preg_match('/^[a-z_][a-z0-9_]*$/', $config['table_name'])) {
             $errors[] = 'Migration table name must be lowercase with underscores only.';
         }
 
@@ -794,7 +800,7 @@ class AdvancedCodeGenerationService
 
         if (empty($config['name'])) {
             $errors[] = 'Model name is required.';
-        } elseif (!preg_match('/^[A-Z][a-zA-Z0-9]*$/', $config['name'])) {
+        } elseif (! preg_match('/^[A-Z][a-zA-Z0-9]*$/', $config['name'])) {
             $errors[] = 'Model name must be PascalCase.';
         }
 
@@ -808,20 +814,36 @@ class AdvancedCodeGenerationService
         foreach ($columns as $column) {
             $line = "\$table->{$column['type']}('{$column['name']}'";
 
-            if (!empty($column['length'])) {
+            if (! empty($column['length'])) {
                 $line .= ", {$column['length']}";
             }
 
             $line .= ')';
 
-            if ($column['nullable'] ?? false) $line .= '->nullable()';
-            if ($column['unique'] ?? false) $line .= '->unique()';
-            if ($column['index'] ?? false) $line .= '->index()';
-            if ($column['unsigned'] ?? false) $line .= '->unsigned()';
-            if ($column['auto_increment'] ?? false) $line .= '->autoIncrement()';
-            if ($column['primary'] ?? false) $line .= '->primary()';
-            if (!empty($column['default'])) $line .= "->default('{$column['default']}')";
-            if (!empty($column['comment'])) $line .= "->comment('{$column['comment']}')";
+            if ($column['nullable'] ?? false) {
+                $line .= '->nullable()';
+            }
+            if ($column['unique'] ?? false) {
+                $line .= '->unique()';
+            }
+            if ($column['index'] ?? false) {
+                $line .= '->index()';
+            }
+            if ($column['unsigned'] ?? false) {
+                $line .= '->unsigned()';
+            }
+            if ($column['auto_increment'] ?? false) {
+                $line .= '->autoIncrement()';
+            }
+            if ($column['primary'] ?? false) {
+                $line .= '->primary()';
+            }
+            if (! empty($column['default'])) {
+                $line .= "->default('{$column['default']}')";
+            }
+            if (! empty($column['comment'])) {
+                $line .= "->comment('{$column['comment']}')";
+            }
 
             $code .= "            {$line};\n";
         }
@@ -834,10 +856,10 @@ class AdvancedCodeGenerationService
         $code = '';
         foreach ($indexes as $index) {
             $columns = is_array($index['columns']) ? $index['columns'] : explode(',', $index['columns']);
-            $columnsStr = "['" . implode("', '", $columns) . "']";
+            $columnsStr = "['".implode("', '", $columns)."']";
 
             $line = "\$table->{$index['type']}({$columnsStr}";
-            if (!empty($index['name'])) {
+            if (! empty($index['name'])) {
                 $line .= ", '{$index['name']}'";
             }
             $line .= ');';
@@ -854,9 +876,15 @@ class AdvancedCodeGenerationService
         foreach ($foreignKeys as $fk) {
             $line = "\$table->foreign('{$fk['column']}')->references('{$fk['references']}')->on('{$fk['on']}')";
 
-            if (!empty($fk['on_delete'])) $line .= "->onDelete('{$fk['on_delete']}')";
-            if (!empty($fk['on_update'])) $line .= "->onUpdate('{$fk['on_update']}')";
-            if (!empty($fk['name'])) $line .= "->name('{$fk['name']}')";
+            if (! empty($fk['on_delete'])) {
+                $line .= "->onDelete('{$fk['on_delete']}')";
+            }
+            if (! empty($fk['on_update'])) {
+                $line .= "->onUpdate('{$fk['on_update']}')";
+            }
+            if (! empty($fk['name'])) {
+                $line .= "->name('{$fk['name']}')";
+            }
 
             $code .= "            {$line};\n";
         }
@@ -866,44 +894,58 @@ class AdvancedCodeGenerationService
 
     protected function buildTraitsCode(array $traits): string
     {
-        if (empty($traits)) return '';
-        return 'use ' . implode(', ', $traits) . ';';
+        if (empty($traits)) {
+            return '';
+        }
+
+        return 'use '.implode(', ', $traits).';';
     }
 
     protected function buildFillableCode(array $fillable): string
     {
-        if (empty($fillable)) return '';
+        if (empty($fillable)) {
+            return '';
+        }
 
-        $items = array_map(fn($item) => "'{$item}'", $fillable);
-        return "\n    protected \$fillable = [\n        " . implode(",\n        ", $items) . "\n    ];";
+        $items = array_map(fn ($item) => "'{$item}'", $fillable);
+
+        return "\n    protected \$fillable = [\n        ".implode(",\n        ", $items)."\n    ];";
     }
 
     protected function buildHiddenCode(array $hidden): string
     {
-        if (empty($hidden)) return '';
+        if (empty($hidden)) {
+            return '';
+        }
 
-        $items = array_map(fn($item) => "'{$item}'", $hidden);
-        return "\n    protected \$hidden = [\n        " . implode(",\n        ", $items) . "\n    ];";
+        $items = array_map(fn ($item) => "'{$item}'", $hidden);
+
+        return "\n    protected \$hidden = [\n        ".implode(",\n        ", $items)."\n    ];";
     }
 
     protected function buildCastsCode(array $casts): string
     {
-        if (empty($casts)) return '';
+        if (empty($casts)) {
+            return '';
+        }
 
         $items = [];
         foreach ($casts as $field => $cast) {
             $items[] = "'{$field}' => '{$cast}'";
         }
 
-        return "\n    protected \$casts = [\n        " . implode(",\n        ", $items) . "\n    ];";
+        return "\n    protected \$casts = [\n        ".implode(",\n        ", $items)."\n    ];";
     }
 
     protected function buildDatesCode(array $dates): string
     {
-        if (empty($dates)) return '';
+        if (empty($dates)) {
+            return '';
+        }
 
-        $items = array_map(fn($item) => "'{$item}'", $dates);
-        return "\n    protected \$dates = [\n        " . implode(",\n        ", $items) . "\n    ];";
+        $items = array_map(fn ($item) => "'{$item}'", $dates);
+
+        return "\n    protected \$dates = [\n        ".implode(",\n        ", $items)."\n    ];";
     }
 
     protected function buildRelationsCode(array $relations): string
@@ -913,10 +955,10 @@ class AdvancedCodeGenerationService
             $code .= "\n    public function {$relation['name']}()\n    {\n";
             $code .= "        return \$this->{$relation['type']}({$relation['related_model']}::class";
 
-            if (!empty($relation['foreign_key'])) {
+            if (! empty($relation['foreign_key'])) {
                 $code .= ", '{$relation['foreign_key']}'";
             }
-            if (!empty($relation['local_key'])) {
+            if (! empty($relation['local_key'])) {
                 $code .= ", '{$relation['local_key']}'";
             }
 
@@ -931,8 +973,8 @@ class AdvancedCodeGenerationService
         $code = '';
         foreach ($scopes as $scope) {
             $code .= "\n    public function scope{$scope['name']}(\$query";
-            if (!empty($scope['parameters'])) {
-                $code .= ', ' . implode(', ', $scope['parameters']);
+            if (! empty($scope['parameters'])) {
+                $code .= ', '.implode(', ', $scope['parameters']);
             }
             $code .= ")\n    {\n";
             $code .= "        {$scope['body']}\n";
@@ -973,7 +1015,7 @@ class AdvancedCodeGenerationService
         $code = '';
         foreach ($methods as $method) {
             $code .= "\n    public function {$method['name']}(";
-            if (!empty($method['parameters'])) {
+            if (! empty($method['parameters'])) {
                 $code .= implode(', ', $method['parameters']);
             }
             $code .= ")\n    {\n";
@@ -988,7 +1030,7 @@ class AdvancedCodeGenerationService
     {
         $code = '';
         foreach ($fakeData as $data) {
-            $parameters = !empty($data['parameters']) ? '(' . $data['parameters'] . ')' : '';
+            $parameters = ! empty($data['parameters']) ? '('.$data['parameters'].')' : '';
             $code .= "            '{$data['field']}' => fake()->{$data['faker_method']}{$parameters},\n";
         }
 
@@ -1032,13 +1074,13 @@ class AdvancedCodeGenerationService
 
     protected function buildFactoryUsageCode(array $config): string
     {
-        if (!($config['use_factory'] ?? true)) {
+        if (! ($config['use_factory'] ?? true)) {
             return '';
         }
 
         $code = "{$config['model']}::factory()";
 
-        if (!empty($config['factory_states'])) {
+        if (! empty($config['factory_states'])) {
             foreach ($config['factory_states'] as $state) {
                 $code .= "->{$state}()";
             }
@@ -1060,7 +1102,7 @@ class AdvancedCodeGenerationService
             $code .= "            ],\n";
         }
 
-        if (!empty($code) && !empty($config['model'])) {
+        if (! empty($code) && ! empty($config['model'])) {
             return "\$data = [\n{$code}        ];\n        foreach (\$data as \$item) {\n            {$config['model']}::create(\$item);\n        }";
         }
 
@@ -1072,11 +1114,11 @@ class AdvancedCodeGenerationService
         $code = '';
         foreach ($methods as $method) {
             $code .= "\n    public function {$method}(User \$user";
-            if (!in_array($method, ['viewAny', 'create'])) {
+            if (! in_array($method, ['viewAny', 'create'])) {
                 $code .= ", {$this->getModelNameFromConfig()} \$model";
             }
             $code .= "): bool\n    {\n";
-            
+
             // Generate appropriate authorization logic based on method
             switch ($method) {
                 case 'viewAny':
@@ -1103,7 +1145,7 @@ class AdvancedCodeGenerationService
                 default:
                     $code .= "        return \$user->hasPermissionTo('{$method} {$this->getModelNameFromConfig()}');\n";
             }
-            
+
             $code .= "    }\n";
         }
 
@@ -1156,7 +1198,7 @@ class AdvancedCodeGenerationService
     {
         $modelName = $this->getModelNameFromConfig();
         $modelVariable = strtolower($modelName);
-        
+
         $code = '';
         foreach ($methods as $method) {
             switch ($method) {
@@ -1220,7 +1262,7 @@ class AdvancedCodeGenerationService
         $code = '';
         foreach ($customMethods as $method) {
             $code .= "\n    public function {$method['name']}(";
-            if (!empty($method['parameters'])) {
+            if (! empty($method['parameters'])) {
                 $code .= implode(', ', $method['parameters']);
             }
             $code .= ")\n    {\n";
@@ -1316,6 +1358,6 @@ class AdvancedCodeGenerationService
 
     protected function getMigrationClassName(string $tableName): string
     {
-        return 'Create' . Str::studly(Str::singular($tableName)) . 'Table';
+        return 'Create'.Str::studly(Str::singular($tableName)).'Table';
     }
 }

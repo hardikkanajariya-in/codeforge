@@ -2,19 +2,19 @@
 
 namespace HkDevs\CodeForgeStudio\Pages;
 
+use Filament\Actions\Action;
+use Filament\Pages\Page;
 use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
 use HkDevs\CodeForgeStudio\Widgets\DatabaseHealthMetricsWidget;
-use HkDevs\CodeForgeStudio\Widgets\QueryPerformanceChart;
 use HkDevs\CodeForgeStudio\Widgets\DatabaseHealthWidget;
-use Filament\Pages\Page;
-use Filament\Actions\Action;
+use HkDevs\CodeForgeStudio\Widgets\QueryPerformanceChart;
 
 /**
  * DatabaseHealthDashboard
- * 
+ *
  * Comprehensive database health monitoring dashboard providing real-time
  * metrics, performance analytics, and system health status visualization.
- * 
+ *
  * Key Features:
  * - Real-time database health metrics monitoring
  * - Interactive performance charts and analytics
@@ -23,42 +23,47 @@ use Filament\Actions\Action;
  * - Widget-based dashboard layout with responsive design
  * - Integration with DatabaseHealthService for data collection
  * - Alert management and health status notifications
- * 
+ *
  * Dashboard Components:
  * - DatabaseHealthMetricsWidget: Core health metrics display
  * - QueryPerformanceChart: Performance trend visualization
  * - DatabaseHealthWidget: Overall health status summary
  * - Connection status indicators with real-time updates
- * 
+ *
  * Monitoring Capabilities:
  * - Response time tracking and alerting
  * - Memory usage monitoring and optimization recommendations
  * - Connection pool status and utilization metrics
  * - Query performance analysis with slow query detection
  * - System resource monitoring and capacity planning
- * 
+ *
  * User Actions:
  * - Manual metrics refresh for real-time updates
  * - Connection testing and validation
  * - Health alert acknowledgment and management
  * - Export capabilities for reporting and analysis
- * 
+ *
  * Navigation:
  * - Positioned in 'Database Health' group for logical organization
  * - Heart icon for intuitive health monitoring identification
  * - Priority sort order for dashboard prominence
- * 
- * @package HkDevs\CodeForgeStudio\Pages
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class DatabaseHealthDashboard extends Page
 {
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-heart';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-heart';
+
     protected static ?string $navigationLabel = 'Health Monitor';
-    protected static string | \UnitEnum | null $navigationGroup = 'Database Health';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Database Health';
+
     protected static ?int $navigationSort = 1;
+
     protected string $view = 'codeforge-studio::pages.database-health-dashboard';
 
     protected function getHealthService(): DatabaseHealthService

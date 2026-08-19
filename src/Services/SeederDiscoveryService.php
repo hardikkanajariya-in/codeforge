@@ -8,10 +8,10 @@ use ReflectionClass;
 
 /**
  * SeederDiscoveryService
- * 
+ *
  * Service for discovering and analyzing Laravel seeder classes within the codebase.
  * Provides comprehensive seeder discovery, validation, and metadata extraction.
- * 
+ *
  * Key Features:
  * - Automatic seeder discovery across project directories
  * - Class validation and inheritance checking
@@ -19,24 +19,25 @@ use ReflectionClass;
  * - Laravel seeder pattern recognition
  * - Custom seeder support and identification
  * - Performance optimized scanning with caching
- * 
+ *
  * Discovery Methods:
  * - File system scanning for seeder files
  * - Class reflection for inheritance validation
  * - Namespace resolution and validation
  * - Autoloader integration for class availability
  * - Pattern matching for seeder identification
- * 
+ *
  * Validation Features:
  * - Seeder class inheritance validation
  * - Method existence checking (run method)
  * - Syntax validation and error detection
  * - Dependency analysis and resolution
  * - Laravel framework compatibility checking
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class SeederDiscoveryService
@@ -53,7 +54,7 @@ class SeederDiscoveryService
 
     /**
      * Discover all available seeder classes in the project
-     * 
+     *
      * @return array Array of seeder class information
      */
     public function discoverSeeders(): array
@@ -65,7 +66,7 @@ class SeederDiscoveryService
 
         foreach ($basePaths as $basePath) {
             foreach ($this->seederDirectories as $directory) {
-                $fullPath = $basePath . DIRECTORY_SEPARATOR . $directory;
+                $fullPath = $basePath.DIRECTORY_SEPARATOR.$directory;
 
                 if (is_dir($fullPath)) {
                     $seeders = array_merge($seeders, $this->scanDirectory($fullPath));
@@ -104,7 +105,7 @@ class SeederDiscoveryService
         // Parent directories (for packages)
         $currentDir = __DIR__;
         while ($currentDir !== dirname($currentDir)) {
-            if (file_exists($currentDir . '/composer.json')) {
+            if (file_exists($currentDir.'/composer.json')) {
                 $paths[] = $currentDir;
             }
             $currentDir = dirname($currentDir);
@@ -149,7 +150,7 @@ class SeederDiscoveryService
     {
         $seeders = [];
 
-        if (!is_dir($directory)) {
+        if (! is_dir($directory)) {
             return $seeders;
         }
 
@@ -199,18 +200,18 @@ class SeederDiscoveryService
             }
 
             // Basic checks
-            if (!$this->isSeederFile($content)) {
+            if (! $this->isSeederFile($content)) {
                 return null;
             }
 
             $className = $this->extractClassName($content);
             $namespace = $this->extractNamespace($content);
 
-            if (!$className) {
+            if (! $className) {
                 return null;
             }
 
-            $fullClassName = $namespace ? $namespace . '\\' . $className : $className;
+            $fullClassName = $namespace ? $namespace.'\\'.$className : $className;
 
             // Try to validate the class if autoloaded
             $isValid = $this->validateSeederClass($fullClassName);
@@ -281,7 +282,7 @@ class SeederDiscoveryService
     protected function validateSeederClass(string $className): bool
     {
         try {
-            if (!class_exists($className)) {
+            if (! class_exists($className)) {
                 return false;
             }
 
@@ -313,7 +314,7 @@ class SeederDiscoveryService
         }
 
         if (Str::startsWith($filePath, $basePath)) {
-            return Str::after($filePath, $basePath . DIRECTORY_SEPARATOR);
+            return Str::after($filePath, $basePath.DIRECTORY_SEPARATOR);
         }
 
         return $filePath;
@@ -331,7 +332,7 @@ class SeederDiscoveryService
         foreach ($seeders as $seeder) {
             $key = $seeder['class_name'];
 
-            if (!in_array($key, $seen)) {
+            if (! in_array($key, $seen)) {
                 $seen[] = $key;
                 $unique[] = $seeder;
             }
@@ -358,11 +359,11 @@ class SeederDiscoveryService
 
             // Add namespace info if available
             if ($seeder['namespace']) {
-                $label .= ' (' . $seeder['namespace'] . ')';
+                $label .= ' ('.$seeder['namespace'].')';
             }
 
             // Add validation status
-            if (!$seeder['is_valid']) {
+            if (! $seeder['is_valid']) {
                 $label .= ' [Invalid]';
             }
 

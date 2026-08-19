@@ -2,10 +2,10 @@
 
 namespace HkDevs\CodeForgeStudio\Widgets;
 
-use HkDevs\CodeForgeStudio\Models\DatabaseHealthMetric;
-use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use HkDevs\CodeForgeStudio\Models\DatabaseHealthMetric;
+use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
 
 class DatabaseHealthMetricsWidget extends BaseWidget
 {
@@ -21,7 +21,7 @@ class DatabaseHealthMetricsWidget extends BaseWidget
             ->first();
 
         $connectionStatus = $latestConnectionCheck ? 'Connected' : 'Unknown';
-        $responseTime = $latestConnectionCheck ? number_format($latestConnectionCheck->value, 2) . ' ms' : 'N/A';
+        $responseTime = $latestConnectionCheck ? number_format($latestConnectionCheck->value, 2).' ms' : 'N/A';
 
         // Get query statistics
         $totalQueries = QueryPerformanceLog::where('connection', $connection)
@@ -61,7 +61,7 @@ class DatabaseHealthMetricsWidget extends BaseWidget
                 ->descriptionIcon('heroicon-m-chart-bar')
                 ->color('info'),
 
-            Stat::make('Avg Response Time', $avgResponseTime ? number_format($avgResponseTime, 2) . ' ms' : 'N/A')
+            Stat::make('Avg Response Time', $avgResponseTime ? number_format($avgResponseTime, 2).' ms' : 'N/A')
                 ->description('Average query execution time')
                 ->descriptionIcon('heroicon-m-clock')
                 ->color($avgResponseTime && $avgResponseTime < 100 ? 'success' : ($avgResponseTime && $avgResponseTime < 500 ? 'warning' : 'danger')),

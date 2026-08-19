@@ -20,7 +20,7 @@ class RecentMigrationsWidget extends Widget
     protected function getRecentMigrations(): array
     {
         try {
-            if (!Schema::hasTable('migrations')) {
+            if (! Schema::hasTable('migrations')) {
                 return [];
             }
 
@@ -33,7 +33,7 @@ class RecentMigrationsWidget extends Widget
                         'migration' => $migration->migration,
                         'batch' => $migration->batch,
                         'status' => 'completed',
-                        'executed_at' => 'Batch ' . $migration->batch
+                        'executed_at' => 'Batch '.$migration->batch,
                     ];
                 })
                 ->toArray();

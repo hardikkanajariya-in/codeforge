@@ -2,8 +2,8 @@
 
 namespace HkDevs\CodeForgeStudio\Resources\MigrationHistoryResource\Pages;
 
-use HkDevs\CodeForgeStudio\Resources\MigrationHistoryResource;
 use Filament\Resources\Pages\ListRecords;
+use HkDevs\CodeForgeStudio\Resources\MigrationHistoryResource;
 
 class ListMigrationHistories extends ListRecords
 {

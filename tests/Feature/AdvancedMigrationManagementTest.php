@@ -3,8 +3,8 @@
 namespace HkDevs\CodeForgeStudio\Tests\Feature;
 
 use HkDevs\CodeForgeStudio\Models\MigrationHistory;
-use HkDevs\CodeForgeStudio\Services\MigrationGeneratorService;
 use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
+use HkDevs\CodeForgeStudio\Services\MigrationGeneratorService;
 use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Schema;
 
 /**
  * Test Cases for Advanced Migration Management
- * 
+ *
  * Based on TC-MIG-001 through TC-MIG-005 from COMPREHENSIVE_TEST_CASES_FOR_USER.md
  * These tests verify enhanced migration commands, history tracking, intelligent rollbacks, and impact analysis.
  */
@@ -23,25 +23,26 @@ class AdvancedMigrationManagementTest extends TestCase
     use RefreshDatabase;
 
     protected MigrationGeneratorService $migrationGeneratorService;
+
     protected DatabaseHealthService $healthService;
 
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->migrationGeneratorService = app(MigrationGeneratorService::class);
         $this->healthService = app(DatabaseHealthService::class);
-        
+
         // Create test migration files for testing
         $this->createTestMigrationFiles();
-        
+
         // Create test data for migration history
         $this->createMigrationHistoryData();
     }
 
     /**
      * TC-MIG-001: Custom Migration Command (`db-manager:migrate`)
-     * 
+     *
      * Purpose: Test enhanced migration management with advanced options
      * Steps:
      * 1. Execute `php artisan db-manager:migrate` with various options
@@ -61,7 +62,7 @@ class AdvancedMigrationManagementTest extends TestCase
         // Verify migration history is recorded
         $this->assertDatabaseHas('migration_histories', [
             'action' => 'migrate',
-            'status' => 'success'
+            'status' => 'success',
         ]);
 
         // Step 2: Test --rollback option with safety checks
@@ -73,7 +74,7 @@ class AdvancedMigrationManagementTest extends TestCase
         // Verify rollback is recorded in history
         $this->assertDatabaseHas('migration_histories', [
             'action' => 'rollback',
-            'status' => 'success'
+            'status' => 'success',
         ]);
 
         // Step 3: Test --refresh option (rollback all and re-run)
@@ -85,7 +86,7 @@ class AdvancedMigrationManagementTest extends TestCase
         // Verify refresh action is recorded
         $this->assertDatabaseHas('migration_histories', [
             'action' => 'refresh',
-            'status' => 'success'
+            'status' => 'success',
         ]);
 
         // Step 4: Test --reset option (rollback all migrations)
@@ -97,7 +98,7 @@ class AdvancedMigrationManagementTest extends TestCase
         // Verify reset action is recorded
         $this->assertDatabaseHas('migration_histories', [
             'action' => 'reset',
-            'status' => 'success'
+            'status' => 'success',
         ]);
 
         // Step 5: Test --step=2 option for specific rollback count
@@ -120,13 +121,13 @@ class AdvancedMigrationManagementTest extends TestCase
         // Verify custom path migration is recorded
         $this->assertDatabaseHas('migration_histories', [
             'migration' => 'like',
-            'action' => 'migrate'
+            'action' => 'migrate',
         ]);
     }
 
     /**
      * TC-MIG-002: Migration History & Timeline Tracking
-     * 
+     *
      * Purpose: Verify complete migration timeline with execution details
      * Steps:
      * 1. Create and run multiple migrations
@@ -140,14 +141,14 @@ class AdvancedMigrationManagementTest extends TestCase
     {
         // Step 1: Create and run multiple migrations
         $this->createMultipleTestMigrations();
-        
+
         $startTime = microtime(true);
         $this->artisan('db-manager:migrate')->assertExitCode(0);
         $endTime = microtime(true);
 
         // Step 2: Verify migration history records execution details
         $migrationHistory = MigrationHistory::latest()->first();
-        
+
         $this->assertNotNull($migrationHistory);
         $this->assertEquals('migrate', $migrationHistory->action);
         $this->assertEquals('success', $migrationHistory->status);
@@ -171,7 +172,7 @@ class AdvancedMigrationManagementTest extends TestCase
 
         // Step 5: Test error logging for failed migrations
         $this->createFailingMigration();
-        
+
         $this->artisan('db-manager:migrate')
             ->assertExitCode(1);
 
@@ -194,7 +195,7 @@ class AdvancedMigrationManagementTest extends TestCase
 
     /**
      * TC-MIG-003: Intelligent Rollback Operations
-     * 
+     *
      * Purpose: Test safe rollback operations with data preservation
      * Steps:
      * 1. Create migrations with schema and data changes
@@ -207,13 +208,13 @@ class AdvancedMigrationManagementTest extends TestCase
     {
         // Step 1: Create migrations with schema and data changes
         $this->createMigrationsWithDataChanges();
-        
+
         // Step 2: Execute migrations and populate with test data
         $this->artisan('db-manager:migrate')->assertExitCode(0);
-        
+
         // Create test data
         $this->populateTestData();
-        
+
         // Verify data exists before rollback
         $this->assertTrue(Schema::hasTable('test_users'));
         $this->assertTrue(Schema::hasTable('test_posts'));
@@ -231,14 +232,14 @@ class AdvancedMigrationManagementTest extends TestCase
         $rollbackHistory = MigrationHistory::where('action', 'rollback')->latest()->first();
         $this->assertNotNull($rollbackHistory);
         $this->assertEquals('success', $rollbackHistory->status);
-        
+
         // Verify data preservation details are logged
         $this->assertArrayHasKey('preserved_data', $rollbackHistory->metadata ?? []);
 
         // Step 5: Test batch rollback with safety confirmations
         $this->artisan('db-manager:migrate')->assertExitCode(0);
         $this->artisan('db-manager:migrate')->assertExitCode(0); // Run another batch
-        
+
         $this->artisan('db-manager:migrate --rollback --step=2')
             ->expectsQuestion('This will rollback the last 2 migration batches. Continue?', 'yes')
             ->expectsQuestion('Some migrations contain data modifications. Preserve data?', 'yes')
@@ -249,13 +250,13 @@ class AdvancedMigrationManagementTest extends TestCase
         $batchRollbacks = MigrationHistory::where('action', 'rollback')
             ->where('created_at', '>', now()->subMinutes(1))
             ->count();
-        
+
         $this->assertGreaterThanOrEqual(2, $batchRollbacks);
     }
 
     /**
      * TC-MIG-004: Migration Impact Analysis
-     * 
+     *
      * Purpose: Test pre-execution impact analysis and validation
      * Steps:
      * 1. Create complex migrations with table modifications
@@ -276,13 +277,13 @@ class AdvancedMigrationManagementTest extends TestCase
 
         // Step 3: Verify impact predictions using available data
         $pendingMigrations = $this->getPendingMigrations();
-        
+
         $this->assertIsArray($pendingMigrations);
         $this->assertGreaterThan(0, count($pendingMigrations));
-        
+
         // Analyze migration files for potential impact
         $analysis = $this->analyzeManualMigrationImpact($pendingMigrations);
-        
+
         $this->assertIsArray($analysis);
         $this->assertArrayHasKey('impact_summary', $analysis);
         $this->assertArrayHasKey('affected_tables', $analysis);
@@ -298,10 +299,10 @@ class AdvancedMigrationManagementTest extends TestCase
 
         // Step 4: Test analysis with potentially destructive operations
         $this->createDestructiveMigration();
-        
+
         $destructiveMigrations = $this->getPendingMigrations();
         $destructiveAnalysis = $this->analyzeManualMigrationImpact($destructiveMigrations);
-        
+
         $this->assertEquals('high', $destructiveAnalysis['risk_level']);
         $this->assertContains('destructive', $destructiveAnalysis['warnings']);
         $this->assertArrayHasKey('data_loss_risk', $destructiveAnalysis);
@@ -310,11 +311,11 @@ class AdvancedMigrationManagementTest extends TestCase
         $recommendations = $destructiveAnalysis['recommendations'];
         $this->assertIsArray($recommendations);
         $this->assertGreaterThan(0, count($recommendations));
-        
+
         // Check for specific recommendations
         $recommendationText = implode(' ', $recommendations);
         $this->assertStringContainsString('backup', strtolower($recommendationText));
-        
+
         // Test migration status command if available
         $this->artisan('migrate:status')
             ->assertExitCode(0);
@@ -322,7 +323,7 @@ class AdvancedMigrationManagementTest extends TestCase
 
     /**
      * TC-MIG-005: Migration Resource Management
-     * 
+     *
      * Purpose: Test migration CRUD operations through Filament resource
      * Steps:
      * 1. Access Migration Resource in admin panel
@@ -353,33 +354,33 @@ class AdvancedMigrationManagementTest extends TestCase
         // Test status filter
         $response = $this->get('/admin/migration-histories?tableFilters[status][value]=success');
         $response->assertStatus(200);
-        
+
         // Test action filter
         $response = $this->get('/admin/migration-histories?tableFilters[action][value]=migrate');
         $response->assertStatus(200);
-        
+
         // Test search functionality
         $response = $this->get('/admin/migration-histories?tableSearch=test_migration');
         $response->assertStatus(200);
 
         // Test date range filter
-        $response = $this->get('/admin/migration-histories?tableFilters[executed_at][from]=' . now()->subDays(7)->format('Y-m-d'));
+        $response = $this->get('/admin/migration-histories?tableFilters[executed_at][from]='.now()->subDays(7)->format('Y-m-d'));
         $response->assertStatus(200);
 
         // Step 4: Verify bulk actions functionality
         $migrationIds = MigrationHistory::limit(3)->pluck('id')->toArray();
-        
+
         // Test bulk export action
         $response = $this->post('/admin/migration-histories/bulk-action', [
             'action' => 'export',
-            'records' => $migrationIds
+            'records' => $migrationIds,
         ]);
         $response->assertStatus(200);
-        
+
         // Test bulk delete action (if enabled)
         $response = $this->post('/admin/migration-histories/bulk-action', [
             'action' => 'delete',
-            'records' => $migrationIds
+            'records' => $migrationIds,
         ]);
         // Should require confirmation or be restricted
         $this->assertTrue(in_array($response->getStatusCode(), [200, 403, 422]));
@@ -389,11 +390,11 @@ class AdvancedMigrationManagementTest extends TestCase
         $response = $this->get('/admin/migration-histories/export?format=csv');
         $response->assertStatus(200);
         $response->assertHeader('content-type', 'text/csv; charset=UTF-8');
-        
+
         // Test Excel export
         $response = $this->get('/admin/migration-histories/export?format=xlsx');
         $response->assertStatus(200);
-        
+
         // Test PDF export
         $response = $this->get('/admin/migration-histories/export?format=pdf');
         $response->assertStatus(200);
@@ -419,7 +420,7 @@ class AdvancedMigrationManagementTest extends TestCase
     protected function createTestMigrationFiles(): void
     {
         $migrationPath = database_path('migrations');
-        
+
         $migrationContent = '<?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -445,8 +446,8 @@ return new class extends Migration
 
         $timestamp = now()->format('Y_m_d_His');
         $filename = "{$timestamp}_create_test_migration_table.php";
-        
-        File::put($migrationPath . '/' . $filename, $migrationContent);
+
+        File::put($migrationPath.'/'.$filename, $migrationContent);
     }
 
     /**
@@ -456,7 +457,7 @@ return new class extends Migration
     {
         $fullPath = database_path($path);
         File::makeDirectory($fullPath, 0755, true, true);
-        
+
         $migrationContent = '<?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -482,8 +483,8 @@ return new class extends Migration
 
         $timestamp = now()->addSecond()->format('Y_m_d_His');
         $filename = "{$timestamp}_create_custom_test_table.php";
-        
-        File::put($fullPath . '/' . $filename, $migrationContent);
+
+        File::put($fullPath.'/'.$filename, $migrationContent);
     }
 
     /**
@@ -501,8 +502,8 @@ return new class extends Migration
             'executed_at' => now()->subHours(2),
             'metadata' => [
                 'tables_created' => ['users'],
-                'indexes_created' => ['users_email_unique']
-            ]
+                'indexes_created' => ['users_email_unique'],
+            ],
         ]);
 
         MigrationHistory::create([
@@ -515,8 +516,8 @@ return new class extends Migration
             'executed_at' => now()->subHour(),
             'metadata' => [
                 'tables_created' => ['posts'],
-                'foreign_keys_created' => ['posts_user_id_foreign']
-            ]
+                'foreign_keys_created' => ['posts_user_id_foreign'],
+            ],
         ]);
     }
 
@@ -528,15 +529,15 @@ return new class extends Migration
         $migrations = [
             'create_test_users_table',
             'create_test_posts_table',
-            'create_test_comments_table'
+            'create_test_comments_table',
         ];
 
         foreach ($migrations as $index => $migrationName) {
             $timestamp = now()->addSeconds($index)->format('Y_m_d_His');
             $filename = "{$timestamp}_{$migrationName}.php";
-            
+
             $migrationContent = $this->generateMigrationContent($migrationName);
-            File::put(database_path('migrations/' . $filename), $migrationContent);
+            File::put(database_path('migrations/'.$filename), $migrationContent);
         }
     }
 
@@ -574,8 +575,8 @@ return new class extends Migration
 
         $timestamp = now()->addMinute()->format('Y_m_d_His');
         $filename = "{$timestamp}_failing_migration.php";
-        
-        File::put(database_path('migrations/' . $filename), $migrationContent);
+
+        File::put(database_path('migrations/'.$filename), $migrationContent);
     }
 
     /**
@@ -634,7 +635,7 @@ return new class extends Migration
 
         $timestamp1 = now()->format('Y_m_d_His');
         $timestamp2 = now()->addSecond()->format('Y_m_d_His');
-        
+
         File::put(database_path("migrations/{$timestamp1}_create_test_users_table.php"), $usersMigration);
         File::put(database_path("migrations/{$timestamp2}_create_test_posts_table.php"), $postsMigration);
     }
@@ -650,7 +651,7 @@ return new class extends Migration
                 'name' => "User {$i}",
                 'email' => "user{$i}@example.com",
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
 
@@ -661,7 +662,7 @@ return new class extends Migration
                 'content' => "Content for post {$i}",
                 'user_id' => rand(1, 5),
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
     }
@@ -698,8 +699,8 @@ return new class extends Migration
 
         $baseTimestamp = now()->format('Y_m_d_His');
         $baseFilename = "{$baseTimestamp}_create_test_users_table.php";
-        
-        File::put(database_path('migrations/' . $baseFilename), $baseMigrationContent);
+
+        File::put(database_path('migrations/'.$baseFilename), $baseMigrationContent);
 
         // Now create the complex modification migration
         $migrationContent = '<?php
@@ -739,8 +740,8 @@ return new class extends Migration
 
         $timestamp = now()->addMinutes(2)->format('Y_m_d_His');
         $filename = "{$timestamp}_complex_migration_modifications.php";
-        
-        File::put(database_path('migrations/' . $filename), $migrationContent);
+
+        File::put(database_path('migrations/'.$filename), $migrationContent);
     }
 
     /**
@@ -783,8 +784,8 @@ return new class extends Migration
 
         $timestamp = now()->addMinutes(3)->format('Y_m_d_His');
         $filename = "{$timestamp}_destructive_migration.php";
-        
-        File::put(database_path('migrations/' . $filename), $migrationContent);
+
+        File::put(database_path('migrations/'.$filename), $migrationContent);
     }
 
     /**
@@ -794,21 +795,21 @@ return new class extends Migration
     {
         $actions = ['migrate', 'rollback', 'refresh', 'reset'];
         $statuses = ['success', 'failed'];
-        
+
         for ($i = 0; $i < 20; $i++) {
             MigrationHistory::create([
                 'migration' => "2024_01_01_00000{$i}_test_migration_{$i}",
                 'batch' => ceil($i / 3),
                 'action' => $actions[array_rand($actions)],
-                'executed_by' => $i % 2 === 0 ? 'system' : 'user_' . ($i % 5 + 1),
+                'executed_by' => $i % 2 === 0 ? 'system' : 'user_'.($i % 5 + 1),
                 'execution_time' => rand(50, 2000) / 10,
                 'status' => $statuses[array_rand($statuses)],
                 'executed_at' => now()->subDays(rand(0, 30)),
                 'error_message' => $statuses[array_rand($statuses)] === 'failed' ? 'Test error message' : null,
                 'metadata' => [
                     'tables_affected' => ["table_{$i}"],
-                    'execution_environment' => 'testing'
-                ]
+                    'execution_environment' => 'testing',
+                ],
             ]);
         }
     }
@@ -820,19 +821,19 @@ return new class extends Migration
     {
         $files = File::glob(database_path('migrations/*.php'));
         $ran = DB::table('migrations')->pluck('migration')->toArray();
-        
+
         $pending = [];
         foreach ($files as $file) {
             $filename = pathinfo($file, PATHINFO_FILENAME);
-            if (!in_array($filename, $ran)) {
+            if (! in_array($filename, $ran)) {
                 $pending[] = [
                     'filename' => $filename,
                     'path' => $file,
-                    'content' => File::get($file)
+                    'content' => File::get($file),
                 ];
             }
         }
-        
+
         return $pending;
     }
 
@@ -846,28 +847,28 @@ return new class extends Migration
                 'tables_created' => 0,
                 'tables_modified' => 0,
                 'tables_dropped' => 0,
-                'data_modifications' => 0
+                'data_modifications' => 0,
             ],
             'affected_tables' => [],
             'risk_level' => 'low',
             'recommendations' => [],
-            'warnings' => []
+            'warnings' => [],
         ];
 
         foreach ($migrations as $migration) {
             $content = $migration['content'];
-            
+
             // Analyze table operations
             if (preg_match('/Schema::create\s*\(\s*[\'"]([^\'"]+)[\'"]/', $content, $matches)) {
                 $impact['impact_summary']['tables_created']++;
                 $impact['affected_tables'][] = $matches[1];
             }
-            
+
             if (preg_match('/Schema::table\s*\(\s*[\'"]([^\'"]+)[\'"]/', $content, $matches)) {
                 $impact['impact_summary']['tables_modified']++;
                 $impact['affected_tables'][] = $matches[1];
             }
-            
+
             // Look for both Schema::drop and Schema::dropIfExists patterns
             if (preg_match('/Schema::(drop|dropIfExists)\s*\(\s*[\'"]([^\'"]+)[\'"]/', $content, $matches)) {
                 $impact['impact_summary']['tables_dropped']++;
@@ -876,7 +877,7 @@ return new class extends Migration
                 $impact['warnings'][] = 'destructive';
                 $impact['data_loss_risk'] = true;
             }
-            
+
             // Check for data modifications
             if (preg_match('/DB::table|DB::statement|DB::raw/', $content)) {
                 $impact['impact_summary']['data_modifications']++;
@@ -888,7 +889,7 @@ return new class extends Migration
             $impact['recommendations'][] = 'Create a backup before running migrations';
             $impact['recommendations'][] = 'Review dropped tables for important data';
         }
-        
+
         if ($impact['impact_summary']['tables_created'] > 5) {
             $impact['recommendations'][] = 'Consider running migrations in batches';
         }
@@ -902,7 +903,7 @@ return new class extends Migration
     protected function generateMigrationContent(string $migrationName): string
     {
         $tableName = str_replace('create_', '', str_replace('_table', '', $migrationName));
-        
+
         return "<?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -934,18 +935,18 @@ return new class extends Migration
     {
         // Clean up test migration files
         $migrationPath = database_path('migrations');
-        $testFiles = File::glob($migrationPath . '/*test*.php');
-        
+        $testFiles = File::glob($migrationPath.'/*test*.php');
+
         foreach ($testFiles as $file) {
             File::delete($file);
         }
-        
+
         // Clean up custom migration directory
         $customPath = database_path('custom-migrations');
         if (File::exists($customPath)) {
             File::deleteDirectory($customPath);
         }
-        
+
         parent::tearDown();
     }
 }

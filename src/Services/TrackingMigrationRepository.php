@@ -7,21 +7,23 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * TrackingMigrationRepository
- * 
+ *
  * A wrapper around Laravel's DatabaseMigrationRepository that provides
  * enhanced migration tracking capabilities for CodeForge Database Studio.
- * 
+ *
  * This class intercepts migration repository operations to provide
  * real-time tracking of migration execution, rollbacks, and state changes.
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class TrackingMigrationRepository extends DatabaseMigrationRepository
 {
     protected $originalRepository;
+
     protected MigrationTrackingService $trackingService;
 
     public function __construct($originalRepository, MigrationTrackingService $trackingService)

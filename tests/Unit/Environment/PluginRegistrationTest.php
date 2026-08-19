@@ -2,10 +2,11 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Unit\Environment;
 
-use HkDevs\CodeForgeStudio\Tests\TestCase;
-use HkDevs\CodeForgeStudio\CodeForgeStudioPlugin;
+use Filament\Contracts\Plugin;
 use Filament\Panel;
-use Filament\PanelProvider;
+use HkDevs\CodeForgeStudio\CodeForgeStudioPlugin;
+use HkDevs\CodeForgeStudio\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Test Case: TC-ENV-003 - Plugin Registration
@@ -13,7 +14,7 @@ use Filament\PanelProvider;
  */
 class PluginRegistrationTest extends TestCase
 {
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_instantiation()
     {
         $plugin = CodeForgeStudioPlugin::make();
@@ -25,13 +26,13 @@ class PluginRegistrationTest extends TestCase
         );
 
         $this->assertInstanceOf(
-            \Filament\Contracts\Plugin::class,
+            Plugin::class,
             $plugin,
             'Plugin should implement Filament Plugin interface'
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_id()
     {
         $plugin = CodeForgeStudioPlugin::make();
@@ -43,7 +44,7 @@ class PluginRegistrationTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_default_configuration()
     {
         $plugin = CodeForgeStudioPlugin::make();
@@ -52,7 +53,7 @@ class PluginRegistrationTest extends TestCase
         $this->assertTrue(true, 'Plugin creates with default configuration');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_feature_toggles()
     {
         $plugin = CodeForgeStudioPlugin::make()
@@ -69,7 +70,7 @@ class PluginRegistrationTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_navigation_configuration()
     {
         $plugin = CodeForgeStudioPlugin::make()
@@ -83,7 +84,7 @@ class PluginRegistrationTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_registration_with_panel()
     {
         // Create a mock panel
@@ -96,11 +97,11 @@ class PluginRegistrationTest extends TestCase
             $plugin->register($panel);
             $this->assertTrue(true, 'Plugin registers with panel successfully');
         } catch (\Exception $e) {
-            $this->fail("Plugin registration failed: " . $e->getMessage());
+            $this->fail('Plugin registration failed: '.$e->getMessage());
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_with_all_features_enabled()
     {
         $plugin = CodeForgeStudioPlugin::make()
@@ -116,11 +117,11 @@ class PluginRegistrationTest extends TestCase
             $plugin->register($panel);
             $this->assertTrue(true, 'Plugin with all features enabled registers successfully');
         } catch (\Exception $e) {
-            $this->fail("Plugin registration with all features failed: " . $e->getMessage());
+            $this->fail('Plugin registration with all features failed: '.$e->getMessage());
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_with_selective_features()
     {
         $plugin = CodeForgeStudioPlugin::make()
@@ -136,11 +137,11 @@ class PluginRegistrationTest extends TestCase
             $plugin->register($panel);
             $this->assertTrue(true, 'Plugin with selective features registers successfully');
         } catch (\Exception $e) {
-            $this->fail("Plugin registration with selective features failed: " . $e->getMessage());
+            $this->fail('Plugin registration with selective features failed: '.$e->getMessage());
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_navigation_group_customization()
     {
         $customGroup = 'Database Management';
@@ -154,7 +155,7 @@ class PluginRegistrationTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_navigation_sort_customization()
     {
         $customSort = 25;
@@ -168,7 +169,7 @@ class PluginRegistrationTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_method_chaining()
     {
         $plugin = CodeForgeStudioPlugin::make()
@@ -185,7 +186,7 @@ class PluginRegistrationTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_configuration_persistence()
     {
         $plugin = CodeForgeStudioPlugin::make()
@@ -200,7 +201,7 @@ class PluginRegistrationTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_with_minimal_configuration()
     {
         $plugin = CodeForgeStudioPlugin::make()
@@ -216,11 +217,11 @@ class PluginRegistrationTest extends TestCase
             $plugin->register($panel);
             $this->assertTrue(true, 'Plugin with minimal configuration registers successfully');
         } catch (\Exception $e) {
-            $this->fail("Plugin registration with minimal configuration failed: " . $e->getMessage());
+            $this->fail('Plugin registration with minimal configuration failed: '.$e->getMessage());
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_registration_multiple_times()
     {
         $plugin = CodeForgeStudioPlugin::make();
@@ -231,7 +232,7 @@ class PluginRegistrationTest extends TestCase
             $plugin->register($panel);
             $this->assertTrue(true, 'Plugin can be registered multiple times without issues');
         } catch (\Exception $e) {
-            $this->fail("Multiple plugin registrations failed: " . $e->getMessage());
+            $this->fail('Multiple plugin registrations failed: '.$e->getMessage());
         }
     }
 

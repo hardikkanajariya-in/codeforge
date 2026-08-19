@@ -2,31 +2,30 @@
 
 namespace HkDevs\CodeForgeStudio\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\View\View;
-use Illuminate\Http\JsonResponse;
 
 /**
  * DocsController handles the documentation system for CodeForge Database Studio.
- * 
+ *
  * This controller provides comprehensive documentation for developers including:
  * - Feature explanations and usage guides
  * - Architecture and implementation details
  * - API reference and examples
  * - Development guidelines and best practices
- * 
- * @package HkDevs\CodeForgeStudio\Http\Controllers
+ *
  * @author HkDevs <contact@hardikkanajariya.in>
+ *
  * @version 1.0
+ *
  * @since 1.0
  */
 class DocsController extends Controller
 {
     /**
      * Show the documentation home page.
-     * 
-     * @return View
      */
     public function home(): View
     {
@@ -35,8 +34,6 @@ class DocsController extends Controller
 
     /**
      * Show the getting started guide.
-     * 
-     * @return View
      */
     public function gettingStarted(): View
     {
@@ -45,8 +42,6 @@ class DocsController extends Controller
 
     /**
      * Show the installation guide.
-     * 
-     * @return View
      */
     public function installation(): View
     {
@@ -55,8 +50,6 @@ class DocsController extends Controller
 
     /**
      * Show the configuration guide.
-     * 
-     * @return View
      */
     public function configuration(): View
     {
@@ -65,8 +58,6 @@ class DocsController extends Controller
 
     /**
      * Show the requirements page.
-     * 
-     * @return View
      */
     public function requirements(): View
     {
@@ -75,8 +66,6 @@ class DocsController extends Controller
 
     /**
      * Show the features overview.
-     * 
-     * @return View
      */
     public function featuresOverview(): View
     {
@@ -85,8 +74,6 @@ class DocsController extends Controller
 
     /**
      * Show the database health feature documentation.
-     * 
-     * @return View
      */
     public function databaseHealth(): View
     {
@@ -95,8 +82,6 @@ class DocsController extends Controller
 
     /**
      * Show the migration management feature documentation.
-     * 
-     * @return View
      */
     public function migrationManagement(): View
     {
@@ -105,8 +90,6 @@ class DocsController extends Controller
 
     /**
      * Show the schema designer feature documentation.
-     * 
-     * @return View
      */
     public function schemaDesigner(): View
     {
@@ -115,8 +98,6 @@ class DocsController extends Controller
 
     /**
      * Show the code generation feature documentation.
-     * 
-     * @return View
      */
     public function codeGeneration(): View
     {
@@ -125,8 +106,6 @@ class DocsController extends Controller
 
     /**
      * Show the data seeding feature documentation.
-     * 
-     * @return View
      */
     public function dataSeeding(): View
     {
@@ -135,8 +114,6 @@ class DocsController extends Controller
 
     /**
      * Show the documentation generator feature documentation.
-     * 
-     * @return View
      */
     public function documentationGenerator(): View
     {
@@ -145,8 +122,6 @@ class DocsController extends Controller
 
     /**
      * Show the architecture overview.
-     * 
-     * @return View
      */
     public function architectureOverview(): View
     {
@@ -155,8 +130,6 @@ class DocsController extends Controller
 
     /**
      * Show the services architecture documentation.
-     * 
-     * @return View
      */
     public function services(): View
     {
@@ -165,8 +138,6 @@ class DocsController extends Controller
 
     /**
      * Show the events architecture documentation.
-     * 
-     * @return View
      */
     public function events(): View
     {
@@ -175,8 +146,6 @@ class DocsController extends Controller
 
     /**
      * Show the database design documentation.
-     * 
-     * @return View
      */
     public function databaseDesign(): View
     {
@@ -185,8 +154,6 @@ class DocsController extends Controller
 
     /**
      * Show the security architecture documentation.
-     * 
-     * @return View
      */
     public function security(): View
     {
@@ -195,8 +162,6 @@ class DocsController extends Controller
 
     /**
      * Show the API overview.
-     * 
-     * @return View
      */
     public function apiOverview(): View
     {
@@ -205,8 +170,6 @@ class DocsController extends Controller
 
     /**
      * Show the API services documentation.
-     * 
-     * @return View
      */
     public function apiServices(): View
     {
@@ -215,8 +178,6 @@ class DocsController extends Controller
 
     /**
      * Show the API commands documentation.
-     * 
-     * @return View
      */
     public function apiCommands(): View
     {
@@ -225,8 +186,6 @@ class DocsController extends Controller
 
     /**
      * Show the API events documentation.
-     * 
-     * @return View
      */
     public function apiEvents(): View
     {
@@ -235,8 +194,6 @@ class DocsController extends Controller
 
     /**
      * Show the API Filament resources documentation.
-     * 
-     * @return View
      */
     public function apiFilamentResources(): View
     {
@@ -245,8 +202,6 @@ class DocsController extends Controller
 
     /**
      * Show the customization guide.
-     * 
-     * @return View
      */
     public function customization(): View
     {
@@ -255,8 +210,6 @@ class DocsController extends Controller
 
     /**
      * Show the extending guide.
-     * 
-     * @return View
      */
     public function extending(): View
     {
@@ -265,8 +218,6 @@ class DocsController extends Controller
 
     /**
      * Show the performance guide.
-     * 
-     * @return View
      */
     public function performance(): View
     {
@@ -275,8 +226,6 @@ class DocsController extends Controller
 
     /**
      * Show the testing guide.
-     * 
-     * @return View
      */
     public function testing(): View
     {
@@ -285,8 +234,6 @@ class DocsController extends Controller
 
     /**
      * Show the deployment guide.
-     * 
-     * @return View
      */
     public function deployment(): View
     {
@@ -295,8 +242,6 @@ class DocsController extends Controller
 
     /**
      * Show the coding standards guide.
-     * 
-     * @return View
      */
     public function codingStandards(): View
     {
@@ -305,8 +250,6 @@ class DocsController extends Controller
 
     /**
      * Show the contribution guide.
-     * 
-     * @return View
      */
     public function contribution(): View
     {
@@ -315,8 +258,6 @@ class DocsController extends Controller
 
     /**
      * Show the workflow guide.
-     * 
-     * @return View
      */
     public function workflow(): View
     {
@@ -325,8 +266,6 @@ class DocsController extends Controller
 
     /**
      * Show the troubleshooting guide.
-     * 
-     * @return View
      */
     public function troubleshooting(): View
     {
@@ -335,8 +274,6 @@ class DocsController extends Controller
 
     /**
      * Show the FAQ page.
-     * 
-     * @return View
      */
     public function faq(): View
     {
@@ -345,8 +282,6 @@ class DocsController extends Controller
 
     /**
      * Show the changelog.
-     * 
-     * @return View
      */
     public function changelog(): View
     {
@@ -355,8 +290,6 @@ class DocsController extends Controller
 
     /**
      * Show the support page.
-     * 
-     * @return View
      */
     public function support(): View
     {
@@ -365,9 +298,6 @@ class DocsController extends Controller
 
     /**
      * Handle search requests for documentation.
-     * 
-     * @param Request $request
-     * @return JsonResponse
      */
     public function search(Request $request): JsonResponse
     {
@@ -376,7 +306,7 @@ class DocsController extends Controller
         if (strlen($query) < 2) {
             return response()->json([
                 'results' => [],
-                'message' => 'Query too short'
+                'message' => 'Query too short',
             ]);
         }
 
@@ -387,15 +317,12 @@ class DocsController extends Controller
         return response()->json([
             'results' => $searchResults,
             'query' => $query,
-            'total' => count($searchResults)
+            'total' => count($searchResults),
         ]);
     }
 
     /**
      * Perform a simple search across documentation content.
-     * 
-     * @param string $query
-     * @return array
      */
     private function performDocumentationSearch(string $query): array
     {
@@ -407,56 +334,56 @@ class DocsController extends Controller
                 'title' => 'Getting Started',
                 'url' => route('codeforge.docs.getting-started'),
                 'excerpt' => 'Learn how to install and configure CodeForge Database Studio for your Laravel project.',
-                'keywords' => ['installation', 'setup', 'configure', 'getting started', 'begin', 'start']
+                'keywords' => ['installation', 'setup', 'configure', 'getting started', 'begin', 'start'],
             ],
             [
                 'title' => 'Installation Guide',
                 'url' => route('codeforge.docs.installation'),
                 'excerpt' => 'Step-by-step installation instructions and system requirements.',
-                'keywords' => ['install', 'composer', 'requirements', 'setup', 'configuration']
+                'keywords' => ['install', 'composer', 'requirements', 'setup', 'configuration'],
             ],
             [
                 'title' => 'Database Health Monitoring',
                 'url' => route('codeforge.docs.features.database-health'),
                 'excerpt' => 'Monitor database performance, health metrics, and connection status.',
-                'keywords' => ['health', 'monitoring', 'performance', 'metrics', 'database']
+                'keywords' => ['health', 'monitoring', 'performance', 'metrics', 'database'],
             ],
             [
                 'title' => 'Migration Management',
                 'url' => route('codeforge.docs.features.migration-management'),
                 'excerpt' => 'Advanced migration tools with history tracking and rollback capabilities.',
-                'keywords' => ['migration', 'migrate', 'rollback', 'history', 'database']
+                'keywords' => ['migration', 'migrate', 'rollback', 'history', 'database'],
             ],
             [
                 'title' => 'Schema Designer',
                 'url' => route('codeforge.docs.features.schema-designer'),
                 'excerpt' => 'Visual database schema design and relationship mapping.',
-                'keywords' => ['schema', 'design', 'visual', 'diagram', 'erd', 'relationships']
+                'keywords' => ['schema', 'design', 'visual', 'diagram', 'erd', 'relationships'],
             ],
             [
                 'title' => 'Code Generation',
                 'url' => route('codeforge.docs.features.code-generation'),
                 'excerpt' => 'Automated generation of models, migrations, factories, and Filament resources.',
-                'keywords' => ['generation', 'generate', 'model', 'migration', 'factory', 'resource', 'filament']
+                'keywords' => ['generation', 'generate', 'model', 'migration', 'factory', 'resource', 'filament'],
             ],
             [
                 'title' => 'API Reference',
                 'url' => route('codeforge.docs.api.overview'),
                 'excerpt' => 'Complete API documentation for services, commands, and events.',
-                'keywords' => ['api', 'reference', 'service', 'command', 'event', 'method']
+                'keywords' => ['api', 'reference', 'service', 'command', 'event', 'method'],
             ],
             [
                 'title' => 'Architecture Overview',
                 'url' => route('codeforge.docs.architecture.overview'),
                 'excerpt' => 'Understanding the plugin architecture and design patterns.',
-                'keywords' => ['architecture', 'design', 'pattern', 'structure', 'overview']
+                'keywords' => ['architecture', 'design', 'pattern', 'structure', 'overview'],
             ],
             [
                 'title' => 'Troubleshooting',
                 'url' => route('codeforge.docs.troubleshooting'),
                 'excerpt' => 'Common issues and their solutions.',
-                'keywords' => ['troubleshooting', 'problem', 'issue', 'error', 'fix', 'solution']
-            ]
+                'keywords' => ['troubleshooting', 'problem', 'issue', 'error', 'fix', 'solution'],
+            ],
         ];
 
         $results = [];
@@ -486,7 +413,7 @@ class DocsController extends Controller
                     'title' => $page['title'],
                     'url' => $page['url'],
                     'excerpt' => $page['excerpt'],
-                    'score' => $score
+                    'score' => $score,
                 ];
             }
         }
@@ -499,6 +426,7 @@ class DocsController extends Controller
         // Remove score from final results
         return array_map(function ($result) {
             unset($result['score']);
+
             return $result;
         }, array_slice($results, 0, 10)); // Limit to top 10 results
     }

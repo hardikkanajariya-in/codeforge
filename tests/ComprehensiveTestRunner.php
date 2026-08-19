@@ -2,8 +2,7 @@
 
 namespace HkDevs\CodeForgeStudio\Tests;
 
-use HkDevs\CodeForgeStudio\Tests\TestCase;
-use Illuminate\Support\Facades\Artisan;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Comprehensive Test Suite Runner and Validator
@@ -11,70 +10,70 @@ use Illuminate\Support\Facades\Artisan;
  */
 class ComprehensiveTestRunner extends TestCase
 {
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_all_environment_requirements()
     {
         $this->artisan('test', [
-            '--filter' => 'EnvironmentRequirementsTest'
+            '--filter' => 'EnvironmentRequirementsTest',
         ])->assertExitCode(0);
 
         $this->assertTrue(true, 'Environment requirements tests passed');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_all_installation_processes()
     {
         $this->artisan('test', [
-            '--filter' => 'InstallationProcessTest'
+            '--filter' => 'InstallationProcessTest',
         ])->assertExitCode(0);
 
         $this->assertTrue(true, 'Installation process tests passed');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_all_plugin_registration()
     {
         $this->artisan('test', [
-            '--filter' => 'PluginRegistrationTest'
+            '--filter' => 'PluginRegistrationTest',
         ])->assertExitCode(0);
 
         $this->assertTrue(true, 'Plugin registration tests passed');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_all_configuration_validation()
     {
         $this->artisan('test', [
-            '--filter' => 'ConfigurationValidationTest'
+            '--filter' => 'ConfigurationValidationTest',
         ])->assertExitCode(0);
 
         $this->assertTrue(true, 'Configuration validation tests passed');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_all_database_migrations()
     {
         $this->artisan('test', [
-            '--filter' => 'DatabaseMigrationsTest'
+            '--filter' => 'DatabaseMigrationsTest',
         ])->assertExitCode(0);
 
         $this->assertTrue(true, 'Database migration tests passed');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_all_core_features()
     {
         $featureTests = [
             'SchemaDesignerCoreTest',
             'MigrationManagerCoreTest',
             'DatabaseHealthMonitoringTest',
-            'SmartDataSeedingTest'
+            'SmartDataSeedingTest',
         ];
 
         foreach ($featureTests as $testClass) {
             try {
                 $this->artisan('test', [
-                    '--filter' => $testClass
+                    '--filter' => $testClass,
                 ])->assertExitCode(0);
             } catch (\Exception $e) {
                 $this->markTestIncomplete("Feature test {$testClass} requires full environment setup");
@@ -84,21 +83,21 @@ class ComprehensiveTestRunner extends TestCase
         $this->assertTrue(true, 'Core feature tests completed');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_integration_scenarios()
     {
         try {
             $this->artisan('test', [
-                '--filter' => 'PluginIntegrationTest'
+                '--filter' => 'PluginIntegrationTest',
             ])->assertExitCode(0);
         } catch (\Exception $e) {
-            $this->markTestIncomplete("Integration tests require full environment setup");
+            $this->markTestIncomplete('Integration tests require full environment setup');
         }
 
         $this->assertTrue(true, 'Integration tests completed');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_performance_benchmarks()
     {
         $startTime = microtime(true);
@@ -112,7 +111,7 @@ class ComprehensiveTestRunner extends TestCase
         $this->assertLessThan(30, $executionTime, 'All tests should complete within 30 seconds');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_error_handling_coverage()
     {
         // Test error handling across all features
@@ -121,7 +120,7 @@ class ComprehensiveTestRunner extends TestCase
             'invalid_configuration',
             'migration_conflicts',
             'seeding_errors',
-            'health_monitoring_failures'
+            'health_monitoring_failures',
         ];
 
         foreach ($errorScenarios as $scenario) {
@@ -130,7 +129,7 @@ class ComprehensiveTestRunner extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_security_compliance()
     {
         // Test security-related aspects
@@ -139,7 +138,7 @@ class ComprehensiveTestRunner extends TestCase
             'csrf_protection',
             'data_validation',
             'access_control',
-            'secure_configuration'
+            'secure_configuration',
         ];
 
         foreach ($securityChecks as $check) {
@@ -147,7 +146,7 @@ class ComprehensiveTestRunner extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_documentation_coverage()
     {
         // Verify that all test cases have corresponding documentation
@@ -161,7 +160,7 @@ class ComprehensiveTestRunner extends TestCase
             'TC-MIGRATION-001' => 'Migration Manager Core Functionality',
             'TC-HEALTH-001' => 'Database Health Monitoring',
             'TC-SEEDING-001' => 'Smart Data Seeding',
-            'TC-INTEGRATION-001' => 'End-to-End Plugin Integration'
+            'TC-INTEGRATION-001' => 'End-to-End Plugin Integration',
         ];
 
         foreach ($documentedTestCases as $testId => $description) {
@@ -169,14 +168,14 @@ class ComprehensiveTestRunner extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_compatibility_matrix()
     {
         $compatibilityMatrix = [
             'php_versions' => ['8.1', '8.2', '8.3'],
             'laravel_versions' => ['10.x', '11.x'],
             'filament_versions' => ['3.x'],
-            'database_drivers' => ['mysql', 'pgsql', 'sqlite', 'sqlsrv']
+            'database_drivers' => ['mysql', 'pgsql', 'sqlite', 'sqlsrv'],
         ];
 
         foreach ($compatibilityMatrix as $component => $versions) {
@@ -184,7 +183,7 @@ class ComprehensiveTestRunner extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_regression_prevention()
     {
         // Test for common regression scenarios
@@ -192,7 +191,7 @@ class ComprehensiveTestRunner extends TestCase
             'configuration_backward_compatibility',
             'database_schema_changes',
             'api_interface_stability',
-            'plugin_lifecycle_consistency'
+            'plugin_lifecycle_consistency',
         ];
 
         foreach ($regressionTests as $test) {
@@ -200,7 +199,7 @@ class ComprehensiveTestRunner extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_deployment_readiness()
     {
         // Final deployment readiness check
@@ -209,7 +208,7 @@ class ComprehensiveTestRunner extends TestCase
             'performance_acceptable' => $this->verifyPerformanceMetrics(),
             'security_validated' => $this->verifySecurityCompliance(),
             'documentation_complete' => $this->verifyDocumentationCompleteness(),
-            'error_handling_robust' => $this->verifyErrorHandling()
+            'error_handling_robust' => $this->verifyErrorHandling(),
         ];
 
         foreach ($deploymentChecks as $check => $result) {

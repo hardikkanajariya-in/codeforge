@@ -2,16 +2,16 @@
 
 namespace HkDevs\CodeForgeStudio\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use HkDevs\CodeForgeStudio\Database\Factories\DocumentationGenerationFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * DocumentationGeneration
- * 
+ *
  * Eloquent model for managing database documentation generation processes
  * with comprehensive tracking, versioning, and multi-format support.
- * 
+ *
  * Key Features:
  * - Multi-format documentation generation (HTML, PDF, Markdown, JSON)
  * - Selective table inclusion with scope configuration
@@ -19,7 +19,7 @@ use HkDevs\CodeForgeStudio\Database\Factories\DocumentationGenerationFactory;
  * - Schema snapshot integration for point-in-time documentation
  * - Comprehensive metadata and options storage
  * - Error tracking and generation status monitoring
- * 
+ *
  * Database Fields:
  * - title: Documentation title and identifier
  * - description: Documentation purpose and content description
@@ -33,16 +33,17 @@ use HkDevs\CodeForgeStudio\Database\Factories\DocumentationGenerationFactory;
  * - metadata: Additional generation context and information
  * - status: Generation status (pending, completed, failed)
  * - schema_snapshot_id: Reference to schema state at generation time
- * 
+ *
  * Generation Features:
  * - Automated schema analysis and relationship mapping
  * - Custom styling and branding for professional documentation
  * - Export capabilities with multiple delivery methods
  * - Integration with schema versioning for accurate documentation
- * 
- * @package HkDevs\CodeForgeStudio\Models
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class DocumentationGeneration extends Model
@@ -115,7 +116,7 @@ class DocumentationGeneration extends Model
 
     public function getFormattedFileSizeAttribute(): string
     {
-        if (!$this->file_size) {
+        if (! $this->file_size) {
             return 'N/A';
         }
 
@@ -126,7 +127,7 @@ class DocumentationGeneration extends Model
             $bytes /= 1024;
         }
 
-        return round($bytes, 2) . ' ' . $units[$i];
+        return round($bytes, 2).' '.$units[$i];
     }
 
     public function getStatusBadgeColorAttribute(): string
@@ -154,7 +155,7 @@ class DocumentationGeneration extends Model
     {
         return match ($this->scope) {
             'full_schema' => 'Full Database Schema',
-            'selected_tables' => 'Selected Tables (' . count($this->included_tables ?? []) . ')',
+            'selected_tables' => 'Selected Tables ('.count($this->included_tables ?? []).')',
             'single_table' => 'Single Table',
             'models_only' => 'Models Only',
             default => 'Unknown Scope',
@@ -163,7 +164,7 @@ class DocumentationGeneration extends Model
 
     public function getDownloadUrlAttribute(): ?string
     {
-        if (!$this->file_path || $this->status !== 'completed') {
+        if (! $this->file_path || $this->status !== 'completed') {
             return null;
         }
 

@@ -2,13 +2,13 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Feature;
 
-use HkDevs\CodeForgeStudio\Tests\TestCase;
 use HkDevs\CodeForgeStudio\CodeForgeStudioPlugin;
+use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 /**
  * DevDocsConfigurationTest
- * 
+ *
  * Tests the developer documentation configuration functionality
  * ensuring that the documentation button appears only when properly configured.
  */
@@ -25,7 +25,7 @@ class DevDocsConfigurationTest extends TestCase
             ->enableCodeGeneration(true);
 
         // Simulate plugin registration
-        app()->singleton('codeforge-plugin-config', function () use ($plugin) {
+        app()->singleton('codeforge-plugin-config', function () {
             return [
                 'enable_dev_docs' => true,
                 'enable_schema_designer' => false,

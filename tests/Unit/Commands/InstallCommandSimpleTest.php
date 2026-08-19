@@ -6,7 +6,7 @@ use HkDevs\CodeForgeStudio\Commands\InstallCommand;
 use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\File;
+use PHPUnit\Framework\Attributes\Test;
 
 class InstallCommandSimpleTest extends TestCase
 {
@@ -17,36 +17,36 @@ class InstallCommandSimpleTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->command = new InstallCommand();
+        $this->command = new InstallCommand;
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_class_exists()
     {
         $this->assertTrue(class_exists(InstallCommand::class));
         $this->assertInstanceOf(Command::class, $this->command);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_has_correct_signature()
     {
         $this->assertEquals('codeforge:install', $this->command->getName());
         $this->assertTrue($this->command->getDefinition()->hasOption('force'));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_has_correct_name()
     {
         $this->assertEquals('codeforge:install', $this->command->getName());
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_has_correct_description()
     {
         $this->assertEquals('Install the Filament CodeForge Studio plugin', $this->command->getDescription());
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_has_force_option()
     {
         $definition = $this->command->getDefinition();
@@ -56,22 +56,22 @@ class InstallCommandSimpleTest extends TestCase
         $this->assertEquals('Force overwrite existing files', $forceOption->getDescription());
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_file_names_are_properly_defined()
     {
         $expectedMigrationFiles = [
-            "2024_01_01_000001_create_database_manager_logs_table.php",
-            "2024_01_01_000002_create_migration_histories_table.php",
-            "2024_01_01_000003_create_query_performance_logs_table.php",
-            "2024_01_01_000004_create_database_health_metrics_table.php",
-            "2024_01_01_000005_create_data_seeders_table.php",
-            "2024_01_01_000006_create_seeder_execution_logs_table.php",
-            "2024_01_01_000007_create_data_generation_templates_table.php",
-            "2024_01_01_000008_create_documentation_generations_table.php",
-            "2024_01_01_000009_create_schema_snapshots_table.php",
-            "2024_01_01_000010_create_code_generation_histories_table.php",
-            "2024_01_01_000011_create_filament_resource_templates_table.php",
-            "2024_01_01_000012_create_filament_resource_generators_table.php"
+            '2024_01_01_000001_create_database_manager_logs_table.php',
+            '2024_01_01_000002_create_migration_histories_table.php',
+            '2024_01_01_000003_create_query_performance_logs_table.php',
+            '2024_01_01_000004_create_database_health_metrics_table.php',
+            '2024_01_01_000005_create_data_seeders_table.php',
+            '2024_01_01_000006_create_seeder_execution_logs_table.php',
+            '2024_01_01_000007_create_data_generation_templates_table.php',
+            '2024_01_01_000008_create_documentation_generations_table.php',
+            '2024_01_01_000009_create_schema_snapshots_table.php',
+            '2024_01_01_000010_create_code_generation_histories_table.php',
+            '2024_01_01_000011_create_filament_resource_templates_table.php',
+            '2024_01_01_000012_create_filament_resource_generators_table.php',
         ];
 
         foreach ($expectedMigrationFiles as $file) {
@@ -82,7 +82,7 @@ class InstallCommandSimpleTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_table_names_follow_laravel_conventions()
     {
         $expectedTableNames = [
@@ -97,7 +97,7 @@ class InstallCommandSimpleTest extends TestCase
             'schema_snapshots',
             'code_generation_histories',
             'filament_resource_templates',
-            'filament_resource_generators'
+            'filament_resource_generators',
         ];
 
         foreach ($expectedTableNames as $tableName) {
@@ -113,22 +113,22 @@ class InstallCommandSimpleTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_files_correspond_to_tables()
     {
         $migrationFiles = [
-            "2024_01_01_000001_create_database_manager_logs_table.php",
-            "2024_01_01_000002_create_migration_histories_table.php",
-            "2024_01_01_000003_create_query_performance_logs_table.php",
-            "2024_01_01_000004_create_database_health_metrics_table.php",
-            "2024_01_01_000005_create_data_seeders_table.php",
-            "2024_01_01_000006_create_seeder_execution_logs_table.php",
-            "2024_01_01_000007_create_data_generation_templates_table.php",
-            "2024_01_01_000008_create_documentation_generations_table.php",
-            "2024_01_01_000009_create_schema_snapshots_table.php",
-            "2024_01_01_000010_create_code_generation_histories_table.php",
-            "2024_01_01_000011_create_filament_resource_templates_table.php",
-            "2024_01_01_000012_create_filament_resource_generators_table.php"
+            '2024_01_01_000001_create_database_manager_logs_table.php',
+            '2024_01_01_000002_create_migration_histories_table.php',
+            '2024_01_01_000003_create_query_performance_logs_table.php',
+            '2024_01_01_000004_create_database_health_metrics_table.php',
+            '2024_01_01_000005_create_data_seeders_table.php',
+            '2024_01_01_000006_create_seeder_execution_logs_table.php',
+            '2024_01_01_000007_create_data_generation_templates_table.php',
+            '2024_01_01_000008_create_documentation_generations_table.php',
+            '2024_01_01_000009_create_schema_snapshots_table.php',
+            '2024_01_01_000010_create_code_generation_histories_table.php',
+            '2024_01_01_000011_create_filament_resource_templates_table.php',
+            '2024_01_01_000012_create_filament_resource_generators_table.php',
         ];
 
         $tableNames = [
@@ -143,7 +143,7 @@ class InstallCommandSimpleTest extends TestCase
             'schema_snapshots',
             'code_generation_histories',
             'filament_resource_templates',
-            'filament_resource_generators'
+            'filament_resource_generators',
         ];
 
         $this->assertCount(count($tableNames), $migrationFiles);
@@ -156,15 +156,15 @@ class InstallCommandSimpleTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_can_be_instantiated()
     {
-        $command = new InstallCommand();
+        $command = new InstallCommand;
         $this->assertInstanceOf(InstallCommand::class, $command);
         $this->assertInstanceOf(Command::class, $command);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_signature_format()
     {
         // Should contain the force option
@@ -174,7 +174,7 @@ class InstallCommandSimpleTest extends TestCase
         $this->assertEquals('codeforge:install', $this->command->getName());
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_namespace_and_naming()
     {
         $reflection = new \ReflectionClass($this->command);
@@ -186,22 +186,22 @@ class InstallCommandSimpleTest extends TestCase
         $this->assertEquals('InstallCommand', $reflection->getShortName());
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_files_are_numbered_sequentially()
     {
         $migrationFiles = [
-            "2024_01_01_000001_create_database_manager_logs_table.php",
-            "2024_01_01_000002_create_migration_histories_table.php",
-            "2024_01_01_000003_create_query_performance_logs_table.php",
-            "2024_01_01_000004_create_database_health_metrics_table.php",
-            "2024_01_01_000005_create_data_seeders_table.php",
-            "2024_01_01_000006_create_seeder_execution_logs_table.php",
-            "2024_01_01_000007_create_data_generation_templates_table.php",
-            "2024_01_01_000008_create_documentation_generations_table.php",
-            "2024_01_01_000009_create_schema_snapshots_table.php",
-            "2024_01_01_000010_create_code_generation_histories_table.php",
-            "2024_01_01_000011_create_filament_resource_templates_table.php",
-            "2024_01_01_000012_create_filament_resource_generators_table.php"
+            '2024_01_01_000001_create_database_manager_logs_table.php',
+            '2024_01_01_000002_create_migration_histories_table.php',
+            '2024_01_01_000003_create_query_performance_logs_table.php',
+            '2024_01_01_000004_create_database_health_metrics_table.php',
+            '2024_01_01_000005_create_data_seeders_table.php',
+            '2024_01_01_000006_create_seeder_execution_logs_table.php',
+            '2024_01_01_000007_create_data_generation_templates_table.php',
+            '2024_01_01_000008_create_documentation_generations_table.php',
+            '2024_01_01_000009_create_schema_snapshots_table.php',
+            '2024_01_01_000010_create_code_generation_histories_table.php',
+            '2024_01_01_000011_create_filament_resource_templates_table.php',
+            '2024_01_01_000012_create_filament_resource_generators_table.php',
         ];
 
         for ($i = 0; $i < count($migrationFiles); $i++) {
@@ -210,7 +210,7 @@ class InstallCommandSimpleTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_protected_methods_exist()
     {
         $reflection = new \ReflectionClass($this->command);
@@ -223,28 +223,28 @@ class InstallCommandSimpleTest extends TestCase
         $this->assertTrue($handleMethod->isPublic());
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_extends_correct_base_class()
     {
-        $this->assertInstanceOf(\Illuminate\Console\Command::class, $this->command);
+        $this->assertInstanceOf(Command::class, $this->command);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_files_have_unique_timestamps()
     {
         $migrationFiles = [
-            "2024_01_01_000001_create_database_manager_logs_table.php",
-            "2024_01_01_000002_create_migration_histories_table.php",
-            "2024_01_01_000003_create_query_performance_logs_table.php",
-            "2024_01_01_000004_create_database_health_metrics_table.php",
-            "2024_01_01_000005_create_data_seeders_table.php",
-            "2024_01_01_000006_create_seeder_execution_logs_table.php",
-            "2024_01_01_000007_create_data_generation_templates_table.php",
-            "2024_01_01_000008_create_documentation_generations_table.php",
-            "2024_01_01_000009_create_schema_snapshots_table.php",
-            "2024_01_01_000010_create_code_generation_histories_table.php",
-            "2024_01_01_000011_create_filament_resource_templates_table.php",
-            "2024_01_01_000012_create_filament_resource_generators_table.php"
+            '2024_01_01_000001_create_database_manager_logs_table.php',
+            '2024_01_01_000002_create_migration_histories_table.php',
+            '2024_01_01_000003_create_query_performance_logs_table.php',
+            '2024_01_01_000004_create_database_health_metrics_table.php',
+            '2024_01_01_000005_create_data_seeders_table.php',
+            '2024_01_01_000006_create_seeder_execution_logs_table.php',
+            '2024_01_01_000007_create_data_generation_templates_table.php',
+            '2024_01_01_000008_create_documentation_generations_table.php',
+            '2024_01_01_000009_create_schema_snapshots_table.php',
+            '2024_01_01_000010_create_code_generation_histories_table.php',
+            '2024_01_01_000011_create_filament_resource_templates_table.php',
+            '2024_01_01_000012_create_filament_resource_generators_table.php',
         ];
 
         $timestamps = [];

@@ -7,13 +7,13 @@ use Illuminate\Console\Command;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\Test;
 
 class InstallCommandFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_user_can_install_plugin_successfully()
     {
         // Act: User runs the install command
@@ -25,7 +25,7 @@ class InstallCommandFeatureTest extends TestCase
         $this->assertStringContainsString('✅ Filament CodeForge Studio installed successfully!', $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_user_receives_clear_installation_feedback()
     {
         // Act: User runs the install command
@@ -39,7 +39,7 @@ class InstallCommandFeatureTest extends TestCase
         $this->assertStringContainsString('Running migrations...', $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_user_receives_helpful_next_steps()
     {
         // Act: User runs the install command
@@ -52,7 +52,7 @@ class InstallCommandFeatureTest extends TestCase
         $this->assertStringContainsString('2. Configure settings in config/codeforge-database-studio.php', $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_user_can_force_reinstall_plugin()
     {
         // Arrange: Install plugin first
@@ -68,7 +68,7 @@ class InstallCommandFeatureTest extends TestCase
         $this->assertStringContainsString('✅ Filament CodeForge Studio installed successfully!', $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_user_can_reinstall_without_errors()
     {
         // Arrange: Install plugin first
@@ -83,7 +83,7 @@ class InstallCommandFeatureTest extends TestCase
         $this->assertStringContainsString('✅ Filament CodeForge Studio installed successfully!', $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_installation_creates_necessary_database_structure()
     {
         // Act: User runs the install command
@@ -94,7 +94,7 @@ class InstallCommandFeatureTest extends TestCase
         $this->assertStringContainsString('Running migrations...', $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_user_sees_professional_output_formatting()
     {
         // Act: User runs the install command
@@ -113,7 +113,7 @@ class InstallCommandFeatureTest extends TestCase
         $this->assertStringContainsString('2.', $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_installation_handles_missing_migrations_gracefully()
     {
         // Act: User runs install command
@@ -131,7 +131,7 @@ class InstallCommandFeatureTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_installation_provides_config_file_guidance()
     {
         // Act: User runs the install command
@@ -143,7 +143,7 @@ class InstallCommandFeatureTest extends TestCase
         $this->assertStringContainsString('Configure settings', $output);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_signature_is_user_friendly()
     {
         // Assert: Command has intuitive signature
@@ -154,7 +154,7 @@ class InstallCommandFeatureTest extends TestCase
         $this->assertEquals('Install the Filament CodeForge Studio plugin', $command->getDescription());
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_force_option_is_documented()
     {
         // Act: Get command information
@@ -169,7 +169,7 @@ class InstallCommandFeatureTest extends TestCase
         $this->assertStringContainsString('Force', $forceOption->getDescription());
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_installation_workflow_is_logical()
     {
         // Act: User runs the install command
@@ -194,7 +194,7 @@ class InstallCommandFeatureTest extends TestCase
         $this->assertLessThan($successPos, $migrationRunPos);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_user_experience_with_existing_installation()
     {
         // Arrange: Install plugin first
@@ -217,7 +217,7 @@ class InstallCommandFeatureTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_installation_error_recovery()
     {
         // This test ensures users can recover from partial installations
@@ -235,7 +235,7 @@ class InstallCommandFeatureTest extends TestCase
         $this->assertEquals(Command::SUCCESS, $secondExitCode);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_provides_complete_user_journey()
     {
         // Act: Complete installation journey

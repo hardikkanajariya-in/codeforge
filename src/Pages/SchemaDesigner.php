@@ -2,26 +2,34 @@
 
 namespace HkDevs\CodeForgeStudio\Pages;
 
-use Filament\Pages\Page;
 use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
+use Filament\Pages\Page;
 use HkDevs\CodeForgeStudio\Models\SchemaVersion;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class SchemaDesigner extends Page
 {
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-squares-2x2';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-squares-2x2';
+
     protected string $view = 'codeforge-studio::pages.schema-designer';
+
     protected static ?string $navigationLabel = 'Schema Designer';
+
     protected static ?string $title = 'Database Schema Designer';
+
     protected static ?int $navigationSort = 3;
 
     public string $selectedConnection = '';
+
     public array $connectionInfo = [];
+
     public array $schemaData = [];
+
     public ?int $currentVersionId = null;
+
     public array $versionHistory = [];
 
     public function mount(): void
@@ -35,7 +43,7 @@ class SchemaDesigner extends Page
             'connection' => $this->selectedConnection,
             'database' => $this->connectionInfo['database'] ?? 'unknown',
             'tables_loaded' => count($this->schemaData['tables'] ?? []),
-            'relationships_loaded' => count($this->schemaData['relationships'] ?? [])
+            'relationships_loaded' => count($this->schemaData['relationships'] ?? []),
         ]);
     }
 
@@ -56,7 +64,7 @@ class SchemaDesigner extends Page
     {
         try {
             // Check if schema_versions table exists first
-            if (!$forceRefresh && Schema::hasTable('schema_versions')) {
+            if (! $forceRefresh && Schema::hasTable('schema_versions')) {
                 // Load existing schema from database
                 $latestVersion = DB::table('schema_versions')
                     ->where('connection', $this->selectedConnection)
@@ -67,6 +75,7 @@ class SchemaDesigner extends Page
                 if ($latestVersion) {
                     $this->currentVersionId = $latestVersion->id;
                     $this->schemaData = json_decode($latestVersion->schema_data, true);
+
                     return;
                 }
             }
@@ -76,7 +85,7 @@ class SchemaDesigner extends Page
         } catch (\Exception $e) {
             Log::error('Failed to load schema data', [
                 'error' => $e->getMessage(),
-                'connection' => $this->selectedConnection
+                'connection' => $this->selectedConnection,
             ]);
             $this->schemaData = ['tables' => [], 'relationships' => []];
         }
@@ -110,10 +119,10 @@ class SchemaDesigner extends Page
                 $allTableNames = array_column($rawTables, 'TABLE_NAME');
 
                 // Debug: Log what we found
-                Log::info("Found " . count($allTableNames) . " total tables in database '{$databaseName}'", [
+                Log::info('Found '.count($allTableNames)." total tables in database '{$databaseName}'", [
                     'database' => $databaseName,
                     'connection' => $this->selectedConnection,
-                    'sample_tables' => array_slice($allTableNames, 0, 10)
+                    'sample_tables' => array_slice($allTableNames, 0, 10),
                 ]);
 
                 $tableNames = $allTableNames;
@@ -151,7 +160,7 @@ class SchemaDesigner extends Page
                     'pg_catalog',
                     'pg_toast',
                     'pg_stat',
-                    'pg_settings'
+                    'pg_settings',
                 ];
 
                 // Skip Laravel/framework tables that might clutter the view
@@ -168,7 +177,7 @@ class SchemaDesigner extends Page
                     'cache_locks',
                     'jobs',
                     'job_batches',
-                    'sessions'
+                    'sessions',
                 ];
 
                 // Skip CodeForge Studio plugin tables
@@ -183,7 +192,7 @@ class SchemaDesigner extends Page
                     'documentation_generations',
                     'schema_snapshots',
                     'schema_versions',
-                    'code_generation_histories'
+                    'code_generation_histories',
                 ];
 
                 $tableLower = strtolower($tableName);
@@ -213,9 +222,9 @@ class SchemaDesigner extends Page
             });
 
             // Debug: Log filtering results
-            Log::info("After filtering: " . count($userTables) . " user tables remaining", [
+            Log::info('After filtering: '.count($userTables).' user tables remaining', [
                 'filtered_count' => count($userTables),
-                'sample_filtered' => array_slice($userTables, 0, 10)
+                'sample_filtered' => array_slice($userTables, 0, 10),
             ]);
 
             foreach ($userTables as $tableName) {
@@ -228,7 +237,7 @@ class SchemaDesigner extends Page
                         'name' => $tableName,
                         'columns' => [],
                         'indexes' => [],
-                        'position' => ['x' => rand(50, 500), 'y' => rand(50, 500)]
+                        'position' => ['x' => rand(50, 500), 'y' => rand(50, 500)],
                     ];
 
                     foreach ($columns as $column) {
@@ -312,13 +321,13 @@ class SchemaDesigner extends Page
 
             Log::info('RefreshSchema - dispatching event', [
                 'tables_count' => count($this->schemaData['tables'] ?? []),
-                'relationships_count' => count($this->schemaData['relationships'] ?? [])
+                'relationships_count' => count($this->schemaData['relationships'] ?? []),
             ]);
 
             // Dispatch event to frontend with the new data in the correct format
             $this->dispatch('schema-loaded', [
                 'tables' => $this->schemaData['tables'] ?? [],
-                'relationships' => $this->schemaData['relationships'] ?? []
+                'relationships' => $this->schemaData['relationships'] ?? [],
             ]);
 
             $tableCount = count($this->schemaData['tables'] ?? []);
@@ -331,19 +340,19 @@ class SchemaDesigner extends Page
         } catch (\Exception $e) {
             Log::error('RefreshSchema failed', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
 
             Notification::make()
                 ->title('Refresh Failed')
-                ->body('Error refreshing schema: ' . $e->getMessage())
+                ->body('Error refreshing schema: '.$e->getMessage())
                 ->danger()
                 ->send();
 
             Log::error('Schema refresh failed', [
                 'error' => $e->getMessage(),
                 'connection' => $this->selectedConnection,
-                'database' => $this->connectionInfo['database']
+                'database' => $this->connectionInfo['database'],
             ]);
         }
     }
@@ -352,13 +361,13 @@ class SchemaDesigner extends Page
     {
         Log::info('UpdateFrontend called', [
             'tables_count' => count($this->schemaData['tables'] ?? []),
-            'relationships_count' => count($this->schemaData['relationships'] ?? [])
+            'relationships_count' => count($this->schemaData['relationships'] ?? []),
         ]);
 
         // Simple method to just update the frontend with current backend data
         $this->dispatch('schema-loaded', [
             'tables' => $this->schemaData['tables'] ?? [],
-            'relationships' => $this->schemaData['relationships'] ?? []
+            'relationships' => $this->schemaData['relationships'] ?? [],
         ]);
     }
 
@@ -384,7 +393,7 @@ class SchemaDesigner extends Page
                 'Total Tables Found' => count($allTables),
                 'Sample Tables' => array_slice($allTables, 0, 20),
                 'Current Schema Tables' => count($this->schemaData['tables'] ?? []),
-                'Schema Data Sample' => array_slice($this->schemaData['tables'] ?? [], 0, 3)
+                'Schema Data Sample' => array_slice($this->schemaData['tables'] ?? [], 0, 3),
             ];
 
             Log::info('Debug Table Info', $debugInfo);
@@ -392,12 +401,12 @@ class SchemaDesigner extends Page
             // Also dispatch current data to frontend
             $this->dispatch('schema-loaded', [
                 'tables' => $this->schemaData['tables'] ?? [],
-                'relationships' => $this->schemaData['relationships'] ?? []
+                'relationships' => $this->schemaData['relationships'] ?? [],
             ]);
 
             Notification::make()
                 ->title('Debug Info Logged')
-                ->body("Found " . count($allTables) . " total tables. Current schema has " . count($this->schemaData['tables'] ?? []) . " tables. Check logs for details.")
+                ->body('Found '.count($allTables).' total tables. Current schema has '.count($this->schemaData['tables'] ?? []).' tables. Check logs for details.')
                 ->info()
                 ->send();
         } catch (\Exception $e) {
@@ -414,8 +423,9 @@ class SchemaDesigner extends Page
     protected function loadVersionHistory(): void
     {
         try {
-            if (!Schema::hasTable('schema_versions')) {
+            if (! Schema::hasTable('schema_versions')) {
                 $this->versionHistory = [];
+
                 return;
             }
 
@@ -444,16 +454,17 @@ class SchemaDesigner extends Page
     public function saveSchema(array $schemaData, ?string $name = null): void
     {
         try {
-            if (!Schema::hasTable('schema_versions')) {
+            if (! Schema::hasTable('schema_versions')) {
                 Notification::make()
                     ->title('Schema versions table not found')
                     ->body('Please run migrations first to enable schema saving.')
                     ->warning()
                     ->send();
+
                 return;
             }
 
-            $name = $name ?: 'Schema ' . now()->format('Y-m-d H:i:s');
+            $name = $name ?: 'Schema '.now()->format('Y-m-d H:i:s');
 
             SchemaVersion::create([
                 'user_id' => auth()->id(),
@@ -487,12 +498,13 @@ class SchemaDesigner extends Page
     public function loadVersion(int $versionId): void
     {
         try {
-            if (!Schema::hasTable('schema_versions')) {
+            if (! Schema::hasTable('schema_versions')) {
                 Notification::make()
                     ->title('Schema versions table not found')
                     ->body('Please run migrations first.')
                     ->warning()
                     ->send();
+
                 return;
             }
 
@@ -505,7 +517,7 @@ class SchemaDesigner extends Page
 
                 $this->dispatch('schema-loaded', [
                     'tables' => $this->schemaData['tables'] ?? [],
-                    'relationships' => $this->schemaData['relationships'] ?? []
+                    'relationships' => $this->schemaData['relationships'] ?? [],
                 ]);
 
                 Notification::make()
@@ -545,7 +557,7 @@ class SchemaDesigner extends Page
             $content .= "    public function up(): void\n    {\n";
 
             foreach ($migrations as $migration) {
-                $content .= $migration . "\n";
+                $content .= $migration."\n";
             }
 
             $content .= "    }\n\n";
@@ -562,7 +574,7 @@ class SchemaDesigner extends Page
             // For now, we'll just show the content. In production, you'd save this to a file
             $this->dispatch('migration-generated', [
                 'content' => $content,
-                'filename' => $filename
+                'filename' => $filename,
             ]);
 
             Notification::make()
@@ -596,9 +608,9 @@ class SchemaDesigner extends Page
             // Add indexes
             foreach ($table['indexes'] ?? [] as $index) {
                 if ($index['unique']) {
-                    $migration .= "            \$table->unique(['" . implode("', '", $index['columns']) . "']);\n";
+                    $migration .= "            \$table->unique(['".implode("', '", $index['columns'])."']);\n";
                 } else {
-                    $migration .= "            \$table->index(['" . implode("', '", $index['columns']) . "']);\n";
+                    $migration .= "            \$table->index(['".implode("', '", $index['columns'])."']);\n";
                 }
             }
 
@@ -623,7 +635,7 @@ class SchemaDesigner extends Page
 
     protected function generateColumnDefinition(array $column): string
     {
-        $definition = "            \$table->";
+        $definition = '            $table->';
 
         // Map column types to Laravel methods
         $typeMap = [
@@ -641,13 +653,13 @@ class SchemaDesigner extends Page
         $laravelType = $typeMap[$column['type']] ?? 'string';
 
         if ($column['name'] === 'id' && $column['autoIncrement']) {
-            $definition .= "id()";
+            $definition .= 'id()';
         } else {
             $definition .= "{$laravelType}('{$column['name']}')";
         }
 
         if ($column['nullable']) {
-            $definition .= "->nullable()";
+            $definition .= '->nullable()';
         }
 
         if ($column['default'] !== null) {
@@ -655,7 +667,7 @@ class SchemaDesigner extends Page
         }
 
         if ($column['unique'] ?? false) {
-            $definition .= "->unique()";
+            $definition .= '->unique()';
         }
 
         $definition .= ";\n";
@@ -666,7 +678,7 @@ class SchemaDesigner extends Page
     public function createDefaultTable(): array
     {
         return [
-            'name' => 'new_table_' . Str::random(6),
+            'name' => 'new_table_'.Str::random(6),
             'columns' => [
                 [
                     'name' => 'id',

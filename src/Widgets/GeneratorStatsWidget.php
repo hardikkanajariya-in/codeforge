@@ -2,6 +2,7 @@
 
 namespace HkDevs\CodeForgeStudio\Widgets;
 
+use Carbon\Carbon;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Facades\File;
@@ -43,7 +44,7 @@ class GeneratorStatsWidget extends BaseWidget
             'timestamp',
             'time',
             'uuid',
-            'ipAddress'
+            'ipAddress',
         ];
 
         return Stat::make('Column Types', count($columnTypes))
@@ -61,7 +62,7 @@ class GeneratorStatsWidget extends BaseWidget
             'belongsToMany',
             'morphTo',
             'morphOne',
-            'morphMany'
+            'morphMany',
         ];
 
         return Stat::make('Relation Types', count($relationTypes))
@@ -75,7 +76,7 @@ class GeneratorStatsWidget extends BaseWidget
         try {
             $historyFile = storage_path('app/codeforge-database-studio/generation-history.json');
 
-            if (!File::exists($historyFile)) {
+            if (! File::exists($historyFile)) {
                 return Stat::make('Today\'s Generations', 0)
                     ->description('No generations yet')
                     ->descriptionIcon('heroicon-m-calendar')
@@ -85,7 +86,8 @@ class GeneratorStatsWidget extends BaseWidget
             $history = json_decode(File::get($historyFile), true) ?? [];
 
             $today = collect($history)->filter(function ($item) {
-                $createdAt = \Carbon\Carbon::parse($item['created_at']);
+                $createdAt = Carbon::parse($item['created_at']);
+
                 return $createdAt->isToday();
             })->count();
 

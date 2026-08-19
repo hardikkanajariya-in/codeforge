@@ -2,9 +2,10 @@
 
 namespace HkDevs\CodeForgeStudio\Tests;
 
-use Illuminate\Foundation\Testing\WithFaker;
-use Orchestra\Testbench\TestCase as BaseTestCase;
 use HkDevs\CodeForgeStudio\CodeForgeStudioServiceProvider;
+use Illuminate\Foundation\Testing\WithFaker;
+use Livewire\LivewireServiceProvider;
+use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -28,7 +29,7 @@ abstract class TestCase extends BaseTestCase
     protected function getPackageProviders($app): array
     {
         return [
-            \Livewire\LivewireServiceProvider::class,
+            LivewireServiceProvider::class,
             CodeForgeStudioServiceProvider::class,
         ];
     }
@@ -46,11 +47,10 @@ abstract class TestCase extends BaseTestCase
             'prefix' => '',
             'foreign_key_constraints' => false,
         ]);
-        
+
         // Disable testbench default migrations
         $app['config']->set('database.migrations', 'migrations');
     }
-
 
     /**
      * Helper to assert view contains expected data keys

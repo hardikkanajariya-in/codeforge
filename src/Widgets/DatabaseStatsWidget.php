@@ -32,7 +32,7 @@ class DatabaseStatsWidget extends BaseWidget
                 $tableName = array_values($tableArray)[0];
 
                 // Skip system tables and plugin tables
-                if (!in_array($tableName, [
+                if (! in_array($tableName, [
                     'migrations',
                     'personal_access_tokens',
                     'password_reset_tokens',
@@ -75,7 +75,7 @@ class DatabaseStatsWidget extends BaseWidget
         try {
             // Get all migration files
             $migrationPath = database_path('migrations');
-            $migrationFiles = glob($migrationPath . '/*.php');
+            $migrationFiles = glob($migrationPath.'/*.php');
             $totalMigrations = count($migrationFiles);
 
             // Get executed migrations
@@ -87,7 +87,7 @@ class DatabaseStatsWidget extends BaseWidget
             $pending = max(0, $totalMigrations - $executedMigrations);
 
             return Stat::make('Pending Migrations', $pending)
-                ->description($executedMigrations . ' completed')
+                ->description($executedMigrations.' completed')
                 ->descriptionIcon('heroicon-m-arrow-path')
                 ->color($pending > 0 ? 'warning' : 'success');
         } catch (\Exception $e) {
@@ -109,25 +109,25 @@ class DatabaseStatsWidget extends BaseWidget
 
             switch ($driver) {
                 case 'mysql':
-                    $result = DB::select("
+                    $result = DB::select('
                         SELECT 
                             ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS size_mb
                         FROM information_schema.tables 
                         WHERE table_schema = DATABASE()
-                    ");
-                    if (!empty($result)) {
-                        $size = $result[0]->size_mb . ' MB';
+                    ');
+                    if (! empty($result)) {
+                        $size = $result[0]->size_mb.' MB';
                         $description = 'Total database size';
                     }
                     break;
 
                 case 'pgsql':
-                    $result = DB::select("
+                    $result = DB::select('
                         SELECT 
                             ROUND(pg_database_size(current_database()) / 1024.0 / 1024.0, 2) AS size_mb
-                    ");
-                    if (!empty($result)) {
-                        $size = $result[0]->size_mb . ' MB';
+                    ');
+                    if (! empty($result)) {
+                        $size = $result[0]->size_mb.' MB';
                         $description = 'Total database size';
                     }
                     break;
@@ -137,7 +137,7 @@ class DatabaseStatsWidget extends BaseWidget
                     if (file_exists($dbPath)) {
                         $sizeBytes = filesize($dbPath);
                         $sizeMB = round($sizeBytes / 1024 / 1024, 2);
-                        $size = $sizeMB . ' MB';
+                        $size = $sizeMB.' MB';
                         $description = 'Database file size';
                     }
                     break;
@@ -154,5 +154,4 @@ class DatabaseStatsWidget extends BaseWidget
                 ->color('danger');
         }
     }
-
 }

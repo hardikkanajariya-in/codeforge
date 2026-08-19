@@ -2,28 +2,29 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Unit;
 
-use HkDevs\CodeForgeStudio\Tests\TestCase;
+use Filament\Contracts\Plugin;
 use HkDevs\CodeForgeStudio\CodeForgeStudioPlugin;
-use HkDevs\CodeForgeStudio\Pages\DatabaseOverview;
 use HkDevs\CodeForgeStudio\Pages\DatabaseHealthDashboard;
-use HkDevs\CodeForgeStudio\Pages\SchemaDesigner;
-use HkDevs\CodeForgeStudio\Pages\SmartDataSeeder;
+use HkDevs\CodeForgeStudio\Pages\DatabaseOverview;
 use HkDevs\CodeForgeStudio\Pages\DocumentationGenerator;
+use HkDevs\CodeForgeStudio\Pages\FactoryGeneratorPage;
+use HkDevs\CodeForgeStudio\Pages\FilamentResourceGeneratorPage;
 use HkDevs\CodeForgeStudio\Pages\GeneratorOverviewPage;
 use HkDevs\CodeForgeStudio\Pages\MigrationGeneratorPage;
 use HkDevs\CodeForgeStudio\Pages\ModelGeneratorPage;
-use HkDevs\CodeForgeStudio\Pages\FactoryGeneratorPage;
+use HkDevs\CodeForgeStudio\Pages\SchemaDesigner;
 use HkDevs\CodeForgeStudio\Pages\SeederGeneratorPage;
-use HkDevs\CodeForgeStudio\Pages\FilamentResourceGeneratorPage;
+use HkDevs\CodeForgeStudio\Pages\SmartDataSeeder;
+use HkDevs\CodeForgeStudio\Resources\DatabaseHealthMetricResource;
+use HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource;
+use HkDevs\CodeForgeStudio\Resources\DataSeederResource;
+use HkDevs\CodeForgeStudio\Resources\DocumentationGenerationResource;
 use HkDevs\CodeForgeStudio\Resources\MigrationHistoryResource;
 use HkDevs\CodeForgeStudio\Resources\QueryPerformanceLogResource;
-use HkDevs\CodeForgeStudio\Resources\DatabaseHealthMetricResource;
-use HkDevs\CodeForgeStudio\Resources\DataSeederResource;
-use HkDevs\CodeForgeStudio\Resources\SeederExecutionLogResource;
-use HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource;
-use HkDevs\CodeForgeStudio\Resources\DocumentationGenerationResource;
 use HkDevs\CodeForgeStudio\Resources\SchemaSnapshotResource;
-use Filament\Contracts\Plugin;
+use HkDevs\CodeForgeStudio\Resources\SeederExecutionLogResource;
+use HkDevs\CodeForgeStudio\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class CodeForgeStudioPluginSimpleTest extends TestCase
 {
@@ -32,30 +33,30 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->plugin = new CodeForgeStudioPlugin();
+        $this->plugin = new CodeForgeStudioPlugin;
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_implements_plugin_interface()
     {
         $this->assertInstanceOf(Plugin::class, $this->plugin);
         $this->assertInstanceOf(CodeForgeStudioPlugin::class, $this->plugin);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_has_correct_id()
     {
         $this->assertEquals('codeforge-database-studio', $this->plugin->getId());
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_can_be_created_via_make_method()
     {
         $plugin = CodeForgeStudioPlugin::make();
         $this->assertInstanceOf(CodeForgeStudioPlugin::class, $plugin);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_default_feature_states()
     {
         // Test default values via reflection since properties are protected
@@ -86,7 +87,7 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
         $this->assertTrue($enableCodeGeneration->getValue($this->plugin));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_enable_schema_designer_method()
     {
         $result = $this->plugin->enableSchemaDesigner(false);
@@ -103,7 +104,7 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
         $this->assertTrue($property->getValue($this->plugin));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_enable_migration_manager_method()
     {
         $result = $this->plugin->enableMigrationManager(false);
@@ -115,7 +116,7 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
         $this->assertFalse($property->getValue($this->plugin));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_enable_health_monitoring_method()
     {
         $result = $this->plugin->enableHealthMonitoring(false);
@@ -127,7 +128,7 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
         $this->assertFalse($property->getValue($this->plugin));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_enable_smart_seeding_method()
     {
         $result = $this->plugin->enableSmartSeeding(false);
@@ -139,7 +140,7 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
         $this->assertFalse($property->getValue($this->plugin));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_enable_documentation_generator_method()
     {
         $result = $this->plugin->enableDocumentationGenerator(false);
@@ -151,7 +152,7 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
         $this->assertFalse($property->getValue($this->plugin));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_enable_code_generation_method()
     {
         $result = $this->plugin->enableCodeGeneration(false);
@@ -163,7 +164,7 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
         $this->assertFalse($property->getValue($this->plugin));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_fluent_interface_chaining()
     {
         $result = $this->plugin
@@ -177,7 +178,7 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
         $this->assertSame($this->plugin, $result);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_page_classes_exist()
     {
         $pageClasses = [
@@ -202,7 +203,7 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_resource_classes_exist()
     {
         $resourceClasses = [
@@ -224,7 +225,7 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_feature_state_changes_are_persistent()
     {
         // Test that feature state changes persist
@@ -258,7 +259,7 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
         $this->assertTrue($enableDocumentationGenerator->getValue($this->plugin));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_configuration_is_chainable()
     {
         $plugin = CodeForgeStudioPlugin::make()
@@ -272,7 +273,7 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
         $this->assertInstanceOf(CodeForgeStudioPlugin::class, $plugin);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_all_feature_toggles_work_correctly()
     {
         $reflection = new \ReflectionClass($this->plugin);
@@ -290,7 +291,7 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
             'enableMigrationManager',
             'enableHealthMonitoring',
             'enableSmartSeeding',
-            'enableDocumentationGenerator'
+            'enableDocumentationGenerator',
         ];
 
         foreach ($properties as $propertyName) {
@@ -314,7 +315,7 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_has_all_required_public_methods()
     {
         $requiredMethods = [
@@ -327,7 +328,7 @@ class CodeForgeStudioPluginSimpleTest extends TestCase
             'enableSmartSeeding',
             'enableDocumentationGenerator',
             'enableCodeGeneration',
-            'make'
+            'make',
         ];
 
         $reflection = new \ReflectionClass($this->plugin);

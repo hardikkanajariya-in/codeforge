@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Schema;
 
 /**
  * Test Cases for Database Overview & Analytics Features
- * 
+ *
  * Based on TC-DB-001 through TC-DB-004 from COMPREHENSIVE_TEST_CASES_FOR_USER.md
  * These tests verify real-time database statistics, performance dashboard analytics,
  * connection health monitoring, and quick access panel functionality.
@@ -23,6 +23,7 @@ class DatabaseOverviewAnalyticsTest extends TestCase
     use RefreshDatabase;
 
     protected DatabaseHealthService $healthService;
+
     protected SchemaAnalyzerService $schemaAnalyzer;
 
     protected function setUp(): void
@@ -39,7 +40,7 @@ class DatabaseOverviewAnalyticsTest extends TestCase
 
     /**
      * TC-DB-001: Live Database Metrics Display
-     * 
+     *
      * Purpose: Verify accurate display of real-time database statistics
      * Steps:
      * 1. Access Database Overview page
@@ -58,14 +59,15 @@ class DatabaseOverviewAnalyticsTest extends TestCase
         $actualTables = Schema::getAllTables();
         $userTables = collect($actualTables)->filter(function ($table) {
             $tableName = array_values((array) $table)[0];
-            return !in_array($tableName, [
+
+            return ! in_array($tableName, [
                 'migrations',
                 'failed_jobs',
                 'password_reset_tokens',
                 'personal_access_tokens',
                 'cache',
                 'cache_locks',
-                'sessions'
+                'sessions',
             ]);
         });
 
@@ -103,7 +105,7 @@ class DatabaseOverviewAnalyticsTest extends TestCase
 
     /**
      * TC-DB-002: Performance Dashboard Analytics
-     * 
+     *
      * Purpose: Test comprehensive database performance monitoring with visual charts
      * Steps:
      * 1. Access Performance Dashboard
@@ -144,7 +146,7 @@ class DatabaseOverviewAnalyticsTest extends TestCase
 
     /**
      * TC-DB-003: Connection Health Monitoring
-     * 
+     *
      * Purpose: Test database connection health across multiple environments
      * Steps:
      * 1. Configure multiple database connections
@@ -192,13 +194,13 @@ class DatabaseOverviewAnalyticsTest extends TestCase
         // Verify metric was recorded
         $this->assertDatabaseHas('database_health_metrics', [
             'connection' => 'testing',
-            'metric_name' => 'response_time'
+            'metric_name' => 'response_time',
         ]);
     }
 
     /**
      * TC-DB-004: Quick Access Panel Functionality
-     * 
+     *
      * Purpose: Test direct shortcuts to frequently used database operations
      * Steps:
      * 1. Access Quick Access Panel
@@ -246,7 +248,7 @@ class DatabaseOverviewAnalyticsTest extends TestCase
 
     /**
      * TC-DB-002 Alternative: Multi-Connection Support Test
-     * 
+     *
      * Purpose: Test plugin with multiple database connections
      */
     public function test_multi_connection_support(): void
@@ -376,7 +378,7 @@ class DatabaseOverviewAnalyticsTest extends TestCase
         for ($i = 0; $i < 24; $i++) {
             QueryPerformanceLog::create([
                 'query_hash' => md5("test_query_{$i}"),
-                'query' => "SELECT * FROM test_users WHERE id = ?", // Required field
+                'query' => 'SELECT * FROM test_users WHERE id = ?', // Required field
                 'bindings' => json_encode([1]),
                 'execution_time' => rand(10, 500), // Random execution time
                 'memory_usage' => rand(1024, 8192),
@@ -392,7 +394,7 @@ class DatabaseOverviewAnalyticsTest extends TestCase
         for ($i = 0; $i < 3; $i++) {
             QueryPerformanceLog::create([
                 'query_hash' => md5("slow_query_{$i}"),
-                'query' => "SELECT * FROM test_posts ORDER BY created_at DESC", // Required field
+                'query' => 'SELECT * FROM test_posts ORDER BY created_at DESC', // Required field
                 'bindings' => json_encode([]),
                 'execution_time' => rand(1000, 5000), // Slow queries
                 'memory_usage' => rand(8192, 16384),

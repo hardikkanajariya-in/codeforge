@@ -1,13 +1,11 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources\SeederExecutionLogResource\Pages;
-use HkDevs\CodeForgeStudio\Support\Section;
-use Filament\Schemas\Schema;
-
-use HkDevs\CodeForgeStudio\Resources\SeederExecutionLogResource;
-use Filament\Resources\Pages\ViewRecord;
 
 use Filament\Infolists\Components;
+use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Resources\SeederExecutionLogResource;
 
 class ViewSeederExecutionLog extends ViewRecord
 {
@@ -27,7 +25,7 @@ class ViewSeederExecutionLog extends ViewRecord
 
                         Components\TextEntry::make('status')
                             ->badge()
-                            ->color(fn(string $state): string => match ($state) {
+                            ->color(fn (string $state): string => match ($state) {
                                 'completed' => 'success',
                                 'failed' => 'danger',
                                 'started' => 'warning',
@@ -80,7 +78,7 @@ class ViewSeederExecutionLog extends ViewRecord
                             ->placeholder('No output captured'),
                     ])
                     ->collapsible()
-                    ->visible(fn($record) => !empty($record->output)),
+                    ->visible(fn ($record) => ! empty($record->output)),
 
                 Components\Section::make('Error Details')
                     ->schema([
@@ -90,7 +88,7 @@ class ViewSeederExecutionLog extends ViewRecord
                             ->color('danger'),
                     ])
                     ->collapsible()
-                    ->visible(fn($record) => !empty($record->error_message)),
+                    ->visible(fn ($record) => ! empty($record->error_message)),
 
                 Components\Section::make('Metadata')
                     ->schema([
@@ -99,7 +97,7 @@ class ViewSeederExecutionLog extends ViewRecord
                     ])
                     ->collapsible()
                     ->collapsed()
-                    ->visible(fn($record) => !empty($record->metadata)),
+                    ->visible(fn ($record) => ! empty($record->metadata)),
             ]);
     }
 }

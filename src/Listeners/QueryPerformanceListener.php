@@ -7,10 +7,10 @@ use Illuminate\Database\Events\QueryExecuted;
 
 /**
  * QueryPerformanceListener
- * 
+ *
  * Event listener for database query execution that provides performance monitoring
  * and health tracking for CodeForge Database Studio applications.
- * 
+ *
  * Key Features:
  * - Real-time query performance monitoring and logging
  * - Automatic recursion prevention with smart flag management
@@ -18,36 +18,37 @@ use Illuminate\Database\Events\QueryExecuted;
  * - Intelligent query skipping to avoid monitoring overhead
  * - Integration with DatabaseHealthService for metrics storage
  * - Connection-aware logging for multi-database setups
- * 
+ *
  * Performance Monitoring:
  * - Execution time tracking with microsecond precision
  * - Query binding capture for debugging and analysis
  * - Connection name tracking for multi-database environments
  * - Memory-efficient logging with selective query filtering
- * 
+ *
  * Smart Query Filtering:
  * - Automatic skipping of health monitoring table queries
  * - System table query filtering (information_schema, performance_schema)
  * - Development query filtering (SHOW, DESCRIBE, EXPLAIN commands)
  * - Recursion prevention for logging queries themselves
- * 
+ *
  * Configuration Options:
  * - Configurable query logging enable/disable
  * - Selective table monitoring with pattern matching
  * - Performance threshold configuration
  * - Error handling and silent failure modes
- * 
+ *
  * Integration Features:
  * - Laravel event system compatibility
  * - DatabaseHealthService integration for data persistence
  * - Multi-connection database support
  * - Graceful error handling without application interruption
- * 
- * @package HkDevs\CodeForgeStudio\Listeners
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * // Auto-registered through service provider
  * Event::listen(QueryExecuted::class, [QueryPerformanceListener::class, 'handle']);
@@ -69,7 +70,7 @@ class QueryPerformanceListener
         }
 
         // Only log if performance monitoring is enabled
-        if (!config('codeforge-database-studio.enable_query_logging', true)) {
+        if (! config('codeforge-database-studio.enable_query_logging', true)) {
             return;
         }
 

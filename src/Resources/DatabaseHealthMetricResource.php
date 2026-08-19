@@ -1,27 +1,26 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources;
-use Filament\Schemas\Schema;
-use HkDevs\CodeForgeStudio\Support\Grid;
-use HkDevs\CodeForgeStudio\Support\Section;
 
-use HkDevs\CodeForgeStudio\Models\DatabaseHealthMetric;
-use HkDevs\CodeForgeStudio\Resources\DatabaseHealthMetricResource\Pages;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists;
-
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use HkDevs\CodeForgeStudio\Models\DatabaseHealthMetric;
+use HkDevs\CodeForgeStudio\Resources\DatabaseHealthMetricResource\Pages;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
  * DatabaseHealthMetricResource
- * 
+ *
  * Filament resource for managing database health metrics with comprehensive
  * monitoring, analysis, and visualization capabilities.
- * 
+ *
  * Key Features:
  * - Complete CRUD operations for health metrics management
  * - Real-time metric visualization with charts and graphs
@@ -29,74 +28,78 @@ use Illuminate\Database\Eloquent\Builder;
  * - Advanced filtering and search capabilities
  * - Metric trend analysis and historical data tracking
  * - Alert management and threshold configuration
- * 
+ *
  * Resource Configuration:
  * - DatabaseHealthMetric model integration
  * - Heart icon for intuitive health monitoring identification
  * - Positioned in 'Database Health' navigation group
  * - Priority sorting for dashboard prominence
- * 
+ *
  * Table Features:
  * - Connection-based metric organization
  * - Metric type and value display with formatting
  * - Status indicators with color coding
  * - Timestamp tracking for historical analysis
  * - Bulk operations for metric management
- * 
+ *
  * Form Management:
  * - Metric creation and editing with validation
  * - Connection selection and configuration
  * - Metric type categorization and naming
  * - Value input with appropriate formatting
  * - Status management and alert configuration
- * 
+ *
  * Advanced Features:
  * - Metric comparison and trend analysis
  * - Export capabilities for reporting
  * - Integration with health monitoring dashboard
  * - Real-time updates and refresh capabilities
- * 
- * @package HkDevs\CodeForgeStudio\Resources
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class DatabaseHealthMetricResource extends Resource
 {
     protected static ?string $model = DatabaseHealthMetric::class;
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-heart';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-heart';
+
     protected static ?string $navigationLabel = 'Health Metrics';
-    protected static string | \UnitEnum | null $navigationGroup = 'Database Health';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Database Health';
+
     protected static ?int $navigationSort = 3;
 
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-                Forms\Components\TextInput::make('connection')
-                    ->required()
-                    ->maxLength(100),
-                Forms\Components\TextInput::make('metric_type')
-                    ->required()
-                    ->maxLength(100),
-                Forms\Components\TextInput::make('metric_name')
-                    ->required()
-                    ->maxLength(100),
-                Forms\Components\TextInput::make('value')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('unit')
-                    ->maxLength(20),
-                Forms\Components\Select::make('status')
-                    ->options([
-                        'normal' => 'Normal',
-                        'warning' => 'Warning',
-                        'critical' => 'Critical',
-                    ])
-                    ->default('normal'),
-                Forms\Components\DateTimePicker::make('recorded_at')
-                    ->required(),
-            ]);
+            Forms\Components\TextInput::make('connection')
+                ->required()
+                ->maxLength(100),
+            Forms\Components\TextInput::make('metric_type')
+                ->required()
+                ->maxLength(100),
+            Forms\Components\TextInput::make('metric_name')
+                ->required()
+                ->maxLength(100),
+            Forms\Components\TextInput::make('value')
+                ->required()
+                ->numeric(),
+            Forms\Components\TextInput::make('unit')
+                ->maxLength(20),
+            Forms\Components\Select::make('status')
+                ->options([
+                    'normal' => 'Normal',
+                    'warning' => 'Warning',
+                    'critical' => 'Critical',
+                ])
+                ->default('normal'),
+            Forms\Components\DateTimePicker::make('recorded_at')
+                ->required(),
+        ]);
     }
 
     public static function infolist(Schema $schema): Schema
@@ -110,13 +113,13 @@ class DatabaseHealthMetricResource extends Resource
                                 Infolists\Components\TextEntry::make('status')
                                     ->badge()
                                     ->size('lg')
-                                    ->color(fn(DatabaseHealthMetric $record): string => $record->status_color),
+                                    ->color(fn (DatabaseHealthMetric $record): string => $record->status_color),
 
                                 Infolists\Components\TextEntry::make('formatted_value')
                                     ->label('Value')
                                     ->badge()
                                     ->size('lg')
-                                    ->color(fn(DatabaseHealthMetric $record): string => match ($record->status) {
+                                    ->color(fn (DatabaseHealthMetric $record): string => match ($record->status) {
                                         'normal' => 'success',
                                         'warning' => 'warning',
                                         'critical' => 'danger',
@@ -158,7 +161,7 @@ class DatabaseHealthMetricResource extends Resource
                                 Infolists\Components\TextEntry::make('metric_type')
                                     ->label('Metric Type')
                                     ->badge()
-                                    ->color(fn(string $state): string => match ($state) {
+                                    ->color(fn (string $state): string => match ($state) {
                                         'connection_status' => 'success',
                                         'query_performance' => 'info',
                                         'database_info' => 'warning',
@@ -175,7 +178,7 @@ class DatabaseHealthMetricResource extends Resource
                                     ->copyable()
                                     ->copyMessage('Value copied!')
                                     ->extraAttributes([
-                                        'class' => 'bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded font-mono text-sm'
+                                        'class' => 'bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded font-mono text-sm',
                                     ]),
 
                                 Infolists\Components\TextEntry::make('unit')
@@ -190,7 +193,7 @@ class DatabaseHealthMetricResource extends Resource
                                     ->size('lg')
                                     ->copyable()
                                     ->copyMessage('Formatted value copied!')
-                                    ->color(fn(DatabaseHealthMetric $record): string => $record->status_color),
+                                    ->color(fn (DatabaseHealthMetric $record): string => $record->status_color),
                             ]),
                     ])
                     ->collapsible()
@@ -204,16 +207,17 @@ class DatabaseHealthMetricResource extends Resource
                                 if (empty($state)) {
                                     return '// No additional metadata available';
                                 }
+
                                 return json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
                             })
                             ->copyable()
                             ->copyMessage('Metadata copied!')
                             ->fontFamily('mono')
                             ->size('sm')
-                            ->color(fn($state) => empty($state) ? 'gray' : 'info')
+                            ->color(fn ($state) => empty($state) ? 'gray' : 'info')
                             ->extraAttributes([
                                 'class' => 'bg-slate-50 dark:bg-slate-800 p-3 rounded-lg border border-slate-200 dark:border-slate-600 whitespace-pre',
-                                'style' => 'font-family: "Fira Code", "Monaco", "Consolas", monospace; line-height: 1.4;'
+                                'style' => 'font-family: "Fira Code", "Monaco", "Consolas", monospace; line-height: 1.4;',
                             ])
                             ->columnSpanFull(),
 
@@ -251,14 +255,14 @@ class DatabaseHealthMetricResource extends Resource
                                 $message = $statusMessages[$state] ?? '❓ Unknown status';
 
                                 if ($record->threshold_info) {
-                                    $message .= "\n\n� Thresholds: " . $record->threshold_info;
+                                    $message .= "\n\n� Thresholds: ".$record->threshold_info;
                                 }
 
                                 return $message;
                             })
                             ->weight('medium')
-                            ->color(fn(DatabaseHealthMetric $record): string => $record->status_color)
-                            ->extraAttributes(fn(DatabaseHealthMetric $record) => match ($record->status) {
+                            ->color(fn (DatabaseHealthMetric $record): string => $record->status_color)
+                            ->extraAttributes(fn (DatabaseHealthMetric $record) => match ($record->status) {
                                 'normal' => [
                                     'class' => 'bg-green-50 dark:bg-green-900/20 p-3 rounded-lg border-l-4 border-green-500',
                                 ],
@@ -289,14 +293,14 @@ class DatabaseHealthMetricResource extends Resource
                                     return 'No specific recommendations available.';
                                 }
 
-                                return '• ' . implode("\n• ", $recommendations);
+                                return '• '.implode("\n• ", $recommendations);
                             })
-                            ->color(fn(DatabaseHealthMetric $record): string => $record->status_color)
+                            ->color(fn (DatabaseHealthMetric $record): string => $record->status_color)
                             ->extraAttributes([
                                 'class' => 'bg-gray-50 dark:bg-gray-800 p-3 rounded-lg whitespace-pre-line',
                             ]),
                     ])
-                    ->icon(fn(DatabaseHealthMetric $record) => match ($record->status) {
+                    ->icon(fn (DatabaseHealthMetric $record) => match ($record->status) {
                         'normal' => 'heroicon-o-check-circle',
                         'warning' => 'heroicon-o-exclamation-triangle',
                         'critical' => 'heroicon-o-x-circle',
@@ -317,7 +321,7 @@ class DatabaseHealthMetricResource extends Resource
                 Tables\Columns\TextColumn::make('metric_type')
                     ->label('Type')
                     ->badge()
-                    ->color(fn(string $state): string => match ($state) {
+                    ->color(fn (string $state): string => match ($state) {
                         'connection_status' => 'success',
                         'query_performance' => 'info',
                         'database_info' => 'warning',
@@ -333,21 +337,21 @@ class DatabaseHealthMetricResource extends Resource
 
                 Tables\Columns\TextColumn::make('value')
                     ->label('Value')
-                    ->formatStateUsing(fn($record) => $record->formatted_value)
+                    ->formatStateUsing(fn ($record) => $record->formatted_value)
                     ->fontFamily('mono')
                     ->weight('bold')
-                    ->color(fn(DatabaseHealthMetric $record): string => $record->status_color)
+                    ->color(fn (DatabaseHealthMetric $record): string => $record->status_color)
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->color(fn(string $state): string => match ($state) {
+                    ->color(fn (string $state): string => match ($state) {
                         'normal' => 'success',
                         'warning' => 'warning',
                         'critical' => 'danger',
                         default => 'gray',
                     })
-                    ->icon(fn(string $state): string => match ($state) {
+                    ->icon(fn (string $state): string => match ($state) {
                         'normal' => 'heroicon-o-check-circle',
                         'warning' => 'heroicon-o-exclamation-triangle',
                         'critical' => 'heroicon-o-x-circle',
@@ -381,10 +385,10 @@ class DatabaseHealthMetricResource extends Resource
                     ]),
                 Tables\Filters\Filter::make('warnings')
                     ->label('Warnings & Critical')
-                    ->query(fn(Builder $query): Builder => $query->whereIn('status', ['warning', 'critical'])),
+                    ->query(fn (Builder $query): Builder => $query->whereIn('status', ['warning', 'critical'])),
                 Tables\Filters\Filter::make('recent')
                     ->label('Last 24 Hours')
-                    ->query(fn(Builder $query): Builder => $query->where('recorded_at', '>=', now()->subDay())),
+                    ->query(fn (Builder $query): Builder => $query->where('recorded_at', '>=', now()->subDay())),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

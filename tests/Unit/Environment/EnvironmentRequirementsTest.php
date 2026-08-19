@@ -2,10 +2,15 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Unit\Environment;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Filament\Contracts\Plugin;
+use Filament\Panel;
 use HkDevs\CodeForgeStudio\Tests\TestCase;
-use HkDevs\CodeForgeStudio\CodeForgeStudioServiceProvider;
-use Illuminate\Support\Facades\Config;
-use Orchestra\Testbench\TestCase as BaseTestCase;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\ServiceProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Test Case: TC-ENV-001 - Environment Requirements Validation
@@ -13,7 +18,7 @@ use Orchestra\Testbench\TestCase as BaseTestCase;
  */
 class EnvironmentRequirementsTest extends TestCase
 {
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_php_version_compatibility()
     {
         // Test PHP 8.1+ compatibility
@@ -21,7 +26,7 @@ class EnvironmentRequirementsTest extends TestCase
         $this->assertGreaterThanOrEqual(8.1, $phpVersion, 'PHP version must be 8.1 or higher');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_required_php_extensions()
     {
         // Test required PHP extensions
@@ -35,32 +40,32 @@ class EnvironmentRequirementsTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_laravel_framework_availability()
     {
         // Verify Laravel framework classes are available
-        $this->assertTrue(class_exists(\Illuminate\Foundation\Application::class));
-        $this->assertTrue(class_exists(\Illuminate\Database\Eloquent\Model::class));
-        $this->assertTrue(class_exists(\Illuminate\Support\ServiceProvider::class));
+        $this->assertTrue(class_exists(Application::class));
+        $this->assertTrue(class_exists(Model::class));
+        $this->assertTrue(class_exists(ServiceProvider::class));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_filament_framework_availability()
     {
         // Verify FilamentPHP classes are available
-        $this->assertTrue(class_exists(\Filament\Panel::class));
-        $this->assertTrue(interface_exists(\Filament\Contracts\Plugin::class));
+        $this->assertTrue(class_exists(Panel::class));
+        $this->assertTrue(interface_exists(Plugin::class));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_doctrine_dbal_availability()
     {
         // Verify Doctrine DBAL is available
-        $this->assertTrue(class_exists(\Doctrine\DBAL\Connection::class));
-        $this->assertTrue(class_exists(\Doctrine\DBAL\Schema\AbstractSchemaManager::class));
+        $this->assertTrue(class_exists(Connection::class));
+        $this->assertTrue(class_exists(AbstractSchemaManager::class));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_database_drivers_availability()
     {
         // Test SQLite driver (always available in testing)
@@ -77,7 +82,7 @@ class EnvironmentRequirementsTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_memory_limit_requirements()
     {
         $memoryLimit = ini_get('memory_limit');
@@ -94,7 +99,7 @@ class EnvironmentRequirementsTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_execution_time_limits()
     {
         $maxExecutionTime = ini_get('max_execution_time');

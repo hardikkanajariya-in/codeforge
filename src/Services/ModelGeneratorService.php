@@ -7,10 +7,10 @@ use Illuminate\Support\Str;
 
 /**
  * ModelGeneratorService
- * 
+ *
  * Advanced Laravel Eloquent model generation service for CodeForge Database Studio.
  * Creates intelligent, feature-rich Eloquent models with comprehensive relationship mapping and optimization.
- * 
+ *
  * Features:
  * - Intelligent Eloquent model generation with automatic property detection
  * - Comprehensive relationship mapping with all relationship types
@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
  * - Cast configuration with automatic type detection and optimization
  * - Validation rule integration with model-level validation
  * - Event integration with model lifecycle events and observers
- * 
+ *
  * Model Generation Intelligence:
  * - Database Schema Analysis: Automatic model generation from database tables
  * - Relationship Detection: Intelligent detection of foreign key relationships
@@ -29,7 +29,7 @@ use Illuminate\Support\Str;
  * - Attribute Discovery: Automatic detection of fillable, hidden, and guarded attributes
  * - Constraint Analysis: Integration of database constraints into model validation
  * - Index Optimization: Model configuration based on database index structures
- * 
+ *
  * Relationship Management:
  * - One-to-One Relationships: Automatic hasOne and belongsTo relationship generation
  * - One-to-Many Relationships: Intelligent hasMany and belongsTo relationship mapping
@@ -38,7 +38,7 @@ use Illuminate\Support\Str;
  * - Has-Many-Through: Complex relationship chain detection and configuration
  * - Morph-Many Relationships: Advanced polymorphic relationship configurations
  * - Custom Relationships: Support for custom relationship types and configurations
- * 
+ *
  * Advanced Features:
  * - Accessor Generation: Automatic accessor creation for formatted data output
  * - Mutator Generation: Intelligent mutator creation for data transformation
@@ -47,7 +47,7 @@ use Illuminate\Support\Str;
  * - Trait Application: Automatic application of appropriate Laravel traits
  * - Soft Delete Integration: Automatic soft delete configuration when applicable
  * - Timestamp Management: Intelligent timestamp configuration and customization
- * 
+ *
  * Code Quality Features:
  * - PSR Compliance: Generated code follows PSR standards and best practices
  * - Documentation Generation: Automatic PHPDoc generation with type hints
@@ -56,7 +56,7 @@ use Illuminate\Support\Str;
  * - Import Optimization: Intelligent use statement generation and organization
  * - Method Organization: Logical organization of generated methods and properties
  * - Comment Generation: Descriptive comments for generated code elements
- * 
+ *
  * Validation Integration:
  * - Rule Generation: Automatic validation rule creation based on database constraints
  * - Form Request Integration: Generation of companion form request classes
@@ -65,7 +65,7 @@ use Illuminate\Support\Str;
  * - Conditional Validation: Context-aware validation rule generation
  * - Localization Support: Multi-language validation message generation
  * - Error Handling: Comprehensive error handling and validation feedback
- * 
+ *
  * Performance Optimization:
  * - Eager Loading Configuration: Automatic with property configuration for relationships
  * - Query Optimization: Optimized query generation with efficient relationship loading
@@ -74,7 +74,7 @@ use Illuminate\Support\Str;
  * - Memory Management: Efficient model generation and instantiation patterns
  * - Lazy Loading: Intelligent lazy loading configuration for large datasets
  * - Connection Management: Multi-database connection support and optimization
- * 
+ *
  * Integration Features:
  * - Laravel Integration: Full compatibility with Laravel's Eloquent ORM
  * - Factory Integration: Automatic model factory generation and configuration
@@ -83,7 +83,7 @@ use Illuminate\Support\Str;
  * - Observer Integration: Model observer generation for event handling
  * - API Resource Integration: Automatic API resource generation for REST APIs
  * - Testing Integration: Test-friendly model generation with testing utilities
- * 
+ *
  * Customization Options:
  * - Template System: Customizable model templates with user-defined patterns
  * - Trait Selection: Configurable trait application based on model requirements
@@ -92,12 +92,13 @@ use Illuminate\Support\Str;
  * - Namespace Customization: Flexible namespace organization and structure
  * - Method Generation: Selective generation of model methods and features
  * - Extension Points: Plugin architecture for custom model generation logic
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $service = app(ModelGeneratorService::class);
  * $result = $service->generateModel([
@@ -112,8 +113,11 @@ use Illuminate\Support\Str;
 class ModelGeneratorService
 {
     protected string $modelsPath;
+
     protected string $factoriesPath;
+
     protected string $seedersPath;
+
     protected string $policiesPath;
 
     public function __construct()
@@ -166,7 +170,7 @@ class ModelGeneratorService
         // Format results for BaseGeneratorPage compatibility
         $formattedResults = [
             'success' => true,
-            'files_created' => []
+            'files_created' => [],
         ];
 
         foreach ($results as $type => $result) {
@@ -175,7 +179,7 @@ class ModelGeneratorService
                     'type' => $result['type'],
                     'class_name' => $result['class_name'],
                     'path' => $result['file_path'],
-                    'file_name' => $result['file_name']
+                    'file_name' => $result['file_name'],
                 ];
             }
         }
@@ -195,7 +199,7 @@ class ModelGeneratorService
         $results['model'] = [
             'class_name' => "{$className}.php",
             'content' => $this->generateModelContent($modelData),
-            'file_path' => $this->modelsPath . "/{$className}.php"
+            'file_path' => $this->modelsPath."/{$className}.php",
         ];
 
         // Preview factory if requested
@@ -204,7 +208,7 @@ class ModelGeneratorService
             $results['factory'] = [
                 'class_name' => "{$factoryClassName}.php",
                 'content' => $this->generateFactoryContent($modelData),
-                'file_path' => $this->factoriesPath . "/{$factoryClassName}.php"
+                'file_path' => $this->factoriesPath."/{$factoryClassName}.php",
             ];
         }
 
@@ -214,7 +218,7 @@ class ModelGeneratorService
             $results['seeder'] = [
                 'class_name' => "{$seederClassName}.php",
                 'content' => $this->generateSeederContent($modelData),
-                'file_path' => $this->seedersPath . "/{$seederClassName}.php"
+                'file_path' => $this->seedersPath."/{$seederClassName}.php",
             ];
         }
 
@@ -224,7 +228,7 @@ class ModelGeneratorService
             $results['policy'] = [
                 'class_name' => "{$policyClassName}.php",
                 'content' => $this->generatePolicyContent($modelData),
-                'file_path' => $this->policiesPath . "/{$policyClassName}.php"
+                'file_path' => $this->policiesPath."/{$policyClassName}.php",
             ];
         }
 
@@ -246,7 +250,7 @@ class ModelGeneratorService
     {
         $className = $this->getModelClassName($modelData['name']);
         $fileName = "{$className}.php";
-        $filePath = $this->modelsPath . '/' . $fileName;
+        $filePath = $this->modelsPath.'/'.$fileName;
 
         if (File::exists($filePath)) {
             throw new \Exception("Model file already exists: {$fileName}");
@@ -255,7 +259,7 @@ class ModelGeneratorService
         $content = $this->generateModelContent($modelData);
 
         // Ensure directory exists
-        if (!File::isDirectory($this->modelsPath)) {
+        if (! File::isDirectory($this->modelsPath)) {
             File::makeDirectory($this->modelsPath, 0755, true);
         }
 
@@ -267,7 +271,7 @@ class ModelGeneratorService
             'file_path' => $filePath,
             'class_name' => $className,
             'content' => $content,
-            'success' => true
+            'success' => true,
         ];
     }
 
@@ -299,7 +303,7 @@ class ModelGeneratorService
             $imports[] = 'Illuminate\Database\Eloquent\SoftDeletes';
         }
 
-        if (!empty($modelData['relations'])) {
+        if (! empty($modelData['relations'])) {
             foreach ($modelData['relations'] as $relation) {
                 $relatedModel = $this->getModelClassName($relation['related_model']);
                 if ($relatedModel !== $className) {
@@ -324,7 +328,7 @@ class ModelGeneratorService
             $traitsList[] = 'SoftDeletes';
         }
 
-        $content .= "    use " . implode(', ', $traitsList) . ";\n\n";
+        $content .= '    use '.implode(', ', $traitsList).";\n\n";
 
         // Add table name if different from convention
         $conventionalTable = Str::snake(Str::pluralStudly($className));
@@ -333,7 +337,7 @@ class ModelGeneratorService
         }
 
         // Add fillable
-        if (!empty($fillable)) {
+        if (! empty($fillable)) {
             $content .= "    protected \$fillable = [\n";
             foreach ($fillable as $field) {
                 $content .= "        '{$field}',\n";
@@ -342,7 +346,7 @@ class ModelGeneratorService
         }
 
         // Add casts
-        if (!empty($casts)) {
+        if (! empty($casts)) {
             $content .= "    protected \$casts = [\n";
             foreach ($casts as $field => $cast) {
                 $content .= "        '{$field}' => '{$cast}',\n";
@@ -356,7 +360,7 @@ class ModelGeneratorService
         }
 
         // Add custom attributes
-        if (!empty($modelData['custom_attributes'])) {
+        if (! empty($modelData['custom_attributes'])) {
             foreach ($modelData['custom_attributes'] as $attribute) {
                 $content .= "    protected \${$attribute['name']} = {$attribute['value']};\n";
             }
@@ -364,27 +368,27 @@ class ModelGeneratorService
         }
 
         // Add relations
-        if (!empty($relations)) {
-            $content .= $relations . "\n";
+        if (! empty($relations)) {
+            $content .= $relations."\n";
         }
 
         // Add scopes
-        if (!empty($scopes)) {
-            $content .= $scopes . "\n";
+        if (! empty($scopes)) {
+            $content .= $scopes."\n";
         }
 
         // Add mutators
-        if (!empty($mutators)) {
-            $content .= $mutators . "\n";
+        if (! empty($mutators)) {
+            $content .= $mutators."\n";
         }
 
         // Add accessors
-        if (!empty($accessors)) {
-            $content .= $accessors . "\n";
+        if (! empty($accessors)) {
+            $content .= $accessors."\n";
         }
 
         // Add custom methods
-        if (!empty($customMethods)) {
+        if (! empty($customMethods)) {
             $content .= $customMethods;
         }
 
@@ -400,7 +404,7 @@ class ModelGeneratorService
     {
         $fillable = [];
 
-        if (!empty($modelData['columns'])) {
+        if (! empty($modelData['columns'])) {
             foreach ($modelData['columns'] as $column) {
                 if ($column['fillable'] ?? false) {
                     $fillable[] = $column['name'];
@@ -409,7 +413,7 @@ class ModelGeneratorService
         }
 
         // Add custom fillable fields
-        if (!empty($modelData['fillable'])) {
+        if (! empty($modelData['fillable'])) {
             $fillable = array_merge($fillable, $modelData['fillable']);
         }
 
@@ -423,7 +427,7 @@ class ModelGeneratorService
     {
         $casts = [];
 
-        if (!empty($modelData['columns'])) {
+        if (! empty($modelData['columns'])) {
             foreach ($modelData['columns'] as $column) {
                 $cast = $this->getEloquentCast($column['type']);
                 if ($cast && ($column['cast'] ?? true)) {
@@ -433,7 +437,7 @@ class ModelGeneratorService
         }
 
         // Add custom casts
-        if (!empty($modelData['casts'])) {
+        if (! empty($modelData['casts'])) {
             $casts = array_merge($casts, $modelData['casts']);
         }
 
@@ -452,7 +456,7 @@ class ModelGeneratorService
         $relations = "    // Relations\n";
 
         foreach ($modelData['relations'] as $relation) {
-            $relations .= $this->generateRelationMethod($relation) . "\n";
+            $relations .= $this->generateRelationMethod($relation)."\n";
         }
 
         return $relations;
@@ -474,40 +478,58 @@ class ModelGeneratorService
         switch ($type) {
             case 'hasOne':
                 $method .= "        return \$this->hasOne({$relatedModel}::class";
-                if ($foreignKey) $method .= ", '{$foreignKey}'";
-                if ($localKey) $method .= ", '{$localKey}'";
+                if ($foreignKey) {
+                    $method .= ", '{$foreignKey}'";
+                }
+                if ($localKey) {
+                    $method .= ", '{$localKey}'";
+                }
                 $method .= ");\n";
                 break;
 
             case 'hasMany':
                 $method .= "        return \$this->hasMany({$relatedModel}::class";
-                if ($foreignKey) $method .= ", '{$foreignKey}'";
-                if ($localKey) $method .= ", '{$localKey}'";
+                if ($foreignKey) {
+                    $method .= ", '{$foreignKey}'";
+                }
+                if ($localKey) {
+                    $method .= ", '{$localKey}'";
+                }
                 $method .= ");\n";
                 break;
 
             case 'belongsTo':
                 $method .= "        return \$this->belongsTo({$relatedModel}::class";
-                if ($foreignKey) $method .= ", '{$foreignKey}'";
-                if ($localKey) $method .= ", '{$localKey}'";
+                if ($foreignKey) {
+                    $method .= ", '{$foreignKey}'";
+                }
+                if ($localKey) {
+                    $method .= ", '{$localKey}'";
+                }
                 $method .= ");\n";
                 break;
 
             case 'belongsToMany':
                 $pivotTable = $relation['pivot_table'] ?? null;
                 $method .= "        return \$this->belongsToMany({$relatedModel}::class";
-                if ($pivotTable) $method .= ", '{$pivotTable}'";
-                if ($foreignKey) $method .= ", '{$foreignKey}'";
-                if ($localKey) $method .= ", '{$localKey}'";
-                $method .= ")";
+                if ($pivotTable) {
+                    $method .= ", '{$pivotTable}'";
+                }
+                if ($foreignKey) {
+                    $method .= ", '{$foreignKey}'";
+                }
+                if ($localKey) {
+                    $method .= ", '{$localKey}'";
+                }
+                $method .= ')';
 
-                if (!empty($relation['pivot_columns'])) {
-                    $pivotCols = "'" . implode("', '", $relation['pivot_columns']) . "'";
+                if (! empty($relation['pivot_columns'])) {
+                    $pivotCols = "'".implode("', '", $relation['pivot_columns'])."'";
                     $method .= "->withPivot([{$pivotCols}])";
                 }
 
                 if ($relation['timestamps'] ?? false) {
-                    $method .= "->withTimestamps()";
+                    $method .= '->withTimestamps()';
                 }
 
                 $method .= ";\n";
@@ -546,7 +568,7 @@ class ModelGeneratorService
         $methods = "    // Custom Methods\n";
 
         foreach ($modelData['custom_methods'] as $method) {
-            $methods .= $this->generateCustomMethod($method) . "\n";
+            $methods .= $this->generateCustomMethod($method)."\n";
         }
 
         return $methods;
@@ -569,17 +591,17 @@ class ModelGeneratorService
         $paramStrings = [];
         foreach ($parameters as $param) {
             $paramStr = '';
-            if (!empty($param['type'])) {
-                $paramStr .= $param['type'] . ' ';
+            if (! empty($param['type'])) {
+                $paramStr .= $param['type'].' ';
             }
-            $paramStr .= '$' . $param['name'];
-            if (!empty($param['default'])) {
-                $paramStr .= ' = ' . $param['default'];
+            $paramStr .= '$'.$param['name'];
+            if (! empty($param['default'])) {
+                $paramStr .= ' = '.$param['default'];
             }
             $paramStrings[] = $paramStr;
         }
         $methodStr .= implode(', ', $paramStrings);
-        $methodStr .= ")";
+        $methodStr .= ')';
 
         // Add return type
         if ($returnType) {
@@ -615,7 +637,7 @@ class ModelGeneratorService
         $scopes = "    // Query Scopes\n";
 
         foreach ($modelData['scopes'] as $scope) {
-            $scopes .= $this->generateScopeMethod($scope) . "\n";
+            $scopes .= $this->generateScopeMethod($scope)."\n";
         }
 
         return $scopes;
@@ -630,18 +652,18 @@ class ModelGeneratorService
         $parameters = $scope['parameters'] ?? [];
         $body = $scope['body'] ?? '// Scope implementation';
 
-        $methodName = 'scope' . ucfirst($name);
+        $methodName = 'scope'.ucfirst($name);
         $methodStr = "    public function {$methodName}(\$query";
 
         // Add parameters
         foreach ($parameters as $param) {
             $methodStr .= ', ';
-            if (!empty($param['type'])) {
-                $methodStr .= $param['type'] . ' ';
+            if (! empty($param['type'])) {
+                $methodStr .= $param['type'].' ';
             }
-            $methodStr .= '$' . $param['name'];
-            if (!empty($param['default'])) {
-                $methodStr .= ' = ' . $param['default'];
+            $methodStr .= '$'.$param['name'];
+            if (! empty($param['default'])) {
+                $methodStr .= ' = '.$param['default'];
             }
         }
 
@@ -674,7 +696,7 @@ class ModelGeneratorService
         $mutators = "    // Mutators\n";
 
         foreach ($modelData['mutators'] as $mutator) {
-            $mutators .= $this->generateMutatorMethod($mutator) . "\n";
+            $mutators .= $this->generateMutatorMethod($mutator)."\n";
         }
 
         return $mutators;
@@ -688,7 +710,7 @@ class ModelGeneratorService
         $attribute = $mutator['attribute'];
         $body = $mutator['body'] ?? 'return $value;';
 
-        $methodName = 'set' . Str::studly($attribute) . 'Attribute';
+        $methodName = 'set'.Str::studly($attribute).'Attribute';
         $methodStr = "    public function {$methodName}(\$value)\n    {\n";
 
         // Add body with proper indentation
@@ -718,7 +740,7 @@ class ModelGeneratorService
         $accessors = "    // Accessors\n";
 
         foreach ($modelData['accessors'] as $accessor) {
-            $accessors .= $this->generateAccessorMethod($accessor) . "\n";
+            $accessors .= $this->generateAccessorMethod($accessor)."\n";
         }
 
         return $accessors;
@@ -732,7 +754,7 @@ class ModelGeneratorService
         $attribute = $accessor['attribute'];
         $body = $accessor['body'] ?? 'return $value;';
 
-        $methodName = 'get' . Str::studly($attribute) . 'Attribute';
+        $methodName = 'get'.Str::studly($attribute).'Attribute';
         $methodStr = "    public function {$methodName}(\$value)\n    {\n";
 
         // Add body with proper indentation
@@ -758,7 +780,7 @@ class ModelGeneratorService
         $modelClass = $this->getModelClassName($modelData['name']);
         $className = "{$modelClass}Factory";
         $fileName = "{$className}.php";
-        $filePath = $this->factoriesPath . '/' . $fileName;
+        $filePath = $this->factoriesPath.'/'.$fileName;
 
         if (File::exists($filePath)) {
             throw new \Exception("Factory file already exists: {$fileName}");
@@ -767,7 +789,7 @@ class ModelGeneratorService
         $content = $this->generateFactoryContent($modelData);
 
         // Ensure directory exists
-        if (!File::isDirectory($this->factoriesPath)) {
+        if (! File::isDirectory($this->factoriesPath)) {
             File::makeDirectory($this->factoriesPath, 0755, true);
         }
 
@@ -779,7 +801,7 @@ class ModelGeneratorService
             'file_path' => $filePath,
             'class_name' => $className,
             'content' => $content,
-            'success' => true
+            'success' => true,
         ];
     }
 
@@ -803,9 +825,9 @@ class ModelGeneratorService
         $content .= "        return [\n";
 
         // Generate fake data for columns
-        if (!empty($modelData['columns'])) {
+        if (! empty($modelData['columns'])) {
             foreach ($modelData['columns'] as $column) {
-                if (!in_array($column['name'], ['id', 'created_at', 'updated_at', 'deleted_at'])) {
+                if (! in_array($column['name'], ['id', 'created_at', 'updated_at', 'deleted_at'])) {
                     $fakeData = $this->generateFakeData($column);
                     $content .= "            '{$column['name']}' => {$fakeData},\n";
                 }
@@ -813,7 +835,7 @@ class ModelGeneratorService
         }
 
         // Add factory data from model data
-        if (!empty($modelData['factory_data'])) {
+        if (! empty($modelData['factory_data'])) {
             foreach ($modelData['factory_data'] as $field => $fakeMethod) {
                 $content .= "            '{$field}' => {$fakeMethod},\n";
             }
@@ -823,7 +845,7 @@ class ModelGeneratorService
         $content .= "    }\n";
 
         // Add factory states if defined
-        if (!empty($modelData['factory_states'])) {
+        if (! empty($modelData['factory_states'])) {
             foreach ($modelData['factory_states'] as $state) {
                 $content .= "\n    /**\n     * {$state['description']}\n     */\n";
                 $content .= "    public function {$state['name']}(): static\n    {\n";
@@ -849,7 +871,7 @@ class ModelGeneratorService
         $modelClass = $this->getModelClassName($modelData['name']);
         $className = "{$modelClass}Seeder";
         $fileName = "{$className}.php";
-        $filePath = $this->seedersPath . '/' . $fileName;
+        $filePath = $this->seedersPath.'/'.$fileName;
 
         if (File::exists($filePath)) {
             throw new \Exception("Seeder file already exists: {$fileName}");
@@ -858,7 +880,7 @@ class ModelGeneratorService
         $content = $this->generateSeederContent($modelData);
 
         // Ensure directory exists
-        if (!File::isDirectory($this->seedersPath)) {
+        if (! File::isDirectory($this->seedersPath)) {
             File::makeDirectory($this->seedersPath, 0755, true);
         }
 
@@ -870,7 +892,7 @@ class ModelGeneratorService
             'file_path' => $filePath,
             'class_name' => $className,
             'content' => $content,
-            'success' => true
+            'success' => true,
         ];
     }
 
@@ -893,7 +915,7 @@ class ModelGeneratorService
         if ($modelData['use_factory'] ?? true) {
             $content .= "        {$modelClass}::factory()\n";
 
-            if (!empty($modelData['factory_states'])) {
+            if (! empty($modelData['factory_states'])) {
                 foreach ($modelData['factory_states'] as $state) {
                     if ($state['use_in_seeder'] ?? false) {
                         $content .= "            ->{$state['name']}()\n";
@@ -906,7 +928,7 @@ class ModelGeneratorService
         } else {
             // Manual seeding
             $content .= "        \$data = [\n";
-            if (!empty($modelData['seed_data'])) {
+            if (! empty($modelData['seed_data'])) {
                 foreach ($modelData['seed_data'] as $record) {
                     $content .= "            [\n";
                     foreach ($record as $field => $value) {
@@ -935,7 +957,7 @@ class ModelGeneratorService
         $modelClass = $this->getModelClassName($modelData['name']);
         $className = "{$modelClass}Policy";
         $fileName = "{$className}.php";
-        $filePath = $this->policiesPath . '/' . $fileName;
+        $filePath = $this->policiesPath.'/'.$fileName;
 
         if (File::exists($filePath)) {
             throw new \Exception("Policy file already exists: {$fileName}");
@@ -944,7 +966,7 @@ class ModelGeneratorService
         $content = $this->generatePolicyContent($modelData);
 
         // Ensure directory exists
-        if (!File::isDirectory($this->policiesPath)) {
+        if (! File::isDirectory($this->policiesPath)) {
             File::makeDirectory($this->policiesPath, 0755, true);
         }
 
@@ -956,7 +978,7 @@ class ModelGeneratorService
             'file_path' => $filePath,
             'class_name' => $className,
             'content' => $content,
-            'success' => true
+            'success' => true,
         ];
     }
 
@@ -989,14 +1011,14 @@ class ModelGeneratorService
             $content .= "    /**\n     * {$description}\n     */\n";
             $content .= "    public function {$methodName}(User \$user";
 
-            if (!in_array($methodName, ['viewAny', 'create'])) {
-                $content .= ", {$modelClass} \$" . Str::camel($modelClass);
+            if (! in_array($methodName, ['viewAny', 'create'])) {
+                $content .= ", {$modelClass} \$".Str::camel($modelClass);
             }
 
             $content .= "): bool\n    {\n";
 
             // Add policy logic based on configuration
-            if (!empty($modelData['policy_rules'][$methodName])) {
+            if (! empty($modelData['policy_rules'][$methodName])) {
                 $rule = $modelData['policy_rules'][$methodName];
                 $content .= "        {$rule}\n";
             } else {
@@ -1007,7 +1029,7 @@ class ModelGeneratorService
             $content .= "    }\n\n";
         }
 
-        $content = rtrim($content) . "\n}\n";
+        $content = rtrim($content)."\n}\n";
 
         return $content;
     }
@@ -1021,12 +1043,12 @@ class ModelGeneratorService
 
         if (empty($modelData['name'])) {
             $errors[] = 'Model name is required';
-        } elseif (!$this->isValidClassName($modelData['name'])) {
+        } elseif (! $this->isValidClassName($modelData['name'])) {
             $errors[] = 'Invalid model name format';
         }
 
         // Validate relations
-        if (!empty($modelData['relations'])) {
+        if (! empty($modelData['relations'])) {
             foreach ($modelData['relations'] as $index => $relation) {
                 $relationErrors = $this->validateRelation($relation, $index);
                 $errors = array_merge($errors, $relationErrors);
@@ -1035,7 +1057,7 @@ class ModelGeneratorService
 
         return [
             'valid' => empty($errors),
-            'errors' => $errors
+            'errors' => $errors,
         ];
     }
 
@@ -1107,7 +1129,7 @@ class ModelGeneratorService
             'date' => 'fake()->date()',
             'dateTime', 'dateTimeTz', 'timestamp', 'timestampTz' => 'fake()->dateTime()',
             'time', 'timeTz' => 'fake()->time()',
-            'enum' => !empty($column['enum_values']) ? "fake()->randomElement(['" . implode("', '", $column['enum_values']) . "'])" : 'fake()->word()',
+            'enum' => ! empty($column['enum_values']) ? "fake()->randomElement(['".implode("', '", $column['enum_values'])."'])" : 'fake()->word()',
             'json', 'jsonb' => 'fake()->words(5)',
             'uuid' => 'fake()->uuid()',
             'ipAddress' => 'fake()->ipv4()',
@@ -1143,7 +1165,7 @@ class ModelGeneratorService
         }
 
         $validTypes = ['hasOne', 'hasMany', 'belongsTo', 'belongsToMany', 'morphTo', 'morphOne', 'morphMany'];
-        if (!empty($relation['type']) && !in_array($relation['type'], $validTypes)) {
+        if (! empty($relation['type']) && ! in_array($relation['type'], $validTypes)) {
             $errors[] = "Relation {$index}: Invalid relation type";
         }
 

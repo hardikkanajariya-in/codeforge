@@ -1,28 +1,27 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources;
-use Filament\Schemas\Schema;
-use HkDevs\CodeForgeStudio\Support\Grid;
-use HkDevs\CodeForgeStudio\Support\Section;
 
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Notifications\Notification;
+use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
+use Filament\Tables;
+use Filament\Tables\Table;
 use HkDevs\CodeForgeStudio\Models\DataGenerationTemplate;
 use HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource\Pages;
 use HkDevs\CodeForgeStudio\Services\DataGenerationService;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
+use HkDevs\CodeForgeStudio\Support\Section;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Filament\Notifications\Notification;
 
 /**
  * DataGenerationTemplateResource
- * 
+ *
  * Filament resource for managing data generation templates that define
  * intelligent test data creation patterns and configurations.
- * 
+ *
  * Key Features:
  * - Complete template lifecycle management (create, edit, delete, activate)
  * - Field mapping configuration for intelligent data generation
@@ -30,195 +29,201 @@ use Filament\Notifications\Notification;
  * - Reusable template patterns for consistent data generation
  * - Template testing and preview capabilities
  * - Integration with Smart Data Seeder functionality
- * 
+ *
  * Resource Configuration:
  * - DataGenerationTemplate model integration
  * - Document duplicate icon for template identification
  * - Positioned in 'Data Management' navigation group
  * - Organized for efficient template discovery and management
- * 
+ *
  * Template Management:
  * - Template creation with comprehensive configuration
  * - Field mapping setup for data type associations
  * - Relationship configuration for referential integrity
  * - Constraint definition for data validation
  * - Sample data storage for testing and preview
- * 
+ *
  * Table Features:
  * - Template listing with name, description, and status
  * - Table-specific template organization
  * - Active/inactive status management
  * - Creation date and author tracking
  * - Quick action buttons for common operations
- * 
+ *
  * Form Configuration:
  * - Template metadata input (name, description, table)
  * - Advanced field mapping with JSON configuration
  * - Relationship definition with foreign key setup
  * - Constraint specification for data validation
  * - Default record count and sample data management
- * 
+ *
  * Advanced Features:
  * - Template duplication for similar scenarios
  * - Import/export capabilities for template sharing
  * - Template validation and testing tools
  * - Integration with DataGenerationService
- * 
- * @package HkDevs\CodeForgeStudio\Resources
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class DataGenerationTemplateResource extends Resource
 {
     protected static ?string $model = DataGenerationTemplate::class;
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-duplicate';
+
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-duplicate';
+
     protected static ?string $navigationLabel = 'Data Templates';
+
     protected static ?string $modelLabel = 'Data Generation Template';
+
     protected static ?string $pluralModelLabel = 'Data Generation Templates';
+
     protected static ?int $navigationSort = 7;
 
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-                Section::make('Basic Information')
-                    ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->required()
-                            ->unique(ignoreRecord: true)
-                            ->maxLength(255),
+            Section::make('Basic Information')
+                ->schema([
+                    Forms\Components\TextInput::make('name')
+                        ->required()
+                        ->unique(ignoreRecord: true)
+                        ->maxLength(255),
 
-                        Forms\Components\Textarea::make('description')
-                            ->maxLength(500)
-                            ->rows(3),
+                    Forms\Components\Textarea::make('description')
+                        ->maxLength(500)
+                        ->rows(3),
 
-                        Forms\Components\Select::make('table_name')
-                            ->options(self::getAvailableTables())
-                            ->searchable()
-                            ->required(),
+                    Forms\Components\Select::make('table_name')
+                        ->options(self::getAvailableTables())
+                        ->searchable()
+                        ->required(),
 
-                        Forms\Components\TextInput::make('default_count')
-                            ->numeric()
-                            ->default(10)
-                            ->minValue(1)
-                            ->maxValue(10000)
-                            ->required(),
+                    Forms\Components\TextInput::make('default_count')
+                        ->numeric()
+                        ->default(10)
+                        ->minValue(1)
+                        ->maxValue(10000)
+                        ->required(),
 
-                        Forms\Components\Toggle::make('is_active')
-                            ->default(true),
-                    ])
-                    ->columns(2),
+                    Forms\Components\Toggle::make('is_active')
+                        ->default(true),
+                ])
+                ->columns(2),
 
-                Section::make('Field Mappings')
-                    ->description('Configure how each field should be generated')
-                    ->schema([
-                        Forms\Components\Repeater::make('field_mappings_repeater')
-                            ->schema([
-                                Forms\Components\TextInput::make('field')
-                                    ->required()
-                                    ->placeholder('Column name'),
+            Section::make('Field Mappings')
+                ->description('Configure how each field should be generated')
+                ->schema([
+                    Forms\Components\Repeater::make('field_mappings_repeater')
+                        ->schema([
+                            Forms\Components\TextInput::make('field')
+                                ->required()
+                                ->placeholder('Column name'),
 
-                                Forms\Components\Select::make('type')
-                                    ->options([
-                                        'auto_increment' => 'Auto Increment',
-                                        'uuid' => 'UUID',
-                                        'string' => 'String/Text',
-                                        'email' => 'Email',
-                                        'name' => 'Name',
-                                        'phone' => 'Phone',
-                                        'address' => 'Address',
-                                        'number' => 'Number',
-                                        'decimal' => 'Decimal',
-                                        'boolean' => 'Boolean',
-                                        'date' => 'Date',
-                                        'datetime' => 'DateTime',
-                                        'json' => 'JSON',
-                                        'enum' => 'Enum',
-                                        'foreign_key' => 'Foreign Key',
-                                        'custom' => 'Custom',
-                                    ])
-                                    ->required()
-                                    ->default('string'),
+                            Forms\Components\Select::make('type')
+                                ->options([
+                                    'auto_increment' => 'Auto Increment',
+                                    'uuid' => 'UUID',
+                                    'string' => 'String/Text',
+                                    'email' => 'Email',
+                                    'name' => 'Name',
+                                    'phone' => 'Phone',
+                                    'address' => 'Address',
+                                    'number' => 'Number',
+                                    'decimal' => 'Decimal',
+                                    'boolean' => 'Boolean',
+                                    'date' => 'Date',
+                                    'datetime' => 'DateTime',
+                                    'json' => 'JSON',
+                                    'enum' => 'Enum',
+                                    'foreign_key' => 'Foreign Key',
+                                    'custom' => 'Custom',
+                                ])
+                                ->required()
+                                ->default('string'),
 
-                                Forms\Components\KeyValue::make('options')
-                                    ->addActionLabel('Add Option')
-                                    ->keyLabel('Option')
-                                    ->valueLabel('Value'),
-                            ])
-                            ->columns(3)
-                            ->defaultItems(0)
-                            ->collapsible()
-                            ->afterStateUpdated(function ($state, Forms\Set $set) {
-                                // Convert repeater data to field_mappings format
-                                $mappings = [];
-                                foreach ($state ?? [] as $item) {
-                                    if (!empty($item['field'])) {
-                                        $mappings[$item['field']] = [
-                                            'type' => $item['type'] ?? 'string',
-                                            'options' => $item['options'] ?? [],
-                                        ];
-                                    }
+                            Forms\Components\KeyValue::make('options')
+                                ->addActionLabel('Add Option')
+                                ->keyLabel('Option')
+                                ->valueLabel('Value'),
+                        ])
+                        ->columns(3)
+                        ->defaultItems(0)
+                        ->collapsible()
+                        ->afterStateUpdated(function ($state, Forms\Set $set) {
+                            // Convert repeater data to field_mappings format
+                            $mappings = [];
+                            foreach ($state ?? [] as $item) {
+                                if (! empty($item['field'])) {
+                                    $mappings[$item['field']] = [
+                                        'type' => $item['type'] ?? 'string',
+                                        'options' => $item['options'] ?? [],
+                                    ];
                                 }
-                                $set('field_mappings', $mappings);
-                            }),
+                            }
+                            $set('field_mappings', $mappings);
+                        }),
 
-                        Forms\Components\Hidden::make('field_mappings'),
-                    ]),
+                    Forms\Components\Hidden::make('field_mappings'),
+                ]),
 
-                Section::make('Relationships')
-                    ->description('Define relationships with other tables')
-                    ->schema([
-                        Forms\Components\Repeater::make('relationships')
-                            ->schema([
-                                Forms\Components\TextInput::make('column')
-                                    ->required()
-                                    ->placeholder('Foreign key column'),
+            Section::make('Relationships')
+                ->description('Define relationships with other tables')
+                ->schema([
+                    Forms\Components\Repeater::make('relationships')
+                        ->schema([
+                            Forms\Components\TextInput::make('column')
+                                ->required()
+                                ->placeholder('Foreign key column'),
 
-                                Forms\Components\Select::make('related_table')
-                                    ->options(self::getAvailableTables())
-                                    ->searchable()
-                                    ->required(),
+                            Forms\Components\Select::make('related_table')
+                                ->options(self::getAvailableTables())
+                                ->searchable()
+                                ->required(),
 
-                                Forms\Components\Select::make('type')
-                                    ->options([
-                                        'belongs_to' => 'Belongs To',
-                                        'has_many' => 'Has Many',
-                                    ])
-                                    ->default('belongs_to')
-                                    ->required(),
-                            ])
-                            ->columns(3)
-                            ->defaultItems(0)
-                            ->collapsible(),
-                    ]),
+                            Forms\Components\Select::make('type')
+                                ->options([
+                                    'belongs_to' => 'Belongs To',
+                                    'has_many' => 'Has Many',
+                                ])
+                                ->default('belongs_to')
+                                ->required(),
+                        ])
+                        ->columns(3)
+                        ->defaultItems(0)
+                        ->collapsible(),
+                ]),
 
-                Section::make('Constraints')
-                    ->description('Define business rules and constraints')
-                    ->schema([
-                        Forms\Components\Repeater::make('constraints')
-                            ->schema([
-                                Forms\Components\Select::make('type')
-                                    ->options([
-                                        'unique' => 'Unique Value',
-                                        'conditional' => 'Conditional Logic',
-                                        'range' => 'Value Range',
-                                    ])
-                                    ->required(),
+            Section::make('Constraints')
+                ->description('Define business rules and constraints')
+                ->schema([
+                    Forms\Components\Repeater::make('constraints')
+                        ->schema([
+                            Forms\Components\Select::make('type')
+                                ->options([
+                                    'unique' => 'Unique Value',
+                                    'conditional' => 'Conditional Logic',
+                                    'range' => 'Value Range',
+                                ])
+                                ->required(),
 
-                                Forms\Components\TextInput::make('field')
-                                    ->required()
-                                    ->placeholder('Field name'),
+                            Forms\Components\TextInput::make('field')
+                                ->required()
+                                ->placeholder('Field name'),
 
-                                Forms\Components\KeyValue::make('rules')
-                                    ->addActionLabel('Add Rule')
-                                    ->keyLabel('Rule')
-                                    ->valueLabel('Value'),
-                            ])
-                            ->columns(3)
-                            ->defaultItems(0)
-                            ->collapsible(),
-                    ]),
-            ]);
+                            Forms\Components\KeyValue::make('rules')
+                                ->addActionLabel('Add Rule')
+                                ->keyLabel('Rule')
+                                ->valueLabel('Value'),
+                        ])
+                        ->columns(3)
+                        ->defaultItems(0)
+                        ->collapsible(),
+                ]),
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -235,12 +240,12 @@ class DataGenerationTemplateResource extends Resource
 
                 Tables\Columns\TextColumn::make('fields_count')
                     ->label('Fields')
-                    ->getStateUsing(fn(DataGenerationTemplate $record) => $record->getFieldsCount())
+                    ->getStateUsing(fn (DataGenerationTemplate $record) => $record->getFieldsCount())
                     ->alignCenter(),
 
                 Tables\Columns\TextColumn::make('relationships_count')
                     ->label('Relations')
-                    ->getStateUsing(fn(DataGenerationTemplate $record) => $record->getRelationshipsCount())
+                    ->getStateUsing(fn (DataGenerationTemplate $record) => $record->getRelationshipsCount())
                     ->alignCenter(),
 
                 Tables\Columns\TextColumn::make('default_count')
@@ -262,7 +267,7 @@ class DataGenerationTemplateResource extends Resource
             ])
             ->filters([
                 Tables\Filters\Filter::make('is_active')
-                    ->query(fn($query) => $query->where('is_active', true))
+                    ->query(fn ($query) => $query->where('is_active', true))
                     ->label('Active Only'),
 
                 Tables\Filters\SelectFilter::make('table_name')
@@ -282,7 +287,7 @@ class DataGenerationTemplateResource extends Resource
                         try {
                             $service = app(DataGenerationService::class);
                             $preview = $service->previewData($record, 3);
-                            
+
                             return view('codeforge-studio::components.data-preview', [
                                 'data' => $preview,
                                 'template' => $record,
@@ -305,7 +310,7 @@ class DataGenerationTemplateResource extends Resource
                         Forms\Components\TextInput::make('count')
                             ->label('Number of Records')
                             ->numeric()
-                            ->default(fn(DataGenerationTemplate $record) => $record->default_count)
+                            ->default(fn (DataGenerationTemplate $record) => $record->default_count)
                             ->minValue(1)
                             ->maxValue(1000)
                             ->required(),
@@ -369,10 +374,10 @@ class DataGenerationTemplateResource extends Resource
 
             foreach ($tables as $table) {
                 // Get the table name from the result object
-                $tableName = array_values((array)$table)[0];
+                $tableName = array_values((array) $table)[0];
 
                 // Skip system tables
-                if (!in_array($tableName, [
+                if (! in_array($tableName, [
                     'migrations',
                     'personal_access_tokens',
                     'password_reset_tokens',
@@ -389,7 +394,8 @@ class DataGenerationTemplateResource extends Resource
 
             return $tableNames;
         } catch (\Exception $e) {
-            Log::error('Failed to retrieve available tables: ' . $e->getMessage());
+            Log::error('Failed to retrieve available tables: '.$e->getMessage());
+
             return [];
         }
     }

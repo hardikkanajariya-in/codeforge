@@ -2,8 +2,8 @@
 
 namespace HkDevs\CodeForgeStudio\Resources\SeederExecutionLogResource\Pages;
 
-use HkDevs\CodeForgeStudio\Resources\SeederExecutionLogResource;
 use Filament\Resources\Pages\ListRecords;
+use HkDevs\CodeForgeStudio\Resources\SeederExecutionLogResource;
 
 class ListSeederExecutionLogs extends ListRecords
 {

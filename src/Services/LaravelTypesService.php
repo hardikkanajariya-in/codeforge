@@ -4,10 +4,10 @@ namespace HkDevs\CodeForgeStudio\Services;
 
 /**
  * LaravelTypesService
- * 
+ *
  * Comprehensive Laravel data type management and mapping service for CodeForge Database Studio.
  * Provides complete type definitions, validation rules, and form field mappings for Laravel development.
- * 
+ *
  * Features:
  * - Complete Laravel migration column type definitions with descriptions
  * - Comprehensive validation rule catalog with parameter specifications
@@ -17,7 +17,7 @@ namespace HkDevs\CodeForgeStudio\Services;
  * - Cross-platform database type compatibility mapping
  * - Performance optimization recommendations for each data type
  * - Best practice guidelines for type selection and usage
- * 
+ *
  * Column Type Categories:
  * - Primary Keys: Auto-incrementing and custom primary key types
  * - String Types: VARCHAR, CHAR, TEXT variants with length specifications
@@ -27,7 +27,7 @@ namespace HkDevs\CodeForgeStudio\Services;
  * - Binary Types: BLOB variants for file and binary data storage
  * - JSON Types: Native JSON support with query optimization
  * - Special Types: UUID, morphs, and custom Laravel-specific types
- * 
+ *
  * Validation Rule Management:
  * - Complete Laravel validation rule catalog with parameter specifications
  * - Rule combination strategies for complex validation scenarios
@@ -36,7 +36,7 @@ namespace HkDevs\CodeForgeStudio\Services;
  * - Performance-optimized validation rule selection
  * - Internationalization support for validation messages
  * - Advanced validation patterns for business logic implementation
- * 
+ *
  * Form Field Mapping:
  * - Intelligent form field type selection based on database column types
  * - UI component recommendations for different data types and constraints
@@ -45,7 +45,7 @@ namespace HkDevs\CodeForgeStudio\Services;
  * - Input validation and sanitization strategies
  * - User experience optimization for different data input scenarios
  * - Integration with popular frontend frameworks and UI libraries
- * 
+ *
  * Database Compatibility:
  * - Cross-database type mapping for MySQL, PostgreSQL, SQLite, SQL Server
  * - Migration compatibility checking and conversion utilities
@@ -54,7 +54,7 @@ namespace HkDevs\CodeForgeStudio\Services;
  * - Index recommendation based on column types and usage patterns
  * - Performance benchmarking for different type configurations
  * - Storage optimization strategies for each data type
- * 
+ *
  * Integration Features:
  * - Seamless integration with Laravel's Schema Builder
  * - Compatibility with all Laravel migration methods and utilities
@@ -63,7 +63,7 @@ namespace HkDevs\CodeForgeStudio\Services;
  * - API integration for external type definition and management
  * - Plugin architecture for custom type definitions and mappings
  * - Version control support for type definition changes
- * 
+ *
  * Development Tools:
  * - Type selection wizards with intelligent recommendations
  * - Migration generation assistance with type optimization
@@ -72,7 +72,7 @@ namespace HkDevs\CodeForgeStudio\Services;
  * - Database schema analysis and optimization recommendations
  * - Performance impact analysis for type selection decisions
  * - Code generation utilities for type-specific implementations
- * 
+ *
  * Performance Optimization:
  * - Memory-efficient type definition storage and retrieval
  * - Lazy loading of type definitions to minimize resource usage
@@ -80,7 +80,7 @@ namespace HkDevs\CodeForgeStudio\Services;
  * - Optimized lookup algorithms for fast type resolution
  * - Batch processing support for large-scale type operations
  * - Resource usage monitoring and optimization recommendations
- * 
+ *
  * Quality Assurance:
  * - Comprehensive type validation and compatibility checking
  * - Best practice enforcement for type selection and usage
@@ -88,12 +88,13 @@ namespace HkDevs\CodeForgeStudio\Services;
  * - Testing utilities for type-specific functionality validation
  * - Error handling and recovery for type-related operations
  * - Audit trail for type definition changes and modifications
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $service = app(LaravelTypesService::class);
  * $columnTypes = $service->getColumnTypes();

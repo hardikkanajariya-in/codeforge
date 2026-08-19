@@ -2,16 +2,16 @@
 
 namespace HkDevs\CodeForgeStudio\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * CodeGenerationHistory
- * 
+ *
  * Eloquent model for tracking code generation operations and maintaining
  * a comprehensive history of all generated files and components.
- * 
+ *
  * Key Features:
  * - Complete generation tracking with metadata and configuration
  * - Parent-child relationship support for grouped generations
@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * - Error handling and success status tracking
  * - User attribution and audit trail capabilities
  * - Template usage tracking for generation analytics
- * 
+ *
  * Database Fields:
  * - generation_id: Unique identifier for generation batch
  * - type: Type of generated component (model, migration, etc.)
@@ -30,15 +30,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * - template_used: Template identifier for generation
  * - success: Boolean status of generation operation
  * - generation_time_ms: Performance timing in milliseconds
- * 
+ *
  * Relationships:
  * - Parent-child generations for complex code generation workflows
  * - User attribution for tracking generation ownership
  * - Hierarchical generation support for related components
- * 
- * @package HkDevs\CodeForgeStudio\Models
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class CodeGenerationHistory extends Model
@@ -63,7 +64,7 @@ class CodeGenerationHistory extends Model
         'generation_time_ms',
         'user_id',
         'parent_generation_id',
-        'metadata'
+        'metadata',
     ];
 
     protected $casts = [
@@ -89,6 +90,7 @@ class CodeGenerationHistory extends Model
     public function user()
     {
         $userModel = config('auth.providers.users.model', 'App\Models\User');
+
         return $this->belongsTo($userModel);
     }
 
@@ -114,7 +116,7 @@ class CodeGenerationHistory extends Model
 
     public function getFormattedFileSizeAttribute(): string
     {
-        if (!$this->file_size) {
+        if (! $this->file_size) {
             return 'N/A';
         }
 
@@ -125,25 +127,25 @@ class CodeGenerationHistory extends Model
             $bytes /= 1024;
         }
 
-        return round($bytes, 2) . ' ' . $units[$i];
+        return round($bytes, 2).' '.$units[$i];
     }
 
     public function getFormattedGenerationTimeAttribute(): string
     {
-        if (!$this->generation_time_ms) {
+        if (! $this->generation_time_ms) {
             return 'N/A';
         }
 
         if ($this->generation_time_ms < 1000) {
-            return $this->generation_time_ms . 'ms';
+            return $this->generation_time_ms.'ms';
         }
 
-        return round($this->generation_time_ms / 1000, 2) . 's';
+        return round($this->generation_time_ms / 1000, 2).'s';
     }
 
     public function canRegenerate(): bool
     {
-        return $this->success && !empty($this->configuration);
+        return $this->success && ! empty($this->configuration);
     }
 
     public function getTypeColorAttribute(): string

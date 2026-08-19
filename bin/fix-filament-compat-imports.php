@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 $root = dirname(__DIR__);
 $iterator = new RecursiveIteratorIterator(
-    new RecursiveDirectoryIterator($root . '/src', RecursiveDirectoryIterator::SKIP_DOTS)
+    new RecursiveDirectoryIterator($root.'/src', RecursiveDirectoryIterator::SKIP_DOTS)
 );
 
 $uses = [
@@ -19,7 +19,7 @@ foreach ($iterator as $file) {
     }
 
     $path = $file->getPathname();
-    if (str_contains($path, DIRECTORY_SEPARATOR . 'Support' . DIRECTORY_SEPARATOR)) {
+    if (str_contains($path, DIRECTORY_SEPARATOR.'Support'.DIRECTORY_SEPARATOR)) {
         continue;
     }
 
@@ -36,7 +36,7 @@ foreach ($iterator as $file) {
         if (! str_contains($content, $use)) {
             $content = preg_replace(
                 '/(namespace HkDevs\\\\CodeForgeStudio[^;]+;\R)/',
-                '$1' . $use . "\n",
+                '$1'.$use."\n",
                 $content,
                 1
             );

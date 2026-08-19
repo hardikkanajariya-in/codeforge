@@ -1,18 +1,16 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources\DocumentationGenerationResource\Pages;
-use HkDevs\CodeForgeStudio\Support\Section;
-use Filament\Schemas\Schema;
 
 use Filament\Actions;
-use Filament\Resources\Pages\ViewRecord;
-use HkDevs\CodeForgeStudio\Resources\DocumentationGenerationResource;
-
-
-use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\KeyValueEntry;
-use HkDevs\CodeForgeStudio\Services\DocumentationGenerationService;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Resources\DocumentationGenerationResource;
+use HkDevs\CodeForgeStudio\Services\DocumentationGenerationService;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 class ViewDocumentationGeneration extends ViewRecord
 {
@@ -27,7 +25,7 @@ class ViewDocumentationGeneration extends ViewRecord
                 ->label('Generate')
                 ->icon('heroicon-o-play')
                 ->color('primary')
-                ->visible(fn() => $this->record->status === 'pending')
+                ->visible(fn () => $this->record->status === 'pending')
                 ->action(function () {
                     try {
                         $service = app(DocumentationGenerationService::class, ['generation' => $this->record]);
@@ -52,15 +50,15 @@ class ViewDocumentationGeneration extends ViewRecord
                 ->label('Download')
                 ->icon('heroicon-o-arrow-down-tray')
                 ->color('success')
-                ->visible(fn() => $this->record->status === 'completed')
-                ->url(fn() => route('admin.database-manager.documentation.download', $this->record))
+                ->visible(fn () => $this->record->status === 'completed')
+                ->url(fn () => route('admin.database-manager.documentation.download', $this->record))
                 ->openUrlInNewTab(),
 
             Actions\Action::make('regenerate')
                 ->label('Regenerate')
                 ->icon('heroicon-o-arrow-path')
                 ->color('warning')
-                ->visible(fn() => in_array($this->record->status, ['completed', 'failed']))
+                ->visible(fn () => in_array($this->record->status, ['completed', 'failed']))
                 ->action(function () {
                     $this->record->update(['status' => 'pending']);
 
@@ -91,14 +89,14 @@ class ViewDocumentationGeneration extends ViewRecord
                     ->schema([
                         TextEntry::make('format')
                             ->badge()
-                            ->color(fn($state) => match ($state) {
+                            ->color(fn ($state) => match ($state) {
                                 'markdown' => 'info',
                                 'html' => 'success',
                                 'pdf' => 'warning',
                                 default => 'gray'
                             }),
                         TextEntry::make('scope')
-                            ->formatStateUsing(fn($state) => match ($state) {
+                            ->formatStateUsing(fn ($state) => match ($state) {
                                 'full_schema' => 'Full Database Schema',
                                 'selected_tables' => 'Selected Tables',
                                 'single_table' => 'Single Table',
@@ -106,7 +104,7 @@ class ViewDocumentationGeneration extends ViewRecord
                                 default => $state
                             })
                             ->badge()
-                            ->color(fn($state) => match ($state) {
+                            ->color(fn ($state) => match ($state) {
                                 'full_schema' => 'primary',
                                 'selected_tables' => 'success',
                                 'single_table' => 'warning',
@@ -115,14 +113,14 @@ class ViewDocumentationGeneration extends ViewRecord
                             }),
                         TextEntry::make('included_tables')
                             ->listWithLineBreaks()
-                            ->visible(fn() => !empty($this->record->included_tables)),
+                            ->visible(fn () => ! empty($this->record->included_tables)),
                     ])->columns(2),
 
                 Section::make('Generation Status')
                     ->schema([
                         TextEntry::make('status')
                             ->badge()
-                            ->color(fn($state) => match ($state) {
+                            ->color(fn ($state) => match ($state) {
                                 'pending' => 'gray',
                                 'generating' => 'warning',
                                 'completed' => 'success',
@@ -131,31 +129,31 @@ class ViewDocumentationGeneration extends ViewRecord
                             }),
                         TextEntry::make('formatted_file_size')
                             ->label('File Size')
-                            ->visible(fn() => $this->record->file_size !== null),
+                            ->visible(fn () => $this->record->file_size !== null),
                         TextEntry::make('generated_at')
                             ->dateTime()
-                            ->visible(fn() => $this->record->generated_at !== null),
+                            ->visible(fn () => $this->record->generated_at !== null),
                         TextEntry::make('generated_by')
-                            ->visible(fn() => $this->record->generated_by !== null),
+                            ->visible(fn () => $this->record->generated_by !== null),
                         TextEntry::make('error_message')
-                            ->visible(fn() => $this->record->status === 'failed')
+                            ->visible(fn () => $this->record->status === 'failed')
                             ->color('danger'),
                     ])->columns(2),
 
                 Section::make('Generation Metadata')
                     ->schema([
                         KeyValueEntry::make('metadata')
-                            ->visible(fn() => !empty($this->record->metadata)),
+                            ->visible(fn () => ! empty($this->record->metadata)),
                     ])
-                    ->visible(fn() => !empty($this->record->metadata))
+                    ->visible(fn () => ! empty($this->record->metadata))
                     ->collapsible(),
 
                 Section::make('Advanced Options')
                     ->schema([
                         KeyValueEntry::make('options')
-                            ->visible(fn() => !empty($this->record->options)),
+                            ->visible(fn () => ! empty($this->record->options)),
                     ])
-                    ->visible(fn() => !empty($this->record->options))
+                    ->visible(fn () => ! empty($this->record->options))
                     ->collapsible(),
 
                 Section::make('Timestamps')

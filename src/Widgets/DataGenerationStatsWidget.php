@@ -8,19 +8,19 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * DataGenerationStatsWidget
- * 
+ *
  * Dashboard widget displaying comprehensive data generation statistics
  * and analytics for CodeForge Database Studio.
- * 
- * @package HkDevs\CodeForgeStudio\Widgets
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
  */
 class DataGenerationStatsWidget extends Widget
 {
     protected string $view = 'codeforge-studio::components.data-generation-stats';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     protected static ?int $sort = 1;
 
@@ -60,22 +60,22 @@ class DataGenerationStatsWidget extends Widget
                 'table_name' => 'users',
                 'record_count' => 100,
                 'status' => 'completed',
-                'created_at' => '2 minutes ago'
+                'created_at' => '2 minutes ago',
             ],
             [
                 'template_name' => 'Product Template',
                 'table_name' => 'products',
                 'record_count' => 50,
                 'status' => 'completed',
-                'created_at' => '5 minutes ago'
+                'created_at' => '5 minutes ago',
             ],
             [
                 'template_name' => 'Order Template',
                 'table_name' => 'orders',
                 'record_count' => 200,
                 'status' => 'failed',
-                'created_at' => '10 minutes ago'
-            ]
+                'created_at' => '10 minutes ago',
+            ],
         ];
     }
 

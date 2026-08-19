@@ -2,8 +2,10 @@
 
 namespace HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource\Pages;
 
-use HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
+use HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource;
 
 class EditDataGenerationTemplate extends EditRecord
 {
@@ -12,8 +14,8 @@ class EditDataGenerationTemplate extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            \Filament\Actions\ViewAction::make(),
-            \Filament\Actions\DeleteAction::make(),
+            ViewAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

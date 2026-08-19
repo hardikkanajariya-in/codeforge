@@ -2,11 +2,11 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Unit\Environment;
 
-use HkDevs\CodeForgeStudio\Tests\TestCase;
 use HkDevs\CodeForgeStudio\CodeForgeStudioServiceProvider;
-use HkDevs\CodeForgeStudio\Commands\InstallCommand;
+use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Test Case: TC-ENV-002 - Installation Process
@@ -28,7 +28,7 @@ class InstallationProcessTest extends TestCase
         parent::tearDown();
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_service_provider_is_registered()
     {
         $providers = $this->app->getLoadedProviders();
@@ -40,7 +40,7 @@ class InstallationProcessTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_package_auto_discovery()
     {
         // Verify package is discoverable
@@ -50,7 +50,7 @@ class InstallationProcessTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_install_command_registration()
     {
         // Test that install command is registered
@@ -63,7 +63,7 @@ class InstallationProcessTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_configuration_publishing()
     {
         // Mock the config path since we're in testing environment
@@ -72,7 +72,7 @@ class InstallationProcessTest extends TestCase
         // Simulate config publishing
         $this->artisan('vendor:publish', [
             '--provider' => CodeForgeStudioServiceProvider::class,
-            '--tag' => 'codeforge-database-studio-config'
+            '--tag' => 'codeforge-database-studio-config',
         ]);
 
         // In a real installation, this would create the config file
@@ -80,19 +80,19 @@ class InstallationProcessTest extends TestCase
         $this->assertTrue(true, 'Configuration publishing command executed successfully');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_publishing()
     {
         // Test migration publishing
         $this->artisan('vendor:publish', [
             '--provider' => CodeForgeStudioServiceProvider::class,
-            '--tag' => 'codeforge-database-studio-migrations'
+            '--tag' => 'codeforge-database-studio-migrations',
         ]);
 
         $this->assertTrue(true, 'Migration publishing command executed successfully');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_install_command_execution()
     {
         // Test the install command
@@ -101,7 +101,7 @@ class InstallationProcessTest extends TestCase
             ->assertExitCode(0);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_install_command_with_force_flag()
     {
         // Test install command with force flag
@@ -109,14 +109,14 @@ class InstallationProcessTest extends TestCase
             ->assertExitCode(0);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_database_migrations_are_available()
     {
         // Verify migration files exist in the package
-        $migrationPath = __DIR__ . '/../../../database/migrations';
+        $migrationPath = __DIR__.'/../../../database/migrations';
 
         if (is_dir($migrationPath)) {
-            $migrations = glob($migrationPath . '/*.php');
+            $migrations = glob($migrationPath.'/*.php');
             $this->assertNotEmpty($migrations, 'Migration files should be available');
 
             // Check for specific migration files
@@ -127,7 +127,7 @@ class InstallationProcessTest extends TestCase
                 'create_database_health_metrics_table',
             ];
 
-            $migrationContents = file_get_contents($migrationPath . '/2024_01_01_000001_create_database_manager_logs_table.php');
+            $migrationContents = file_get_contents($migrationPath.'/2024_01_01_000001_create_database_manager_logs_table.php');
 
             foreach ($expectedMigrations as $expectedMigration) {
                 $found = false;
@@ -145,7 +145,7 @@ class InstallationProcessTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_configuration_defaults()
     {
         // Test default configuration values
@@ -166,7 +166,7 @@ class InstallationProcessTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_installation_idempotency()
     {
         // Test that running install multiple times doesn't cause issues
@@ -176,7 +176,7 @@ class InstallationProcessTest extends TestCase
         $this->assertTrue(true, 'Installation command is idempotent');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_installation_with_existing_config()
     {
         // Simulate existing configuration
@@ -188,7 +188,7 @@ class InstallationProcessTest extends TestCase
         $this->assertTrue(true, 'Installation works with existing configuration');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_installation_error_handling()
     {
         // Test installation with invalid permissions (simulated)
@@ -200,7 +200,7 @@ class InstallationProcessTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_post_installation_verification()
     {
         // Run installation
