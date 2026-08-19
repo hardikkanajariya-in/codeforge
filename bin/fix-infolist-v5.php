@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-$root = dirname(__DIR__) . '/src';
+$root = dirname(__DIR__).'/src';
 
 $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root));
 
@@ -44,7 +44,7 @@ foreach ($iterator as $file) {
         if (! str_contains($content, 'use Filament\Schemas\Schema;')) {
             $content = preg_replace(
                 '/(namespace [^;]+;\R)/',
-                '$1use Filament\Schemas\Schema;' . PHP_EOL,
+                '$1use Filament\Schemas\Schema;'.PHP_EOL,
                 $content,
                 1
             );
@@ -56,7 +56,7 @@ foreach ($iterator as $file) {
         ) {
             $content = preg_replace(
                 '/(namespace [^;]+;\R)/',
-                '$1use HkDevs\CodeForgeStudio\Support\Section;' . PHP_EOL,
+                '$1use HkDevs\CodeForgeStudio\Support\Section;'.PHP_EOL,
                 $content,
                 1
             );
@@ -68,7 +68,7 @@ foreach ($iterator as $file) {
         ) {
             $content = preg_replace(
                 '/(namespace [^;]+;\R)/',
-                '$1use HkDevs\CodeForgeStudio\Support\Grid;' . PHP_EOL,
+                '$1use HkDevs\CodeForgeStudio\Support\Grid;'.PHP_EOL,
                 $content,
                 1
             );

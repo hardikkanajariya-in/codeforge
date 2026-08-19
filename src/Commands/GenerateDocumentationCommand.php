@@ -2,16 +2,18 @@
 
 namespace HkDevs\CodeForgeStudio\Commands;
 
-use Illuminate\Console\Command;
-use HkDevs\CodeForgeStudio\Services\DocumentationGenerationService;
 use HkDevs\CodeForgeStudio\Models\DocumentationGeneration;
+use HkDevs\CodeForgeStudio\Services\DocumentationGenerationService;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * GenerateDocumentationCommand
- * 
+ *
  * Comprehensive database documentation generation utility for CodeForge Database Studio.
  * Creates professional, multi-format documentation for database schemas, models, and relationships.
- * 
+ *
  * Features:
  * - Multi-format output support (Markdown, HTML, PDF)
  * - Flexible documentation scope (full schema, selected tables, models only)
@@ -20,18 +22,18 @@ use HkDevs\CodeForgeStudio\Models\DocumentationGeneration;
  * - Downloadable documentation files with custom naming
  * - Integration with Laravel models and Eloquent relationships
  * - Professional formatting with consistent styling
- * 
+ *
  * Output Formats:
  * - Markdown: Developer-friendly format for version control and collaboration
  * - HTML: Web-ready documentation with navigation and styling
  * - PDF: Print-ready professional documentation for stakeholders
- * 
+ *
  * Documentation Scopes:
  * - Full Schema: Complete database documentation including all tables and relationships
  * - Selected Tables: Targeted documentation for specific table subsets
  * - Single Table: Detailed documentation for individual table analysis
  * - Models Only: Laravel model-focused documentation with relationships
- * 
+ *
  * Content Generation:
  * - Table structure with column definitions and constraints
  * - Index and key information including performance implications
@@ -39,42 +41,43 @@ use HkDevs\CodeForgeStudio\Models\DocumentationGeneration;
  * - Laravel model integration and Eloquent relationship detection
  * - Data type analysis and validation rule documentation
  * - Sample data and usage examples where applicable
- * 
+ *
  * Customization Options:
  * - Custom document titles and descriptions
  * - Branded headers and footers
  * - Table filtering and selection
  * - Output filename customization
  * - Automatic file organization and naming
- * 
+ *
  * Integration Features:
  * - Compatible with CI/CD pipelines for automated documentation
  * - Version control friendly output formats
  * - Exportable for external documentation systems
  * - Scheduled generation support for up-to-date documentation
- * 
+ *
  * Use Cases:
  * - API documentation generation
  * - Database schema documentation for teams
  * - Compliance and audit documentation
  * - Onboarding materials for new developers
  * - System architecture documentation
- * 
- * @package HkDevs\CodeForgeStudio\Commands
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * # Generate full schema documentation in Markdown
  * php artisan codeforge:generate-docs --format=markdown --scope=full_schema
- * 
+ *
  * # Create PDF documentation for specific tables
  * php artisan codeforge:generate-docs --format=pdf --scope=selected_tables --tables=users,orders,products
- * 
+ *
  * # Generate HTML documentation with custom title
  * php artisan codeforge:generate-docs --format=html --title="E-commerce Database Schema" --auto-download
- * 
+ *
  * # Create model-focused documentation
  * php artisan codeforge:generate-docs --scope=models_only --output=laravel_models.md
  */
@@ -98,26 +101,29 @@ class GenerateDocumentationCommand extends Command
         try {
             // Validate format
             $format = $this->option('format');
-            if (!in_array($format, ['markdown', 'html', 'pdf'])) {
+            if (! in_array($format, ['markdown', 'html', 'pdf'])) {
                 $this->error('Invalid format. Use: markdown, html, or pdf');
+
                 return self::FAILURE;
             }
 
             // Validate scope
             $scope = $this->option('scope');
-            if (!in_array($scope, ['full_schema', 'selected_tables', 'single_table', 'models_only'])) {
+            if (! in_array($scope, ['full_schema', 'selected_tables', 'single_table', 'models_only'])) {
                 $this->error('Invalid scope. Use: full_schema, selected_tables, single_table, or models_only');
+
                 return self::FAILURE;
             }
 
             // Prepare data
-            $title = $this->option('title') ?: 'Database Documentation - ' . now()->format('Y-m-d H:i:s');
+            $title = $this->option('title') ?: 'Database Documentation - '.now()->format('Y-m-d H:i:s');
             $description = $this->option('description') ?: 'Auto-generated database documentation';
             $tables = $this->option('tables');
 
             // Validate tables for specific scopes
             if (in_array($scope, ['selected_tables', 'single_table']) && empty($tables)) {
                 $this->error('Tables must be specified for selected_tables or single_table scope');
+
                 return self::FAILURE;
             }
 
@@ -157,7 +163,7 @@ class GenerateDocumentationCommand extends Command
 
             return self::SUCCESS;
         } catch (\Exception $e) {
-            $this->error('Documentation generation failed: ' . $e->getMessage());
+            $this->error('Documentation generation failed: '.$e->getMessage());
 
             if ($this->option('verbose')) {
                 $this->line($e->getTraceAsString());
@@ -172,7 +178,7 @@ class GenerateDocumentationCommand extends Command
         $outputPath = $this->option('output') ?: $this->generateOutputPath($generation);
 
         try {
-            $content = \Illuminate\Support\Facades\Storage::disk('local')->get($generation->file_path);
+            $content = Storage::disk('local')->get($generation->file_path);
             file_put_contents($outputPath, $content);
 
             $this->info("✅ File downloaded to: {$outputPath}");
@@ -183,7 +189,7 @@ class GenerateDocumentationCommand extends Command
 
     protected function generateOutputPath(DocumentationGeneration $generation): string
     {
-        $title = \Illuminate\Support\Str::slug($generation->title);
+        $title = Str::slug($generation->title);
         $timestamp = now()->format('Y-m-d_H-i-s');
         $extension = match ($generation->format) {
             'pdf' => 'pdf',

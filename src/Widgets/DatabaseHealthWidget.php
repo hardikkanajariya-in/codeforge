@@ -2,14 +2,15 @@
 
 namespace HkDevs\CodeForgeStudio\Widgets;
 
-use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
 use Filament\Widgets\Widget;
+use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
 use Illuminate\Support\Facades\DB;
 
 class DatabaseHealthWidget extends Widget
 {
     protected string $view = 'codeforge-studio::widgets.database-health';
-    protected int | string | array $columnSpan = 'full';
+
+    protected int|string|array $columnSpan = 'full';
 
     protected function getHealthService(): DatabaseHealthService
     {
@@ -27,6 +28,7 @@ class DatabaseHealthWidget extends Widget
             'recentActivity' => $this->getRecentActivity(),
         ];
     }
+
     protected function getConnectionStatus(): array
     {
         return $this->getHealthService()->getConnectionStatus();
@@ -35,6 +37,7 @@ class DatabaseHealthWidget extends Widget
     protected function getPerformanceMetrics(): array
     {
         $connection = config('database.default');
+
         return $this->getHealthService()->getPerformanceMetrics($connection);
     }
 
@@ -42,7 +45,7 @@ class DatabaseHealthWidget extends Widget
     {
         try {
             // Check if our logs table exists
-            if (!DB::getSchemaBuilder()->hasTable('database_manager_logs')) {
+            if (! DB::getSchemaBuilder()->hasTable('database_manager_logs')) {
                 return [];
             }
 

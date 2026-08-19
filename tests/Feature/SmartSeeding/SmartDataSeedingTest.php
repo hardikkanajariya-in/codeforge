@@ -4,8 +4,9 @@ namespace HkDevs\CodeForgeStudio\Tests\Feature\SmartSeeding;
 
 use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Test Case: TC-SEEDING-001 - Smart Data Seeding
@@ -20,7 +21,7 @@ class SmartDataSeedingTest extends TestCase
         parent::setUp();
 
         // Create data seeders table
-        if (!Schema::hasTable('data_seeders')) {
+        if (! Schema::hasTable('data_seeders')) {
             Schema::create('data_seeders', function ($table) {
                 $table->id();
                 $table->string('name');
@@ -33,7 +34,7 @@ class SmartDataSeedingTest extends TestCase
         }
 
         // Create seeder execution logs table
-        if (!Schema::hasTable('seeder_execution_logs')) {
+        if (! Schema::hasTable('seeder_execution_logs')) {
             Schema::create('seeder_execution_logs', function ($table) {
                 $table->id();
                 $table->unsignedBigInteger('seeder_id');
@@ -46,7 +47,7 @@ class SmartDataSeedingTest extends TestCase
         }
 
         // Create data generation templates table
-        if (!Schema::hasTable('data_generation_templates')) {
+        if (! Schema::hasTable('data_generation_templates')) {
             Schema::create('data_generation_templates', function ($table) {
                 $table->id();
                 $table->string('name');
@@ -58,7 +59,7 @@ class SmartDataSeedingTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_seeder_configuration_creation()
     {
         $seederConfig = [
@@ -68,8 +69,8 @@ class SmartDataSeedingTest extends TestCase
                 'name' => ['type' => 'faker', 'method' => 'name'],
                 'email' => ['type' => 'faker', 'method' => 'email'],
                 'age' => ['type' => 'range', 'min' => 18, 'max' => 65],
-                'is_active' => ['type' => 'boolean', 'probability' => 0.8]
-            ]
+                'is_active' => ['type' => 'boolean', 'probability' => 0.8],
+            ],
         ];
 
         $seederId = DB::table('data_seeders')->insertGetId([
@@ -79,7 +80,7 @@ class SmartDataSeedingTest extends TestCase
             'configuration' => json_encode($seederConfig),
             'is_active' => true,
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ]);
 
         $seeder = DB::table('data_seeders')->where('id', $seederId)->first();
@@ -93,41 +94,41 @@ class SmartDataSeedingTest extends TestCase
         $this->assertArrayHasKey('fields', $config);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_data_generation_template()
     {
         $template = [
             'fields' => [
                 'first_name' => [
                     'type' => 'faker',
-                    'provider' => 'firstName'
+                    'provider' => 'firstName',
                 ],
                 'last_name' => [
                     'type' => 'faker',
-                    'provider' => 'lastName'
+                    'provider' => 'lastName',
                 ],
                 'email' => [
                     'type' => 'faker',
-                    'provider' => 'email'
+                    'provider' => 'email',
                 ],
                 'birth_date' => [
                     'type' => 'date_range',
                     'start' => '1960-01-01',
-                    'end' => '2005-12-31'
+                    'end' => '2005-12-31',
                 ],
                 'salary' => [
                     'type' => 'number_range',
                     'min' => 30000,
-                    'max' => 150000
-                ]
+                    'max' => 150000,
+                ],
             ],
             'relationships' => [
                 'department_id' => [
                     'type' => 'foreign_key',
                     'table' => 'departments',
-                    'column' => 'id'
-                ]
-            ]
+                    'column' => 'id',
+                ],
+            ],
         ];
 
         $templateId = DB::table('data_generation_templates')->insertGetId([
@@ -136,7 +137,7 @@ class SmartDataSeedingTest extends TestCase
             'template_data' => json_encode($template),
             'is_active' => true,
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ]);
 
         $savedTemplate = DB::table('data_generation_templates')->where('id', $templateId)->first();
@@ -150,7 +151,7 @@ class SmartDataSeedingTest extends TestCase
         $this->assertCount(5, $templateData['fields']);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_seeder_execution_simulation()
     {
         // Create test table for seeding
@@ -174,12 +175,12 @@ class SmartDataSeedingTest extends TestCase
                     'name' => ['type' => 'faker', 'method' => 'productName'],
                     'price' => ['type' => 'range', 'min' => 10.00, 'max' => 999.99],
                     'description' => ['type' => 'faker', 'method' => 'text'],
-                    'is_active' => ['type' => 'boolean', 'probability' => 0.9]
-                ]
+                    'is_active' => ['type' => 'boolean', 'probability' => 0.9],
+                ],
             ]),
             'is_active' => true,
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ]);
 
         // Simulate seeder execution
@@ -194,7 +195,7 @@ class SmartDataSeedingTest extends TestCase
                 'description' => "Description for test product {$i}",
                 'is_active' => rand(0, 10) < 9, // 90% probability of being active
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ];
         }
 
@@ -209,7 +210,7 @@ class SmartDataSeedingTest extends TestCase
             'records_created' => 50,
             'execution_time' => $executionTime,
             'status' => 'completed',
-            'executed_at' => now()
+            'executed_at' => now(),
         ]);
 
         // Verify results
@@ -225,7 +226,7 @@ class SmartDataSeedingTest extends TestCase
         $this->assertEquals(50, $executionLog->records_created);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_foreign_key_relationship_seeding()
     {
         // Create related tables
@@ -250,7 +251,7 @@ class SmartDataSeedingTest extends TestCase
             $categories[] = [
                 'name' => "Category {$i}",
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ];
         }
         DB::table('test_categories')->insert($categories);
@@ -265,7 +266,7 @@ class SmartDataSeedingTest extends TestCase
                 'name' => "Item {$i}",
                 'category_id' => $categoryIds[array_rand($categoryIds)],
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ];
         }
         DB::table('test_items')->insert($items);
@@ -282,7 +283,7 @@ class SmartDataSeedingTest extends TestCase
         $this->assertEquals(20, $itemsWithValidCategories);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_conditional_data_generation()
     {
         Schema::create('test_users_conditional', function ($table) {
@@ -305,18 +306,18 @@ class SmartDataSeedingTest extends TestCase
                     'choices' => [
                         'admin' => 0.1,
                         'manager' => 0.2,
-                        'employee' => 0.7
-                    ]
+                        'employee' => 0.7,
+                    ],
                 ],
                 'salary' => [
                     'type' => 'conditional',
                     'conditions' => [
                         ['field' => 'role', 'value' => 'admin', 'result' => ['min' => 80000, 'max' => 120000]],
                         ['field' => 'role', 'value' => 'manager', 'result' => ['min' => 50000, 'max' => 80000]],
-                        ['field' => 'role', 'value' => 'employee', 'result' => ['min' => 30000, 'max' => 50000]]
-                    ]
-                ]
-            ]
+                        ['field' => 'role', 'value' => 'employee', 'result' => ['min' => 30000, 'max' => 50000]],
+                    ],
+                ],
+            ],
         ];
 
         $seederId = DB::table('data_seeders')->insertGetId([
@@ -326,7 +327,7 @@ class SmartDataSeedingTest extends TestCase
             'configuration' => json_encode($conditionalConfig),
             'is_active' => true,
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ]);
 
         // Simulate conditional data generation
@@ -334,7 +335,7 @@ class SmartDataSeedingTest extends TestCase
         $salaryRanges = [
             'admin' => ['min' => 80000, 'max' => 120000],
             'manager' => ['min' => 50000, 'max' => 80000],
-            'employee' => ['min' => 30000, 'max' => 50000]
+            'employee' => ['min' => 30000, 'max' => 50000],
         ];
 
         $testData = [];
@@ -348,7 +349,7 @@ class SmartDataSeedingTest extends TestCase
                 'role' => $role,
                 'salary' => rand($salaryRange['min'], $salaryRange['max']),
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ];
         }
 
@@ -368,7 +369,7 @@ class SmartDataSeedingTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_data_validation_during_seeding()
     {
         Schema::create('test_validated_data', function ($table) {
@@ -385,7 +386,7 @@ class SmartDataSeedingTest extends TestCase
             'email' => ['type' => 'email', 'unique' => true],
             'phone' => ['type' => 'phone', 'format' => 'international'],
             'age' => ['type' => 'integer', 'min' => 18, 'max' => 100],
-            'status' => ['type' => 'enum', 'values' => ['active', 'inactive', 'pending']]
+            'status' => ['type' => 'enum', 'values' => ['active', 'inactive', 'pending']],
         ];
 
         // Generate valid test data
@@ -397,7 +398,7 @@ class SmartDataSeedingTest extends TestCase
                 'age' => rand(18, 65),
                 'status' => ['active', 'inactive', 'pending'][rand(0, 2)],
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ];
         }
 
@@ -414,7 +415,7 @@ class SmartDataSeedingTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_bulk_seeding_performance()
     {
         Schema::create('performance_test_bulk', function ($table) {
@@ -434,7 +435,7 @@ class SmartDataSeedingTest extends TestCase
                 'name' => "Record {$i}",
                 'value' => rand(1, 10000),
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ];
         }
 
@@ -455,7 +456,7 @@ class SmartDataSeedingTest extends TestCase
         $this->assertLessThan(5.0, $executionTime, 'Bulk seeding should complete within 5 seconds');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_seeder_error_handling()
     {
         // Create seeder with invalid configuration
@@ -466,12 +467,12 @@ class SmartDataSeedingTest extends TestCase
             'configuration' => json_encode([
                 'record_count' => 10,
                 'fields' => [
-                    'invalid_field' => ['type' => 'unknown_type']
-                ]
+                    'invalid_field' => ['type' => 'unknown_type'],
+                ],
             ]),
             'is_active' => true,
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ]);
 
         // Simulate failed execution
@@ -481,7 +482,7 @@ class SmartDataSeedingTest extends TestCase
             'execution_time' => 0.1,
             'status' => 'failed',
             'error_message' => 'Table non_existent_table does not exist',
-            'executed_at' => now()
+            'executed_at' => now(),
         ]);
 
         $errorLog = DB::table('seeder_execution_logs')
@@ -493,7 +494,7 @@ class SmartDataSeedingTest extends TestCase
         $this->assertStringContainsString('does not exist', $errorLog->error_message);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_seeder_template_reusability()
     {
         // Create reusable template
@@ -503,8 +504,8 @@ class SmartDataSeedingTest extends TestCase
                 'last_name' => ['type' => 'faker', 'provider' => 'lastName'],
                 'email' => ['type' => 'faker', 'provider' => 'email'],
                 'created_at' => ['type' => 'current_timestamp'],
-                'updated_at' => ['type' => 'current_timestamp']
-            ]
+                'updated_at' => ['type' => 'current_timestamp'],
+            ],
         ];
 
         $templateId = DB::table('data_generation_templates')->insertGetId([
@@ -513,29 +514,29 @@ class SmartDataSeedingTest extends TestCase
             'template_data' => json_encode($userTemplate),
             'is_active' => true,
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ]);
 
         // Use template for multiple seeders
         $seederConfigs = [
             ['name' => 'Admin Users', 'count' => 5, 'table' => 'admin_users'],
             ['name' => 'Regular Users', 'count' => 100, 'table' => 'regular_users'],
-            ['name' => 'Test Users', 'count' => 50, 'table' => 'test_users']
+            ['name' => 'Test Users', 'count' => 50, 'table' => 'test_users'],
         ];
 
         foreach ($seederConfigs as $config) {
             DB::table('data_seeders')->insert([
                 'name' => $config['name'],
-                'description' => "Generated from Standard User Template",
+                'description' => 'Generated from Standard User Template',
                 'table_name' => $config['table'],
                 'configuration' => json_encode([
                     'template_id' => $templateId,
                     'record_count' => $config['count'],
-                    'additional_fields' => []
+                    'additional_fields' => [],
                 ]),
                 'is_active' => true,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
 

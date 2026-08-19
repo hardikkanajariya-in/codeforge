@@ -26,7 +26,7 @@ class EditSchemaSnapshot extends EditRecord
             'table_relationships',
             'model_mappings',
             'validation_rules',
-            'policy_information'
+            'policy_information',
         ]));
     }
 
@@ -38,7 +38,7 @@ class EditSchemaSnapshot extends EditRecord
             'name',
             'description',
             'version',
-            'is_baseline'
+            'is_baseline',
         ]));
     }
 }

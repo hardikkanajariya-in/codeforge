@@ -1,29 +1,27 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources;
-use Filament\Schemas\Schema;
-use HkDevs\CodeForgeStudio\Support\Grid;
-use HkDevs\CodeForgeStudio\Support\Section;
 
-use HkDevs\CodeForgeStudio\Models\DataSeeder;
-use HkDevs\CodeForgeStudio\Resources\DataSeederResource\Pages;
-use HkDevs\CodeForgeStudio\Services\SeederExecutionService;
-use HkDevs\CodeForgeStudio\Services\SeederDiscoveryService;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
-use Filament\Tables\Table;
 use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Table;
+use HkDevs\CodeForgeStudio\Models\DataSeeder;
+use HkDevs\CodeForgeStudio\Resources\DataSeederResource\Pages;
+use HkDevs\CodeForgeStudio\Services\SeederDiscoveryService;
+use HkDevs\CodeForgeStudio\Services\SeederExecutionService;
+use HkDevs\CodeForgeStudio\Support\Section;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-
 /**
  * DataSeederResource
- * 
+ *
  * Filament resource for managing database seeders with comprehensive
  * execution tracking, configuration management, and monitoring capabilities.
- * 
+ *
  * Key Features:
  * - Complete seeder lifecycle management (create, edit, execute, monitor)
  * - Execution history tracking with detailed logging
@@ -31,163 +29,172 @@ use Illuminate\Database\Eloquent\Collection;
  * - Auto-run configuration for automated deployment pipelines
  * - Status monitoring and health tracking
  * - Integration with SeederExecutionService
- * 
+ *
  * Resource Configuration:
  * - DataSeeder model integration
  * - Database icon for seeder identification
  * - Positioned in 'Data Management' navigation group
  * - Organized for efficient seeder discovery and execution
- * 
+ *
  * Seeder Management:
  * - Seeder registration and configuration
  * - Class name and file path management
  * - Execution configuration and parameters
  * - Priority ordering for dependency resolution
  * - Auto-run settings for automated execution
- * 
+ *
  * Table Features:
  * - Seeder listing with name, status, and last execution
  * - Priority-based ordering and organization
  * - Status indicators with color coding
  * - Execution history and performance tracking
  * - Bulk operations for seeder management
- * 
+ *
  * Form Configuration:
  * - Seeder metadata input (name, description, class)
  * - File path configuration and validation
  * - JSON configuration for execution parameters
  * - Status management and type classification
  * - Priority setting for execution order
- * 
+ *
  * Execution Features:
  * - Manual seeder execution from interface
  * - Bulk execution for multiple seeders
  * - Execution logging and error tracking
  * - Performance monitoring and optimization
  * - Integration with SeederExecutionLog tracking
- * 
+ *
  * Advanced Features:
  * - Seeder dependency analysis and visualization
  * - Execution scheduling and automation
  * - Performance analytics and optimization recommendations
  * - Integration with migration and schema management
- * 
- * @package HkDevs\CodeForgeStudio\Resources
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 
-use Filament\Notifications\Notification;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 
 class DataSeederResource extends Resource
 {
     protected static ?string $model = DataSeeder::class;
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-play';
+
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-play';
+
     protected static ?string $navigationLabel = 'Data Seeders';
+
     protected static ?string $modelLabel = 'Data Seeder';
+
     protected static ?string $pluralModelLabel = 'Data Seeders';
+
     protected static ?int $navigationSort = 5;
 
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-                Section::make('Basic Information')
-                    ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->required()
-                            ->unique(ignoreRecord: true)
-                            ->maxLength(255),
+            Section::make('Basic Information')
+                ->schema([
+                    Forms\Components\TextInput::make('name')
+                        ->required()
+                        ->unique(ignoreRecord: true)
+                        ->maxLength(255),
 
-                        Forms\Components\Textarea::make('description')
-                            ->maxLength(500)
-                            ->rows(3),
+                    Forms\Components\Textarea::make('description')
+                        ->maxLength(500)
+                        ->rows(3),
 
-                        Forms\Components\Select::make('class_name')
-                            ->required()
-                            ->searchable()
-                            ->options(function () {
-                                return app(SeederDiscoveryService::class)
-                                    ->getSeederOptions();
-                            })
-                            ->afterStateUpdated(function ($state, callable $set) {
-                                if ($state) {
-                                    $discoveryService = app(SeederDiscoveryService::class);
-                                    $filePath = $discoveryService->getSeederFilePath($state);
-                                    $set('file_path', $filePath);
-                                }
-                            })
-                            ->live(debounce: 300)
-                            ->helperText('Select an available seeder class from your project'),
+                    Forms\Components\Select::make('class_name')
+                        ->required()
+                        ->searchable()
+                        ->options(function () {
+                            return app(SeederDiscoveryService::class)
+                                ->getSeederOptions();
+                        })
+                        ->afterStateUpdated(function ($state, callable $set) {
+                            if ($state) {
+                                $discoveryService = app(SeederDiscoveryService::class);
+                                $filePath = $discoveryService->getSeederFilePath($state);
+                                $set('file_path', $filePath);
+                            }
+                        })
+                        ->live(debounce: 300)
+                        ->helperText('Select an available seeder class from your project'),
 
-                        Forms\Components\Placeholder::make('file_path_display')
-                            ->label('File Path')
-                            ->content(function (callable $get) {
-                                $className = $get('class_name');
-                                if ($className) {
-                                    $discoveryService = app(SeederDiscoveryService::class);
-                                    $filePath = $discoveryService->getSeederFilePath($className);
-                                    return $filePath ?
-                                        \Illuminate\Support\Str::limit($filePath, 80) :
-                                        'File path will be determined automatically';
-                                }
-                                return 'Select a seeder class to see the file path';
-                            })
-                            ->helperText('This path is automatically determined based on the selected seeder class'),
+                    Forms\Components\Placeholder::make('file_path_display')
+                        ->label('File Path')
+                        ->content(function (callable $get) {
+                            $className = $get('class_name');
+                            if ($className) {
+                                $discoveryService = app(SeederDiscoveryService::class);
+                                $filePath = $discoveryService->getSeederFilePath($className);
 
-                        Forms\Components\Hidden::make('file_path'),
-                    ])
-                    ->columns(2),
+                                return $filePath ?
+                                    Str::limit($filePath, 80) :
+                                    'File path will be determined automatically';
+                            }
 
-                Section::make('Configuration')
-                    ->schema([
-                        Forms\Components\Select::make('type')
-                            ->options([
-                                'laravel' => 'Laravel Seeder',
-                                'generated' => 'Generated Seeder',
-                                'custom' => 'Custom Seeder',
-                            ])
-                            ->required()
-                            ->default('laravel'),
+                            return 'Select a seeder class to see the file path';
+                        })
+                        ->helperText('This path is automatically determined based on the selected seeder class'),
 
-                        Forms\Components\Select::make('status')
-                            ->options([
-                                'draft' => 'Draft',
-                                'active' => 'Active',
-                                'inactive' => 'Inactive',
-                            ])
-                            ->native(false)
-                            ->required()
-                            ->default('draft'),
+                    Forms\Components\Hidden::make('file_path'),
+                ])
+                ->columns(2),
 
-                        Forms\Components\TextInput::make('priority')
-                            ->numeric()
-                            ->default(100)
-                            ->helperText('Lower numbers run first'),
+            Section::make('Configuration')
+                ->schema([
+                    Forms\Components\Select::make('type')
+                        ->options([
+                            'laravel' => 'Laravel Seeder',
+                            'generated' => 'Generated Seeder',
+                            'custom' => 'Custom Seeder',
+                        ])
+                        ->required()
+                        ->default('laravel'),
 
-                        Forms\Components\Toggle::make('auto_run')
-                            ->helperText('Run automatically in batch operations'),
-                    ])
-                    ->columns(2),
+                    Forms\Components\Select::make('status')
+                        ->options([
+                            'draft' => 'Draft',
+                            'active' => 'Active',
+                            'inactive' => 'Inactive',
+                        ])
+                        ->native(false)
+                        ->required()
+                        ->default('draft'),
 
-                Section::make('Advanced Configuration')
-                    ->schema([
-                        Forms\Components\KeyValue::make('configuration')
-                            ->addActionLabel('Add Configuration')
-                            ->keyLabel('Setting')
-                            ->valueLabel('Value')
-                            ->default([
-                                'batch_size' => '1000',
-                                'memory_limit' => '512M',
-                                'use_transactions' => 'true',
-                                'truncate_before_seed' => 'false',
-                                'timeout' => '300',
-                                'connection' => 'default',
-                            ])
-                            ->helperText('Common seeder configuration options are pre-filled. You can modify or add custom settings.'),
-                    ])
-                    ->collapsible(),
-            ]);
+                    Forms\Components\TextInput::make('priority')
+                        ->numeric()
+                        ->default(100)
+                        ->helperText('Lower numbers run first'),
+
+                    Forms\Components\Toggle::make('auto_run')
+                        ->helperText('Run automatically in batch operations'),
+                ])
+                ->columns(2),
+
+            Section::make('Advanced Configuration')
+                ->schema([
+                    Forms\Components\KeyValue::make('configuration')
+                        ->addActionLabel('Add Configuration')
+                        ->keyLabel('Setting')
+                        ->valueLabel('Value')
+                        ->default([
+                            'batch_size' => '1000',
+                            'memory_limit' => '512M',
+                            'use_transactions' => 'true',
+                            'truncate_before_seed' => 'false',
+                            'timeout' => '300',
+                            'connection' => 'default',
+                        ])
+                        ->helperText('Common seeder configuration options are pre-filled. You can modify or add custom settings.'),
+                ])
+                ->collapsible(),
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -231,10 +238,11 @@ class DataSeederResource extends Resource
                     ->label('Last Run')
                     ->getStateUsing(function (DataSeeder $record) {
                         $latest = $record->latestExecution();
+
                         return $latest ? $latest->status : 'Never run';
                     })
                     ->badge()
-                    ->color(fn(string $state): string => match ($state) {
+                    ->color(fn (string $state): string => match ($state) {
                         'completed' => 'success',
                         'failed' => 'danger',
                         'started' => 'warning',
@@ -262,7 +270,7 @@ class DataSeederResource extends Resource
                     ]),
 
                 Tables\Filters\Filter::make('auto_run')
-                    ->query(fn(Builder $query): Builder => $query->where('auto_run', true))
+                    ->query(fn (Builder $query): Builder => $query->where('auto_run', true))
                     ->label('Auto Run Only'),
             ])
             ->actions([
@@ -271,7 +279,7 @@ class DataSeederResource extends Resource
                     ->color('success')
                     ->requiresConfirmation()
                     ->modalHeading('Execute Seeder')
-                    ->modalDescription(fn(DataSeeder $record) => "Are you sure you want to execute '{$record->name}'?")
+                    ->modalDescription(fn (DataSeeder $record) => "Are you sure you want to execute '{$record->name}'?")
                     ->action(function (DataSeeder $record) {
                         try {
                             $service = app(SeederExecutionService::class);
@@ -297,7 +305,7 @@ class DataSeederResource extends Resource
                                 ->send();
                         }
                     })
-                    ->visible(fn(DataSeeder $record) => $record->canExecute()),
+                    ->visible(fn (DataSeeder $record) => $record->canExecute()),
 
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
@@ -306,8 +314,7 @@ class DataSeederResource extends Resource
                     ->icon('heroicon-o-document-text')
                     ->color('info')
                     ->url(
-                        fn(DataSeeder $record): string =>
-                        route('filament.admin.resources.seeder-execution-logs.index') . '?tableFilters[seeder_name][value]=' . urlencode($record->name)
+                        fn (DataSeeder $record): string => route('filament.admin.resources.seeder-execution-logs.index').'?tableFilters[seeder_name][value]='.urlencode($record->name)
                     ),
             ])
             ->bulkActions([
@@ -335,7 +342,7 @@ class DataSeederResource extends Resource
                                     ->send();
                             } else {
                                 Notification::make()
-                                    ->title("Batch execution completed")
+                                    ->title('Batch execution completed')
                                     ->body("{$successful} successful, {$failed} failed")
                                     ->warning()
                                     ->send();
@@ -345,12 +352,12 @@ class DataSeederResource extends Resource
                     BulkAction::make('activate')
                         ->icon('heroicon-o-check')
                         ->color('success')
-                        ->action(fn(Collection $records) => $records->each->update(['status' => 'active'])),
+                        ->action(fn (Collection $records) => $records->each->update(['status' => 'active'])),
 
                     BulkAction::make('deactivate')
                         ->icon('heroicon-o-x-mark')
                         ->color('danger')
-                        ->action(fn(Collection $records) => $records->each->update(['status' => 'inactive'])),
+                        ->action(fn (Collection $records) => $records->each->update(['status' => 'inactive'])),
 
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),

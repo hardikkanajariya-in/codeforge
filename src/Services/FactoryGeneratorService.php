@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\File;
 
 /**
  * FactoryGeneratorService
- * 
+ *
  * Advanced Laravel Model Factory generation service for CodeForge Database Studio.
  * Creates intelligent, context-aware model factories with realistic data generation patterns.
- * 
+ *
  * Features:
  * - Intelligent factory generation based on model structure and relationships
  * - Context-aware field mapping with realistic data generation patterns
@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\File;
  * - Factory trait generation for enhanced testing capabilities
  * - Sequence and callback support for complex data generation scenarios
  * - Template-based generation with customizable factory patterns
- * 
+ *
  * Factory Generation Intelligence:
  * - Model Analysis: Automatic detection of model properties and relationships
  * - Field Mapping: Intelligent mapping of database columns to appropriate Faker methods
@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\File;
  * - Relationship Awareness: Automatic foreign key population with related model factories
  * - Attribute Casting: Support for model attribute casting and custom data types
  * - Validation Integration: Factory generation that respects model validation rules
- * 
+ *
  * Advanced Features:
  * - Factory States: Generation of multiple factory states for different testing scenarios
  * - Sequence Support: Ordered data generation with incremental and calculated values
@@ -37,7 +37,7 @@ use Illuminate\Support\Facades\File;
  * - Relationship Factories: Automatic generation of related model factories
  * - Custom Providers: Integration with custom Faker providers and data sources
  * - Configuration Templates: Reusable factory configuration patterns
- * 
+ *
  * Data Generation Patterns:
  * - Realistic Data: Context-appropriate data generation for each field type
  * - Localization: Locale-specific data generation for international applications
@@ -46,7 +46,7 @@ use Illuminate\Support\Facades\File;
  * - Performance Optimization: Efficient data generation for large test datasets
  * - Relationship Integrity: Automatic maintenance of referential integrity
  * - Custom Formats: Support for custom data formats and validation patterns
- * 
+ *
  * Template System:
  * - Customizable Templates: User-defined factory generation templates
  * - Pattern Library: Pre-built patterns for common model types and scenarios
@@ -55,7 +55,7 @@ use Illuminate\Support\Facades\File;
  * - Version Control: Template versioning with change tracking and rollback
  * - Team Sharing: Collaborative template development and sharing capabilities
  * - Import/Export: Template portability across projects and environments
- * 
+ *
  * Integration Features:
  * - Laravel Integration: Seamless integration with Laravel's factory system
  * - PHPUnit Support: Optimized factory generation for PHPUnit testing
@@ -64,7 +64,7 @@ use Illuminate\Support\Facades\File;
  * - Migration Integration: Factory generation based on migration definitions
  * - Testing Framework: Integration with Laravel's testing utilities and helpers
  * - CI/CD Support: Automated factory generation for testing environments
- * 
+ *
  * Quality Assurance:
  * - Code Validation: Generated factory code validation and syntax checking
  * - PSR Compliance: Code generation following PSR standards and best practices
@@ -72,7 +72,7 @@ use Illuminate\Support\Facades\File;
  * - Testing: Built-in testing of generated factories for functionality verification
  * - Error Handling: Comprehensive error handling with detailed diagnostic information
  * - Performance Testing: Factory performance validation and optimization recommendations
- * 
+ *
  * Customization Options:
  * - Custom Field Mappings: User-defined field generation strategies
  * - Generation Rules: Custom validation and generation rule configuration
@@ -80,12 +80,13 @@ use Illuminate\Support\Facades\File;
  * - Namespace Management: Automatic namespace resolution and organization
  * - File Organization: Customizable file naming and directory structure
  * - Code Style: Integration with code style standards and formatting tools
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $service = app(FactoryGeneratorService::class);
  * $result = $service->generateFiles([
@@ -114,8 +115,8 @@ class FactoryGeneratorService
 
         try {
             $className = $config['class_name'];
-            $fileName = $className . '.php';
-            $filePath = database_path('factories/' . $fileName);
+            $fileName = $className.'.php';
+            $filePath = database_path('factories/'.$fileName);
 
             // Ensure directory exists
             File::ensureDirectoryExists(dirname($filePath));
@@ -142,8 +143,8 @@ class FactoryGeneratorService
         return [
             'factory' => [
                 'content' => $this->generateFactoryContent($config),
-                'file_name' => $config['class_name'] . '.php',
-                'file_path' => 'database/factories/' . $config['class_name'] . '.php',
+                'file_name' => $config['class_name'].'.php',
+                'file_path' => 'database/factories/'.$config['class_name'].'.php',
             ],
         ];
     }
@@ -199,11 +200,11 @@ class FactoryGeneratorService
         }
 
         // Generate callbacks
-        if (!empty($config['after_creating'])) {
+        if (! empty($config['after_creating'])) {
             $content .= $this->generateAfterCreatingCallback($config['after_creating']);
         }
 
-        if (!empty($config['after_making'])) {
+        if (! empty($config['after_making'])) {
             $content .= $this->generateAfterMakingCallback($config['after_making']);
         }
 
@@ -221,25 +222,25 @@ class FactoryGeneratorService
         $line = "            '{$fieldName}' => ";
 
         if ($field['nullable'] ?? false) {
-            $line .= "\$this->faker->optional(0.8)->";
+            $line .= '$this->faker->optional(0.8)->';
         } else {
-            $line .= "\$this->faker->";
+            $line .= '$this->faker->';
         }
 
         if ($field['unique'] ?? false) {
-            $line .= "unique()->";
+            $line .= 'unique()->';
         }
 
         $line .= $fakerMethod;
 
-        if (!empty($parameters)) {
+        if (! empty($parameters)) {
             $line .= "({$parameters})";
         } else {
-            $line .= "()";
+            $line .= '()';
         }
 
-        if (!empty($field['custom_code'])) {
-            $line = "            '{$fieldName}' => " . $field['custom_code'];
+        if (! empty($field['custom_code'])) {
+            $line = "            '{$fieldName}' => ".$field['custom_code'];
         }
 
         $line .= ",\n";
@@ -267,7 +268,7 @@ class FactoryGeneratorService
     {
         $field = $sequence['field'];
         $values = $sequence['values'];
-        $valuesString = "'" . implode("', '", $values) . "'";
+        $valuesString = "'".implode("', '", $values)."'";
 
         $content = "\n    /**\n";
         $content .= "     * {$field} sequence\n";
@@ -296,7 +297,7 @@ class FactoryGeneratorService
         $content .= "        return \$this->afterCreating(function (\$model) {\n";
 
         foreach ($callbacks as $callback) {
-            $content .= "            " . $callback['code'] . "\n";
+            $content .= '            '.$callback['code']."\n";
         }
 
         $content .= "        });\n";
@@ -315,7 +316,7 @@ class FactoryGeneratorService
         $content .= "        return \$this->afterMaking(function (\$model) {\n";
 
         foreach ($callbacks as $callback) {
-            $content .= "            " . $callback['code'] . "\n";
+            $content .= '            '.$callback['code']."\n";
         }
 
         $content .= "        });\n";

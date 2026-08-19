@@ -29,7 +29,7 @@ $requiredUses = [
 ];
 
 foreach ($files as $relative) {
-    $path = $root . '/' . $relative;
+    $path = $root.'/'.$relative;
     if (! is_file($path)) {
         continue;
     }
@@ -50,7 +50,7 @@ foreach ($files as $relative) {
         if (! str_contains($content, $useLine)) {
             $content = preg_replace(
                 '/(namespace [^;]+;\R)/',
-                '$1' . $useLine . "\n",
+                '$1'.$useLine."\n",
                 $content,
                 1
             );

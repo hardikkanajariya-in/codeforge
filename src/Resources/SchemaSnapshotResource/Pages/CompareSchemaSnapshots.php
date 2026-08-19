@@ -1,43 +1,42 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources\SchemaSnapshotResource\Pages;
-use Filament\Schemas\Schema;
-use HkDevs\CodeForgeStudio\Support\Grid;
-use HkDevs\CodeForgeStudio\Support\Section;
 
-use Filament\Resources\Pages\Page;
-use HkDevs\CodeForgeStudio\Resources\SchemaSnapshotResource;
-use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
+use Filament\Actions\Action;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
-use Filament\Forms\Components\Select;
-use Filament\Actions\Action;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\Page;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
+use HkDevs\CodeForgeStudio\Resources\SchemaSnapshotResource;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 /**
  * CompareSchemaSnapshots
- * 
+ *
  * Specialized Filament page for comparing database schema snapshots with
  * detailed difference analysis and visualization capabilities.
- * 
+ *
  * Key Features:
  * - Side-by-side schema snapshot comparison
  * - Detailed difference highlighting and analysis
  * - Visual representation of schema changes
  * - Migration script generation from differences
  * - Change impact analysis and recommendations
- * 
+ *
  * Comparison Capabilities:
  * - Table structure comparison with field-level differences
  * - Index and constraint comparison analysis
  * - Relationship mapping and foreign key changes
  * - Data type and attribute difference detection
  * - Schema evolution tracking and visualization
- * 
- * @package HkDevs\CodeForgeStudio\Resources\SchemaSnapshotResource\Pages
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class CompareSchemaSnapshots extends Page implements HasForms
@@ -49,8 +48,11 @@ class CompareSchemaSnapshots extends Page implements HasForms
     protected string $view = 'codeforge-studio::pages.compare-schema-snapshots';
 
     public SchemaSnapshot $record;
+
     public ?SchemaSnapshot $compareWith = null;
+
     public ?array $comparison = null;
+
     public ?int $compare_with_id = null;
 
     public function mount(SchemaSnapshot $record): void
@@ -61,34 +63,34 @@ class CompareSchemaSnapshots extends Page implements HasForms
     public function form(Schema $schema): Schema
     {
         return $schema->components([
-                Section::make('Compare Snapshots')
-                    ->description('Select another snapshot to compare with the current one')
-                    ->schema([
-                        Select::make('compare_with_id')
-                            ->label('Compare with')
-                            ->options(function () {
-                                return SchemaSnapshot::where('id', '!=', $this->record->id)
-                                    ->where('database_connection', $this->record->database_connection)
-                                    ->orderBy('captured_at', 'desc')
-                                    ->get()
-                                    ->mapWithKeys(function ($snapshot) {
-                                        return [$snapshot->id => "{$snapshot->name} ({$snapshot->captured_at->format('Y-m-d H:i')})"];
-                                    });
-                            })
-                            ->searchable()
-                            ->live(debounce: 300)
-                            ->afterStateUpdated(function ($state) {
-                                $this->compare_with_id = $state;
-                                if ($state) {
-                                    $this->compareWith = SchemaSnapshot::find($state);
-                                    $this->generateComparison();
-                                } else {
-                                    $this->compareWith = null;
-                                    $this->comparison = null;
-                                }
-                            }),
-                    ])
-            ]);
+            Section::make('Compare Snapshots')
+                ->description('Select another snapshot to compare with the current one')
+                ->schema([
+                    Select::make('compare_with_id')
+                        ->label('Compare with')
+                        ->options(function () {
+                            return SchemaSnapshot::where('id', '!=', $this->record->id)
+                                ->where('database_connection', $this->record->database_connection)
+                                ->orderBy('captured_at', 'desc')
+                                ->get()
+                                ->mapWithKeys(function ($snapshot) {
+                                    return [$snapshot->id => "{$snapshot->name} ({$snapshot->captured_at->format('Y-m-d H:i')})"];
+                                });
+                        })
+                        ->searchable()
+                        ->live(debounce: 300)
+                        ->afterStateUpdated(function ($state) {
+                            $this->compare_with_id = $state;
+                            if ($state) {
+                                $this->compareWith = SchemaSnapshot::find($state);
+                                $this->generateComparison();
+                            } else {
+                                $this->compareWith = null;
+                                $this->comparison = null;
+                            }
+                        }),
+                ]),
+        ]);
     }
 
     protected function getHeaderActions(): array
@@ -96,13 +98,13 @@ class CompareSchemaSnapshots extends Page implements HasForms
         return [
             Action::make('back')
                 ->label('Back to Snapshot')
-                ->url(fn() => SchemaSnapshotResource::getUrl('view', ['record' => $this->record])),
+                ->url(fn () => SchemaSnapshotResource::getUrl('view', ['record' => $this->record])),
 
             Action::make('export_comparison')
                 ->label('Export Comparison')
                 ->icon('heroicon-o-arrow-down-tray')
                 ->color('success')
-                ->visible(fn() => $this->comparison !== null)
+                ->visible(fn () => $this->comparison !== null)
                 ->action(function () {
                     $this->exportComparison();
                 }),
@@ -111,7 +113,7 @@ class CompareSchemaSnapshots extends Page implements HasForms
 
     protected function generateComparison(): void
     {
-        if (!$this->compareWith) {
+        if (! $this->compareWith) {
             return;
         }
 
@@ -135,7 +137,7 @@ class CompareSchemaSnapshots extends Page implements HasForms
 
     protected function exportComparison(): void
     {
-        if (!$this->comparison) {
+        if (! $this->comparison) {
             return;
         }
 
@@ -148,12 +150,12 @@ class CompareSchemaSnapshots extends Page implements HasForms
         $filename = "schema-comparison-{$fromName}-to-{$toName}-{$timestamp}.md";
 
         // Ensure temp directory exists with proper permissions
-        $tempDir = storage_path('app' . DIRECTORY_SEPARATOR . 'temp');
-        if (!file_exists($tempDir)) {
+        $tempDir = storage_path('app'.DIRECTORY_SEPARATOR.'temp');
+        if (! file_exists($tempDir)) {
             mkdir($tempDir, 0755, true);
         }
 
-        $path = $tempDir . DIRECTORY_SEPARATOR . $filename;
+        $path = $tempDir.DIRECTORY_SEPARATOR.$filename;
 
         try {
             file_put_contents($path, $markdown);
@@ -166,11 +168,12 @@ class CompareSchemaSnapshots extends Page implements HasForms
         } catch (\Exception $e) {
             Notification::make()
                 ->title('Export Failed')
-                ->body("Failed to export comparison: " . $e->getMessage())
+                ->body('Failed to export comparison: '.$e->getMessage())
                 ->danger()
                 ->send();
         }
     }
+
     protected function generateComparisonMarkdown(): string
     {
         $changes = $this->comparison['changes'];
@@ -180,14 +183,14 @@ class CompareSchemaSnapshots extends Page implements HasForms
         $markdown = "# Schema Comparison Report\n\n";
         $markdown .= "**From:** {$from['name']} ({$from['captured_at']->format('Y-m-d H:i:s')})\n";
         $markdown .= "**To:** {$to['name']} ({$to['captured_at']->format('Y-m-d H:i:s')})\n";
-        $markdown .= "**Generated:** " . now()->format('Y-m-d H:i:s') . "\n\n";
+        $markdown .= '**Generated:** '.now()->format('Y-m-d H:i:s')."\n\n";
 
         $markdown .= "## Summary\n\n";
-        $markdown .= "- **Added Tables:** " . count($changes['added_tables'] ?? []) . "\n";
-        $markdown .= "- **Removed Tables:** " . count($changes['removed_tables'] ?? []) . "\n";
-        $markdown .= "- **Modified Tables:** " . count($changes['modified_tables'] ?? []) . "\n\n";
+        $markdown .= '- **Added Tables:** '.count($changes['added_tables'] ?? [])."\n";
+        $markdown .= '- **Removed Tables:** '.count($changes['removed_tables'] ?? [])."\n";
+        $markdown .= '- **Modified Tables:** '.count($changes['modified_tables'] ?? [])."\n\n";
 
-        if (!empty($changes['added_tables'])) {
+        if (! empty($changes['added_tables'])) {
             $markdown .= "## Added Tables\n\n";
             foreach ($changes['added_tables'] as $table) {
                 $markdown .= "- `{$table}`\n";
@@ -195,7 +198,7 @@ class CompareSchemaSnapshots extends Page implements HasForms
             $markdown .= "\n";
         }
 
-        if (!empty($changes['removed_tables'])) {
+        if (! empty($changes['removed_tables'])) {
             $markdown .= "## Removed Tables\n\n";
             foreach ($changes['removed_tables'] as $table) {
                 $markdown .= "- `{$table}`\n";
@@ -203,14 +206,14 @@ class CompareSchemaSnapshots extends Page implements HasForms
             $markdown .= "\n";
         }
 
-        if (!empty($changes['modified_tables'])) {
+        if (! empty($changes['modified_tables'])) {
             $markdown .= "## Modified Tables\n\n";
             foreach ($changes['modified_tables'] as $tableChange) {
                 $markdown .= "### `{$tableChange['table']}`\n\n";
 
                 $tableChanges = $tableChange['changes'];
 
-                if (!empty($tableChanges['added_columns'])) {
+                if (! empty($tableChanges['added_columns'])) {
                     $markdown .= "**Added Columns:**\n";
                     foreach ($tableChanges['added_columns'] as $column) {
                         $markdown .= "- `{$column}`\n";
@@ -218,7 +221,7 @@ class CompareSchemaSnapshots extends Page implements HasForms
                     $markdown .= "\n";
                 }
 
-                if (!empty($tableChanges['removed_columns'])) {
+                if (! empty($tableChanges['removed_columns'])) {
                     $markdown .= "**Removed Columns:**\n";
                     foreach ($tableChanges['removed_columns'] as $column) {
                         $markdown .= "- `{$column}`\n";
@@ -226,7 +229,7 @@ class CompareSchemaSnapshots extends Page implements HasForms
                     $markdown .= "\n";
                 }
 
-                if (!empty($tableChanges['modified_columns'])) {
+                if (! empty($tableChanges['modified_columns'])) {
                     $markdown .= "**Modified Columns:**\n";
                     foreach ($tableChanges['modified_columns'] as $column => $change) {
                         $markdown .= "- `{$column}`: Changed\n";
@@ -241,6 +244,6 @@ class CompareSchemaSnapshots extends Page implements HasForms
 
     public function getTitle(): string
     {
-        return "Compare Schema Snapshots";
+        return 'Compare Schema Snapshots';
     }
 }

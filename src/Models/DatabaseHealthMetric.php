@@ -2,15 +2,15 @@
 
 namespace HkDevs\CodeForgeStudio\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * DatabaseHealthMetric
- * 
+ *
  * Eloquent model for storing and managing database health monitoring metrics
  * with comprehensive performance tracking and status management.
- * 
+ *
  * Key Features:
  * - Multi-connection database health monitoring
  * - Flexible metric types (response_time, memory_usage, connections, etc.)
@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * - Status tracking (healthy, warning, critical)
  * - Metadata storage for additional metric context
  * - Time-series data support with recorded timestamps
- * 
+ *
  * Database Fields:
  * - connection: Database connection identifier
  * - metric_type: Type of metric (response_time, memory, etc.)
@@ -28,16 +28,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * - status: Health status (healthy, warning, critical)
  * - metadata: Additional metric context and configuration
  * - recorded_at: Timestamp of metric collection
- * 
+ *
  * Value Formatting:
  * - Automatic unit conversion (ms to μs for sub-millisecond times)
  * - Memory size formatting (bytes to KB/MB/GB)
  * - Percentage formatting for ratio-based metrics
  * - Custom formatting based on metric type
- * 
- * @package HkDevs\CodeForgeStudio\Models
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class DatabaseHealthMetric extends Model
@@ -70,24 +71,25 @@ class DatabaseHealthMetric extends Model
 
         if ($this->metric_type === 'response_time') {
             if ($value < 1) {
-                return number_format($value * 1000, 2) . ' μs';
+                return number_format($value * 1000, 2).' μs';
             } else {
-                return number_format($value, 2) . ' ms';
+                return number_format($value, 2).' ms';
             }
         }
 
         if ($unit === 'MB') {
             if ($value >= 1024) {
-                return number_format($value / 1024, 2) . ' GB';
+                return number_format($value / 1024, 2).' GB';
             }
-            return number_format($value, 2) . ' MB';
+
+            return number_format($value, 2).' MB';
         }
 
         if ($unit === '%') {
-            return number_format($value, 1) . '%';
+            return number_format($value, 1).'%';
         }
 
-        return number_format($value, 2) . ($unit ? ' ' . $unit : '');
+        return number_format($value, 2).($unit ? ' '.$unit : '');
     }
 
     public function getStatusColorAttribute(): string

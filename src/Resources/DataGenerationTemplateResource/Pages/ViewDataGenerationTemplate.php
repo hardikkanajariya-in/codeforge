@@ -2,8 +2,9 @@
 
 namespace HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource\Pages;
 
-use HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource;
+use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
+use HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource;
 
 class ViewDataGenerationTemplate extends ViewRecord
 {
@@ -12,7 +13,7 @@ class ViewDataGenerationTemplate extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            \Filament\Actions\EditAction::make(),
+            EditAction::make(),
         ];
     }
 }

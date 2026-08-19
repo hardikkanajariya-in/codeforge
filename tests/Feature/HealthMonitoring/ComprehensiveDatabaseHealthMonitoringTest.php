@@ -2,38 +2,38 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Feature\HealthMonitoring;
 
-use HkDevs\CodeForgeStudio\Tests\TestCase;
-use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
-use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
-use HkDevs\CodeForgeStudio\Models\DatabaseHealthMetric;
 use HkDevs\CodeForgeStudio\Listeners\QueryPerformanceListener;
+use HkDevs\CodeForgeStudio\Models\DatabaseHealthMetric;
+use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
+use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
+use HkDevs\CodeForgeStudio\Tests\TestCase;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Support\Facades\Cache;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * Comprehensive Database Health Monitoring Test Suite
- * 
+ *
  * This test class implements all test cases from the Comprehensive Test Cases Documentation
  * for Database Health Monitoring functionality, ensuring complete coverage of:
- * 
+ *
  * - TC-HEALTH-001: Real-time Query Performance Tracking
- * - TC-HEALTH-002: Slow Query Detection & Analysis  
+ * - TC-HEALTH-002: Slow Query Detection & Analysis
  * - TC-HEALTH-003: Health Metrics Collection Command
  * - TC-HEALTH-004: Connection Status & Health Checks
  * - TC-HEALTH-005: Performance Alerts & Thresholds
  * - TC-HEALTH-006: Health Report Generation
  * - TC-HEALTH-007: Query Performance Analysis
- * 
- * @package HkDevs\CodeForgeStudio\Tests\Feature\HealthMonitoring
+ *
  * @author HkDevs (hardikkanajariya.in)
+ *
  * @version 1.0.0
  */
 class ComprehensiveDatabaseHealthMonitoringTest extends TestCase
@@ -41,6 +41,7 @@ class ComprehensiveDatabaseHealthMonitoringTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     private DatabaseHealthService $healthService;
+
     private QueryPerformanceListener $queryListener;
 
     protected function setUp(): void
@@ -49,7 +50,7 @@ class ComprehensiveDatabaseHealthMonitoringTest extends TestCase
 
         // Initialize health monitoring service
         $this->healthService = app(DatabaseHealthService::class);
-        $this->queryListener = new QueryPerformanceListener();
+        $this->queryListener = new QueryPerformanceListener;
 
         // Configure health monitoring settings for testing
         Config::set('codeforge-database-studio.enable_query_logging', true);
@@ -66,7 +67,7 @@ class ComprehensiveDatabaseHealthMonitoringTest extends TestCase
      */
     private function runPluginMigrations(): void
     {
-        if (!Schema::hasTable('database_health_metrics')) {
+        if (! Schema::hasTable('database_health_metrics')) {
             Schema::create('database_health_metrics', function ($table) {
                 $table->id();
                 $table->string('connection');
@@ -83,7 +84,7 @@ class ComprehensiveDatabaseHealthMonitoringTest extends TestCase
             });
         }
 
-        if (!Schema::hasTable('query_performance_logs')) {
+        if (! Schema::hasTable('query_performance_logs')) {
             Schema::create('query_performance_logs', function ($table) {
                 $table->id();
                 $table->string('connection');
@@ -105,7 +106,7 @@ class ComprehensiveDatabaseHealthMonitoringTest extends TestCase
             });
         }
 
-        if (!Schema::hasTable('database_manager_logs')) {
+        if (! Schema::hasTable('database_manager_logs')) {
             Schema::create('database_manager_logs', function ($table) {
                 $table->id();
                 $table->string('operation');
@@ -140,7 +141,7 @@ class ComprehensiveDatabaseHealthMonitoringTest extends TestCase
 
         // Step 3: Verify real-time performance metrics collection
         $this->assertDatabaseHas('query_performance_logs', [
-            'connection' => 'testing'
+            'connection' => 'testing',
         ]);
 
         $loggedQueries = QueryPerformanceLog::where('connection', 'testing')->get();
@@ -167,7 +168,7 @@ class ComprehensiveDatabaseHealthMonitoringTest extends TestCase
     }
 
     /**
-     * TC-HEALTH-002: Slow Query Detection & Analysis  
+     * TC-HEALTH-002: Slow Query Detection & Analysis
      * Purpose: Test automatic identification and logging of performance bottlenecks
      */
     public function test_slow_query_detection_and_analysis(): void
@@ -238,7 +239,7 @@ class ComprehensiveDatabaseHealthMonitoringTest extends TestCase
         // Step 3: Verify metrics are collected and stored properly
         $this->assertDatabaseHas('database_health_metrics', [
             'connection' => 'testing',
-            'metric_type' => 'connection_status'
+            'metric_type' => 'connection_status',
         ]);
 
         $collectedMetrics = DatabaseHealthMetric::where('connection', 'testing')->get();
@@ -257,7 +258,7 @@ class ComprehensiveDatabaseHealthMonitoringTest extends TestCase
         $this->assertDatabaseHas('database_health_metrics', [
             'connection' => 'testing',
             'metric_type' => 'performance_test',
-            'metric_name' => 'automated_collection'
+            'metric_name' => 'automated_collection',
         ]);
 
         // Step 5: Verify metric data accuracy and completeness
@@ -329,7 +330,7 @@ class ComprehensiveDatabaseHealthMonitoringTest extends TestCase
             'slow_query_threshold' => 1000,
             'connection_timeout' => 5000,
             'memory_threshold' => 80,
-            'error_rate_threshold' => 5
+            'error_rate_threshold' => 5,
         ];
 
         foreach ($alertThresholds as $key => $value) {
@@ -521,7 +522,7 @@ class ComprehensiveDatabaseHealthMonitoringTest extends TestCase
 
         // Verify query was logged
         $this->assertDatabaseHas('query_performance_logs', [
-            'connection' => 'testing'
+            'connection' => 'testing',
         ]);
     }
 
@@ -531,7 +532,7 @@ class ComprehensiveDatabaseHealthMonitoringTest extends TestCase
     public function test_performance_metrics_caching(): void
     {
         // Test that performance metrics are properly cached
-        $cacheKey = 'health_metrics_testing_' . now()->format('Y-m-d-H');
+        $cacheKey = 'health_metrics_testing_'.now()->format('Y-m-d-H');
 
         // Clear any existing cache
         Cache::forget($cacheKey);
@@ -582,7 +583,7 @@ class ComprehensiveDatabaseHealthMonitoringTest extends TestCase
 
         // Test query scopes (if any)
         $slowQueries = QueryPerformanceLog::where('execution_time', '>=', 1000)->get();
-        $this->assertInstanceOf(\Illuminate\Database\Eloquent\Collection::class, $slowQueries);
+        $this->assertInstanceOf(Collection::class, $slowQueries);
     }
 
     /**
@@ -621,7 +622,7 @@ class ComprehensiveDatabaseHealthMonitoringTest extends TestCase
         string $query,
         float $executionTime,
         string $status = 'success',
-        string $errorMessage = null
+        ?string $errorMessage = null
     ): void {
         $this->healthService->logQueryPerformance(
             $query,

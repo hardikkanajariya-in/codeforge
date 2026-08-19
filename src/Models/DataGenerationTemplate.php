@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * DataGenerationTemplate
- * 
+ *
  * Eloquent model for managing data generation templates that define
  * how to create realistic test data for database tables.
- * 
+ *
  * Key Features:
  * - Configurable field mappings for data generation
  * - Relationship-aware data generation with foreign key support
@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * - Reusable templates with activation status
  * - Sample data storage for generation examples
  * - User attribution for template ownership
- * 
+ *
  * Database Fields:
  * - name: Template identifier and display name
  * - description: Template purpose and usage information
@@ -28,16 +28,17 @@ use Illuminate\Database\Eloquent\Model;
  * - default_count: Default number of records to generate
  * - sample_data: Example data for template testing
  * - is_active: Template activation status
- * 
+ *
  * Template Features:
  * - Smart field type detection and appropriate data generation
  * - Relationship handling for referential integrity
  * - Custom data patterns and realistic value generation
  * - Configurable data volume and distribution
- * 
- * @package HkDevs\CodeForgeStudio\Models
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class DataGenerationTemplate extends Model
@@ -85,12 +86,12 @@ class DataGenerationTemplate extends Model
 
     public function hasRelationships(): bool
     {
-        return !empty($this->relationships);
+        return ! empty($this->relationships);
     }
 
     public function hasConstraints(): bool
     {
-        return !empty($this->constraints);
+        return ! empty($this->constraints);
     }
 
     public function getRelationshipsCount(): int
@@ -105,6 +106,6 @@ class DataGenerationTemplate extends Model
 
     public function canGenerate(): bool
     {
-        return $this->is_active && !empty($this->field_mappings);
+        return $this->is_active && ! empty($this->field_mappings);
     }
 }

@@ -2,10 +2,11 @@
 
 namespace HkDevs\CodeForgeStudio\Http\Controllers;
 
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
 use HkDevs\CodeForgeStudio\Models\DocumentationGeneration;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DocumentationDownloadController
@@ -13,21 +14,21 @@ class DocumentationDownloadController
     public function download($generationId): Response|StreamedResponse
     {
         // Debug logging
-        Log::info('Download requested for generation ID: ' . $generationId);
+        Log::info('Download requested for generation ID: '.$generationId);
 
         $generation = DocumentationGeneration::findOrFail($generationId);
 
-        Log::info('Generation found: ' . $generation->id);
-        Log::info('Generation status: ' . $generation->status);
-        Log::info('Generation file_path: ' . $generation->file_path);
+        Log::info('Generation found: '.$generation->id);
+        Log::info('Generation status: '.$generation->status);
+        Log::info('Generation file_path: '.$generation->file_path);
 
-        if ($generation->status !== 'completed' || !$generation->file_path) {
+        if ($generation->status !== 'completed' || ! $generation->file_path) {
             Log::error('Generation not completed or no file path');
             abort(404, 'Documentation file not found or not completed');
         }
 
-        if (!Storage::disk('local')->exists($generation->file_path)) {
-            Log::error('File does not exist in storage: ' . $generation->file_path);
+        if (! Storage::disk('local')->exists($generation->file_path)) {
+            Log::error('File does not exist in storage: '.$generation->file_path);
             abort(404, 'Documentation file no longer exists');
         }
 
@@ -45,16 +46,16 @@ class DocumentationDownloadController
     {
         $generation = DocumentationGeneration::findOrFail($generationId);
 
-        if ($generation->status !== 'completed' || !$generation->file_path) {
+        if ($generation->status !== 'completed' || ! $generation->file_path) {
             abort(404, 'Documentation file not found or not completed');
         }
 
-        if (!Storage::disk('local')->exists($generation->file_path)) {
+        if (! Storage::disk('local')->exists($generation->file_path)) {
             abort(404, 'Documentation file no longer exists');
         }
 
         // Only allow viewing of HTML and Markdown files
-        if (!in_array($generation->format, ['html', 'markdown'])) {
+        if (! in_array($generation->format, ['html', 'markdown'])) {
             return $this->download($generation);
         }
 
@@ -69,11 +70,11 @@ class DocumentationDownloadController
     {
         $generation = DocumentationGeneration::findOrFail($generationId);
 
-        if ($generation->status !== 'completed' || !$generation->file_path) {
+        if ($generation->status !== 'completed' || ! $generation->file_path) {
             abort(404, 'Documentation file not found or not completed');
         }
 
-        if (!Storage::disk('local')->exists($generation->file_path)) {
+        if (! Storage::disk('local')->exists($generation->file_path)) {
             abort(404, 'Documentation file no longer exists');
         }
 
@@ -82,6 +83,7 @@ class DocumentationDownloadController
         // For markdown, convert to simple HTML for preview
         if ($generation->format === 'markdown') {
             $htmlContent = $this->convertMarkdownToHtml($content, $generation);
+
             return response($htmlContent)->header('Content-Type', 'text/html');
         }
 
@@ -96,7 +98,7 @@ class DocumentationDownloadController
 
     protected function generateDownloadFilename(DocumentationGeneration $generation): string
     {
-        $title = \Illuminate\Support\Str::slug($generation->title);
+        $title = Str::slug($generation->title);
         $timestamp = $generation->generated_at?->format('Y-m-d_H-i-s') ?? now()->format('Y-m-d_H-i-s');
         $extension = match ($generation->format) {
             'pdf' => 'pdf',
@@ -151,7 +153,7 @@ class DocumentationDownloadController
 
         foreach ($lines as $line) {
             if (preg_match('/^\|(.+)\|$/', $line, $matches)) {
-                if (!$inTable) {
+                if (! $inTable) {
                     $result[] = '<table style="border-collapse: collapse; width: 100%; margin: 20px 0;">';
                     $inTable = true;
                 }
@@ -159,13 +161,13 @@ class DocumentationDownloadController
                 $cells = array_map('trim', explode('|', trim($matches[1])));
                 $row = '<tr>';
                 foreach ($cells as $cell) {
-                    $row .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $cell . '</td>';
+                    $row .= '<td style="border: 1px solid #ddd; padding: 8px;">'.$cell.'</td>';
                 }
                 $row .= '</tr>';
                 $result[] = $row;
             } elseif (preg_match('/^\|[-\s\|]+\|$/', $line)) {
                 // Table separator line - convert previous row to header
-                if (!empty($result) && $inTable) {
+                if (! empty($result) && $inTable) {
                     $lastRow = array_pop($result);
                     $headerRow = str_replace(['<td', '</td>'], ['<th', '</th>'], $lastRow);
                     $headerRow = str_replace('style="border: 1px solid #ddd; padding: 8px;"', 'style="border: 1px solid #ddd; padding: 8px; background-color: #f8f9fa; font-weight: bold;"', $headerRow);

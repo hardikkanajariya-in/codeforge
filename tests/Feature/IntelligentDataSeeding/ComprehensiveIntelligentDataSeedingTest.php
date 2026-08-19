@@ -2,37 +2,37 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Feature\IntelligentDataSeeding;
 
-use HkDevs\CodeForgeStudio\Tests\TestCase;
-use HkDevs\CodeForgeStudio\Pages\SmartDataSeeder;
-use HkDevs\CodeForgeStudio\Services\DataGenerationService;
+use Carbon\Carbon;
 use HkDevs\CodeForgeStudio\Models\DataGenerationTemplate;
 use HkDevs\CodeForgeStudio\Models\DataSeeder;
 use HkDevs\CodeForgeStudio\Models\SeederExecutionLog;
+use HkDevs\CodeForgeStudio\Pages\SmartDataSeeder;
+use HkDevs\CodeForgeStudio\Services\DataGenerationService;
+use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Livewire\Livewire;
-use Carbon\Carbon;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Comprehensive Intelligent Data Seeding Test Suite
- * 
+ *
  * This test class implements all test cases from the Comprehensive Test Cases Documentation
  * for Intelligent Data Seeding functionality, ensuring complete coverage of:
- * 
+ *
  * - TC-SEED-001: Context-Aware Data Generation
  * - TC-SEED-002: Custom Seeding Templates
  * - TC-SEED-003: Relationship-Aware Seeding
  * - TC-SEED-004: Bulk Data Operations
  * - TC-SEED-005: Seeder Management & Execution
- * 
- * @package HkDevs\CodeForgeStudio\Tests\Feature\IntelligentDataSeeding
+ *
  * @author HkDevs (hardikkanajariya.in)
+ *
  * @version 1.0.0
  */
 class ComprehensiveIntelligentDataSeedingTest extends TestCase
@@ -40,7 +40,9 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
     use RefreshDatabase, WithFaker;
 
     private DataGenerationService $dataGenerationService;
+
     private array $testTablesCreated = [];
+
     private array $createdTemplates = [];
 
     protected function setUp(): void
@@ -75,7 +77,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
      * TC-SEED-001: Context-Aware Data Generation
      * Purpose: Test intelligent data generation based on field types and relationships
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_context_aware_data_generation()
     {
         // Step 1: Create models with various field types and naming patterns
@@ -87,7 +89,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         $tableData = [
             'table_name' => 'context_users',
             'record_count' => 20,
-            'generation_mode' => 'auto'
+            'generation_mode' => 'auto',
         ];
 
         $component->set('data', $tableData);
@@ -163,7 +165,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
      * TC-SEED-002: Custom Seeding Templates
      * Purpose: Test reusable templates for consistent data patterns
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_custom_seeding_templates()
     {
         // Step 1: Create custom seeding templates for different domains
@@ -183,7 +185,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
             'table_name' => 'template_products',
             'record_count' => 15,
             'generation_mode' => 'existing',
-            'template_id' => $ecommerceTemplate->id
+            'template_id' => $ecommerceTemplate->id,
         ];
 
         $component->set('data', $tableData);
@@ -227,7 +229,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
             'name' => 'Invalid Template',
             'table_name' => 'non_existent_table',
             'field_mappings' => ['invalid' => 'mapping'],
-            'is_active' => true
+            'is_active' => true,
         ]);
 
         try {
@@ -242,7 +244,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
      * TC-SEED-003: Relationship-Aware Seeding
      * Purpose: Test automatic handling of foreign key relationships during seeding
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_relationship_aware_seeding()
     {
         // Step 1: Create models with complex relationship structures
@@ -255,7 +257,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         $categoryData = [
             'table_name' => 'rel_categories',
             'record_count' => 5,
-            'generation_mode' => 'auto'
+            'generation_mode' => 'auto',
         ];
 
         $component->set('data', $categoryData);
@@ -268,7 +270,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         $productData = [
             'table_name' => 'rel_products',
             'record_count' => 20,
-            'generation_mode' => 'auto'
+            'generation_mode' => 'auto',
         ];
 
         $component->set('data', $productData);
@@ -315,7 +317,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
      * TC-SEED-004: Bulk Data Operations
      * Purpose: Test efficient generation of large test datasets
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_bulk_data_operations()
     {
         // Step 1: Configure seeding for large record counts (10k+)
@@ -329,7 +331,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         $bulkData = [
             'table_name' => 'bulk_records',
             'record_count' => 1000, // Reduced for testing environment
-            'generation_mode' => 'auto'
+            'generation_mode' => 'auto',
         ];
 
         $component->set('data', $bulkData);
@@ -370,7 +372,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         $largerBulkData = [
             'table_name' => 'bulk_records',
             'record_count' => 5000,
-            'generation_mode' => 'auto'
+            'generation_mode' => 'auto',
         ];
 
         // Clear table first
@@ -393,7 +395,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
      * TC-SEED-005: Seeder Management & Execution
      * Purpose: Test seeder execution history and management through Artisan commands
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_seeder_management_and_execution()
     {
         // Step 1: Execute various seeding operations using Artisan commands
@@ -415,7 +417,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         $userData = [
             'table_name' => 'mgmt_users',
             'record_count' => 50,
-            'generation_mode' => 'auto'
+            'generation_mode' => 'auto',
         ];
 
         $component->set('data', $userData);
@@ -440,7 +442,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
             $failingData = [
                 'table_name' => 'non_existent_table',
                 'record_count' => 10,
-                'generation_mode' => 'auto'
+                'generation_mode' => 'auto',
             ];
 
             $component->set('data', $failingData);
@@ -494,7 +496,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
     /**
      * Test data generation service performance and optimization
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_data_generation_service_performance()
     {
         $startTime = microtime(true);
@@ -535,7 +537,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
     /**
      * Test data quality and validation
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_data_quality_and_validation()
     {
         $this->createDataQualityTestTable();
@@ -587,7 +589,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
     private function createRequiredTables(): void
     {
         // Create data_seeders table if not exists
-        if (!Schema::hasTable('data_seeders')) {
+        if (! Schema::hasTable('data_seeders')) {
             Schema::create('data_seeders', function ($table) {
                 $table->id();
                 $table->string('name');
@@ -600,7 +602,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         }
 
         // Create seeder_execution_logs table if not exists
-        if (!Schema::hasTable('seeder_execution_logs')) {
+        if (! Schema::hasTable('seeder_execution_logs')) {
             Schema::create('seeder_execution_logs', function ($table) {
                 $table->id();
                 $table->unsignedBigInteger('seeder_id');
@@ -613,7 +615,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         }
 
         // Create data_generation_templates table if not exists
-        if (!Schema::hasTable('data_generation_templates')) {
+        if (! Schema::hasTable('data_generation_templates')) {
             Schema::create('data_generation_templates', function ($table) {
                 $table->id();
                 $table->string('name');
@@ -637,7 +639,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
     private function createTestTablesForSeeding(): void
     {
         // Basic test table
-        if (!Schema::hasTable('seed_test_users')) {
+        if (! Schema::hasTable('seed_test_users')) {
             Schema::create('seed_test_users', function ($table) {
                 $table->id();
                 $table->string('name');
@@ -654,7 +656,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
      */
     private function createContextAwareTestTables(): void
     {
-        if (!Schema::hasTable('context_users')) {
+        if (! Schema::hasTable('context_users')) {
             Schema::create('context_users', function ($table) {
                 $table->id();
                 $table->string('first_name');
@@ -673,7 +675,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
             $this->testTablesCreated[] = 'context_users';
         }
 
-        if (!Schema::hasTable('template_products')) {
+        if (! Schema::hasTable('template_products')) {
             Schema::create('template_products', function ($table) {
                 $table->id();
                 $table->string('product_name');
@@ -692,7 +694,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
     private function createRelationshipTestTables(): void
     {
         // Categories table
-        if (!Schema::hasTable('rel_categories')) {
+        if (! Schema::hasTable('rel_categories')) {
             Schema::create('rel_categories', function ($table) {
                 $table->id();
                 $table->string('name');
@@ -703,7 +705,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         }
 
         // Products table with foreign key
-        if (!Schema::hasTable('rel_products')) {
+        if (! Schema::hasTable('rel_products')) {
             Schema::create('rel_products', function ($table) {
                 $table->id();
                 $table->string('name');
@@ -715,7 +717,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         }
 
         // Tags table
-        if (!Schema::hasTable('rel_tags')) {
+        if (! Schema::hasTable('rel_tags')) {
             Schema::create('rel_tags', function ($table) {
                 $table->id();
                 $table->string('name');
@@ -725,7 +727,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         }
 
         // Pivot table
-        if (!Schema::hasTable('rel_product_tags')) {
+        if (! Schema::hasTable('rel_product_tags')) {
             Schema::create('rel_product_tags', function ($table) {
                 $table->id();
                 $table->foreignId('product_id')->constrained('rel_products');
@@ -741,7 +743,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
      */
     private function createBulkTestTables(): void
     {
-        if (!Schema::hasTable('bulk_records')) {
+        if (! Schema::hasTable('bulk_records')) {
             Schema::create('bulk_records', function ($table) {
                 $table->id();
                 $table->string('name');
@@ -759,7 +761,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
      */
     private function createSeederManagementTables(): void
     {
-        if (!Schema::hasTable('mgmt_users')) {
+        if (! Schema::hasTable('mgmt_users')) {
             Schema::create('mgmt_users', function ($table) {
                 $table->id();
                 $table->string('name');
@@ -769,7 +771,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
             $this->testTablesCreated[] = 'mgmt_users';
         }
 
-        if (!Schema::hasTable('mgmt_posts')) {
+        if (! Schema::hasTable('mgmt_posts')) {
             Schema::create('mgmt_posts', function ($table) {
                 $table->id();
                 $table->string('title');
@@ -786,7 +788,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
      */
     private function createDataQualityTestTable(): void
     {
-        if (!Schema::hasTable('quality_test')) {
+        if (! Schema::hasTable('quality_test')) {
             Schema::create('quality_test', function ($table) {
                 $table->id();
                 $table->string('email');
@@ -820,6 +822,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         ]);
 
         $this->createdTemplates[] = $template->id;
+
         return $template;
     }
 
@@ -843,6 +846,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         ]);
 
         $this->createdTemplates[] = $template->id;
+
         return $template;
     }
 
@@ -868,6 +872,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         ]);
 
         $this->createdTemplates[] = $template->id;
+
         return $template;
     }
 
@@ -880,8 +885,8 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         $customMappings['custom_field'] = ['type' => 'faker', 'method' => 'word'];
 
         $template = DataGenerationTemplate::create([
-            'name' => 'Customized ' . $baseTemplate->name,
-            'description' => 'Customized version of ' . $baseTemplate->name,
+            'name' => 'Customized '.$baseTemplate->name,
+            'description' => 'Customized version of '.$baseTemplate->name,
             'table_name' => $baseTemplate->table_name,
             'field_mappings' => $customMappings,
             'default_count' => $baseTemplate->default_count,
@@ -889,6 +894,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
         ]);
 
         $this->createdTemplates[] = $template->id;
+
         return $template;
     }
 
@@ -931,7 +937,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
             $numTags = rand(1, 3);
             $selectedTags = array_rand($tagIds, $numTags);
 
-            if (!is_array($selectedTags)) {
+            if (! is_array($selectedTags)) {
                 $selectedTags = [$selectedTags];
             }
 
@@ -1000,6 +1006,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
 
         $startTime = microtime(true);
         DB::table('bulk_records')->insert($data);
+
         return microtime(true) - $startTime;
     }
 
@@ -1026,7 +1033,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
     /**
      * Log seeder execution
      */
-    private function logSeederExecution(DataSeeder $seeder, int $recordsCreated, float $executionTime, string $status, string $errorMessage = null): void
+    private function logSeederExecution(DataSeeder $seeder, int $recordsCreated, float $executionTime, string $status, ?string $errorMessage = null): void
     {
         SeederExecutionLog::create([
             'seeder_id' => $seeder->id,
@@ -1047,7 +1054,7 @@ class ComprehensiveIntelligentDataSeedingTest extends TestCase
             ->where('status', 'completed')
             ->first();
 
-        if (!$log) {
+        if (! $log) {
             return [];
         }
 

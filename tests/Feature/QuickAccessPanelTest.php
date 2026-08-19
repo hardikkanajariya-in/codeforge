@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Schema;
 
 /**
  * Test Cases for Quick Access Panel Functionality
- * 
+ *
  * Based on TC-DB-004 from COMPREHENSIVE_TEST_CASES_FOR_USER.md
  * These tests verify direct shortcuts to frequently used database operations,
  * navigation efficiency, and quick access feature integration.
@@ -21,6 +21,7 @@ class QuickAccessPanelTest extends TestCase
     use RefreshDatabase;
 
     protected DatabaseHealthService $healthService;
+
     protected SchemaAnalyzerService $schemaAnalyzer;
 
     protected function setUp(): void
@@ -36,7 +37,7 @@ class QuickAccessPanelTest extends TestCase
 
     /**
      * TC-DB-004: Quick Access Panel Functionality
-     * 
+     *
      * Purpose: Test direct shortcuts to frequently used database operations
      * Steps:
      * 1. Access Quick Access Panel
@@ -114,7 +115,7 @@ class QuickAccessPanelTest extends TestCase
 
     /**
      * Test Database Overview Quick Stats
-     * 
+     *
      * Purpose: Test rapid database overview information
      */
     public function test_database_overview_quick_stats(): void
@@ -143,7 +144,7 @@ class QuickAccessPanelTest extends TestCase
 
     /**
      * Test Migration Management Shortcuts
-     * 
+     *
      * Purpose: Test quick access to migration operations
      */
     public function test_migration_management_shortcuts(): void
@@ -172,7 +173,7 @@ class QuickAccessPanelTest extends TestCase
 
     /**
      * Test Schema Designer Shortcuts
-     * 
+     *
      * Purpose: Test quick access to schema design features
      */
     public function test_schema_designer_shortcuts(): void
@@ -197,7 +198,7 @@ class QuickAccessPanelTest extends TestCase
 
     /**
      * Test Health Monitoring Shortcuts
-     * 
+     *
      * Purpose: Test quick access to health monitoring features
      */
     public function test_health_monitoring_shortcuts(): void
@@ -222,7 +223,7 @@ class QuickAccessPanelTest extends TestCase
 
     /**
      * Test Documentation Generator Shortcuts
-     * 
+     *
      * Purpose: Test quick access to documentation features
      */
     public function test_documentation_generator_shortcuts(): void
@@ -247,7 +248,7 @@ class QuickAccessPanelTest extends TestCase
 
     /**
      * Test Quick Access Performance
-     * 
+     *
      * Purpose: Test that quick access data loads efficiently
      */
     public function test_quick_access_performance(): void
@@ -270,7 +271,7 @@ class QuickAccessPanelTest extends TestCase
 
     /**
      * Test Quick Access Data Refresh
-     * 
+     *
      * Purpose: Test real-time data updates in quick access
      */
     public function test_quick_access_data_refresh(): void
@@ -299,7 +300,7 @@ class QuickAccessPanelTest extends TestCase
 
     /**
      * Test Quick Access Error Handling
-     * 
+     *
      * Purpose: Test graceful error handling in quick access
      */
     public function test_quick_access_error_handling(): void
@@ -316,7 +317,7 @@ class QuickAccessPanelTest extends TestCase
                 $this->assertIsArray($data, "Section {$section} should be an array");
             }
         } catch (\Exception $e) {
-            $this->fail('Quick access should handle errors gracefully: ' . $e->getMessage());
+            $this->fail('Quick access should handle errors gracefully: '.$e->getMessage());
         }
     }
 
@@ -474,6 +475,7 @@ class QuickAccessPanelTest extends TestCase
                 // Skip tables that can't be counted
             }
         }
+
         return $total;
     }
 
@@ -491,6 +493,7 @@ class QuickAccessPanelTest extends TestCase
     protected function getConnectionStatus(): string
     {
         $test = $this->healthService->testConnection('testing');
+
         return $test['status'] === 'connected' ? 'connected' : 'disconnected';
     }
 
@@ -504,6 +507,7 @@ class QuickAccessPanelTest extends TestCase
                 ->where('executed_at', '>=', now()->subDays(7))
                 ->count();
         }
+
         return 0;
     }
 
@@ -523,8 +527,13 @@ class QuickAccessPanelTest extends TestCase
     {
         $tableCount = count($tables);
 
-        if ($tableCount <= 5) return 'simple';
-        if ($tableCount <= 20) return 'moderate';
+        if ($tableCount <= 5) {
+            return 'simple';
+        }
+        if ($tableCount <= 20) {
+            return 'moderate';
+        }
+
         return 'complex';
     }
 
@@ -535,6 +544,7 @@ class QuickAccessPanelTest extends TestCase
     {
         // Simplified health score calculation
         $connectionTest = $this->healthService->testConnection('testing');
+
         return $connectionTest['status'] === 'connected' ? 95 : 50;
     }
 
@@ -549,6 +559,7 @@ class QuickAccessPanelTest extends TestCase
                 ->where('recorded_at', '>=', now()->subHours(2))
                 ->count();
         }
+
         return 0;
     }
 

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 
 class InstallCommandMockTest extends TestCase
 {
@@ -20,7 +21,7 @@ class InstallCommandMockTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->command = new InstallCommand();
+        $this->command = new InstallCommand;
     }
 
     protected function tearDown(): void
@@ -29,7 +30,7 @@ class InstallCommandMockTest extends TestCase
         parent::tearDown();
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_has_correct_properties()
     {
         $this->assertEquals('codeforge:install', $this->command->getName());
@@ -40,30 +41,30 @@ class InstallCommandMockTest extends TestCase
         $this->assertTrue($signature->hasOption('force'));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_handle_method_returns_success()
     {
         $exitCode = Artisan::call('codeforge:install');
         $this->assertEquals(Command::SUCCESS, $exitCode);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_files_array_is_complete()
     {
         // Test that all expected migration files are defined
         $expectedFiles = [
-            "2024_01_01_000001_create_database_manager_logs_table.php",
-            "2024_01_01_000002_create_migration_histories_table.php",
-            "2024_01_01_000003_create_query_performance_logs_table.php",
-            "2024_01_01_000004_create_database_health_metrics_table.php",
-            "2024_01_01_000005_create_data_seeders_table.php",
-            "2024_01_01_000006_create_seeder_execution_logs_table.php",
-            "2024_01_01_000007_create_data_generation_templates_table.php",
-            "2024_01_01_000008_create_documentation_generations_table.php",
-            "2024_01_01_000009_create_schema_snapshots_table.php",
-            "2024_01_01_000010_create_code_generation_histories_table.php",
-            "2024_01_01_000011_create_filament_resource_templates_table.php",
-            "2024_01_01_000012_create_filament_resource_generators_table.php"
+            '2024_01_01_000001_create_database_manager_logs_table.php',
+            '2024_01_01_000002_create_migration_histories_table.php',
+            '2024_01_01_000003_create_query_performance_logs_table.php',
+            '2024_01_01_000004_create_database_health_metrics_table.php',
+            '2024_01_01_000005_create_data_seeders_table.php',
+            '2024_01_01_000006_create_seeder_execution_logs_table.php',
+            '2024_01_01_000007_create_data_generation_templates_table.php',
+            '2024_01_01_000008_create_documentation_generations_table.php',
+            '2024_01_01_000009_create_schema_snapshots_table.php',
+            '2024_01_01_000010_create_code_generation_histories_table.php',
+            '2024_01_01_000011_create_filament_resource_templates_table.php',
+            '2024_01_01_000012_create_filament_resource_generators_table.php',
         ];
 
         // Verify each file follows naming convention
@@ -74,7 +75,7 @@ class InstallCommandMockTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_table_names_array_is_complete()
     {
         $expectedTables = [
@@ -89,7 +90,7 @@ class InstallCommandMockTest extends TestCase
             'schema_snapshots',
             'code_generation_histories',
             'filament_resource_templates',
-            'filament_resource_generators'
+            'filament_resource_generators',
         ];
 
         // Verify each table name follows convention
@@ -100,22 +101,22 @@ class InstallCommandMockTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_files_correspond_to_table_names()
     {
         $migrationFiles = [
-            "2024_01_01_000001_create_database_manager_logs_table.php",
-            "2024_01_01_000002_create_migration_histories_table.php",
-            "2024_01_01_000003_create_query_performance_logs_table.php",
-            "2024_01_01_000004_create_database_health_metrics_table.php",
-            "2024_01_01_000005_create_data_seeders_table.php",
-            "2024_01_01_000006_create_seeder_execution_logs_table.php",
-            "2024_01_01_000007_create_data_generation_templates_table.php",
-            "2024_01_01_000008_create_documentation_generations_table.php",
-            "2024_01_01_000009_create_schema_snapshots_table.php",
-            "2024_01_01_000010_create_code_generation_histories_table.php",
-            "2024_01_01_000011_create_filament_resource_templates_table.php",
-            "2024_01_01_000012_create_filament_resource_generators_table.php"
+            '2024_01_01_000001_create_database_manager_logs_table.php',
+            '2024_01_01_000002_create_migration_histories_table.php',
+            '2024_01_01_000003_create_query_performance_logs_table.php',
+            '2024_01_01_000004_create_database_health_metrics_table.php',
+            '2024_01_01_000005_create_data_seeders_table.php',
+            '2024_01_01_000006_create_seeder_execution_logs_table.php',
+            '2024_01_01_000007_create_data_generation_templates_table.php',
+            '2024_01_01_000008_create_documentation_generations_table.php',
+            '2024_01_01_000009_create_schema_snapshots_table.php',
+            '2024_01_01_000010_create_code_generation_histories_table.php',
+            '2024_01_01_000011_create_filament_resource_templates_table.php',
+            '2024_01_01_000012_create_filament_resource_generators_table.php',
         ];
 
         $tableNames = [
@@ -130,7 +131,7 @@ class InstallCommandMockTest extends TestCase
             'schema_snapshots',
             'code_generation_histories',
             'filament_resource_templates',
-            'filament_resource_generators'
+            'filament_resource_generators',
         ];
 
         // Verify arrays have same count
@@ -145,7 +146,7 @@ class InstallCommandMockTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_calls_vendor_publish_for_config()
     {
         // This test verifies the command structure calls vendor:publish appropriately
@@ -155,7 +156,7 @@ class InstallCommandMockTest extends TestCase
             ->assertExitCode(Command::SUCCESS);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_calls_vendor_publish_for_migrations()
     {
         $this->artisan('codeforge:install')
@@ -164,7 +165,7 @@ class InstallCommandMockTest extends TestCase
             ->assertExitCode(Command::SUCCESS);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_calls_migrate_with_correct_parameters()
     {
         $this->artisan('codeforge:install')
@@ -173,7 +174,7 @@ class InstallCommandMockTest extends TestCase
             ->assertExitCode(Command::SUCCESS);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_force_option_is_passed_to_vendor_publish()
     {
         $this->artisan('codeforge:install', ['--force' => true])
@@ -182,7 +183,7 @@ class InstallCommandMockTest extends TestCase
             ->assertExitCode(Command::SUCCESS);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_schema_has_table_checks()
     {
         // Test that the command properly uses Schema::hasTable
@@ -192,7 +193,7 @@ class InstallCommandMockTest extends TestCase
             ->assertExitCode(Command::SUCCESS);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_file_exists_checks()
     {
         // Test that the command properly checks for existing migration files
@@ -202,7 +203,7 @@ class InstallCommandMockTest extends TestCase
             ->assertExitCode(Command::SUCCESS);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_database_path_helper_usage()
     {
         // Verify the command uses database_path() helper correctly
@@ -213,7 +214,7 @@ class InstallCommandMockTest extends TestCase
         $this->assertTrue(function_exists('database_path'));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_info_and_line_output_methods()
     {
         $this->artisan('codeforge:install')
@@ -222,7 +223,7 @@ class InstallCommandMockTest extends TestCase
             ->assertExitCode(Command::SUCCESS);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_warning_output_for_force_flag()
     {
         $this->artisan('codeforge:install', ['--force' => true])
@@ -231,7 +232,7 @@ class InstallCommandMockTest extends TestCase
             ->assertExitCode(Command::SUCCESS);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_exception_handling_in_migration_runner()
     {
         // Test that exceptions in migration running are handled gracefully
@@ -241,7 +242,7 @@ class InstallCommandMockTest extends TestCase
             ->assertExitCode(Command::SUCCESS);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_step_migration_parameter()
     {
         // Verify the command uses --step parameter for migrations
@@ -251,7 +252,7 @@ class InstallCommandMockTest extends TestCase
             ->assertExitCode(Command::SUCCESS);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_path_parameter()
     {
         // Verify the command specifies the correct migration path
@@ -261,7 +262,7 @@ class InstallCommandMockTest extends TestCase
             ->assertExitCode(Command::SUCCESS);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_command_structure_and_flow()
     {
         $this->artisan('codeforge:install')

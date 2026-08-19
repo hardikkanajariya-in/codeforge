@@ -2,29 +2,30 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Unit;
 
-use HkDevs\CodeForgeStudio\Tests\TestCase;
+use Filament\Contracts\Plugin;
+use Filament\Panel;
 use HkDevs\CodeForgeStudio\CodeForgeStudioPlugin;
-use HkDevs\CodeForgeStudio\Pages\DatabaseOverview;
 use HkDevs\CodeForgeStudio\Pages\DatabaseHealthDashboard;
-use HkDevs\CodeForgeStudio\Pages\SchemaDesigner;
-use HkDevs\CodeForgeStudio\Pages\SmartDataSeeder;
+use HkDevs\CodeForgeStudio\Pages\DatabaseOverview;
 use HkDevs\CodeForgeStudio\Pages\DocumentationGenerator;
+use HkDevs\CodeForgeStudio\Pages\FactoryGeneratorPage;
+use HkDevs\CodeForgeStudio\Pages\FilamentResourceGeneratorPage;
 use HkDevs\CodeForgeStudio\Pages\GeneratorOverviewPage;
 use HkDevs\CodeForgeStudio\Pages\MigrationGeneratorPage;
 use HkDevs\CodeForgeStudio\Pages\ModelGeneratorPage;
-use HkDevs\CodeForgeStudio\Pages\FactoryGeneratorPage;
+use HkDevs\CodeForgeStudio\Pages\SchemaDesigner;
 use HkDevs\CodeForgeStudio\Pages\SeederGeneratorPage;
-use HkDevs\CodeForgeStudio\Pages\FilamentResourceGeneratorPage;
+use HkDevs\CodeForgeStudio\Pages\SmartDataSeeder;
+use HkDevs\CodeForgeStudio\Resources\DatabaseHealthMetricResource;
+use HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource;
+use HkDevs\CodeForgeStudio\Resources\DataSeederResource;
+use HkDevs\CodeForgeStudio\Resources\DocumentationGenerationResource;
 use HkDevs\CodeForgeStudio\Resources\MigrationHistoryResource;
 use HkDevs\CodeForgeStudio\Resources\QueryPerformanceLogResource;
-use HkDevs\CodeForgeStudio\Resources\DatabaseHealthMetricResource;
-use HkDevs\CodeForgeStudio\Resources\DataSeederResource;
-use HkDevs\CodeForgeStudio\Resources\SeederExecutionLogResource;
-use HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource;
-use HkDevs\CodeForgeStudio\Resources\DocumentationGenerationResource;
 use HkDevs\CodeForgeStudio\Resources\SchemaSnapshotResource;
-use Filament\Panel;
-use Filament\Contracts\Plugin;
+use HkDevs\CodeForgeStudio\Resources\SeederExecutionLogResource;
+use HkDevs\CodeForgeStudio\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class CodeForgeStudioPluginTest extends TestCase
 {
@@ -33,30 +34,30 @@ class CodeForgeStudioPluginTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->plugin = new CodeForgeStudioPlugin();
+        $this->plugin = new CodeForgeStudioPlugin;
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_implements_plugin_interface()
     {
         $this->assertInstanceOf(Plugin::class, $this->plugin);
         $this->assertInstanceOf(CodeForgeStudioPlugin::class, $this->plugin);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_has_correct_id()
     {
         $this->assertEquals('codeforge-database-studio', $this->plugin->getId());
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_plugin_can_be_created_via_make_method()
     {
         $plugin = CodeForgeStudioPlugin::make();
         $this->assertInstanceOf(CodeForgeStudioPlugin::class, $plugin);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_default_feature_states()
     {
         // Test default values via reflection since properties are protected
@@ -83,7 +84,7 @@ class CodeForgeStudioPluginTest extends TestCase
         $this->assertTrue($enableDocumentationGenerator->getValue($this->plugin));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_enable_schema_designer_method()
     {
         $result = $this->plugin->enableSchemaDesigner(false);
@@ -100,7 +101,7 @@ class CodeForgeStudioPluginTest extends TestCase
         $this->assertTrue($property->getValue($this->plugin));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_enable_migration_manager_method()
     {
         $result = $this->plugin->enableMigrationManager(false);
@@ -112,7 +113,7 @@ class CodeForgeStudioPluginTest extends TestCase
         $this->assertFalse($property->getValue($this->plugin));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_enable_health_monitoring_method()
     {
         $result = $this->plugin->enableHealthMonitoring(false);
@@ -124,7 +125,7 @@ class CodeForgeStudioPluginTest extends TestCase
         $this->assertFalse($property->getValue($this->plugin));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_enable_smart_seeding_method()
     {
         $result = $this->plugin->enableSmartSeeding(false);
@@ -136,7 +137,7 @@ class CodeForgeStudioPluginTest extends TestCase
         $this->assertFalse($property->getValue($this->plugin));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_enable_documentation_generator_method()
     {
         $result = $this->plugin->enableDocumentationGenerator(false);
@@ -148,7 +149,7 @@ class CodeForgeStudioPluginTest extends TestCase
         $this->assertFalse($property->getValue($this->plugin));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_register_method_with_all_features_enabled()
     {
         // Create a mock panel
@@ -163,6 +164,7 @@ class CodeForgeStudioPluginTest extends TestCase
             ->method('pages')
             ->willReturnCallback(function ($pages) use (&$registeredPages, $panel) {
                 $registeredPages = $pages;
+
                 return $panel;
             });
 
@@ -170,6 +172,7 @@ class CodeForgeStudioPluginTest extends TestCase
             ->method('resources')
             ->willReturnCallback(function ($resources) use (&$registeredResources, $panel) {
                 $registeredResources = $resources;
+
                 return $panel;
             });
 
@@ -212,7 +215,7 @@ class CodeForgeStudioPluginTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_register_method_with_all_features_disabled()
     {
         $this->plugin
@@ -233,6 +236,7 @@ class CodeForgeStudioPluginTest extends TestCase
             ->method('pages')
             ->willReturnCallback(function ($pages) use (&$registeredPages, $panel) {
                 $registeredPages = $pages;
+
                 return $panel;
             });
 
@@ -240,6 +244,7 @@ class CodeForgeStudioPluginTest extends TestCase
             ->method('resources')
             ->willReturnCallback(function ($resources) use (&$registeredResources, $panel) {
                 $registeredResources = $resources;
+
                 return $panel;
             });
 
@@ -250,7 +255,7 @@ class CodeForgeStudioPluginTest extends TestCase
         $this->assertEquals([], $registeredResources);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_register_method_with_only_schema_designer_enabled()
     {
         $this->plugin
@@ -270,6 +275,7 @@ class CodeForgeStudioPluginTest extends TestCase
             ->method('pages')
             ->willReturnCallback(function ($pages) use (&$registeredPages, $panel) {
                 $registeredPages = $pages;
+
                 return $panel;
             });
 
@@ -277,6 +283,7 @@ class CodeForgeStudioPluginTest extends TestCase
             ->method('resources')
             ->willReturnCallback(function ($resources) use (&$registeredResources, $panel) {
                 $registeredResources = $resources;
+
                 return $panel;
             });
 
@@ -291,7 +298,7 @@ class CodeForgeStudioPluginTest extends TestCase
         $this->assertEquals([], $registeredResources);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_boot_method_exists_and_can_be_called()
     {
         $panel = $this->createMock(Panel::class);
@@ -301,7 +308,7 @@ class CodeForgeStudioPluginTest extends TestCase
         $this->plugin->boot($panel);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_fluent_interface_chaining()
     {
         $result = $this->plugin
@@ -315,7 +322,7 @@ class CodeForgeStudioPluginTest extends TestCase
         $this->assertSame($this->plugin, $result);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_page_classes_exist()
     {
         $pageClasses = [
@@ -340,7 +347,7 @@ class CodeForgeStudioPluginTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_resource_classes_exist()
     {
         $resourceClasses = [
@@ -362,7 +369,7 @@ class CodeForgeStudioPluginTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_always_includes_database_overview_page()
     {
         // Test with all features disabled
@@ -381,6 +388,7 @@ class CodeForgeStudioPluginTest extends TestCase
             ->method('pages')
             ->willReturnCallback(function ($pages) use (&$registeredPages, $panel) {
                 $registeredPages = $pages;
+
                 return $panel;
             });
 
@@ -393,7 +401,7 @@ class CodeForgeStudioPluginTest extends TestCase
         $this->assertContains(DatabaseOverview::class, $registeredPages, 'DatabaseOverview page should always be included');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_manager_controls_generator_pages()
     {
         // Generator pages should only be included when migration manager is enabled
@@ -412,6 +420,7 @@ class CodeForgeStudioPluginTest extends TestCase
             ->method('pages')
             ->willReturnCallback(function ($pages) use (&$registeredPages, $panel) {
                 $registeredPages = $pages;
+
                 return $panel;
             });
 
@@ -435,7 +444,7 @@ class CodeForgeStudioPluginTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_health_monitoring_controls_related_pages_and_resources()
     {
         $this->plugin
@@ -454,6 +463,7 @@ class CodeForgeStudioPluginTest extends TestCase
             ->method('pages')
             ->willReturnCallback(function ($pages) use (&$registeredPages, $panel) {
                 $registeredPages = $pages;
+
                 return $panel;
             });
 
@@ -461,6 +471,7 @@ class CodeForgeStudioPluginTest extends TestCase
             ->method('resources')
             ->willReturnCallback(function ($resources) use (&$registeredResources, $panel) {
                 $registeredResources = $resources;
+
                 return $panel;
             });
 
@@ -471,7 +482,7 @@ class CodeForgeStudioPluginTest extends TestCase
         $this->assertContains(DatabaseHealthMetricResource::class, $registeredResources);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_smart_seeding_controls_related_pages_and_resources()
     {
         $this->plugin
@@ -490,6 +501,7 @@ class CodeForgeStudioPluginTest extends TestCase
             ->method('pages')
             ->willReturnCallback(function ($pages) use (&$registeredPages, $panel) {
                 $registeredPages = $pages;
+
                 return $panel;
             });
 
@@ -497,6 +509,7 @@ class CodeForgeStudioPluginTest extends TestCase
             ->method('resources')
             ->willReturnCallback(function ($resources) use (&$registeredResources, $panel) {
                 $registeredResources = $resources;
+
                 return $panel;
             });
 
@@ -508,7 +521,7 @@ class CodeForgeStudioPluginTest extends TestCase
         $this->assertContains(DataGenerationTemplateResource::class, $registeredResources);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_documentation_generator_controls_related_pages_and_resources()
     {
         $this->plugin
@@ -527,6 +540,7 @@ class CodeForgeStudioPluginTest extends TestCase
             ->method('pages')
             ->willReturnCallback(function ($pages) use (&$registeredPages, $panel) {
                 $registeredPages = $pages;
+
                 return $panel;
             });
 
@@ -534,6 +548,7 @@ class CodeForgeStudioPluginTest extends TestCase
             ->method('resources')
             ->willReturnCallback(function ($resources) use (&$registeredResources, $panel) {
                 $registeredResources = $resources;
+
                 return $panel;
             });
 

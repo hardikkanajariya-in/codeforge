@@ -3,9 +3,10 @@
 namespace HkDevs\CodeForgeStudio\Tests\Unit\Environment;
 
 use HkDevs\CodeForgeStudio\Tests\TestCase;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Test Case: TC-ENV-005 - Database Migrations Execution
@@ -21,16 +22,16 @@ class DatabaseMigrationsTest extends TestCase
         $this->refreshDatabase();
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_files_exist()
     {
-        $migrationPath = __DIR__ . '/../../../database/migrations';
+        $migrationPath = __DIR__.'/../../../database/migrations';
 
-        if (!is_dir($migrationPath)) {
+        if (! is_dir($migrationPath)) {
             $this->markTestSkipped('Migration directory not found');
         }
 
-        $migrations = glob($migrationPath . '/*.php');
+        $migrations = glob($migrationPath.'/*.php');
         $this->assertNotEmpty($migrations, 'Migration files should exist');
 
         $expectedMigrations = [
@@ -55,10 +56,10 @@ class DatabaseMigrationsTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_database_manager_logs_table_creation()
     {
-        if (!Schema::hasTable('database_manager_logs')) {
+        if (! Schema::hasTable('database_manager_logs')) {
             $this->createDatabaseManagerLogsTable();
         }
 
@@ -74,7 +75,7 @@ class DatabaseMigrationsTest extends TestCase
             'user_id',
             'details',
             'created_at',
-            'updated_at'
+            'updated_at',
         ];
 
         foreach ($expectedColumns as $column) {
@@ -85,10 +86,10 @@ class DatabaseMigrationsTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_histories_table_creation()
     {
-        if (!Schema::hasTable('migration_histories')) {
+        if (! Schema::hasTable('migration_histories')) {
             $this->createMigrationHistoriesTable();
         }
 
@@ -104,7 +105,7 @@ class DatabaseMigrationsTest extends TestCase
             'executed_at',
             'rollback_at',
             'status',
-            'error_message'
+            'error_message',
         ];
 
         foreach ($expectedColumns as $column) {
@@ -115,10 +116,10 @@ class DatabaseMigrationsTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_query_performance_logs_table_creation()
     {
-        if (!Schema::hasTable('query_performance_logs')) {
+        if (! Schema::hasTable('query_performance_logs')) {
             $this->createQueryPerformanceLogsTable();
         }
 
@@ -133,7 +134,7 @@ class DatabaseMigrationsTest extends TestCase
             'execution_time',
             'memory_usage',
             'connection_name',
-            'created_at'
+            'created_at',
         ];
 
         foreach ($expectedColumns as $column) {
@@ -144,10 +145,10 @@ class DatabaseMigrationsTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_database_health_metrics_table_creation()
     {
-        if (!Schema::hasTable('database_health_metrics')) {
+        if (! Schema::hasTable('database_health_metrics')) {
             $this->createDatabaseHealthMetricsTable();
         }
 
@@ -163,7 +164,7 @@ class DatabaseMigrationsTest extends TestCase
             'threshold',
             'status',
             'measured_at',
-            'created_at'
+            'created_at',
         ];
 
         foreach ($expectedColumns as $column) {
@@ -174,10 +175,10 @@ class DatabaseMigrationsTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_data_seeders_table_creation()
     {
-        if (!Schema::hasTable('data_seeders')) {
+        if (! Schema::hasTable('data_seeders')) {
             $this->createDataSeedersTable();
         }
 
@@ -194,7 +195,7 @@ class DatabaseMigrationsTest extends TestCase
             'configuration',
             'is_active',
             'created_at',
-            'updated_at'
+            'updated_at',
         ];
 
         foreach ($expectedColumns as $column) {
@@ -205,10 +206,10 @@ class DatabaseMigrationsTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_seeder_execution_logs_table_creation()
     {
-        if (!Schema::hasTable('seeder_execution_logs')) {
+        if (! Schema::hasTable('seeder_execution_logs')) {
             $this->createSeederExecutionLogsTable();
         }
 
@@ -224,7 +225,7 @@ class DatabaseMigrationsTest extends TestCase
             'execution_time',
             'status',
             'error_message',
-            'executed_at'
+            'executed_at',
         ];
 
         foreach ($expectedColumns as $column) {
@@ -235,10 +236,10 @@ class DatabaseMigrationsTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_data_generation_templates_table_creation()
     {
-        if (!Schema::hasTable('data_generation_templates')) {
+        if (! Schema::hasTable('data_generation_templates')) {
             $this->createDataGenerationTemplatesTable();
         }
 
@@ -254,7 +255,7 @@ class DatabaseMigrationsTest extends TestCase
             'template_data',
             'is_active',
             'created_at',
-            'updated_at'
+            'updated_at',
         ];
 
         foreach ($expectedColumns as $column) {
@@ -265,7 +266,7 @@ class DatabaseMigrationsTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_table_constraints_and_indexes()
     {
         // Test that important indexes and constraints are in place
@@ -276,7 +277,7 @@ class DatabaseMigrationsTest extends TestCase
             'database_health_metrics',
             'data_seeders',
             'seeder_execution_logs',
-            'data_generation_templates'
+            'data_generation_templates',
         ];
 
         $testedTables = 0;
@@ -307,7 +308,7 @@ class DatabaseMigrationsTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_rollback_capability()
     {
         // Test that tables can be dropped (rollback capability)
@@ -326,7 +327,7 @@ class DatabaseMigrationsTest extends TestCase
         $this->assertFalse(Schema::hasTable($testTable), 'Test table should be dropped');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_foreign_key_constraints()
     {
         // Test foreign key relationships where applicable
@@ -341,7 +342,7 @@ class DatabaseMigrationsTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_database_connection_compatibility()
     {
         // Test that tables work with the current database connection
@@ -359,11 +360,11 @@ class DatabaseMigrationsTest extends TestCase
             $result = DB::select('SELECT 1 as test');
             $this->assertEquals(1, $result[0]->test);
         } catch (\Exception $e) {
-            $this->fail("Basic database query failed: " . $e->getMessage());
+            $this->fail('Basic database query failed: '.$e->getMessage());
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_table_data_insertion()
     {
         // Test that data can be inserted into plugin tables
@@ -485,7 +486,7 @@ class DatabaseMigrationsTest extends TestCase
             'database_health_metrics',
             'data_seeders',
             'seeder_execution_logs',
-            'data_generation_templates'
+            'data_generation_templates',
         ];
 
         foreach ($tables as $table) {

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('error_message')->nullable();
             $table->timestamp('executed_at');
             $table->timestamps();
-            
+
             $table->index(['migration', 'action']);
             $table->index('executed_at');
         });

@@ -1,18 +1,15 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Services;
-use HkDevs\CodeForgeStudio\Support\Grid;
-use HkDevs\CodeForgeStudio\Support\Section;
-use HkDevs\CodeForgeStudio\Support\FilamentSchema;
 
 use Illuminate\Support\Facades\File;
 
 /**
  * StubTemplateService
- * 
+ *
  * Advanced code template management and processing service for CodeForge Database Studio.
  * Provides comprehensive template management with dynamic content replacement and customization capabilities.
- * 
+ *
  * Features:
  * - Comprehensive stub template management with hierarchical organization
  * - Dynamic content replacement with intelligent placeholder resolution
@@ -22,7 +19,7 @@ use Illuminate\Support\Facades\File;
  * - Template validation and syntax checking with error detection and recovery
  * - Performance-optimized template processing with caching and lazy loading
  * - Extensible template system with plugin architecture for custom functionality
- * 
+ *
  * Template Management:
  * - Template Discovery: Automatic discovery and loading of template files
  * - Hierarchical Organization: Organized template structure with category-based management
@@ -31,7 +28,7 @@ use Illuminate\Support\Facades\File;
  * - Template Validation: Comprehensive validation of template syntax and structure
  * - Custom Templates: User-defined template creation and management capabilities
  * - Template Sharing: Team collaboration with shared template libraries and repositories
- * 
+ *
  * Content Replacement:
  * - Placeholder System: Comprehensive placeholder system with type-aware replacement
  * - Dynamic Content: Runtime content generation with context-aware replacement
@@ -40,7 +37,7 @@ use Illuminate\Support\Facades\File;
  * - Nested Replacement: Support for nested placeholders and complex replacement scenarios
  * - Type Conversion: Automatic type conversion and formatting for placeholder values
  * - Escape Handling: Proper escaping and sanitization of replacement content
- * 
+ *
  * Template Types:
  * - Model Templates: Laravel Eloquent model generation templates
  * - Migration Templates: Database migration creation templates
@@ -50,7 +47,7 @@ use Illuminate\Support\Facades\File;
  * - Resource Templates: API resource templates with field transformation logic
  * - Policy Templates: Authorization policy templates with resource-based permissions
  * - Test Templates: Unit and feature test templates with comprehensive coverage
- * 
+ *
  * Advanced Features:
  * - Template Composition: Combine multiple templates for complex code generation
  * - Macro System: Reusable template macros for common code patterns
@@ -59,7 +56,7 @@ use Illuminate\Support\Facades\File;
  * - Template Debugging: Debug mode with template processing visualization
  * - Performance Profiling: Template performance analysis and optimization recommendations
  * - Error Recovery: Intelligent error recovery with fallback templates and strategies
- * 
+ *
  * Customization Options:
  * - Custom Placeholders: User-defined placeholder types and replacement logic
  * - Template Extensions: Plugin system for extending template functionality
@@ -68,7 +65,7 @@ use Illuminate\Support\Facades\File;
  * - Namespace Management: Automatic namespace resolution and organization
  * - Import Optimization: Intelligent use statement generation and optimization
  * - Comment Generation: Automatic documentation and comment generation
- * 
+ *
  * Performance Optimization:
  * - Template Caching: Intelligent caching of parsed templates and replacement results
  * - Lazy Loading: On-demand template loading to minimize memory usage
@@ -77,7 +74,7 @@ use Illuminate\Support\Facades\File;
  * - Resource Optimization: CPU and I/O optimization for template processing
  * - Background Processing: Asynchronous template processing for improved responsiveness
  * - Compression: Template compression for efficient storage and transfer
- * 
+ *
  * Integration Features:
  * - Laravel Integration: Seamless integration with Laravel's service container
  * - File System Integration: Support for multiple file systems and storage backends
@@ -86,7 +83,7 @@ use Illuminate\Support\Facades\File;
  * - API Integration: REST endpoints for external template management and processing
  * - Webhook Support: Real-time template updates and synchronization
  * - Team Collaboration: Multi-user template development and review workflows
- * 
+ *
  * Quality Assurance:
  * - Template Validation: Comprehensive validation of template syntax and structure
  * - Output Validation: Validation of generated code for syntax and compliance
@@ -95,7 +92,7 @@ use Illuminate\Support\Facades\File;
  * - Performance Testing: Automated performance testing and benchmarking
  * - Documentation Generation: Automatic generation of template documentation
  * - Best Practice Enforcement: Enforcement of coding standards and best practices
- * 
+ *
  * Development Tools:
  * - Template Editor: Built-in template editing with syntax highlighting and validation
  * - Preview Mode: Real-time preview of template output with sample data
@@ -103,12 +100,13 @@ use Illuminate\Support\Facades\File;
  * - Performance Monitor: Real-time performance monitoring and optimization suggestions
  * - Template Analytics: Usage analytics and optimization recommendations
  * - Migration Tools: Tools for migrating templates between versions and formats
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $service = app(StubTemplateService::class);
  * $template = $service->getStub('model.basic');
@@ -118,11 +116,12 @@ use Illuminate\Support\Facades\File;
 class StubTemplateService
 {
     protected string $stubsPath;
+
     protected array $templates = [];
 
     public function __construct()
     {
-        $this->stubsPath = __DIR__ . '/../stubs';
+        $this->stubsPath = __DIR__.'/../stubs';
         $this->loadTemplates();
     }
 
@@ -131,9 +130,9 @@ class StubTemplateService
      */
     public function getStub(string $stubName): string
     {
-        $stubPath = $this->stubsPath . '/' . str_replace('.', '/', $stubName) . '.stub';
+        $stubPath = $this->stubsPath.'/'.str_replace('.', '/', $stubName).'.stub';
 
-        if (!File::exists($stubPath)) {
+        if (! File::exists($stubPath)) {
             // Return a basic stub if the specific one doesn't exist
             return $this->getBasicStub($stubName);
         }
@@ -149,7 +148,7 @@ class StubTemplateService
         $content = $stub;
 
         foreach ($replacements as $key => $value) {
-            $placeholder = '{{ ' . $key . ' }}';
+            $placeholder = '{{ '.$key.' }}';
             $content = str_replace($placeholder, $value, $content);
         }
 
@@ -197,7 +196,7 @@ class StubTemplateService
         $templatesFile = storage_path('app/codeforge-database-studio/templates.json');
         $dir = dirname($templatesFile);
 
-        if (!File::isDirectory($dir)) {
+        if (! File::isDirectory($dir)) {
             File::makeDirectory($dir, 0755, true);
         }
 

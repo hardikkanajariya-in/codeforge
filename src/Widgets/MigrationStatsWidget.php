@@ -25,9 +25,9 @@ class MigrationStatsWidget extends BaseWidget
             $allMigrations = Migration::getAllMigrations();
             $total = $allMigrations->count();
             $executed = $allMigrations->where('status', 'executed')->count();
-            
+
             return Stat::make('Total Migrations', $total)
-                ->description($executed . ' executed')
+                ->description($executed.' executed')
                 ->descriptionIcon('heroicon-m-document-text')
                 ->color('primary');
         } catch (\Exception $e) {
@@ -43,10 +43,10 @@ class MigrationStatsWidget extends BaseWidget
         try {
             $allMigrations = Migration::getAllMigrations();
             $pending = $allMigrations->where('status', 'pending')->count();
-            
+
             $color = $pending > 0 ? 'warning' : 'success';
             $description = $pending > 0 ? 'Need to be executed' : 'All up to date';
-            
+
             return Stat::make('Pending Migrations', $pending)
                 ->description($description)
                 ->descriptionIcon('heroicon-m-clock')
@@ -64,12 +64,12 @@ class MigrationStatsWidget extends BaseWidget
         try {
             $recentCount = 0;
             $description = 'No recent activity';
-            
+
             if (Schema::hasTable('migration_histories')) {
                 $recentCount = MigrationHistory::where('executed_at', '>=', now()->subDays(7))->count();
                 $description = $recentCount > 0 ? 'In the last 7 days' : 'No activity this week';
             }
-            
+
             return Stat::make('Recent Activity', $recentCount)
                 ->description($description)
                 ->descriptionIcon('heroicon-m-chart-bar')

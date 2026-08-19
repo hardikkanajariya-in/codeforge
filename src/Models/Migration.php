@@ -3,41 +3,42 @@
 namespace HkDevs\CodeForgeStudio\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 
 /**
  * Migration
- * 
+ *
  * Eloquent model for Laravel migration management with enhanced functionality
  * for CodeForge Database Studio migration tracking and analysis.
- * 
+ *
  * Key Features:
  * - Laravel migrations table integration with batch tracking
  * - File system integration for migration discovery
  * - Migration status analysis and dependency tracking
  * - Batch grouping for rollback operations
  * - Enhanced migration metadata and execution tracking
- * 
+ *
  * Database Fields:
  * - migration: Migration file name identifier
  * - batch: Batch number for grouping related migrations
- * 
+ *
  * Enhanced Functionality:
  * - File system scanning for migration discovery
  * - Migration status comparison (pending vs executed)
  * - Dependency analysis for safe rollback operations
  * - Integration with CodeForge migration tracking services
- * 
+ *
  * Static Methods:
  * - getAllMigrations(): Discover all migration files
  * - Migration analysis and comparison utilities
  * - Batch management for grouped operations
- * 
- * @package HkDevs\CodeForgeStudio\Models
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class Migration extends Model
@@ -46,7 +47,9 @@ class Migration extends Model
 
     // Use migration name as primary key since that's what uniquely identifies migrations
     protected $primaryKey = 'migration';
+
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $fillable = [
@@ -88,7 +91,7 @@ class Migration extends Model
             $executed = $executedMigrations->get($migration);
 
             // Create a proper Migration model instance
-            $migrationModel = new static();
+            $migrationModel = new static;
             $migrationModel->migration = $migration;
             $migrationModel->batch = $executed->batch ?? null;
             $migrationModel->executed_at = $executed->created_at ?? null;

@@ -1,25 +1,25 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Pages;
-use Filament\Schemas\Schema;
-use HkDevs\CodeForgeStudio\Support\Grid;
-use HkDevs\CodeForgeStudio\Support\Section;
 
-use HkDevs\CodeForgeStudio\Services\DataGenerationService;
-use HkDevs\CodeForgeStudio\Models\DataGenerationTemplate;
-use Filament\Pages\Page;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
+use Filament\Pages\Page;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Models\DataGenerationTemplate;
+use HkDevs\CodeForgeStudio\Services\DataGenerationService;
+use HkDevs\CodeForgeStudio\Support\Section;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\HtmlString;
 
 /**
  * SmartDataSeeder
- * 
+ *
  * Intelligent data seeding page providing automated, realistic test data
  * generation with advanced analysis and template-based customization.
- * 
+ *
  * Key Features:
  * - Intelligent table analysis and field type detection
  * - Template-based data generation with reusable patterns
@@ -27,63 +27,71 @@ use Illuminate\Support\Facades\Log;
  * - Relationship-aware seeding with foreign key management
  * - Customizable data patterns and generation rules
  * - Batch processing for large dataset generation
- * 
+ *
  * Smart Analysis:
  * - Automatic table structure analysis and field introspection
  * - Foreign key relationship detection and dependency mapping
  * - Data type analysis for appropriate generation methods
  * - Constraint analysis for validation and data integrity
  * - Index analysis for performance optimization
- * 
+ *
  * Template System:
  * - Reusable data generation templates with configuration
  * - Field mapping customization for specialized data types
  * - Relationship template support for complex scenarios
  * - Custom data provider integration
  * - Template sharing and import/export capabilities
- * 
+ *
  * Preview Functionality:
  * - Real-time data generation preview before execution
  * - Sample data display with formatting and validation
  * - Relationship data preview with linked records
  * - Performance estimation and execution planning
- * 
+ *
  * Generation Options:
  * - Configurable record counts with batch processing
  * - Custom field value patterns and constraints
  * - Unique constraint handling and duplicate prevention
  * - Date range configuration for temporal data
  * - Localization support for international data
- * 
+ *
  * Advanced Features:
  * - Transaction support for safe data generation
  * - Rollback capabilities for testing scenarios
  * - Progress tracking for long-running operations
  * - Error handling with detailed reporting
  * - Performance monitoring and optimization
- * 
+ *
  * Integration:
  * - DataGenerationService for intelligent data creation
  * - DataGenerationTemplate model for template management
  * - Database analysis services for schema introspection
  * - Notification system for user feedback
- * 
- * @package HkDevs\CodeForgeStudio\Pages
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class SmartDataSeeder extends Page
 {
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-cpu-chip';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-cpu-chip';
+
     protected string $view = 'codeforge-studio::pages.smart-data-seeder';
+
     protected static ?string $title = 'Smart Data Seeder';
+
     protected static ?string $navigationLabel = 'Smart Seeder';
+
     protected static ?int $navigationSort = 4;
 
     public ?array $data = [];
+
     public string $selectedTable = '';
+
     public ?array $previewData = [];
+
     public ?array $tableAnalysis = [];
 
     public function mount(): void
@@ -94,143 +102,144 @@ class SmartDataSeeder extends Page
     public function form(Schema $schema): Schema
     {
         return $schema->components([
-                Section::make('Table Selection')
-                    ->description('Select a table to generate data for')
-                    ->schema([
-                        Forms\Components\Select::make('table_name')
-                            ->label('Table')
-                            ->options($this->getAvailableTables())
-                            ->searchable()
-                            ->live(debounce: 300)
-                            ->afterStateUpdated(function ($state) {
-                                if ($state) {
-                                    $this->selectedTable = $state;
-                                    $this->analyzeTable($state);
-                                }
-                            })
-                            ->required(),
+            Section::make('Table Selection')
+                ->description('Select a table to generate data for')
+                ->schema([
+                    Forms\Components\Select::make('table_name')
+                        ->label('Table')
+                        ->options($this->getAvailableTables())
+                        ->searchable()
+                        ->live(debounce: 300)
+                        ->afterStateUpdated(function ($state) {
+                            if ($state) {
+                                $this->selectedTable = $state;
+                                $this->analyzeTable($state);
+                            }
+                        })
+                        ->required(),
 
-                        Forms\Components\TextInput::make('record_count')
-                            ->label('Number of Records')
-                            ->numeric()
-                            ->default(10)
-                            ->minValue(1)
-                            ->maxValue(1000)
-                            ->required(),
-                    ])
-                    ->columns(2),
+                    Forms\Components\TextInput::make('record_count')
+                        ->label('Number of Records')
+                        ->numeric()
+                        ->default(10)
+                        ->minValue(1)
+                        ->maxValue(1000)
+                        ->required(),
+                ])
+                ->columns(2),
 
-                Section::make('Template Selection')
-                    ->description('Choose how to generate data')
-                    ->schema([
-                        Forms\Components\Radio::make('generation_mode')
-                            ->options([
-                                'auto' => 'Auto Generate - Create template automatically',
-                                'existing' => 'Use Existing Template',
-                                'custom' => 'Custom Configuration',
-                            ])
-                            ->default('auto')
-                            ->live(debounce: 300)
-                            ->required(),
-
-                        Forms\Components\Select::make('template_id')
-                            ->label('Existing Template')
-                            ->options(function () {
-                                if (!$this->selectedTable) {
-                                    return [];
-                                }
-
-                                return DataGenerationTemplate::forTable($this->selectedTable)
-                                    ->active()
-                                    ->pluck('name', 'id')
-                                    ->toArray();
-                            })
-                            ->visible(fn(Forms\Get $get) => $get('generation_mode') === 'existing'),
-                    ]),
-
-                Section::make('Preview')
-                    ->description('Preview generated data before insertion')
-                    ->schema([
-                        Forms\Components\Placeholder::make('preview_table')
-                            ->content(function () {
-                                if (empty($this->previewData)) {
-                                    return 'No preview available. Select a table and click "Generate Preview".';
-                                }
-
-                                // Generate HTML table directly
-                                $html = '<div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">';
-                                $html .= '<table class="min-w-full divide-y divide-gray-300">';
-
-                                if (!empty($this->previewData)) {
-                                    // Header
-                                    $html .= '<thead class="bg-gray-50"><tr>';
-                                    foreach (array_keys($this->previewData[0]) as $column) {
-                                        $html .= '<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">' . htmlspecialchars($column) . '</th>';
-                                    }
-                                    $html .= '</tr></thead>';
-
-                                    // Body
-                                    $html .= '<tbody class="bg-white divide-y divide-gray-200">';
-                                    foreach ($this->previewData as $row) {
-                                        $html .= '<tr>';
-                                        foreach ($row as $value) {
-                                            $html .= '<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">';
-                                            if (is_array($value) || is_object($value)) {
-                                                $html .= '<code class="text-xs bg-gray-100 px-2 py-1 rounded">' . htmlspecialchars(json_encode($value)) . '</code>';
-                                            } elseif (is_bool($value)) {
-                                                $class = $value ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
-                                                $html .= '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ' . $class . '">' . ($value ? 'true' : 'false') . '</span>';
-                                            } elseif (is_null($value)) {
-                                                $html .= '<span class="text-gray-400 italic">null</span>';
-                                            } else {
-                                                $html .= htmlspecialchars((string)$value);
-                                            }
-                                            $html .= '</td>';
-                                        }
-                                        $html .= '</tr>';
-                                    }
-                                    $html .= '</tbody>';
-                                }
-
-                                $html .= '</table></div>';
-                                $html .= '<div class="mt-2 text-sm text-gray-500">Showing preview of ' . count($this->previewData) . ' records for table: <code class="font-mono">' . htmlspecialchars($this->selectedTable) . '</code></div>';
-
-                                return new \Illuminate\Support\HtmlString($html);
-                            }),
-                    ])
-                    ->visible(fn() => !empty($this->previewData)),
-
-                Section::make('Actions')
-                    ->schema([
-                        Forms\Components\Actions::make([
-                            Forms\Components\Actions\Action::make('preview')
-                                ->label('Generate Preview')
-                                ->icon('heroicon-o-eye')
-                                ->color('info')
-                                ->action('generatePreview'),
-
-                            Forms\Components\Actions\Action::make('generate')
-                                ->label('Generate & Insert Data')
-                                ->icon('heroicon-o-play')
-                                ->color('success')
-                                ->requiresConfirmation()
-                                ->modalHeading('Confirm Data Generation')
-                                ->modalDescription(function () {
-                                    $count = $this->data['record_count'] ?? 0;
-                                    return "This will insert {$count} records into the '{$this->selectedTable}' table.";
-                                })
-                                ->action('generateAndInsertData'),
-
-                            Forms\Components\Actions\Action::make('save_template')
-                                ->label('Save as Template')
-                                ->icon('heroicon-o-bookmark')
-                                ->color('warning')
-                                ->visible(fn() => !empty($this->tableAnalysis))
-                                ->action('saveAsTemplate'),
+            Section::make('Template Selection')
+                ->description('Choose how to generate data')
+                ->schema([
+                    Forms\Components\Radio::make('generation_mode')
+                        ->options([
+                            'auto' => 'Auto Generate - Create template automatically',
+                            'existing' => 'Use Existing Template',
+                            'custom' => 'Custom Configuration',
                         ])
-                            ->alignEnd(),
-                    ]),
-            ])
+                        ->default('auto')
+                        ->live(debounce: 300)
+                        ->required(),
+
+                    Forms\Components\Select::make('template_id')
+                        ->label('Existing Template')
+                        ->options(function () {
+                            if (! $this->selectedTable) {
+                                return [];
+                            }
+
+                            return DataGenerationTemplate::forTable($this->selectedTable)
+                                ->active()
+                                ->pluck('name', 'id')
+                                ->toArray();
+                        })
+                        ->visible(fn (Forms\Get $get) => $get('generation_mode') === 'existing'),
+                ]),
+
+            Section::make('Preview')
+                ->description('Preview generated data before insertion')
+                ->schema([
+                    Forms\Components\Placeholder::make('preview_table')
+                        ->content(function () {
+                            if (empty($this->previewData)) {
+                                return 'No preview available. Select a table and click "Generate Preview".';
+                            }
+
+                            // Generate HTML table directly
+                            $html = '<div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">';
+                            $html .= '<table class="min-w-full divide-y divide-gray-300">';
+
+                            if (! empty($this->previewData)) {
+                                // Header
+                                $html .= '<thead class="bg-gray-50"><tr>';
+                                foreach (array_keys($this->previewData[0]) as $column) {
+                                    $html .= '<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">'.htmlspecialchars($column).'</th>';
+                                }
+                                $html .= '</tr></thead>';
+
+                                // Body
+                                $html .= '<tbody class="bg-white divide-y divide-gray-200">';
+                                foreach ($this->previewData as $row) {
+                                    $html .= '<tr>';
+                                    foreach ($row as $value) {
+                                        $html .= '<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">';
+                                        if (is_array($value) || is_object($value)) {
+                                            $html .= '<code class="text-xs bg-gray-100 px-2 py-1 rounded">'.htmlspecialchars(json_encode($value)).'</code>';
+                                        } elseif (is_bool($value)) {
+                                            $class = $value ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+                                            $html .= '<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full '.$class.'">'.($value ? 'true' : 'false').'</span>';
+                                        } elseif (is_null($value)) {
+                                            $html .= '<span class="text-gray-400 italic">null</span>';
+                                        } else {
+                                            $html .= htmlspecialchars((string) $value);
+                                        }
+                                        $html .= '</td>';
+                                    }
+                                    $html .= '</tr>';
+                                }
+                                $html .= '</tbody>';
+                            }
+
+                            $html .= '</table></div>';
+                            $html .= '<div class="mt-2 text-sm text-gray-500">Showing preview of '.count($this->previewData).' records for table: <code class="font-mono">'.htmlspecialchars($this->selectedTable).'</code></div>';
+
+                            return new HtmlString($html);
+                        }),
+                ])
+                ->visible(fn () => ! empty($this->previewData)),
+
+            Section::make('Actions')
+                ->schema([
+                    Forms\Components\Actions::make([
+                        Forms\Components\Actions\Action::make('preview')
+                            ->label('Generate Preview')
+                            ->icon('heroicon-o-eye')
+                            ->color('info')
+                            ->action('generatePreview'),
+
+                        Forms\Components\Actions\Action::make('generate')
+                            ->label('Generate & Insert Data')
+                            ->icon('heroicon-o-play')
+                            ->color('success')
+                            ->requiresConfirmation()
+                            ->modalHeading('Confirm Data Generation')
+                            ->modalDescription(function () {
+                                $count = $this->data['record_count'] ?? 0;
+
+                                return "This will insert {$count} records into the '{$this->selectedTable}' table.";
+                            })
+                            ->action('generateAndInsertData'),
+
+                        Forms\Components\Actions\Action::make('save_template')
+                            ->label('Save as Template')
+                            ->icon('heroicon-o-bookmark')
+                            ->color('warning')
+                            ->visible(fn () => ! empty($this->tableAnalysis))
+                            ->action('saveAsTemplate'),
+                    ])
+                        ->alignEnd(),
+                ]),
+        ])
             ->statePath('data');
     }
 
@@ -244,15 +253,16 @@ class SmartDataSeeder extends Page
             Log::info('GeneratePreview called', [
                 'form_data' => $this->data,
                 'selectedTable' => $this->selectedTable,
-                'tableName' => $tableName
+                'tableName' => $tableName,
             ]);
 
-            if (!$tableName) {
+            if (! $tableName) {
                 Notification::make()
                     ->title('Error')
                     ->body('Please select a table first.')
                     ->danger()
                     ->send();
+
                 return;
             }
 
@@ -261,12 +271,12 @@ class SmartDataSeeder extends Page
 
             $service = app(DataGenerationService::class);
 
-            if (($this->data['generation_mode'] ?? 'auto') === 'existing' && !empty($this->data['template_id'])) {
+            if (($this->data['generation_mode'] ?? 'auto') === 'existing' && ! empty($this->data['template_id'])) {
                 $template = DataGenerationTemplate::findOrFail($this->data['template_id']);
                 $this->previewData = $service->previewData($template, 5);
             } else {
                 // Auto generate or custom mode
-                $template = $service->createTemplateFromTable($tableName, 'preview_template_' . time());
+                $template = $service->createTemplateFromTable($tableName, 'preview_template_'.time());
                 $this->previewData = $service->previewData($template, 5);
                 $template->delete(); // Clean up temporary template
             }
@@ -274,18 +284,18 @@ class SmartDataSeeder extends Page
             // Debug the preview data
             Log::info('Preview data generated', [
                 'count' => count($this->previewData),
-                'sample' => array_slice($this->previewData, 0, 1)
+                'sample' => array_slice($this->previewData, 0, 1),
             ]);
 
             Notification::make()
                 ->title('Preview Generated')
-                ->body('Preview data has been generated successfully. Count: ' . count($this->previewData))
+                ->body('Preview data has been generated successfully. Count: '.count($this->previewData))
                 ->success()
                 ->send();
         } catch (\Exception $e) {
             Log::error('Preview generation failed', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
 
             Notification::make()
@@ -302,7 +312,7 @@ class SmartDataSeeder extends Page
             $this->validate();
 
             $tableName = $this->data['table_name'] ?? $this->selectedTable;
-            if (!$tableName) {
+            if (! $tableName) {
                 throw new \Exception('Please select a table first.');
             }
 
@@ -312,12 +322,12 @@ class SmartDataSeeder extends Page
             $service = app(DataGenerationService::class);
             $count = $this->data['record_count'] ?? 10;
 
-            if (($this->data['generation_mode'] ?? 'auto') === 'existing' && !empty($this->data['template_id'])) {
+            if (($this->data['generation_mode'] ?? 'auto') === 'existing' && ! empty($this->data['template_id'])) {
                 $template = DataGenerationTemplate::findOrFail($this->data['template_id']);
                 $result = $service->insertGeneratedData($template, $count);
             } else {
                 // Auto generate template
-                $template = $service->createTemplateFromTable($tableName, 'auto_' . $tableName . '_' . time());
+                $template = $service->createTemplateFromTable($tableName, 'auto_'.$tableName.'_'.time());
                 $result = $service->insertGeneratedData($template, $count);
             }
 
@@ -347,7 +357,7 @@ class SmartDataSeeder extends Page
     {
         try {
             $tableName = $this->data['table_name'] ?? $this->selectedTable;
-            if (!$tableName || empty($this->tableAnalysis)) {
+            if (! $tableName || empty($this->tableAnalysis)) {
                 throw new \Exception('Please analyze a table first.');
             }
 
@@ -357,7 +367,7 @@ class SmartDataSeeder extends Page
             $service = app(DataGenerationService::class);
             $template = $service->createTemplateFromTable(
                 $tableName,
-                'template_' . $tableName . '_' . time()
+                'template_'.$tableName.'_'.time()
             );
 
             Notification::make()
@@ -402,7 +412,7 @@ class SmartDataSeeder extends Page
                 $tableName = array_values($tableArray)[0];
 
                 // Skip system tables
-                if (!in_array($tableName, [
+                if (! in_array($tableName, [
                     'migrations',
                     'personal_access_tokens',
                     'password_reset_tokens',
@@ -433,7 +443,7 @@ class SmartDataSeeder extends Page
 
                 foreach ($tables as $tableName) {
                     // Skip system tables
-                    if (!in_array($tableName, [
+                    if (! in_array($tableName, [
                         'migrations',
                         'personal_access_tokens',
                         'password_reset_tokens',

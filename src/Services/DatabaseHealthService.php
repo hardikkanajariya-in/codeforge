@@ -2,18 +2,18 @@
 
 namespace HkDevs\CodeForgeStudio\Services;
 
+use Exception;
 use HkDevs\CodeForgeStudio\Models\DatabaseHealthMetric;
 use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Exception;
+use Illuminate\Support\Facades\DB;
 
 /**
  * DatabaseHealthService
- * 
+ *
  * Comprehensive database health monitoring and performance analysis service for CodeForge Database Studio.
  * Provides real-time monitoring, performance metrics collection, and health assessment capabilities.
- * 
+ *
  * Features:
  * - Multi-connection database health monitoring with real-time status tracking
  * - Comprehensive performance metrics collection and historical analysis
@@ -23,7 +23,7 @@ use Exception;
  * - Automated health scoring with threshold-based alerting
  * - Historical trend analysis with pattern recognition
  * - Proactive issue detection and performance regression identification
- * 
+ *
  * Health Monitoring Capabilities:
  * - Connection Status: Real-time connectivity testing and availability monitoring
  * - Response Time Analysis: Latency measurement and performance benchmarking
@@ -32,7 +32,7 @@ use Exception;
  * - Error Tracking: Failed query detection and error pattern analysis
  * - Resource Utilization: Memory, CPU, and connection pool monitoring
  * - Index Efficiency: Index usage analysis and optimization recommendations
- * 
+ *
  * Performance Analytics:
  * - 24-hour rolling statistics with minute-level granularity
  * - Comparative analysis across multiple database connections
@@ -41,7 +41,7 @@ use Exception;
  * - Storage growth forecasting and capacity planning
  * - Error rate analysis with root cause identification
  * - Performance regression detection with automated alerting
- * 
+ *
  * Monitoring Features:
  * - Real-time dashboard integration with live metric updates
  * - Automated threshold-based alerting with customizable triggers
@@ -50,7 +50,7 @@ use Exception;
  * - Integration with external monitoring systems and APIs
  * - Custom metric collection with user-defined parameters
  * - Multi-environment monitoring with environment-specific configurations
- * 
+ *
  * Data Collection:
  * - Automated metric collection with configurable intervals
  * - Intelligent sampling to minimize performance impact
@@ -59,7 +59,7 @@ use Exception;
  * - Data validation and integrity checking
  * - Efficient data retention with automated cleanup
  * - Export capabilities for external analysis tools
- * 
+ *
  * Integration Features:
  * - Laravel application integration with minimal configuration
  * - Support for multiple database drivers and connection types
@@ -68,7 +68,7 @@ use Exception;
  * - Webhook support for real-time alerting systems
  * - CI/CD pipeline integration for deployment monitoring
  * - Team collaboration with shared monitoring configurations
- * 
+ *
  * Performance Optimization:
  * - Minimal overhead monitoring with optimized data collection
  * - Intelligent caching strategies for frequently accessed metrics
@@ -76,12 +76,13 @@ use Exception;
  * - Memory-efficient data structures and processing algorithms
  * - Connection pooling optimization for monitoring operations
  * - Background processing for resource-intensive analysis tasks
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $service = app(DatabaseHealthService::class);
  * $status = $service->getConnectionStatus();
@@ -144,7 +145,7 @@ class DatabaseHealthService
                 'connection' => $connection,
                 'status' => 'error',
                 'response_time' => null,
-                'message' => 'Database connection failed: ' . $e->getMessage(),
+                'message' => 'Database connection failed: '.$e->getMessage(),
                 'timestamp' => now(),
             ];
         }
@@ -171,7 +172,7 @@ class DatabaseHealthService
             return $metrics;
         } catch (Exception $e) {
             return [
-                'error' => 'Failed to retrieve performance metrics: ' . $e->getMessage()
+                'error' => 'Failed to retrieve performance metrics: '.$e->getMessage(),
             ];
         }
     }
@@ -256,11 +257,11 @@ class DatabaseHealthService
             // Get database size
             $dbName = config("database.connections.{$connection}.database");
             $size = DB::connection($connection)
-                ->selectOne("
+                ->selectOne('
                     SELECT ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS size_mb
                     FROM information_schema.tables 
                     WHERE table_schema = ?
-                ", [$dbName]);
+                ', [$dbName]);
 
             if ($size) {
                 $metrics['database_size'] = $size->size_mb;
@@ -293,7 +294,7 @@ class DatabaseHealthService
             // Get database size
             $dbName = config("database.connections.{$connection}.database");
             $size = DB::connection($connection)
-                ->selectOne("SELECT pg_size_pretty(pg_database_size(?)) as size", [$dbName]);
+                ->selectOne('SELECT pg_size_pretty(pg_database_size(?)) as size', [$dbName]);
 
             if ($size) {
                 $metrics['database_size'] = $size->size;

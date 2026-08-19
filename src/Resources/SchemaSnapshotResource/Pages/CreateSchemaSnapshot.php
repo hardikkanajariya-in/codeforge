@@ -2,10 +2,11 @@
 
 namespace HkDevs\CodeForgeStudio\Resources\SchemaSnapshotResource\Pages;
 
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
 use HkDevs\CodeForgeStudio\Resources\SchemaSnapshotResource;
 use HkDevs\CodeForgeStudio\Services\SchemaDocumentationService;
-use Filament\Notifications\Notification;
 
 class CreateSchemaSnapshot extends CreateRecord
 {
@@ -56,7 +57,7 @@ class CreateSchemaSnapshot extends CreateRecord
         // Fix for Laravel bug where lastInsertId() returns wrong value
         // Find the actual record by name and use its real ID
         if ($this->record && $this->record->name) {
-            $actualRecord = \HkDevs\CodeForgeStudio\Models\SchemaSnapshot::where('name', $this->record->name)
+            $actualRecord = SchemaSnapshot::where('name', $this->record->name)
                 ->orderBy('id', 'desc')
                 ->first();
 

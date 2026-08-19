@@ -2,15 +2,14 @@
 
 namespace HkDevs\CodeForgeStudio\Commands;
 
-use Illuminate\Console\Command;
 use HkDevs\CodeForgeStudio\Services\AssetService;
+use Illuminate\Console\Command;
 
 /**
  * Asset Debug Command for CodeForge Studio
- * 
+ *
  * Provides debugging information about asset locations and status
- * 
- * @package HkDevs\CodeForgeStudio\Commands
+ *
  * @author hardikkanajariya.in
  */
 class AssetDebugCommand extends Command
@@ -45,15 +44,15 @@ class AssetDebugCommand extends Command
 
         $this->line('');
         $this->info('📊 Status:');
-        $this->line('✅ Published Assets: ' . ($paths['published_exists'] ? 'Available' : 'Not Available'));
-        $this->line('✅ Package Assets: ' . ($paths['package_exists'] ? 'Available' : 'Not Available'));
+        $this->line('✅ Published Assets: '.($paths['published_exists'] ? 'Available' : 'Not Available'));
+        $this->line('✅ Package Assets: '.($paths['package_exists'] ? 'Available' : 'Not Available'));
 
         $this->line('');
         $this->info('🌐 Asset URLs:');
-        $this->line('CSS: ' . AssetService::asset('css/schema-designer-v2.css'));
-        $this->line('JS: ' . AssetService::asset('js/schema-designer-v2.js'));
+        $this->line('CSS: '.AssetService::asset('css/schema-designer-v2.css'));
+        $this->line('JS: '.AssetService::asset('js/schema-designer-v2.js'));
 
-        if (!$paths['published_exists'] && $paths['package_exists']) {
+        if (! $paths['published_exists'] && $paths['package_exists']) {
             $this->line('');
             $this->warn('⚠️  Assets are not published but available in package directory.');
             $this->info('💡 Assets will be served directly from package via route.');
@@ -64,6 +63,7 @@ class AssetDebugCommand extends Command
         } else {
             $this->line('');
             $this->error('❌ Assets not found in either published or package directories!');
+
             return self::FAILURE;
         }
 

@@ -1,33 +1,35 @@
 #!/usr/bin/env php
 <?php
+
 /**
  * Manual Asset Publisher for CodeForge Database Studio
  * This script manually copies assets from package to the correct locations
  */
-
 echo "🚀 CodeForge Database Studio - Manual Asset Publisher\n";
 echo "====================================================\n\n";
 
 // Define paths
 $sourceBasePath = __DIR__;
-$cssSource = $sourceBasePath . '/resources/css';
-$jsSource = $sourceBasePath . '/resources/js';
+$cssSource = $sourceBasePath.'/resources/css';
+$jsSource = $sourceBasePath.'/resources/js';
 
 // For testing in package directory
-$testCssDestination = $sourceBasePath . '/public/vendor/codeforge/css';
-$testJsDestination = $sourceBasePath . '/public/vendor/codeforge/js';
+$testCssDestination = $sourceBasePath.'/public/vendor/codeforge/css';
+$testJsDestination = $sourceBasePath.'/public/vendor/codeforge/js';
 
 // Function to copy directory recursively
 function copyDirectory($source, $destination)
 {
-    if (!is_dir($source)) {
+    if (! is_dir($source)) {
         echo "❌ Source directory does not exist: $source\n";
+
         return false;
     }
 
-    if (!is_dir($destination)) {
-        if (!mkdir($destination, 0755, true)) {
+    if (! is_dir($destination)) {
+        if (! mkdir($destination, 0755, true)) {
             echo "❌ Failed to create destination directory: $destination\n";
+
             return false;
         }
         echo "✅ Created directory: $destination\n";
@@ -35,10 +37,12 @@ function copyDirectory($source, $destination)
 
     $files = scandir($source);
     foreach ($files as $file) {
-        if ($file === '.' || $file === '..') continue;
+        if ($file === '.' || $file === '..') {
+            continue;
+        }
 
-        $sourcePath = $source . '/' . $file;
-        $destPath = $destination . '/' . $file;
+        $sourcePath = $source.'/'.$file;
+        $destPath = $destination.'/'.$file;
 
         if (is_dir($sourcePath)) {
             copyDirectory($sourcePath, $destPath);
@@ -62,7 +66,7 @@ if (copyDirectory($cssSource, $testCssDestination)) {
     echo "❌ Failed to publish CSS assets!\n\n";
 }
 
-// Copy JS files  
+// Copy JS files
 echo "📁 Publishing JS assets...\n";
 if (copyDirectory($jsSource, $testJsDestination)) {
     echo "✅ JS assets published successfully!\n\n";

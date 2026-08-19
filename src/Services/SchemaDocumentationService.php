@@ -2,22 +2,23 @@
 
 namespace HkDevs\CodeForgeStudio\Services;
 
+use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Builder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use ReflectionClass;
 use ReflectionMethod;
-use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
 
 /**
  * SchemaDocumentationService
- * 
+ *
  * Advanced database schema documentation and snapshot management service for CodeForge Database Studio.
  * Provides comprehensive schema documentation generation with versioning and change tracking capabilities.
- * 
+ *
  * Features:
  * - Comprehensive schema snapshot generation with complete database structure capture
  * - Laravel model integration with automatic relationship discovery and mapping
@@ -27,7 +28,7 @@ use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
  * - Multi-format documentation export with customizable templates
  * - Schema comparison and evolution tracking across environments
  * - Baseline management for migration reference points
- * 
+ *
  * Schema Documentation Capabilities:
  * - Complete Table Documentation: Detailed table structure with columns, indexes, and constraints
  * - Relationship Mapping: Comprehensive relationship documentation with visual representation
@@ -36,7 +37,7 @@ use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
  * - Policy Documentation: Authorization policy integration with permission mapping
  * - Data Dictionary: Detailed field descriptions and business logic documentation
  * - Schema Statistics: Database metrics and structural analysis with performance insights
- * 
+ *
  * Snapshot Management:
  * - Schema Snapshots: Complete database schema capture with metadata and statistics
  * - Version Control: Schema versioning with change tracking and rollback capabilities
@@ -45,7 +46,7 @@ use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
  * - Snapshot Comparison: Detailed comparison between schema snapshots with impact analysis
  * - Historical Tracking: Long-term schema evolution tracking with trend analysis
  * - Snapshot Optimization: Efficient storage and retrieval of schema snapshot data
- * 
+ *
  * Model Integration:
  * - Automatic Model Discovery: Detection of Eloquent models and their relationships
  * - Relationship Analysis: Comprehensive analysis of model relationships and dependencies
@@ -54,7 +55,7 @@ use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
  * - Event Documentation: Model event and observer documentation
  * - Trait Integration: Documentation of model traits and their functionality
  * - Factory Integration: Model factory documentation and data generation patterns
- * 
+ *
  * Advanced Features:
  * - Cross-Database Schema Analysis: Multi-database schema comparison and documentation
  * - Performance Analysis: Schema-based performance analysis and optimization recommendations
@@ -63,7 +64,7 @@ use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
  * - Migration Planning: Schema change planning with impact assessment and recommendations
  * - Documentation Templates: Customizable documentation templates with branding options
  * - Export Capabilities: Multiple export formats including Markdown, HTML, PDF, and JSON
- * 
+ *
  * Validation Integration:
  * - Rule Extraction: Automatic extraction of validation rules from models and form requests
  * - Constraint Documentation: Database constraint documentation with business rule mapping
@@ -72,7 +73,7 @@ use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
  * - Conditional Validation: Context-aware validation rule documentation
  * - Localization Support: Multi-language validation rule documentation
  * - Testing Integration: Validation rule testing and verification documentation
- * 
+ *
  * Policy Integration:
  * - Authorization Documentation: Comprehensive policy and authorization rule documentation
  * - Permission Mapping: Detailed permission and role mapping with access control documentation
@@ -81,7 +82,7 @@ use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
  * - Role Documentation: User role and permission documentation with inheritance patterns
  * - Security Policies: Security policy documentation with best practice recommendations
  * - Access Audit: Access pattern analysis and security audit documentation
- * 
+ *
  * Integration Features:
  * - Laravel Integration: Seamless integration with Laravel applications and conventions
  * - Git Integration: Version control integration with commit-based change tracking
@@ -90,7 +91,7 @@ use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
  * - Webhook Support: Real-time documentation updates with external system integration
  * - Team Collaboration: Multi-user documentation collaboration with review workflows
  * - External Tools: Integration with external documentation and diagramming tools
- * 
+ *
  * Performance Optimization:
  * - Efficient Schema Introspection: Optimized database queries for schema analysis
  * - Caching Strategies: Intelligent caching of documentation data and snapshots
@@ -98,12 +99,13 @@ use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
  * - Memory Management: Efficient memory usage for complex schema documentation
  * - Streaming Export: Progressive export for large documentation sets
  * - Batch Processing: Optimized batch processing for multiple schema operations
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $service = new SchemaDocumentationService('mysql');
  * $snapshot = $service->generateSchemaSnapshot('Baseline v1.0', 'Initial schema baseline');
@@ -113,11 +115,17 @@ use HkDevs\CodeForgeStudio\Models\SchemaSnapshot;
 class SchemaDocumentationService
 {
     protected string $connection;
+
     protected Builder $schema;
+
     protected array $tableData = [];
+
     protected array $relationships = [];
+
     protected array $modelMappings = [];
+
     protected array $validationRules = [];
+
     protected array $policyInformation = [];
 
     public function __construct(?string $connection = null)
@@ -192,10 +200,10 @@ class SchemaDocumentationService
         $database = DB::connection($this->connection)->getDatabaseName();
 
         $tables = DB::connection($this->connection)
-            ->select("SELECT table_name FROM information_schema.tables WHERE table_schema = ?", [$database]);
+            ->select('SELECT table_name FROM information_schema.tables WHERE table_schema = ?', [$database]);
 
         return collect($tables)
-            ->map(fn($table) => $table->table_name ?? $table->TABLE_NAME)
+            ->map(fn ($table) => $table->table_name ?? $table->TABLE_NAME)
             ->toArray();
     }
 
@@ -205,7 +213,7 @@ class SchemaDocumentationService
             ->select("SELECT tablename FROM pg_tables WHERE schemaname = 'public'");
 
         return collect($tables)
-            ->map(fn($table) => $table->tablename)
+            ->map(fn ($table) => $table->tablename)
             ->toArray();
     }
 
@@ -215,7 +223,7 @@ class SchemaDocumentationService
             ->select("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'");
 
         return collect($tables)
-            ->map(fn($table) => $table->name)
+            ->map(fn ($table) => $table->name)
             ->toArray();
     }
 
@@ -225,7 +233,7 @@ class SchemaDocumentationService
             ->select("SELECT table_name FROM information_schema.tables WHERE table_type = 'BASE TABLE'");
 
         return collect($tables)
-            ->map(fn($table) => $table->table_name ?? $table->TABLE_NAME)
+            ->map(fn ($table) => $table->table_name ?? $table->TABLE_NAME)
             ->toArray();
     }
 
@@ -271,7 +279,7 @@ class SchemaDocumentationService
         $database = DB::connection($this->connection)->getDatabaseName();
 
         $columns = DB::connection($this->connection)
-            ->select("
+            ->select('
                 SELECT 
                     column_name,
                     data_type,
@@ -286,7 +294,7 @@ class SchemaDocumentationService
                 FROM information_schema.columns 
                 WHERE table_schema = ? AND table_name = ?
                 ORDER BY ordinal_position
-            ", [$database, $tableName]);
+            ', [$database, $tableName]);
 
         $result = [];
         foreach ($columns as $column) {
@@ -310,7 +318,7 @@ class SchemaDocumentationService
     protected function getPostgresColumns(string $tableName): array
     {
         $columns = DB::connection($this->connection)
-            ->select("
+            ->select('
                 SELECT 
                     column_name,
                     data_type,
@@ -322,7 +330,7 @@ class SchemaDocumentationService
                 FROM information_schema.columns 
                 WHERE table_name = ?
                 ORDER BY ordinal_position
-            ", [$tableName]);
+            ', [$tableName]);
 
         $result = [];
         foreach ($columns as $column) {
@@ -350,7 +358,7 @@ class SchemaDocumentationService
             $result[$column->name] = [
                 'name' => $column->name,
                 'type' => $column->type,
-                'nullable' => !$column->notnull,
+                'nullable' => ! $column->notnull,
                 'default' => $column->dflt_value,
                 'primary_key' => (bool) $column->pk,
             ];
@@ -362,7 +370,7 @@ class SchemaDocumentationService
     protected function getSqlServerColumns(string $tableName): array
     {
         $columns = DB::connection($this->connection)
-            ->select("
+            ->select('
                 SELECT 
                     column_name,
                     data_type,
@@ -374,7 +382,7 @@ class SchemaDocumentationService
                 FROM information_schema.columns 
                 WHERE table_name = ?
                 ORDER BY ordinal_position
-            ", [$tableName]);
+            ', [$tableName]);
 
         $result = [];
         foreach ($columns as $column) {
@@ -420,10 +428,10 @@ class SchemaDocumentationService
         $result = [];
         foreach ($indexes as $index) {
             $indexName = $index->Key_name ?? $index->KEY_NAME;
-            if (!isset($result[$indexName])) {
+            if (! isset($result[$indexName])) {
                 $result[$indexName] = [
                     'name' => $indexName,
-                    'unique' => !($index->Non_unique ?? $index->NON_UNIQUE),
+                    'unique' => ! ($index->Non_unique ?? $index->NON_UNIQUE),
                     'primary' => $indexName === 'PRIMARY',
                     'columns' => [],
                 ];
@@ -454,7 +462,7 @@ class SchemaDocumentationService
                 'name' => $index->name,
                 'unique' => (bool) $index->unique,
                 'primary' => false,
-                'columns' => array_map(fn($col) => $col->name, $columns),
+                'columns' => array_map(fn ($col) => $col->name, $columns),
             ];
         }
 
@@ -492,7 +500,7 @@ class SchemaDocumentationService
         $database = DB::connection($this->connection)->getDatabaseName();
 
         $foreignKeys = DB::connection($this->connection)
-            ->select("
+            ->select('
                 SELECT 
                     constraint_name,
                     column_name,
@@ -502,7 +510,7 @@ class SchemaDocumentationService
                 WHERE table_schema = ? 
                 AND table_name = ? 
                 AND referenced_table_name IS NOT NULL
-            ", [$database, $tableName]);
+            ', [$database, $tableName]);
 
         $result = [];
         foreach ($foreignKeys as $fk) {
@@ -598,9 +606,9 @@ class SchemaDocumentationService
 
             $namespace = $this->getNamespaceFromFile($file->getPathname());
             $className = $file->getBasename('.php');
-            $fullClassName = $namespace . '\\' . $className;
+            $fullClassName = $namespace.'\\'.$className;
 
-            if (!class_exists($fullClassName)) {
+            if (! class_exists($fullClassName)) {
                 continue;
             }
 
@@ -608,7 +616,7 @@ class SchemaDocumentationService
                 $reflection = new ReflectionClass($fullClassName);
 
                 if (
-                    !$reflection->isSubclassOf(\Illuminate\Database\Eloquent\Model::class) ||
+                    ! $reflection->isSubclassOf(Model::class) ||
                     $reflection->isAbstract()
                 ) {
                     continue;
@@ -656,7 +664,7 @@ class SchemaDocumentationService
             }
 
             $returnType = $method->getReturnType();
-            if (!$returnType) {
+            if (! $returnType) {
                 continue;
             }
 
@@ -710,7 +718,7 @@ class SchemaDocumentationService
 
             $methods[] = [
                 'name' => $method->getName(),
-                'parameters' => array_map(fn($param) => [
+                'parameters' => array_map(fn ($param) => [
                     'name' => $param->getName(),
                     'type' => $param->getType() ? (string) $param->getType() : null,
                     'default' => $param->isOptional() ? $param->getDefaultValue() : null,
@@ -749,6 +757,7 @@ class SchemaDocumentationService
                 return $column['name'];
             }
         }
+
         return null;
     }
 
@@ -759,11 +768,11 @@ class SchemaDocumentationService
 
             if ($driver === 'mysql') {
                 $result = DB::connection($this->connection)
-                    ->select("
+                    ->select('
                         SELECT create_time 
                         FROM information_schema.tables 
                         WHERE table_schema = ? AND table_name = ?
-                    ", [DB::connection($this->connection)->getDatabaseName(), $tableName]);
+                    ', [DB::connection($this->connection)->getDatabaseName(), $tableName]);
 
                 return $result[0]->create_time ?? null;
             }
@@ -792,11 +801,11 @@ class SchemaDocumentationService
 
             if ($driver === 'mysql') {
                 $result = DB::connection($this->connection)
-                    ->select("
+                    ->select('
                         SELECT ROUND(((data_length + index_length) / 1024 / 1024), 2) AS size_mb
                         FROM information_schema.tables 
                         WHERE table_schema = ? AND table_name = ?
-                    ", [DB::connection($this->connection)->getDatabaseName(), $tableName]);
+                    ', [DB::connection($this->connection)->getDatabaseName(), $tableName]);
 
                 return (float) ($result[0]->size_mb ?? 0);
             }

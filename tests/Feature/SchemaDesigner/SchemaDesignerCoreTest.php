@@ -4,8 +4,9 @@ namespace HkDevs\CodeForgeStudio\Tests\Feature\SchemaDesigner;
 
 use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Test Case: TC-SCHEMA-001 - Schema Designer Core Functionality
@@ -15,7 +16,7 @@ class SchemaDesignerCoreTest extends TestCase
 {
     use RefreshDatabase;
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_schema_designer_page_loads()
     {
         // Test that schema designer page can be accessed
@@ -26,7 +27,7 @@ class SchemaDesignerCoreTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_database_table_listing()
     {
         // Create some test tables
@@ -54,7 +55,7 @@ class SchemaDesignerCoreTest extends TestCase
         $this->assertContains('test_posts', $tables);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_table_schema_inspection()
     {
         // Create a test table
@@ -77,7 +78,7 @@ class SchemaDesignerCoreTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_table_column_details()
     {
         Schema::create('test_column_details', function ($table) {
@@ -110,7 +111,7 @@ class SchemaDesignerCoreTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_foreign_key_detection()
     {
         // Create related tables
@@ -133,7 +134,7 @@ class SchemaDesignerCoreTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_index_detection()
     {
         Schema::create('test_indexes', function ($table) {
@@ -163,7 +164,7 @@ class SchemaDesignerCoreTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_table_relationship_mapping()
     {
         // Create a complex relationship structure
@@ -196,7 +197,7 @@ class SchemaDesignerCoreTest extends TestCase
         $this->assertTrue(Schema::hasColumn('test_reviews', 'book_id'));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_table_constraint_validation()
     {
         Schema::create('test_constraints', function ($table) {
@@ -211,16 +212,16 @@ class SchemaDesignerCoreTest extends TestCase
             DB::table('test_constraints')->insert([
                 'name' => 'Test User',
                 'email' => 'test@example.com',
-                'age' => 25
+                'age' => 25,
             ]);
 
             $this->assertTrue(true, 'Valid data should be inserted');
         } catch (\Exception $e) {
-            $this->fail('Valid data insertion failed: ' . $e->getMessage());
+            $this->fail('Valid data insertion failed: '.$e->getMessage());
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_schema_export_capability()
     {
         // Create a test table
@@ -240,7 +241,7 @@ class SchemaDesignerCoreTest extends TestCase
         $this->assertNotEmpty($columns);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_database_connection_handling()
     {
         // Test multiple database connection handling
@@ -252,7 +253,7 @@ class SchemaDesignerCoreTest extends TestCase
         $this->assertContains($driverName, ['mysql', 'pgsql', 'sqlite', 'sqlsrv']);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_table_size_calculation()
     {
         // Create a table with some data
@@ -265,7 +266,7 @@ class SchemaDesignerCoreTest extends TestCase
         // Insert some test data
         for ($i = 0; $i < 10; $i++) {
             DB::table('test_size')->insert([
-                'data' => 'Test data row ' . $i,
+                'data' => 'Test data row '.$i,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -276,7 +277,7 @@ class SchemaDesignerCoreTest extends TestCase
         $this->assertEquals(10, $count);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_schema_backup_preparation()
     {
         // Create multiple test tables
@@ -297,7 +298,7 @@ class SchemaDesignerCoreTest extends TestCase
         $this->assertContains('backup_table_2', $tables);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_table_modification_detection()
     {
         // Create initial table
@@ -320,7 +321,7 @@ class SchemaDesignerCoreTest extends TestCase
         $this->assertNotEquals($initialColumns, $modifiedColumns);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_complex_data_types()
     {
         // Test various data types support

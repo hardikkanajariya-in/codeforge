@@ -2,16 +2,16 @@
 
 namespace HkDevs\CodeForgeStudio\Services;
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 /**
  * CodeGenerationService
- * 
+ *
  * Core code generation orchestration service for CodeForge Database Studio.
  * Provides unified generation of Laravel application components with intelligent dependency management.
- * 
+ *
  * Features:
  * - Complete Laravel component generation (Models, Migrations, Factories, Seeders, Policies)
  * - Intelligent dependency resolution and generation ordering
@@ -21,7 +21,7 @@ use Illuminate\Support\Str;
  * - File conflict detection and resolution strategies
  * - Real-time progress tracking and status reporting
  * - Integration with specialized generator services
- * 
+ *
  * Component Generation:
  * - Database Migrations: Complete table creation with columns, indexes, and constraints
  * - Eloquent Models: Full model generation with relationships and attribute casting
@@ -30,7 +30,7 @@ use Illuminate\Support\Str;
  * - Policy Classes: Authorization logic with resource-based permissions
  * - Request Classes: Form validation with comprehensive rule sets
  * - Controller Classes: RESTful controllers with standard CRUD operations
- * 
+ *
  * Generation Workflow:
  * - Configuration validation and sanitization
  * - Dependency analysis and generation order optimization
@@ -38,7 +38,7 @@ use Illuminate\Support\Str;
  * - Database schema validation and consistency checking
  * - Generated file validation and syntax verification
  * - Transaction commit with complete generation history logging
- * 
+ *
  * Safety Features:
  * - Database transaction support for atomic operations
  * - File backup creation before overwriting existing files
@@ -46,33 +46,34 @@ use Illuminate\Support\Str;
  * - Comprehensive validation of input parameters and configurations
  * - Error recovery with detailed diagnostic information
  * - Preview mode for generation impact assessment
- * 
+ *
  * Integration Capabilities:
  * - Seamless integration with Laravel's native Artisan commands
  * - Support for custom generation templates and patterns
  * - Integration with CodeForge monitoring and logging systems
  * - Batch generation support for large-scale development workflows
  * - Team collaboration with shared generation configurations
- * 
+ *
  * Performance Features:
  * - Optimized file I/O operations with minimal disk access
  * - Intelligent caching of generation templates and configurations
  * - Memory-efficient handling of large generation sets
  * - Lazy loading of generation dependencies and services
  * - Batch processing optimization for multiple component generation
- * 
+ *
  * Monitoring and Tracking:
  * - Unique generation identifier assignment for tracking
  * - Comprehensive generation history with success/failure logging
  * - Performance metrics collection and analysis
  * - User attribution and activity tracking
  * - Generation pattern analysis and optimization recommendations
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $service = app(CodeGenerationService::class);
  * $result = $service->generateComplete([
@@ -85,7 +86,9 @@ use Illuminate\Support\Str;
 class CodeGenerationService
 {
     protected MigrationGeneratorService $migrationGenerator;
+
     protected ModelGeneratorService $modelGenerator;
+
     protected array $generationHistory = [];
 
     public function __construct(
@@ -110,14 +113,14 @@ class CodeGenerationService
             'seeder' => null,
             'policy' => null,
             'errors' => [],
-            'generation_id' => Str::uuid()->toString()
+            'generation_id' => Str::uuid()->toString(),
         ];
 
         DB::beginTransaction();
 
         try {
             // Generate migration first
-            if (!empty($data['migration'])) {
+            if (! empty($data['migration'])) {
                 $migrationResult = $this->migrationGenerator->generateMigration($data['migration']);
                 $results['migration'] = $migrationResult;
 
@@ -129,7 +132,7 @@ class CodeGenerationService
             }
 
             // Generate model and related files if requested
-            if (!empty($data['model'])) {
+            if (! empty($data['model'])) {
                 $modelResults = $this->modelGenerator->generateModel($data['model']);
 
                 foreach ($modelResults as $type => $result) {
@@ -170,17 +173,17 @@ class CodeGenerationService
             'factory' => null,
             'seeder' => null,
             'policy' => null,
-            'errors' => []
+            'errors' => [],
         ];
 
         try {
             // Preview migration
-            if (!empty($data['migration'])) {
+            if (! empty($data['migration'])) {
                 $results['migration'] = $this->migrationGenerator->previewMigration($data['migration']);
             }
 
             // Preview model and related files
-            if (!empty($data['model'])) {
+            if (! empty($data['model'])) {
                 $modelPreviews = $this->modelGenerator->previewModel($data['model']);
 
                 foreach ($modelPreviews as $type => $preview) {
@@ -202,30 +205,30 @@ class CodeGenerationService
         $errors = [];
 
         // Validate migration data
-        if (!empty($data['migration'])) {
+        if (! empty($data['migration'])) {
             $migrationValidation = $this->migrationGenerator->validateMigrationData($data['migration']);
-            if (!$migrationValidation['valid']) {
+            if (! $migrationValidation['valid']) {
                 $errors = array_merge($errors, $migrationValidation['errors']);
             }
         }
 
         // Validate model data
-        if (!empty($data['model'])) {
+        if (! empty($data['model'])) {
             $modelValidation = $this->modelGenerator->validateModelData($data['model']);
-            if (!$modelValidation['valid']) {
+            if (! $modelValidation['valid']) {
                 $errors = array_merge($errors, $modelValidation['errors']);
             }
         }
 
         // Cross-validation between migration and model
-        if (!empty($data['migration']) && !empty($data['model'])) {
+        if (! empty($data['migration']) && ! empty($data['model'])) {
             $crossErrors = $this->validateMigrationModelConsistency($data['migration'], $data['model']);
             $errors = array_merge($errors, $crossErrors);
         }
 
         return [
             'valid' => empty($errors),
-            'errors' => $errors
+            'errors' => $errors,
         ];
     }
 
@@ -237,7 +240,7 @@ class CodeGenerationService
         $results = [
             'success' => false,
             'files_removed' => [],
-            'errors' => []
+            'errors' => [],
         ];
 
         try {
@@ -275,7 +278,7 @@ class CodeGenerationService
     {
         $historyFile = storage_path('app/codeforge-database-studio/generation-history.json');
 
-        if (!File::exists($historyFile)) {
+        if (! File::exists($historyFile)) {
             return [];
         }
 
@@ -302,14 +305,14 @@ class CodeGenerationService
 
                 $tableData = [
                     'name' => $tableName,
-                    'columns' => []
+                    'columns' => [],
                 ];
 
                 foreach ($columns as $column) {
                     $tableData['columns'][] = [
                         'name' => $column->getName(),
                         'type' => $this->getColumnTypeName($column->getType()),
-                        'nullable' => !$column->getNotnull(),
+                        'nullable' => ! $column->getNotnull(),
                         'default' => $column->getDefault(),
                         'auto_increment' => $column->getAutoincrement(),
                     ];
@@ -346,7 +349,7 @@ class CodeGenerationService
         ];
 
         // Process columns for fillable and casts
-        if (!empty($migrationData['columns'])) {
+        if (! empty($migrationData['columns'])) {
             foreach ($migrationData['columns'] as $column) {
                 // Skip system columns
                 if (in_array($column['name'], ['id', 'created_at', 'updated_at', 'deleted_at'])) {
@@ -354,7 +357,7 @@ class CodeGenerationService
                 }
 
                 // Add to fillable if not auto-increment
-                if (!($column['auto_increment'] ?? false)) {
+                if (! ($column['auto_increment'] ?? false)) {
                     $modelData['fillable'][] = $column['name'];
                 }
 
@@ -367,7 +370,7 @@ class CodeGenerationService
         }
 
         // Suggest relations based on foreign keys
-        if (!empty($migrationData['foreign_keys'])) {
+        if (! empty($migrationData['foreign_keys'])) {
             foreach ($migrationData['foreign_keys'] as $fk) {
                 $relationName = $this->suggestRelationName($fk['referenced_table']);
                 $relatedModel = Str::studly(Str::singular($fk['referenced_table']));
@@ -377,7 +380,7 @@ class CodeGenerationService
                     'type' => 'belongsTo',
                     'related_model' => $relatedModel,
                     'foreign_key' => $fk['column'],
-                    'local_key' => $fk['referenced_column']
+                    'local_key' => $fk['referenced_column'],
                 ];
             }
         }
@@ -396,7 +399,7 @@ class CodeGenerationService
             'file_name' => $result['file_name'],
             'file_path' => $result['file_path'],
             'class_name' => $result['class_name'] ?? null,
-            'created_at' => now()->toISOString()
+            'created_at' => now()->toISOString(),
         ];
     }
 
@@ -408,7 +411,7 @@ class CodeGenerationService
         $historyFile = storage_path('app/codeforge-database-studio/generation-history.json');
         $historyDir = dirname($historyFile);
 
-        if (!File::isDirectory($historyDir)) {
+        if (! File::isDirectory($historyDir)) {
             File::makeDirectory($historyDir, 0755, true);
         }
 
@@ -421,7 +424,7 @@ class CodeGenerationService
             'generation_id' => $results['generation_id'],
             'files_created' => $results['files_created'],
             'created_at' => now()->toISOString(),
-            'success' => $results['success']
+            'success' => $results['success'],
         ];
 
         $history[] = $metadata;
@@ -441,7 +444,7 @@ class CodeGenerationService
     {
         $historyFile = storage_path('app/codeforge-database-studio/generation-history.json');
 
-        if (!File::exists($historyFile)) {
+        if (! File::exists($historyFile)) {
             return null;
         }
 
@@ -463,7 +466,7 @@ class CodeGenerationService
     {
         $historyFile = storage_path('app/codeforge-database-studio/generation-history.json');
 
-        if (!File::exists($historyFile)) {
+        if (! File::exists($historyFile)) {
             return;
         }
 
@@ -504,11 +507,11 @@ class CodeGenerationService
         }
 
         // Check if fillable fields exist in migration columns
-        if (!empty($modelData['fillable']) && !empty($migrationData['columns'])) {
+        if (! empty($modelData['fillable']) && ! empty($migrationData['columns'])) {
             $migrationColumns = collect($migrationData['columns'])->pluck('name')->toArray();
 
             foreach ($modelData['fillable'] as $fillableField) {
-                if (!in_array($fillableField, $migrationColumns)) {
+                if (! in_array($fillableField, $migrationColumns)) {
                     $errors[] = "Fillable field '{$fillableField}' not found in migration columns";
                 }
             }

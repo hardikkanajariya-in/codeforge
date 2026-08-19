@@ -2,34 +2,32 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Feature\HealthMonitoring;
 
-use HkDevs\CodeForgeStudio\Tests\TestCase;
-use HkDevs\CodeForgeStudio\Widgets\DatabaseHealthWidget;
-use HkDevs\CodeForgeStudio\Widgets\DatabaseHealthMetricsWidget;
-use HkDevs\CodeForgeStudio\Widgets\DatabaseStatsWidget;
-use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
-use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
 use HkDevs\CodeForgeStudio\Models\DatabaseHealthMetric;
+use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
+use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
+use HkDevs\CodeForgeStudio\Tests\TestCase;
+use HkDevs\CodeForgeStudio\Widgets\DatabaseHealthMetricsWidget;
+use HkDevs\CodeForgeStudio\Widgets\DatabaseHealthWidget;
+use HkDevs\CodeForgeStudio\Widgets\DatabaseStatsWidget;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
 use Livewire\Livewire;
-use Carbon\Carbon;
 
 /**
  * Health Monitoring Widgets Integration Test Suite
- * 
+ *
  * This test class focuses on testing the health monitoring dashboard widgets
  * and their integration with the health monitoring system.
- * 
+ *
  * Tests widget functionality for:
  * - DatabaseHealthWidget
- * - DatabaseHealthMetricsWidget  
+ * - DatabaseHealthMetricsWidget
  * - DatabaseStatsWidget
- * 
+ *
  * Implements test cases TC-WID-001, TC-WID-002 from the comprehensive test documentation.
- * 
- * @package HkDevs\CodeForgeStudio\Tests\Feature\HealthMonitoring
+ *
  * @author HkDevs (hardikkanajariya.in)
  */
 class HealthMonitoringWidgetsTest extends TestCase
@@ -58,7 +56,7 @@ class HealthMonitoringWidgetsTest extends TestCase
      */
     private function runPluginMigrations(): void
     {
-        if (!Schema::hasTable('database_health_metrics')) {
+        if (! Schema::hasTable('database_health_metrics')) {
             Schema::create('database_health_metrics', function ($table) {
                 $table->id();
                 $table->string('connection');
@@ -73,7 +71,7 @@ class HealthMonitoringWidgetsTest extends TestCase
             });
         }
 
-        if (!Schema::hasTable('query_performance_logs')) {
+        if (! Schema::hasTable('query_performance_logs')) {
             Schema::create('query_performance_logs', function ($table) {
                 $table->id();
                 $table->string('connection');
@@ -91,7 +89,7 @@ class HealthMonitoringWidgetsTest extends TestCase
             });
         }
 
-        if (!Schema::hasTable('database_manager_logs')) {
+        if (! Schema::hasTable('database_manager_logs')) {
             Schema::create('database_manager_logs', function ($table) {
                 $table->id();
                 $table->string('operation');
@@ -201,7 +199,7 @@ class HealthMonitoringWidgetsTest extends TestCase
                 'avg_response_time',
                 'slow_queries',
                 'error_rate',
-                'database_size'
+                'database_size',
             ];
 
             foreach ($expectedMetrics as $metric) {

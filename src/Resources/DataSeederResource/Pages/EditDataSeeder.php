@@ -2,8 +2,10 @@
 
 namespace HkDevs\CodeForgeStudio\Resources\DataSeederResource\Pages;
 
-use HkDevs\CodeForgeStudio\Resources\DataSeederResource;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
+use HkDevs\CodeForgeStudio\Resources\DataSeederResource;
 
 class EditDataSeeder extends EditRecord
 {
@@ -12,8 +14,8 @@ class EditDataSeeder extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            \Filament\Actions\ViewAction::make(),
-            \Filament\Actions\DeleteAction::make(),
+            ViewAction::make(),
+            DeleteAction::make(),
         ];
     }
 }

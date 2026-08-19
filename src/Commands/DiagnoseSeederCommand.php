@@ -9,10 +9,10 @@ use Illuminate\Database\Seeder;
 
 /**
  * DiagnoseSeederCommand
- * 
+ *
  * Diagnostic command for troubleshooting seeder issues in CodeForge Database Studio.
  * Provides comprehensive analysis of seeder configurations, file integrity, and execution history.
- * 
+ *
  * Features:
  * - Seeder configuration validation and verification
  * - File existence and accessibility checking
@@ -21,7 +21,7 @@ use Illuminate\Database\Seeder;
  * - Detailed error reporting and troubleshooting guidance
  * - Auto-run seeder configuration verification
  * - Dependency and relationship validation
- * 
+ *
  * Diagnostic Checks:
  * - File System: File path validation and accessibility
  * - Class Loading: PHP class existence and autoloading
@@ -30,10 +30,11 @@ use Illuminate\Database\Seeder;
  * - Database: Connection and table accessibility
  * - Execution History: Recent success/failure patterns
  * - Dependencies: Missing dependencies and requirements
- * 
- * @package HkDevs\CodeForgeStudio\Commands
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class DiagnoseSeederCommand extends Command
@@ -65,7 +66,8 @@ class DiagnoseSeederCommand extends Command
 
             return $this->diagnoseAllSeeders();
         } catch (\Exception $e) {
-            $this->error('❌ Diagnostic failed: ' . $e->getMessage());
+            $this->error('❌ Diagnostic failed: '.$e->getMessage());
+
             return 1;
         }
     }
@@ -74,8 +76,9 @@ class DiagnoseSeederCommand extends Command
     {
         $seeder = DataSeeder::where('name', $name)->first();
 
-        if (!$seeder) {
+        if (! $seeder) {
             $this->error("❌ Seeder '{$name}' not found");
+
             return 1;
         }
 
@@ -94,6 +97,7 @@ class DiagnoseSeederCommand extends Command
 
         if ($failedLogs->isEmpty()) {
             $this->info('✅ No failed seeders found in the last 7 days');
+
             return 0;
         }
 
@@ -124,6 +128,7 @@ class DiagnoseSeederCommand extends Command
 
         if ($autoSeeders->isEmpty()) {
             $this->info('ℹ️  No auto-run seeders configured');
+
             return 0;
         }
 
@@ -159,6 +164,7 @@ class DiagnoseSeederCommand extends Command
 
         if ($seeders->isEmpty()) {
             $this->info('ℹ️  No seeders found');
+
             return 0;
         }
 
@@ -182,7 +188,7 @@ class DiagnoseSeederCommand extends Command
         }
 
         $this->newLine();
-        $this->info("📊 Summary:");
+        $this->info('📊 Summary:');
         $this->line("   Total seeders: {$seeders->count()}");
         $this->line("   Active: {$active}");
         $this->line("   Inactive: {$inactive}");
@@ -200,22 +206,22 @@ class DiagnoseSeederCommand extends Command
             $this->line("   Class: {$seeder->class_name}");
             $this->line("   Status: {$seeder->status}");
             $this->line("   Type: {$seeder->type}");
-            $this->line("   Auto-run: " . ($seeder->auto_run ? 'Yes' : 'No'));
+            $this->line('   Auto-run: '.($seeder->auto_run ? 'Yes' : 'No'));
         }
 
         // Check status
         if ($seeder->status !== 'active') {
             $this->warn("   ⚠️  Seeder is not active (status: {$seeder->status})");
-            if (!$verbose) {
+            if (! $verbose) {
                 $this->line("   🔍 {$seeder->name}: Not active (status: {$seeder->status})");
             }
             $issues++;
         }
 
         // Check file existence
-        if (!$seeder->exists()) {
+        if (! $seeder->exists()) {
             $this->error("   ❌ File not found: {$seeder->file_path}");
-            if (!$verbose) {
+            if (! $verbose) {
                 $this->line("   🔍 {$seeder->name}: File not found");
             }
             $issues++;
@@ -226,9 +232,9 @@ class DiagnoseSeederCommand extends Command
         }
 
         // Check class loading
-        if (!class_exists($seeder->class_name)) {
+        if (! class_exists($seeder->class_name)) {
             $this->error("   ❌ Class not found: {$seeder->class_name}");
-            if (!$verbose) {
+            if (! $verbose) {
                 $this->line("   🔍 {$seeder->name}: Class not loadable");
             }
             $issues++;
@@ -240,33 +246,33 @@ class DiagnoseSeederCommand extends Command
             // Check if it's a valid seeder
             try {
                 $reflection = new \ReflectionClass($seeder->class_name);
-                if (!$reflection->isSubclassOf(Seeder::class)) {
-                    $this->error("   ❌ Class is not a valid seeder (must extend Illuminate\\Database\\Seeder)");
-                    if (!$verbose) {
+                if (! $reflection->isSubclassOf(Seeder::class)) {
+                    $this->error('   ❌ Class is not a valid seeder (must extend Illuminate\\Database\\Seeder)');
+                    if (! $verbose) {
                         $this->line("   🔍 {$seeder->name}: Invalid seeder class");
                     }
                     $issues++;
                 } else {
                     if ($verbose) {
-                        $this->info("   ✅ Valid seeder class");
+                        $this->info('   ✅ Valid seeder class');
                     }
                 }
 
                 // Check if instantiable
-                if (!$reflection->isInstantiable()) {
-                    $this->error("   ❌ Class is not instantiable");
-                    if (!$verbose) {
+                if (! $reflection->isInstantiable()) {
+                    $this->error('   ❌ Class is not instantiable');
+                    if (! $verbose) {
                         $this->line("   🔍 {$seeder->name}: Class not instantiable");
                     }
                     $issues++;
                 } else {
                     if ($verbose) {
-                        $this->info("   ✅ Class is instantiable");
+                        $this->info('   ✅ Class is instantiable');
                     }
                 }
             } catch (\ReflectionException $e) {
                 $this->error("   ❌ Reflection error: {$e->getMessage()}");
-                if (!$verbose) {
+                if (! $verbose) {
                     $this->line("   🔍 {$seeder->name}: Reflection error");
                 }
                 $issues++;
@@ -277,7 +283,7 @@ class DiagnoseSeederCommand extends Command
         $recentLogs = $seeder->executionLogs()->recent(7)->limit(3)->get();
         if ($recentLogs->isNotEmpty()) {
             if ($verbose) {
-                $this->line("   📊 Recent executions:");
+                $this->line('   📊 Recent executions:');
                 foreach ($recentLogs as $log) {
                     $status = $log->status === 'completed' ? '✅' : '❌';
                     $this->line("      {$status} {$log->started_at} - {$log->status}");
@@ -289,7 +295,7 @@ class DiagnoseSeederCommand extends Command
 
             $failedCount = $recentLogs->where('status', 'failed')->count();
             if ($failedCount > 0) {
-                if (!$verbose) {
+                if (! $verbose) {
                     $this->line("   🔍 {$seeder->name}: {$failedCount} recent failures");
                 }
             }
@@ -297,7 +303,7 @@ class DiagnoseSeederCommand extends Command
 
         if ($verbose) {
             if ($issues === 0) {
-                $this->info("   ✅ No issues found");
+                $this->info('   ✅ No issues found');
             } else {
                 $this->error("   ❌ Found {$issues} issue(s)");
             }

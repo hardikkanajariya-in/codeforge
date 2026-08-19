@@ -4,9 +4,10 @@ namespace HkDevs\CodeForgeStudio\Tests\Feature\MigrationManager;
 
 use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Test Case: TC-MIGRATION-001 - Migration Manager Core Functionality
@@ -16,11 +17,11 @@ class MigrationManagerCoreTest extends TestCase
 {
     use RefreshDatabase;
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_history_tracking()
     {
         // Create migration history table if it doesn't exist
-        if (!Schema::hasTable('migration_histories')) {
+        if (! Schema::hasTable('migration_histories')) {
             Schema::create('migration_histories', function ($table) {
                 $table->id();
                 $table->string('migration_name');
@@ -37,7 +38,7 @@ class MigrationManagerCoreTest extends TestCase
             'migration_name' => '2024_01_01_000001_create_test_table',
             'batch' => 1,
             'executed_at' => now(),
-            'status' => 'completed'
+            'status' => 'completed',
         ]);
 
         $migrationRecord = DB::table('migration_histories')
@@ -48,10 +49,10 @@ class MigrationManagerCoreTest extends TestCase
         $this->assertEquals('completed', $migrationRecord->status);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_batch_management()
     {
-        if (!Schema::hasTable('migration_histories')) {
+        if (! Schema::hasTable('migration_histories')) {
             Schema::create('migration_histories', function ($table) {
                 $table->id();
                 $table->string('migration_name');
@@ -76,7 +77,7 @@ class MigrationManagerCoreTest extends TestCase
                 'migration_name' => $migration['name'],
                 'batch' => $migration['batch'],
                 'executed_at' => now(),
-                'status' => 'completed'
+                'status' => 'completed',
             ]);
         }
 
@@ -88,10 +89,10 @@ class MigrationManagerCoreTest extends TestCase
         $this->assertEquals(2, $batch2Count);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_status_tracking()
     {
-        if (!Schema::hasTable('migration_histories')) {
+        if (! Schema::hasTable('migration_histories')) {
             Schema::create('migration_histories', function ($table) {
                 $table->id();
                 $table->string('migration_name');
@@ -112,7 +113,7 @@ class MigrationManagerCoreTest extends TestCase
                 'batch' => 1,
                 'executed_at' => $status === 'pending' ? null : now(),
                 'status' => $status,
-                'error_message' => $status === 'failed' ? 'Test error message' : null
+                'error_message' => $status === 'failed' ? 'Test error message' : null,
             ]);
         }
 
@@ -123,10 +124,10 @@ class MigrationManagerCoreTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_rollback_tracking()
     {
-        if (!Schema::hasTable('migration_histories')) {
+        if (! Schema::hasTable('migration_histories')) {
             Schema::create('migration_histories', function ($table) {
                 $table->id();
                 $table->string('migration_name');
@@ -143,7 +144,7 @@ class MigrationManagerCoreTest extends TestCase
             'migration_name' => 'test_rollback_migration',
             'batch' => 1,
             'executed_at' => now()->subHour(),
-            'status' => 'completed'
+            'status' => 'completed',
         ]);
 
         // Simulate rollback
@@ -151,7 +152,7 @@ class MigrationManagerCoreTest extends TestCase
             ->where('id', $migrationId)
             ->update([
                 'rollback_at' => now(),
-                'status' => 'rolled_back'
+                'status' => 'rolled_back',
             ]);
 
         $migration = DB::table('migration_histories')->where('id', $migrationId)->first();
@@ -161,10 +162,10 @@ class MigrationManagerCoreTest extends TestCase
         $this->assertNotNull($migration->rollback_at);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_error_handling()
     {
-        if (!Schema::hasTable('migration_histories')) {
+        if (! Schema::hasTable('migration_histories')) {
             Schema::create('migration_histories', function ($table) {
                 $table->id();
                 $table->string('migration_name');
@@ -182,7 +183,7 @@ class MigrationManagerCoreTest extends TestCase
             'batch' => 1,
             'executed_at' => now(),
             'status' => 'failed',
-            'error_message' => 'SQLSTATE[42S01]: Base table or view already exists'
+            'error_message' => 'SQLSTATE[42S01]: Base table or view already exists',
         ]);
 
         $failedMigration = DB::table('migration_histories')
@@ -194,7 +195,7 @@ class MigrationManagerCoreTest extends TestCase
         $this->assertStringContainsString('SQLSTATE', $failedMigration->error_message);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_generation()
     {
         // Test migration file generation logic (mock)
@@ -211,10 +212,10 @@ class MigrationManagerCoreTest extends TestCase
         $this->assertStringContainsString($migrationName, $fileName);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_dependency_resolution()
     {
-        if (!Schema::hasTable('migration_histories')) {
+        if (! Schema::hasTable('migration_histories')) {
             Schema::create('migration_histories', function ($table) {
                 $table->id();
                 $table->string('migration_name');
@@ -231,14 +232,14 @@ class MigrationManagerCoreTest extends TestCase
             'migration_name' => '2024_01_01_000001_create_users_table',
             'batch' => 1,
             'executed_at' => now()->subMinutes(10),
-            'status' => 'completed'
+            'status' => 'completed',
         ]);
 
         $childMigration = DB::table('migration_histories')->insertGetId([
             'migration_name' => '2024_01_01_000002_create_posts_table',
             'batch' => 2,
             'executed_at' => now()->subMinutes(5),
-            'status' => 'completed'
+            'status' => 'completed',
         ]);
 
         // Test dependency order
@@ -249,16 +250,16 @@ class MigrationManagerCoreTest extends TestCase
         $this->assertTrue($migrations[0]->executed_at < $migrations[1]->executed_at);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_preview_functionality()
     {
         // Test migration preview (dry run)
-        $migrationSQL = "CREATE TABLE test_preview (
+        $migrationSQL = 'CREATE TABLE test_preview (
             id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             created_at TIMESTAMP NULL,
             updated_at TIMESTAMP NULL
-        )";
+        )';
 
         // Test SQL validation
         $this->assertStringContainsString('CREATE TABLE', $migrationSQL);
@@ -266,14 +267,14 @@ class MigrationManagerCoreTest extends TestCase
         $this->assertStringContainsString('test_preview', $migrationSQL);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_backup_before_execution()
     {
         // Simulate backup creation before migration
         $backupData = [
             'tables' => ['users', 'posts', 'categories'],
             'timestamp' => now(),
-            'size' => '1.2MB'
+            'size' => '1.2MB',
         ];
 
         $this->assertIsArray($backupData['tables']);
@@ -281,10 +282,10 @@ class MigrationManagerCoreTest extends TestCase
         $this->assertNotNull($backupData['timestamp']);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_performance_tracking()
     {
-        if (!Schema::hasTable('migration_histories')) {
+        if (! Schema::hasTable('migration_histories')) {
             Schema::create('migration_histories', function ($table) {
                 $table->id();
                 $table->string('migration_name');
@@ -298,7 +299,7 @@ class MigrationManagerCoreTest extends TestCase
 
         // Add execution time tracking
         Schema::table('migration_histories', function ($table) {
-            if (!Schema::hasColumn('migration_histories', 'execution_time')) {
+            if (! Schema::hasColumn('migration_histories', 'execution_time')) {
                 $table->float('execution_time')->nullable()->after('status');
             }
         });
@@ -309,7 +310,7 @@ class MigrationManagerCoreTest extends TestCase
             'batch' => 1,
             'executed_at' => now(),
             'status' => 'completed',
-            'execution_time' => 2.5 // seconds
+            'execution_time' => 2.5, // seconds
         ]);
 
         $migration = DB::table('migration_histories')
@@ -319,7 +320,7 @@ class MigrationManagerCoreTest extends TestCase
         $this->assertEquals(2.5, $migration->execution_time);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_validation()
     {
         // Test migration file validation
@@ -352,10 +353,10 @@ return new class extends Migration
         $this->assertStringContainsString('Schema::', $validMigrationContent);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_migration_conflict_detection()
     {
-        if (!Schema::hasTable('migration_histories')) {
+        if (! Schema::hasTable('migration_histories')) {
             Schema::create('migration_histories', function ($table) {
                 $table->id();
                 $table->string('migration_name');
@@ -372,7 +373,7 @@ return new class extends Migration
             'migration_name' => '2024_01_01_000001_create_products_table',
             'batch' => 1,
             'executed_at' => now(),
-            'status' => 'completed'
+            'status' => 'completed',
         ]);
 
         // Test duplicate detection
@@ -383,7 +384,7 @@ return new class extends Migration
         $this->assertTrue($existing, 'Should detect existing migration for same table');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_custom_migration_commands()
     {
         // Test that custom migration commands are available

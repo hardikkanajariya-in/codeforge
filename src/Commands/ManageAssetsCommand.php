@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Schema;
 
 /**
  * ManageAssetsCommand
- * 
+ *
  * Comprehensive asset management utility for CodeForge Database Studio plugin.
  * Provides complete control over published assets including configuration, migrations, views, and frontend assets.
- * 
+ *
  * Features:
  * - Complete asset lifecycle management (remove, publish, refresh)
  * - Selective asset type management (config, migrations, views, CSS/JS)
@@ -20,66 +20,66 @@ use Illuminate\Support\Facades\Schema;
  * - Intelligent migration detection and cleanup
  * - Comprehensive file system management
  * - Detailed operation reporting and logging
- * 
+ *
  * Asset Categories:
  * - Configuration Files: Plugin settings and customizable options
  * - Database Migrations: Schema setup and modification files
  * - View Templates: Blade templates and UI components
  * - Frontend Assets: CSS stylesheets and JavaScript files
- * 
+ *
  * Management Operations:
  * - Remove: Clean removal of published assets from Laravel application
  * - Publish: Deploy assets from package to Laravel application
  * - Refresh: Complete remove and republish cycle for clean updates
- * 
+ *
  * Safety Features:
  * - Dry-run mode for risk-free operation preview
  * - Confirmation prompts for destructive operations
  * - Backup recommendations before major changes
  * - Detailed logging of all file operations
  * - Error handling with rollback capabilities
- * 
+ *
  * Selective Management:
  * - Target specific asset types with precise control
  * - Maintain granular control over deployment
  * - Prevent unnecessary file operations
  * - Optimize CI/CD pipeline integration
- * 
+ *
  * Development Support:
  * - Development environment asset management
  * - Hot-reload compatible asset publishing
  * - Version control friendly operations
  * - Team development asset synchronization
- * 
+ *
  * Use Cases:
  * - Plugin updates and asset synchronization
  * - Development environment setup and teardown
  * - CI/CD pipeline asset management
  * - Troubleshooting asset conflicts
  * - Clean reinstallation procedures
- * 
- * @package HkDevs\CodeForgeStudio\Commands
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * # Remove all published assets
  * php artisan codeforge:assets remove
- * 
+ *
  * # Publish all assets with force overwrite
  * php artisan codeforge:assets publish --force
- * 
+ *
  * # Refresh only configuration files
  * php artisan codeforge:assets refresh --config
- * 
+ *
  * # Preview removal without actually deleting
  * php artisan codeforge:assets remove --dry-run
- * 
+ *
  * # Manage only frontend assets
  * php artisan codeforge:assets publish --assets --force
  */
-
 class ManageAssetsCommand extends Command
 {
     protected $signature = 'codeforge:assets 
@@ -106,7 +106,7 @@ class ManageAssetsCommand extends Command
         'views' => 'resources/views/vendor/codeforge-studio',
         'assets' => [
             'public/vendor/codeforge-studio/css',
-            'public/vendor/codeforge-studio/js'
+            'public/vendor/codeforge-studio/js',
         ],
     ];
 
@@ -114,15 +114,16 @@ class ManageAssetsCommand extends Command
     {
         $action = $this->argument('action');
 
-        if (!in_array($action, ['remove', 'publish', 'refresh'])) {
+        if (! in_array($action, ['remove', 'publish', 'refresh'])) {
             $this->error('Invalid action. Use: remove, publish, or refresh');
+
             return self::FAILURE;
         }
 
-        $this->info("🔧 CodeForge Database Studio Asset Management");
-        $this->line("Action: " . ucfirst($action));
+        $this->info('🔧 CodeForge Database Studio Asset Management');
+        $this->line('Action: '.ucfirst($action));
         if ($this->option('dry-run')) {
-            $this->warn("DRY RUN MODE - No changes will be made");
+            $this->warn('DRY RUN MODE - No changes will be made');
         }
         $this->line('');
 
@@ -149,10 +150,18 @@ class ManageAssetsCommand extends Command
     {
         $types = [];
 
-        if ($this->option('config')) $types[] = 'config';
-        if ($this->option('migrations')) $types[] = 'migrations';
-        if ($this->option('views')) $types[] = 'views';
-        if ($this->option('assets')) $types[] = 'assets';
+        if ($this->option('config')) {
+            $types[] = 'config';
+        }
+        if ($this->option('migrations')) {
+            $types[] = 'migrations';
+        }
+        if ($this->option('views')) {
+            $types[] = 'views';
+        }
+        if ($this->option('assets')) {
+            $types[] = 'assets';
+        }
 
         return $types;
     }
@@ -188,6 +197,7 @@ class ManageAssetsCommand extends Command
 
             if ($this->option('dry-run')) {
                 $this->line("  [DRY RUN] Would publish tag: {$this->publishableTags[$type]}");
+
                 continue;
             }
 
@@ -229,6 +239,7 @@ class ManageAssetsCommand extends Command
 
             if ($this->option('dry-run')) {
                 $this->line("    [DRY RUN] Would publish tag: {$this->publishableTags[$type]}");
+
                 continue;
             }
 
@@ -261,6 +272,7 @@ class ManageAssetsCommand extends Command
                 } else {
                     $this->line("  [DRY RUN] Not found: {$path}");
                 }
+
                 continue;
             }
 
@@ -283,7 +295,7 @@ class ManageAssetsCommand extends Command
         $migrationPath = database_path('migrations');
 
         // CodeForge Studio migration files start with 2024_01_01_
-        $migrationFiles = File::glob($migrationPath . '/2024_01_01_*_codeforge_*.php');
+        $migrationFiles = File::glob($migrationPath.'/2024_01_01_*_codeforge_*.php');
 
         // Also check for the specific migration names we know about
         $knownMigrations = [
@@ -299,14 +311,15 @@ class ManageAssetsCommand extends Command
         ];
 
         foreach ($knownMigrations as $migration) {
-            $filePath = $migrationPath . '/' . $migration;
+            $filePath = $migrationPath.'/'.$migration;
             if (File::exists($filePath)) {
                 $migrationFiles[] = $filePath;
             }
         }
 
         if (empty($migrationFiles)) {
-            $this->line("  ⚠ No CodeForge Studio migrations found");
+            $this->line('  ⚠ No CodeForge Studio migrations found');
+
             return;
         }
 
@@ -315,6 +328,7 @@ class ManageAssetsCommand extends Command
 
             if ($this->option('dry-run')) {
                 $this->line("  [DRY RUN] Would remove migration: {$fileName}");
+
                 continue;
             }
 
@@ -322,7 +336,7 @@ class ManageAssetsCommand extends Command
             $this->line("  ✓ Removed migration: {$fileName}");
         }
 
-        if (!$this->option('dry-run')) {
+        if (! $this->option('dry-run')) {
             // Check if we need to rollback any migrated tables
             if (
                 Schema::hasTable('database_manager_logs') ||
@@ -339,13 +353,13 @@ class ManageAssetsCommand extends Command
 
     public function getDescription(): string
     {
-        return $this->description . PHP_EOL . PHP_EOL .
-            'Examples:' . PHP_EOL .
-            '  Remove all assets:     php artisan codeforge:assets remove' . PHP_EOL .
-            '  Publish all assets:    php artisan codeforge:assets publish --force' . PHP_EOL .
-            '  Refresh all assets:    php artisan codeforge:assets refresh' . PHP_EOL .
-            '  Remove only config:    php artisan codeforge:assets remove --config' . PHP_EOL .
-            '  Refresh only views:    php artisan codeforge:assets refresh --views' . PHP_EOL .
-            '  Dry run (preview):     php artisan codeforge:assets remove --dry-run' . PHP_EOL;
+        return $this->description.PHP_EOL.PHP_EOL.
+            'Examples:'.PHP_EOL.
+            '  Remove all assets:     php artisan codeforge:assets remove'.PHP_EOL.
+            '  Publish all assets:    php artisan codeforge:assets publish --force'.PHP_EOL.
+            '  Refresh all assets:    php artisan codeforge:assets refresh'.PHP_EOL.
+            '  Remove only config:    php artisan codeforge:assets remove --config'.PHP_EOL.
+            '  Refresh only views:    php artisan codeforge:assets refresh --views'.PHP_EOL.
+            '  Dry run (preview):     php artisan codeforge:assets remove --dry-run'.PHP_EOL;
     }
 }

@@ -2,9 +2,10 @@
 
 namespace HkDevs\CodeForgeStudio\Resources\DatabaseHealthMetricResource\Pages;
 
-use HkDevs\CodeForgeStudio\Resources\DatabaseHealthMetricResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
+use HkDevs\CodeForgeStudio\Resources\DatabaseHealthMetricResource;
+use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
 
 class ViewDatabaseHealthMetric extends ViewRecord
 {
@@ -25,7 +26,7 @@ class ViewDatabaseHealthMetric extends ViewRecord
                 ->color('primary')
                 ->action(function () {
                     // Trigger a new health check for this connection
-                    $healthService = app(\HkDevs\CodeForgeStudio\Services\DatabaseHealthService::class);
+                    $healthService = app(DatabaseHealthService::class);
                     $healthService->testConnection($this->record->connection);
 
                     $this->refreshFormData(['record']);

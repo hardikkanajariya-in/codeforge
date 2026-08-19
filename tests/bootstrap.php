@@ -12,7 +12,7 @@
 */
 
 // Load the Composer autoloader
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 // Set timezone to UTC for consistent testing
 date_default_timezone_set('UTC');

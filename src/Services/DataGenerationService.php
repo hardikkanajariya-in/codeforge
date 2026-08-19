@@ -2,20 +2,20 @@
 
 namespace HkDevs\CodeForgeStudio\Services;
 
-use HkDevs\CodeForgeStudio\Models\DataGenerationTemplate;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Faker\Factory as Faker;
 use Faker\Generator;
+use HkDevs\CodeForgeStudio\Models\DataGenerationTemplate;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * DataGenerationService
- * 
+ *
  * Intelligent test data generation service for CodeForge Database Studio.
  * Provides contextually-aware, realistic data generation with relationship integrity and custom templates.
- * 
+ *
  * Features:
  * - Intelligent data generation based on column names, types, and constraints
  * - Template-driven generation with reusable configuration patterns
@@ -25,7 +25,7 @@ use Faker\Generator;
  * - Custom field mapping and generation rule configuration
  * - Constraint compliance validation and enforcement
  * - Performance-optimized generation for large datasets
- * 
+ *
  * Data Generation Intelligence:
  * - Column Name Analysis: Automatic detection of field types (email, phone, name, address)
  * - Data Type Mapping: Context-appropriate generation for each database column type
@@ -34,7 +34,7 @@ use Faker\Generator;
  * - Locale Support: Culturally appropriate data generation for international applications
  * - Relationship Handling: Foreign key population from related tables with integrity checks
  * - Custom Rules: User-defined generation rules and validation patterns
- * 
+ *
  * Template System:
  * - Reusable Templates: Save and share data generation configurations
  * - Template Inheritance: Build complex templates from simpler base configurations
@@ -43,7 +43,7 @@ use Faker\Generator;
  * - Import/Export: Template portability across environments and projects
  * - Template Validation: Comprehensive validation of template configurations
  * - Dynamic Templates: Runtime template modification and customization
- * 
+ *
  * Performance Features:
  * - Batch Processing: Optimized bulk insertion with configurable batch sizes
  * - Memory Management: Efficient memory usage for large dataset generation
@@ -52,7 +52,7 @@ use Faker\Generator;
  * - Parallel Processing: Multi-threaded generation for improved performance
  * - Progress Tracking: Real-time progress monitoring for long-running operations
  * - Resource Optimization: CPU and memory usage optimization strategies
- * 
+ *
  * Data Quality:
  * - Realistic Data Generation: Contextually appropriate and believable test data
  * - Referential Integrity: Automatic maintenance of database relationships
@@ -61,7 +61,7 @@ use Faker\Generator;
  * - Quality Metrics: Data quality assessment and reporting
  * - Error Recovery: Graceful handling of generation errors with retry mechanisms
  * - Data Verification: Post-generation validation and integrity checking
- * 
+ *
  * Integration Features:
  * - Laravel Integration: Seamless integration with Laravel's database layer
  * - Faker Integration: Advanced Faker library integration with custom providers
@@ -70,7 +70,7 @@ use Faker\Generator;
  * - CI/CD Support: Automated data generation for testing environments
  * - API Integration: REST API endpoints for external data generation requests
  * - Event Integration: Laravel event system integration for generation workflows
- * 
+ *
  * Customization Options:
  * - Custom Field Mappings: User-defined field generation strategies
  * - Generation Rules: Custom validation and generation rule configuration
@@ -78,12 +78,13 @@ use Faker\Generator;
  * - Localization: Multi-language and region-specific data generation
  * - Format Specifications: Custom data format and pattern specifications
  * - Extension Points: Plugin architecture for custom generation modules
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $service = app(DataGenerationService::class);
  * $template = $service->createTemplateFromTable('users', 'user_template');
@@ -125,7 +126,7 @@ class DataGenerationService
                 $insertedIds[] = $id;
             } catch (\Exception $e) {
                 // Log failed inserts but continue
-                Log::warning("Failed to insert generated data: " . $e->getMessage(), [
+                Log::warning('Failed to insert generated data: '.$e->getMessage(), [
                     'template' => $template->name,
                     'record' => $record,
                 ]);
@@ -147,7 +148,7 @@ class DataGenerationService
 
     public function analyzeTable(string $tableName): array
     {
-        if (!Schema::hasTable($tableName)) {
+        if (! Schema::hasTable($tableName)) {
             throw new \Exception("Table {$tableName} does not exist.");
         }
 
@@ -171,7 +172,7 @@ class DataGenerationService
         $analysis = $this->analyzeTable($tableName);
 
         return DataGenerationTemplate::create([
-            'name' => $templateName ?? "auto_" . $tableName,
+            'name' => $templateName ?? 'auto_'.$tableName,
             'description' => "Auto-generated template for {$tableName} table",
             'table_name' => $tableName,
             'field_mappings' => $analysis['suggestions'],
@@ -344,6 +345,7 @@ class DataGenerationService
     protected function generateEnum(array $options): string
     {
         $values = $options['values'] ?? ['option1', 'option2', 'option3'];
+
         return $this->faker->randomElement($values);
     }
 
@@ -354,7 +356,7 @@ class DataGenerationService
 
         if ($table && Schema::hasTable($table)) {
             $ids = DB::table($table)->pluck($column)->toArray();
-            if (!empty($ids)) {
+            if (! empty($ids)) {
                 return $this->faker->randomElement($ids);
             }
         }
@@ -405,7 +407,7 @@ class DataGenerationService
         }
 
         // Suggest based on column name patterns
-        if (str_contains($columnName, 'email') && !str_contains($columnName, '_at')) {
+        if (str_contains($columnName, 'email') && ! str_contains($columnName, '_at')) {
             return ['type' => 'email'];
         }
 
@@ -436,22 +438,14 @@ class DataGenerationService
 
         // Suggest based on data type
         return match (true) {
-            str_contains($type, 'varchar') || str_contains($type, 'text') =>
-            ['type' => 'string', 'options' => ['length' => $column['length'] ?? 50]],
-            str_contains($type, 'tinyint(1)') =>
-            ['type' => 'boolean'],
-            str_contains($type, 'int') =>
-            ['type' => 'integer', 'options' => ['min' => 1, 'max' => 1000]],
-            str_contains($type, 'decimal') || str_contains($type, 'float') =>
-            ['type' => 'decimal', 'options' => ['min' => 0, 'max' => 1000, 'decimals' => 2]],
-            str_contains($type, 'boolean') =>
-            ['type' => 'boolean'],
-            str_contains($type, 'date') =>
-            ['type' => 'date'],
-            str_contains($type, 'datetime') || str_contains($type, 'timestamp') =>
-            ['type' => 'datetime'],
-            str_contains($type, 'json') =>
-            ['type' => 'json', 'options' => ['structure' => ['key' => 'string']]],
+            str_contains($type, 'varchar') || str_contains($type, 'text') => ['type' => 'string', 'options' => ['length' => $column['length'] ?? 50]],
+            str_contains($type, 'tinyint(1)') => ['type' => 'boolean'],
+            str_contains($type, 'int') => ['type' => 'integer', 'options' => ['min' => 1, 'max' => 1000]],
+            str_contains($type, 'decimal') || str_contains($type, 'float') => ['type' => 'decimal', 'options' => ['min' => 0, 'max' => 1000, 'decimals' => 2]],
+            str_contains($type, 'boolean') => ['type' => 'boolean'],
+            str_contains($type, 'date') => ['type' => 'date'],
+            str_contains($type, 'datetime') || str_contains($type, 'timestamp') => ['type' => 'datetime'],
+            str_contains($type, 'json') => ['type' => 'json', 'options' => ['structure' => ['key' => 'string']]],
             default => ['type' => 'string', 'options' => ['length' => 50]],
         };
     }
@@ -501,7 +495,7 @@ class DataGenerationService
         foreach ($relationships as $relationship) {
             if ($relationship['type'] === 'belongs_to') {
                 $relatedIds = DB::table($relationship['related_table'])->pluck('id')->toArray();
-                if (!empty($relatedIds)) {
+                if (! empty($relatedIds)) {
                     $record[$relationship['column']] = $this->faker->randomElement($relatedIds);
                 }
             }

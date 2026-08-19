@@ -9,10 +9,10 @@ use ReflectionClass;
 
 /**
  * FilamentResourceGeneratorService
- * 
+ *
  * Advanced Filament Admin Panel resource generation service for CodeForge Database Studio.
  * Creates comprehensive, production-ready Filament resources with intelligent form and table generation.
- * 
+ *
  * Features:
  * - Intelligent Filament resource generation from models and database schemas
  * - Automatic form field generation with appropriate input types and validation
@@ -22,7 +22,7 @@ use ReflectionClass;
  * - Custom action generation with bulk operations and modal support
  * - Widget integration with dashboard and resource-specific widgets
  * - Multi-language support with automatic translation key generation
- * 
+ *
  * Resource Generation Intelligence:
  * - Model Analysis: Comprehensive model introspection for accurate resource generation
  * - Field Type Detection: Automatic UI component selection based on database column types
@@ -31,7 +31,7 @@ use ReflectionClass;
  * - Permission Detection: Integration with existing authorization policies and middleware
  * - UI Optimization: Context-aware component selection for optimal user experience
  * - Performance Optimization: Efficient query generation with eager loading strategies
- * 
+ *
  * Form Generation:
  * - Smart Field Selection: Automatic form field type selection based on data types
  * - Relationship Fields: Select, checkbox, and radio components for model relationships
@@ -40,7 +40,7 @@ use ReflectionClass;
  * - Date and Time Pickers: Specialized components for temporal data with timezone support
  * - Custom Components: Integration with custom Filament form components
  * - Conditional Logic: Dynamic form behavior with conditional field visibility
- * 
+ *
  * Table Generation:
  * - Column Configuration: Intelligent column selection with sorting and filtering
  * - Search Integration: Full-text search with column-specific search capabilities
@@ -49,7 +49,7 @@ use ReflectionClass;
  * - Pagination: Optimized pagination with configurable page sizes
  * - Custom Columns: Support for calculated columns and custom display logic
  * - Responsive Design: Mobile-optimized table layouts with adaptive columns
- * 
+ *
  * Advanced Features:
  * - Page Generation: Create, Edit, List, and View page generation with customization
  * - Widget Integration: Resource-specific widgets and dashboard integration
@@ -58,7 +58,7 @@ use ReflectionClass;
  * - Navigation Integration: Automatic menu generation with icon and grouping support
  * - Theme Integration: Support for custom themes and branding options
  * - Plugin Integration: Compatibility with popular Filament plugins and extensions
- * 
+ *
  * Security and Authorization:
  * - Policy Integration: Automatic integration with Laravel authorization policies
  * - Role-based Access: Support for role-based resource access and field visibility
@@ -67,7 +67,7 @@ use ReflectionClass;
  * - Data Validation: Comprehensive validation with custom rule support
  * - CSRF Protection: Built-in CSRF protection for all resource operations
  * - Input Sanitization: Automatic input sanitization and XSS prevention
- * 
+ *
  * Customization Options:
  * - Template System: Customizable generation templates with override capabilities
  * - Component Overrides: Custom component selection and configuration options
@@ -76,7 +76,7 @@ use ReflectionClass;
  * - JavaScript Integration: Custom JavaScript behavior and component enhancement
  * - Plugin Integration: Support for custom Filament plugins and extensions
  * - Localization: Multi-language support with automatic translation management
- * 
+ *
  * Integration Features:
  * - Laravel Integration: Seamless integration with Laravel applications and conventions
  * - Filament Ecosystem: Full compatibility with Filament plugins and extensions
@@ -85,7 +85,7 @@ use ReflectionClass;
  * - Migration Integration: Resource generation based on database migrations
  * - Seeder Integration: Test data integration for resource development and testing
  * - API Integration: RESTful API generation for resource operations
- * 
+ *
  * Performance Optimization:
  * - Query Optimization: Efficient database queries with eager loading and optimization
  * - Caching Integration: Intelligent caching strategies for improved performance
@@ -93,12 +93,13 @@ use ReflectionClass;
  * - Memory Management: Efficient memory usage for resource-intensive operations
  * - Background Processing: Asynchronous processing for bulk operations
  * - Index Optimization: Database index recommendations for optimal performance
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $service = app(FilamentResourceGeneratorService::class);
  * $models = $service->getAvailableModels();
@@ -111,6 +112,7 @@ use ReflectionClass;
 class FilamentResourceGeneratorService
 {
     protected array $availableModels = [];
+
     protected array $availableMigrations = [];
 
     public function __construct()
@@ -136,7 +138,8 @@ class FilamentResourceGeneratorService
 
         return collect($this->availableModels)->filter(function ($model) use ($existingResources) {
             $modelName = class_basename($model['class']);
-            return !in_array($modelName . 'Resource', $existingResources);
+
+            return ! in_array($modelName.'Resource', $existingResources);
         })->values()->all();
     }
 
@@ -155,7 +158,7 @@ class FilamentResourceGeneratorService
     {
         try {
             $reflection = new ReflectionClass($modelClass);
-            $model = new $modelClass();
+            $model = new $modelClass;
 
             // Get table information
             $tableName = $model->getTable();
@@ -191,7 +194,7 @@ class FilamentResourceGeneratorService
                 'suggested_filters' => $this->suggestFilters($columnDetails),
             ];
         } catch (\Exception $e) {
-            throw new \Exception("Failed to analyze model {$modelClass}: " . $e->getMessage());
+            throw new \Exception("Failed to analyze model {$modelClass}: ".$e->getMessage());
         }
     }
 
@@ -201,9 +204,9 @@ class FilamentResourceGeneratorService
     public function generateConfigurationFromMigration(string $migrationFile): array
     {
         try {
-            $migrationPath = database_path('migrations/' . $migrationFile . '.php');
+            $migrationPath = database_path('migrations/'.$migrationFile.'.php');
 
-            if (!File::exists($migrationPath)) {
+            if (! File::exists($migrationPath)) {
                 throw new \Exception("Migration file not found: {$migrationFile}");
             }
 
@@ -218,7 +221,7 @@ class FilamentResourceGeneratorService
 
             // Check if model exists, if not, generate it
             $modelGenerated = false;
-            if (!class_exists($modelClass)) {
+            if (! class_exists($modelClass)) {
                 $this->generateModelClass($modelName, $tableName, $columns);
                 $modelGenerated = true;
             }
@@ -235,7 +238,7 @@ class FilamentResourceGeneratorService
                 'suggested_filters' => $this->suggestFilters($columns),
             ];
         } catch (\Exception $e) {
-            throw new \Exception("Failed to analyze migration {$migrationFile}: " . $e->getMessage());
+            throw new \Exception("Failed to analyze migration {$migrationFile}: ".$e->getMessage());
         }
     }
 
@@ -287,7 +290,7 @@ class FilamentResourceGeneratorService
                 'files_to_create' => $this->getFilesToCreate($resourceName, $resourceCode, $pages, $policy),
             ];
         } catch (\Exception $e) {
-            throw new \Exception("Failed to generate resource code: " . $e->getMessage());
+            throw new \Exception('Failed to generate resource code: '.$e->getMessage());
         }
     }
 
@@ -302,37 +305,37 @@ class FilamentResourceGeneratorService
         try {
             // Create resource directory
             $resourceDir = app_path('Filament/Resources');
-            if (!File::exists($resourceDir)) {
+            if (! File::exists($resourceDir)) {
                 File::makeDirectory($resourceDir, 0755, true);
             }
 
             // Create main resource file
-            $resourceFile = $resourceDir . '/' . $generator->name . 'Resource.php';
+            $resourceFile = $resourceDir.'/'.$generator->name.'Resource.php';
             File::put($resourceFile, $generatedCode['resource']);
             $createdFiles[] = $resourceFile;
 
             // Create resource pages
-            if (!empty($generatedCode['pages'])) {
-                $pagesDir = $resourceDir . '/' . $generator->name . 'Resource/Pages';
-                if (!File::exists($pagesDir)) {
+            if (! empty($generatedCode['pages'])) {
+                $pagesDir = $resourceDir.'/'.$generator->name.'Resource/Pages';
+                if (! File::exists($pagesDir)) {
                     File::makeDirectory($pagesDir, 0755, true);
                 }
 
                 foreach ($generatedCode['pages'] as $pageName => $pageCode) {
-                    $pageFile = $pagesDir . '/' . $pageName . '.php';
+                    $pageFile = $pagesDir.'/'.$pageName.'.php';
                     File::put($pageFile, $pageCode);
                     $createdFiles[] = $pageFile;
                 }
             }
 
             // Create policy if generated
-            if (!empty($generatedCode['policy'])) {
+            if (! empty($generatedCode['policy'])) {
                 $policyDir = app_path('Policies');
-                if (!File::exists($policyDir)) {
+                if (! File::exists($policyDir)) {
                     File::makeDirectory($policyDir, 0755, true);
                 }
 
-                $policyFile = $policyDir . '/' . $generator->name . 'Policy.php';
+                $policyFile = $policyDir.'/'.$generator->name.'Policy.php';
                 File::put($policyFile, $generatedCode['policy']);
                 $createdFiles[] = $policyFile;
             }
@@ -340,7 +343,7 @@ class FilamentResourceGeneratorService
             // Update generator record (only if it's an Eloquent model)
             if (method_exists($generator, 'update')) {
                 $generator->update([
-                    'resource_class' => 'App\\Filament\\Resources\\' . $generator->name . 'Resource',
+                    'resource_class' => 'App\\Filament\\Resources\\'.$generator->name.'Resource',
                     'file_path' => $resourceFile,
                     'status' => 'generated',
                     'error_message' => null,
@@ -377,7 +380,7 @@ class FilamentResourceGeneratorService
         // Add resource file
         if (isset($generatedCode['resource'])) {
             $previewFiles[] = [
-                'name' => $generator->name . 'Resource.php',
+                'name' => $generator->name.'Resource.php',
                 'content' => $generatedCode['resource'],
             ];
         }
@@ -386,7 +389,7 @@ class FilamentResourceGeneratorService
         if (isset($generatedCode['pages']) && is_array($generatedCode['pages'])) {
             foreach ($generatedCode['pages'] as $pageName => $pageContent) {
                 $previewFiles[] = [
-                    'name' => $pageName . '.php',
+                    'name' => $pageName.'.php',
                     'content' => $pageContent,
                 ];
             }
@@ -395,7 +398,7 @@ class FilamentResourceGeneratorService
         // Add policy file
         if (isset($generatedCode['policy']) && $generatedCode['policy']) {
             $previewFiles[] = [
-                'name' => $generator->name . 'Policy.php',
+                'name' => $generator->name.'Policy.php',
                 'content' => $generatedCode['policy'],
             ];
         }
@@ -409,14 +412,14 @@ class FilamentResourceGeneratorService
     public function updateResource(object $generator): array
     {
         try {
-            if (!$generator->isGenerated()) {
+            if (! $generator->isGenerated()) {
                 throw new \Exception('Resource has not been generated yet');
             }
 
             // Backup existing file
             $resourceFile = $generator->file_path;
             if (File::exists($resourceFile)) {
-                $backupFile = $resourceFile . '.backup.' . time();
+                $backupFile = $resourceFile.'.backup.'.time();
                 File::copy($resourceFile, $backupFile);
             }
 
@@ -465,14 +468,14 @@ class FilamentResourceGeneratorService
 
             // Delete resource pages directory
             $resourceDir = dirname($generator->file_path);
-            $pagesDir = $resourceDir . '/' . $generator->name . 'Resource';
+            $pagesDir = $resourceDir.'/'.$generator->name.'Resource';
             if (File::exists($pagesDir)) {
                 File::deleteDirectory($pagesDir);
                 $deletedFiles[] = $pagesDir;
             }
 
             // Delete policy if exists
-            $policyFile = app_path('Policies/' . $generator->name . 'Policy.php');
+            $policyFile = app_path('Policies/'.$generator->name.'Policy.php');
             if (File::exists($policyFile)) {
                 File::delete($policyFile);
                 $deletedFiles[] = $policyFile;
@@ -510,7 +513,7 @@ class FilamentResourceGeneratorService
             $modelFiles = File::files($modelsPath);
 
             foreach ($modelFiles as $file) {
-                $className = 'App\\Models\\' . pathinfo($file->getFilename(), PATHINFO_FILENAME);
+                $className = 'App\\Models\\'.pathinfo($file->getFilename(), PATHINFO_FILENAME);
 
                 if (class_exists($className)) {
                     try {
@@ -518,7 +521,7 @@ class FilamentResourceGeneratorService
                         $modelName = class_basename($className);
 
                         // Skip abstract classes and exclude "Unknown" models
-                        if (!$reflection->isAbstract() && $modelName !== 'Unknown') {
+                        if (! $reflection->isAbstract() && $modelName !== 'Unknown') {
                             $this->availableModels[] = [
                                 'class' => $className,
                                 'name' => $modelName,
@@ -558,7 +561,7 @@ class FilamentResourceGeneratorService
                 }
 
                 // Only include "create table" migrations
-                if (!$this->isCreateTableMigration($filename, $file->getPathname())) {
+                if (! $this->isCreateTableMigration($filename, $file->getPathname())) {
                     continue;
                 }
 
@@ -616,13 +619,14 @@ class FilamentResourceGeneratorService
     protected function isCreateTableMigration(string $filename, string $filePath): bool
     {
         // Check filename pattern for "create_" prefix
-        if (!preg_match('/create_\w+_table/', $filename)) {
+        if (! preg_match('/create_\w+_table/', $filename)) {
             return false;
         }
 
         // Double-check by reading file content for Schema::create
         try {
             $content = File::get($filePath);
+
             return Str::contains($content, 'Schema::create(');
         } catch (\Exception $e) {
             // If we can't read the file, fall back to filename pattern
@@ -718,7 +722,7 @@ class FilamentResourceGeneratorService
         $field = [
             'name' => $name,
             'label' => Str::title(str_replace('_', ' ', $name)),
-            'required' => !in_array($name, ['email_verified_at']) && !Str::contains($name, 'nullable'),
+            'required' => ! in_array($name, ['email_verified_at']) && ! Str::contains($name, 'nullable'),
         ];
 
         // Determine field type based on column type and name
@@ -752,8 +756,8 @@ class FilamentResourceGeneratorService
         }
 
         // Only add placeholder for components that support it
-        if (!in_array($field['type'], ['toggle', 'date', 'datetime', 'time'])) {
-            $field['placeholder'] = 'Enter ' . str_replace('_', ' ', $name);
+        if (! in_array($field['type'], ['toggle', 'date', 'datetime', 'time'])) {
+            $field['placeholder'] = 'Enter '.str_replace('_', ' ', $name);
         }
 
         return $field;
@@ -771,7 +775,7 @@ class FilamentResourceGeneratorService
             'name' => $name,
             'label' => Str::title(str_replace('_', ' ', $name)),
             'searchable' => in_array($name, ['name', 'title', 'email', 'slug']),
-            'sortable' => !in_array($type, ['text', 'json']),
+            'sortable' => ! in_array($type, ['text', 'json']),
         ];
 
         // Determine column type
@@ -807,9 +811,9 @@ class FilamentResourceGeneratorService
 
         // Only suggest filters for appropriate columns
         if (
-            !in_array($name, ['status', 'type', 'category', 'created_at', 'updated_at']) &&
-            !$type === 'boolean' &&
-            !Str::endsWith($name, '_id')
+            ! in_array($name, ['status', 'type', 'category', 'created_at', 'updated_at']) &&
+            ! $type === 'boolean' &&
+            ! Str::endsWith($name, '_id')
         ) {
             return null;
         }
@@ -851,21 +855,21 @@ class FilamentResourceGeneratorService
         array $policyConfig
     ): string {
         $modelClassName = class_basename($modelClass);
-        $resourceClassName = $resourceName . 'Resource';
+        $resourceClassName = $resourceName.'Resource';
         $navigationIcon = $pageConfig['navigation_icon'] ?? 'heroicon-o-rectangle-stack';
         $navigationGroup = $pageConfig['navigation_group'] ?? null;
         $navigationSort = $pageConfig['navigation_sort'] ?? null;
 
         // Only generate model if it doesn't exist AND we're working from migration
         // When using model selection, the model should already exist
-        if (!class_exists($modelClass) && !$this->isModelBasedGeneration($pageConfig)) {
+        if (! class_exists($modelClass) && ! $this->isModelBasedGeneration($pageConfig)) {
             // Extract table name from model class for generation
             $tableName = Str::snake(Str::plural($modelClassName));
             $this->generateModelClass($modelClassName, $tableName, []);
         }
 
         $navigationGroupLine = $navigationGroup ? "    protected static ?string \$navigationGroup = '{$navigationGroup}';" : "    protected static ?string \$navigationGroup = 'Resources';";
-        $navigationSortLine = $navigationSort ? "    protected static ?int \$navigationSort = {$navigationSort};" : "    protected static ?int \$navigationSort = null;";
+        $navigationSortLine = $navigationSort ? "    protected static ?int \$navigationSort = {$navigationSort};" : '    protected static ?int $navigationSort = null;';
 
         $formSchema = $this->buildFormSchema($formConfig);
         $tableColumns = $this->buildTableColumns($tableConfig);
@@ -948,6 +952,7 @@ class {$resourceClassName} extends Resource
         // If source_type is set and equals 'model', we're doing model-based generation
         return ($pageConfig['source_type'] ?? null) === 'model';
     }
+
     protected function buildFormSchema(array $formConfig): string
     {
         $fields = [];
@@ -988,10 +993,10 @@ class {$resourceClassName} extends Resource
         switch ($type) {
             case 'text':
                 $code .= "TextInput::make('{$name}')";
-                if (!empty($field['min_length'])) {
+                if (! empty($field['min_length'])) {
                     $code .= "\n                    ->minLength({$field['min_length']})";
                 }
-                if (!empty($field['max_length'])) {
+                if (! empty($field['max_length'])) {
                     $code .= "\n                    ->maxLength({$field['max_length']})";
                 }
                 break;
@@ -1005,7 +1010,7 @@ class {$resourceClassName} extends Resource
                 if ($field['revealable'] ?? true) {
                     $code .= "\n                    ->revealable()";
                 }
-                if (!empty($field['min_length'])) {
+                if (! empty($field['min_length'])) {
                     $code .= "\n                    ->minLength({$field['min_length']})";
                 }
                 if ($field['confirmation'] ?? false) {
@@ -1015,36 +1020,36 @@ class {$resourceClassName} extends Resource
 
             case 'number':
                 $code .= "TextInput::make('{$name}')\n                    ->numeric()";
-                if (!empty($field['min_value'])) {
+                if (! empty($field['min_value'])) {
                     $code .= "\n                    ->minValue({$field['min_value']})";
                 }
-                if (!empty($field['max_value'])) {
+                if (! empty($field['max_value'])) {
                     $code .= "\n                    ->maxValue({$field['max_value']})";
                 }
-                if (!empty($field['step'])) {
+                if (! empty($field['step'])) {
                     $code .= "\n                    ->step('{$field['step']}')";
                 }
-                if (!empty($field['default_value'])) {
+                if (! empty($field['default_value'])) {
                     $code .= "\n                    ->default({$field['default_value']})";
                 }
                 break;
 
             case 'textarea':
                 $code .= "Textarea::make('{$name}')";
-                if (!empty($field['rows'])) {
+                if (! empty($field['rows'])) {
                     $code .= "\n                    ->rows({$field['rows']})";
                 }
-                if (!empty($field['min_length'])) {
+                if (! empty($field['min_length'])) {
                     $code .= "\n                    ->minLength({$field['min_length']})";
                 }
-                if (!empty($field['max_length'])) {
+                if (! empty($field['max_length'])) {
                     $code .= "\n                    ->maxLength({$field['max_length']})";
                 }
                 break;
 
             case 'select':
                 $code .= "Select::make('{$name}')";
-                if (!empty($field['options'])) {
+                if (! empty($field['options'])) {
                     $options = $this->formatOptionsArray($field['options']);
                     $code .= "\n                    ->options({$options})";
                 }
@@ -1061,7 +1066,7 @@ class {$resourceClassName} extends Resource
 
             case 'radio':
                 $code .= "Radio::make('{$name}')";
-                if (!empty($field['options'])) {
+                if (! empty($field['options'])) {
                     $options = $this->formatOptionsArray($field['options']);
                     $code .= "\n                    ->options({$options})";
                 }
@@ -1089,51 +1094,51 @@ class {$resourceClassName} extends Resource
 
             case 'date':
                 $code .= "DatePicker::make('{$name}')";
-                if (!empty($field['display_format'])) {
+                if (! empty($field['display_format'])) {
                     $code .= "\n                    ->displayFormat('{$field['display_format']}')";
                 }
-                if (!empty($field['min_date'])) {
+                if (! empty($field['min_date'])) {
                     $code .= "\n                    ->minDate('{$field['min_date']}')";
                 }
-                if (!empty($field['max_date'])) {
+                if (! empty($field['max_date'])) {
                     $code .= "\n                    ->maxDate('{$field['max_date']}')";
                 }
                 break;
 
             case 'datetime':
                 $code .= "DateTimePicker::make('{$name}')";
-                if (!empty($field['display_format'])) {
+                if (! empty($field['display_format'])) {
                     $code .= "\n                    ->displayFormat('{$field['display_format']}')";
                 }
-                if (!empty($field['min_date'])) {
+                if (! empty($field['min_date'])) {
                     $code .= "\n                    ->minDate('{$field['min_date']}')";
                 }
-                if (!empty($field['max_date'])) {
+                if (! empty($field['max_date'])) {
                     $code .= "\n                    ->maxDate('{$field['max_date']}')";
                 }
                 break;
 
             case 'time':
                 $code .= "TimePicker::make('{$name}')";
-                if (!empty($field['display_format'])) {
+                if (! empty($field['display_format'])) {
                     $code .= "\n                    ->displayFormat('{$field['display_format']}')";
                 }
                 break;
 
             case 'file':
                 $code .= "FileUpload::make('{$name}')";
-                if (!empty($field['disk'])) {
+                if (! empty($field['disk'])) {
                     $code .= "\n                    ->disk('{$field['disk']}')";
                 }
-                if (!empty($field['directory'])) {
+                if (! empty($field['directory'])) {
                     $code .= "\n                    ->directory('{$field['directory']}')";
                 }
-                if (!empty($field['accepted_file_types'])) {
+                if (! empty($field['accepted_file_types'])) {
                     $types = array_map('trim', explode(',', $field['accepted_file_types']));
-                    $typesString = "['" . implode("', '", $types) . "']";
+                    $typesString = "['".implode("', '", $types)."']";
                     $code .= "\n                    ->acceptedFileTypes({$typesString})";
                 }
-                if (!empty($field['max_size'])) {
+                if (! empty($field['max_size'])) {
                     $code .= "\n                    ->maxSize({$field['max_size']} * 1024)";
                 }
                 if ($field['multiple'] ?? false) {
@@ -1143,13 +1148,13 @@ class {$resourceClassName} extends Resource
 
             case 'image':
                 $code .= "FileUpload::make('{$name}')\n                    ->image()";
-                if (!empty($field['disk'])) {
+                if (! empty($field['disk'])) {
                     $code .= "\n                    ->disk('{$field['disk']}')";
                 }
-                if (!empty($field['directory'])) {
+                if (! empty($field['directory'])) {
                     $code .= "\n                    ->directory('{$field['directory']}')";
                 }
-                if (!empty($field['max_size'])) {
+                if (! empty($field['max_size'])) {
                     $code .= "\n                    ->maxSize({$field['max_size']} * 1024)";
                 }
                 if ($field['multiple'] ?? false) {
@@ -1163,9 +1168,9 @@ class {$resourceClassName} extends Resource
             case 'rich_editor':
                 $code .= "RichEditor::make('{$name}')";
                 if ($field['disable_toolbar_buttons'] ?? false) {
-                    if (!empty($field['toolbar_buttons'])) {
+                    if (! empty($field['toolbar_buttons'])) {
                         $buttons = array_map('trim', explode(',', $field['toolbar_buttons']));
-                        $buttonsString = "['" . implode("', '", $buttons) . "']";
+                        $buttonsString = "['".implode("', '", $buttons)."']";
                         $code .= "\n                    ->toolbarButtons({$buttonsString})";
                     }
                 } else {
@@ -1179,9 +1184,9 @@ class {$resourceClassName} extends Resource
             case 'markdown':
                 $code .= "MarkdownEditor::make('{$name}')";
                 if ($field['disable_toolbar_buttons'] ?? false) {
-                    if (!empty($field['toolbar_buttons'])) {
+                    if (! empty($field['toolbar_buttons'])) {
                         $buttons = array_map('trim', explode(',', $field['toolbar_buttons']));
-                        $buttonsString = "['" . implode("', '", $buttons) . "']";
+                        $buttonsString = "['".implode("', '", $buttons)."']";
                         $code .= "\n                    ->toolbarButtons({$buttonsString})";
                     }
                 }
@@ -1234,17 +1239,17 @@ class {$resourceClassName} extends Resource
         }
 
         // Only add placeholder for components that support it (exclude toggle, date pickers, etc.)
-        if (!empty($field['placeholder']) && !in_array($type, ['toggle', 'date', 'datetime', 'time', 'checkbox', 'file', 'image', 'rich_editor', 'markdown', 'color', 'hidden'])) {
+        if (! empty($field['placeholder']) && ! in_array($type, ['toggle', 'date', 'datetime', 'time', 'checkbox', 'file', 'image', 'rich_editor', 'markdown', 'color', 'hidden'])) {
             $code .= "\n                    ->placeholder('{$field['placeholder']}')";
         }
 
-        if (!empty($field['helper_text'])) {
+        if (! empty($field['helper_text'])) {
             $code .= "\n                    ->helperText('{$field['helper_text']}')";
         }
 
-        if (!empty($field['validation'])) {
+        if (! empty($field['validation'])) {
             $rules = array_map('trim', explode('|', $field['validation']));
-            $rulesString = "['" . implode("', '", $rules) . "']";
+            $rulesString = "['".implode("', '", $rules)."']";
             $code .= "\n                    ->rules({$rulesString})";
         }
 
@@ -1303,7 +1308,7 @@ class {$resourceClassName} extends Resource
 
             case 'badge':
                 $code .= "TextColumn::make('{$name}')\n                    ->badge()";
-                if (!empty($column['colors'])) {
+                if (! empty($column['colors'])) {
                     $colors = $this->formatOptionsArray($column['colors']);
                     $code .= "\n                    ->color(fn (string \$state): string => match (\$state) {";
                     if (is_string($column['colors'])) {
@@ -1316,7 +1321,7 @@ class {$resourceClassName} extends Resource
                     }
                     $code .= "\n                        default => 'gray',\n                    })";
                 }
-                if (!empty($column['icons'])) {
+                if (! empty($column['icons'])) {
                     if (is_string($column['icons'])) {
                         $iconArray = json_decode($column['icons'], true);
                         if (is_array($iconArray)) {
@@ -1332,21 +1337,21 @@ class {$resourceClassName} extends Resource
 
             case 'boolean':
                 $code .= "IconColumn::make('{$name}')\n                    ->boolean()";
-                if (!empty($column['true_icon'])) {
+                if (! empty($column['true_icon'])) {
                     $code .= "\n                    ->trueIcon('{$column['true_icon']}')";
                 }
-                if (!empty($column['false_icon'])) {
+                if (! empty($column['false_icon'])) {
                     $code .= "\n                    ->falseIcon('{$column['false_icon']}')";
                 }
-                if (!empty($column['true_color'])) {
+                if (! empty($column['true_color'])) {
                     $code .= "\n                    ->trueColor('{$column['true_color']}')";
                 }
                 break;
 
             case 'color':
                 $code .= "ColorColumn::make('{$name}')";
-                if (!empty($column['size'])) {
-                    $code .= "\n                    ->size(ColorColumn\ColorColumnSize::" . ucfirst($column['size']) . ")";
+                if (! empty($column['size'])) {
+                    $code .= "\n                    ->size(ColorColumn\ColorColumnSize::".ucfirst($column['size']).')';
                 }
                 if ($column['copy_message'] ?? false) {
                     $code .= "\n                    ->copyable()";
@@ -1358,14 +1363,14 @@ class {$resourceClassName} extends Resource
 
             case 'image':
                 $code .= "ImageColumn::make('{$name}')";
-                if (!empty($column['height'])) {
+                if (! empty($column['height'])) {
                     $code .= "\n                    ->height({$column['height']})";
                 }
-                if (!empty($column['width'])) {
+                if (! empty($column['width'])) {
                     $code .= "\n                    ->width({$column['width']})";
                 }
-                if (!empty($column['shape'])) {
-                    $code .= "\n                    ->" . $column['shape'] . "()";
+                if (! empty($column['shape'])) {
+                    $code .= "\n                    ->".$column['shape'].'()';
                 }
                 if ($column['stacked'] ?? false) {
                     $code .= "\n                    ->stacked()";
@@ -1374,10 +1379,10 @@ class {$resourceClassName} extends Resource
 
             case 'date':
                 $code .= "TextColumn::make('{$name}')\n                    ->date()";
-                if (!empty($column['date_format'])) {
+                if (! empty($column['date_format'])) {
                     $code .= "\n                    ->dateFormat('{$column['date_format']}')";
                 }
-                if (!empty($column['timezone'])) {
+                if (! empty($column['timezone'])) {
                     $code .= "\n                    ->timezone('{$column['timezone']}')";
                 }
                 if ($column['since'] ?? false) {
@@ -1387,10 +1392,10 @@ class {$resourceClassName} extends Resource
 
             case 'datetime':
                 $code .= "TextColumn::make('{$name}')\n                    ->dateTime()";
-                if (!empty($column['date_format'])) {
+                if (! empty($column['date_format'])) {
                     $code .= "\n                    ->dateTimeFormat('{$column['date_format']}')";
                 }
-                if (!empty($column['timezone'])) {
+                if (! empty($column['timezone'])) {
                     $code .= "\n                    ->timezone('{$column['timezone']}')";
                 }
                 if ($column['since'] ?? false) {
@@ -1438,11 +1443,11 @@ class {$resourceClassName} extends Resource
             $code .= "\n                    ->toggleable()";
         }
 
-        if (!empty($column['format'])) {
+        if (! empty($column['format'])) {
             $code .= "\n                    ->formatStateUsing(fn (string \$state): string => '{$column['format']}' . \$state)";
         }
 
-        if (!empty($column['suffix'])) {
+        if (! empty($column['suffix'])) {
             $code .= "\n                    ->suffix('{$column['suffix']}')";
         }
 
@@ -1527,7 +1532,7 @@ class {$resourceClassName} extends Resource
         $actions = [
             "                Tables\Actions\BulkActionGroup::make([",
             "                    Tables\Actions\DeleteBulkAction::make(),",
-            "                ]),",
+            '                ]),',
         ];
 
         foreach ($bulkActionConfig['bulk_actions'] ?? [] as $action) {
@@ -1569,16 +1574,16 @@ class {$resourceClassName} extends Resource
         $pages = [];
 
         // Generate List page
-        $pages['List' . $resourceName . 's'] = $this->generateListPage($resourceName);
+        $pages['List'.$resourceName.'s'] = $this->generateListPage($resourceName);
 
         // Generate Create page
-        $pages['Create' . $resourceName] = $this->generateCreatePage($resourceName);
+        $pages['Create'.$resourceName] = $this->generateCreatePage($resourceName);
 
         // Generate View page
-        $pages['View' . $resourceName] = $this->generateViewPage($resourceName);
+        $pages['View'.$resourceName] = $this->generateViewPage($resourceName);
 
         // Generate Edit page
-        $pages['Edit' . $resourceName] = $this->generateEditPage($resourceName);
+        $pages['Edit'.$resourceName] = $this->generateEditPage($resourceName);
 
         return $pages;
     }
@@ -1588,7 +1593,7 @@ class {$resourceClassName} extends Resource
      */
     protected function generateListPage(string $resourceName): string
     {
-        $resourceClassName = $resourceName . 'Resource';
+        $resourceClassName = $resourceName.'Resource';
 
         return "<?php
 
@@ -1616,7 +1621,7 @@ class List{$resourceName}s extends ListRecords
      */
     protected function generateCreatePage(string $resourceName): string
     {
-        $resourceClassName = $resourceName . 'Resource';
+        $resourceClassName = $resourceName.'Resource';
 
         return "<?php
 
@@ -1636,7 +1641,7 @@ class Create{$resourceName} extends CreateRecord
      */
     protected function generateViewPage(string $resourceName): string
     {
-        $resourceClassName = $resourceName . 'Resource';
+        $resourceClassName = $resourceName.'Resource';
 
         return "<?php
 
@@ -1664,7 +1669,7 @@ class View{$resourceName} extends ViewRecord
      */
     protected function generateEditPage(string $resourceName): string
     {
-        $resourceClassName = $resourceName . 'Resource';
+        $resourceClassName = $resourceName.'Resource';
 
         return "<?php
 
@@ -1694,7 +1699,7 @@ class Edit{$resourceName} extends EditRecord
     protected function generateResourcePolicy(string $resourceName, string $modelClass, array $policyConfig): string
     {
         $modelClassName = class_basename($modelClass);
-        $policyClassName = $resourceName . 'Policy';
+        $policyClassName = $resourceName.'Policy';
 
         return "<?php
 
@@ -1815,6 +1820,7 @@ class {$policyClassName}
     {
         // Remove timestamp prefix and convert to readable name
         $name = preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $filename);
+
         return Str::title(str_replace('_', ' ', $name));
     }
 
@@ -1861,7 +1867,7 @@ class {$policyClassName}
         }
 
         // Ensure we have an array at this point
-        if (!is_array($options)) {
+        if (! is_array($options)) {
             return '[]';
         }
 
@@ -1870,7 +1876,7 @@ class {$policyClassName}
             $formattedOptions[] = "'{$key}' => '{$value}'";
         }
 
-        return '[' . implode(', ', $formattedOptions) . ']';
+        return '['.implode(', ', $formattedOptions).']';
     }
 
     protected function getFilesToCreate(string $resourceName, string $resourceCode, array $pages, ?string $policy): array
@@ -1904,17 +1910,17 @@ class {$policyClassName}
 
         // Create Models directory if it doesn't exist
         $modelsDir = app_path('Models');
-        if (!File::exists($modelsDir)) {
+        if (! File::exists($modelsDir)) {
             File::makeDirectory($modelsDir, 0755, true);
         }
 
         // Generate fillable fields (exclude timestamps and id)
         $fillableFields = collect($columns)
             ->filter(function ($column) {
-                return !in_array($column['name'], ['id', 'created_at', 'updated_at', 'deleted_at']);
+                return ! in_array($column['name'], ['id', 'created_at', 'updated_at', 'deleted_at']);
             })
             ->pluck('name')
-            ->map(fn($name) => "        '{$name}'")
+            ->map(fn ($name) => "        '{$name}'")
             ->implode(",\n");
 
         // Generate casts for special column types
@@ -1930,15 +1936,15 @@ class {$policyClassName}
                     'datetime', 'timestamp' => 'datetime',
                     default => null
                 };
+
                 return $cast ? [$column['name'] => $cast] : [];
             })
-            ->map(fn($cast, $name) => "        '{$name}' => '{$cast}'")
+            ->map(fn ($cast, $name) => "        '{$name}' => '{$cast}'")
             ->implode(",\n");
 
         // Check if timestamps exist
         $hasTimestamps = collect($columns)->contains(
-            fn($col) =>
-            in_array($col['name'], ['created_at', 'updated_at'])
+            fn ($col) => in_array($col['name'], ['created_at', 'updated_at'])
         );
 
         $modelContent = "<?php
@@ -1954,13 +1960,13 @@ class {$modelName} extends Model
 
     protected \$table = '{$tableName}';
 
-    public \$timestamps = " . ($hasTimestamps ? 'true' : 'false') . ";
+    public \$timestamps = ".($hasTimestamps ? 'true' : 'false').";
 
     protected \$fillable = [
 {$fillableFields}
     ];";
 
-        if (!empty($casts)) {
+        if (! empty($casts)) {
             $modelContent .= "
 
     protected \$casts = [
@@ -1968,9 +1974,9 @@ class {$modelName} extends Model
     ];";
         }
 
-        $modelContent .= "
+        $modelContent .= '
 }
-";
+';
 
         File::put($modelPath, $modelContent);
     }
@@ -1995,6 +2001,7 @@ class {$modelName} extends Model
         $generator = $this->createGeneratorFromConfig($config);
 
         $generatedCode = $this->generateResourceCode($generator);
+
         return $this->createResourceFiles($generator, $generatedCode);
     }
 
@@ -2003,16 +2010,16 @@ class {$modelName} extends Model
      */
     protected function createGeneratorFromConfig(array $config): object
     {
-        $generator = new \stdClass();
+        $generator = new \stdClass;
 
         // Determine the resource name from class_name or provide better defaults
         $className = $config['class_name'] ?? '';
         $modelClass = $config['model'] ?? '';
 
         // If we have a model class but no class name, generate it from the model
-        if (empty($className) && !empty($modelClass)) {
+        if (empty($className) && ! empty($modelClass)) {
             $modelName = class_basename($modelClass);
-            $className = $modelName . 'Resource';
+            $className = $modelName.'Resource';
         }
 
         // Final fallback if both are empty
@@ -2024,7 +2031,7 @@ class {$modelName} extends Model
         $resourceName = Str::replaceLast('Resource', '', $className);
 
         // Ensure we have the correct model class reference
-        $finalModelClass = $modelClass ?: 'App\\Models\\' . $resourceName;
+        $finalModelClass = $modelClass ?: 'App\\Models\\'.$resourceName;
 
         // Map configuration to generator properties (matching expected property names)
         $generator->name = $resourceName;
@@ -2041,19 +2048,19 @@ class {$modelName} extends Model
 
         // Prepare configuration arrays properly
         $generator->form_configuration = [
-            'fields' => $config['form_fields'] ?? []
+            'fields' => $config['form_fields'] ?? [],
         ];
         $generator->table_configuration = [
-            'columns' => $config['table_columns'] ?? []
+            'columns' => $config['table_columns'] ?? [],
         ];
         $generator->filter_configuration = [
-            'filters' => $config['filters'] ?? []
+            'filters' => $config['filters'] ?? [],
         ];
         $generator->action_configuration = [
-            'actions' => $config['actions'] ?? []
+            'actions' => $config['actions'] ?? [],
         ];
         $generator->bulk_action_configuration = [
-            'bulk_actions' => $config['bulk_actions'] ?? []
+            'bulk_actions' => $config['bulk_actions'] ?? [],
         ];
         $generator->page_configuration = [
             'generate_pages' => true,
@@ -2064,7 +2071,7 @@ class {$modelName} extends Model
             'source_type' => $config['source_type'] ?? 'model', // Track generation source
         ];
         $generator->policy_configuration = [
-            'generate_policy' => false
+            'generate_policy' => false,
         ];
 
         // Backward compatibility properties

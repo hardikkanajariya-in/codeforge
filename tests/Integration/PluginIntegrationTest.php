@@ -2,13 +2,14 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Integration;
 
-use HkDevs\CodeForgeStudio\Tests\TestCase;
+use Filament\Panel;
 use HkDevs\CodeForgeStudio\CodeForgeStudioPlugin;
 use HkDevs\CodeForgeStudio\CodeForgeStudioServiceProvider;
+use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
-use Filament\Panel;
+use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Test Case: TC-INTEGRATION-001 - End-to-End Plugin Integration
@@ -18,7 +19,7 @@ class PluginIntegrationTest extends TestCase
 {
     use RefreshDatabase;
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_complete_plugin_lifecycle()
     {
         // Test 1: Service Provider Registration
@@ -48,11 +49,11 @@ class PluginIntegrationTest extends TestCase
             $plugin->register($panel);
             $this->assertTrue(true, 'Plugin should register with panel successfully');
         } catch (\Exception $e) {
-            $this->fail('Plugin registration failed: ' . $e->getMessage());
+            $this->fail('Plugin registration failed: '.$e->getMessage());
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_feature_interoperability()
     {
         // Create all plugin tables
@@ -68,7 +69,7 @@ class PluginIntegrationTest extends TestCase
         $this->testSeedingHealthIntegration();
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_multi_database_support()
     {
         // Test with different database configurations
@@ -86,7 +87,7 @@ class PluginIntegrationTest extends TestCase
         $this->assertContains($connection->getDriverName(), ['sqlite', 'mysql', 'pgsql', 'sqlsrv']);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_concurrent_operations()
     {
         $this->createAllPluginTables();
@@ -104,7 +105,7 @@ class PluginIntegrationTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_data_consistency_across_features()
     {
         $this->createAllPluginTables();
@@ -138,7 +139,7 @@ class PluginIntegrationTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_error_handling_integration()
     {
         $this->createAllPluginTables();
@@ -158,7 +159,7 @@ class PluginIntegrationTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_performance_under_load()
     {
         $this->createAllPluginTables();
@@ -172,7 +173,7 @@ class PluginIntegrationTest extends TestCase
                 'migration_name' => "load_test_migration_{$i}",
                 'batch' => 1,
                 'executed_at' => now(),
-                'status' => 'completed'
+                'status' => 'completed',
             ]);
 
             // Health monitoring
@@ -182,7 +183,7 @@ class PluginIntegrationTest extends TestCase
                 'threshold' => 80,
                 'status' => 'healthy',
                 'measured_at' => now(),
-                'created_at' => now()
+                'created_at' => now(),
             ]);
 
             // Data seeding logs
@@ -191,7 +192,7 @@ class PluginIntegrationTest extends TestCase
                 'records_created' => rand(10, 100),
                 'execution_time' => rand(100, 1000) / 1000,
                 'status' => 'completed',
-                'executed_at' => now()
+                'executed_at' => now(),
             ]);
         }
 
@@ -210,7 +211,7 @@ class PluginIntegrationTest extends TestCase
         $this->assertGreaterThanOrEqual(100, $logCount);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_configuration_changes_propagation()
     {
         // Test configuration changes across plugin features
@@ -225,12 +226,12 @@ class PluginIntegrationTest extends TestCase
         $this->assertInstanceOf(CodeForgeStudioPlugin::class, $plugin);
 
         // Restore original configuration
-        if (!empty($originalConfig)) {
+        if (! empty($originalConfig)) {
             config(['codeforge-database-studio' => $originalConfig]);
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_backup_and_restore_compatibility()
     {
         $this->createAllPluginTables();
@@ -261,7 +262,7 @@ class PluginIntegrationTest extends TestCase
     private function createAllPluginTables(): void
     {
         // Migration histories table
-        if (!Schema::hasTable('migration_histories')) {
+        if (! Schema::hasTable('migration_histories')) {
             Schema::create('migration_histories', function ($table) {
                 $table->id();
                 $table->string('migration_name');
@@ -275,7 +276,7 @@ class PluginIntegrationTest extends TestCase
         }
 
         // Data seeders table
-        if (!Schema::hasTable('data_seeders')) {
+        if (! Schema::hasTable('data_seeders')) {
             Schema::create('data_seeders', function ($table) {
                 $table->id();
                 $table->string('name');
@@ -288,7 +289,7 @@ class PluginIntegrationTest extends TestCase
         }
 
         // Health metrics table
-        if (!Schema::hasTable('database_health_metrics')) {
+        if (! Schema::hasTable('database_health_metrics')) {
             Schema::create('database_health_metrics', function ($table) {
                 $table->id();
                 $table->string('metric_name');
@@ -301,7 +302,7 @@ class PluginIntegrationTest extends TestCase
         }
 
         // Seeder execution logs table
-        if (!Schema::hasTable('seeder_execution_logs')) {
+        if (! Schema::hasTable('seeder_execution_logs')) {
             Schema::create('seeder_execution_logs', function ($table) {
                 $table->id();
                 $table->unsignedBigInteger('seeder_id');
@@ -314,7 +315,7 @@ class PluginIntegrationTest extends TestCase
         }
     }
 
-    private function testSchemaToMigrationIntegration(): void
+    private function test_schema_to_migration_integration(): void
     {
         // Create a schema change and track it in migration history
         Schema::create('integration_test_table', function ($table) {
@@ -329,14 +330,14 @@ class PluginIntegrationTest extends TestCase
             'executed_at' => now(),
             'status' => 'completed',
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ]);
 
         $this->assertTrue(Schema::hasTable('integration_test_table'));
         $this->assertEquals(1, DB::table('migration_histories')->where('migration_name', 'create_integration_test_table')->count());
     }
 
-    private function testMigrationHealthIntegration(): void
+    private function test_migration_health_integration(): void
     {
         // Log health metrics for migration performance
         DB::table('database_health_metrics')->insert([
@@ -345,7 +346,7 @@ class PluginIntegrationTest extends TestCase
             'threshold' => 2.0,
             'status' => 'healthy',
             'measured_at' => now(),
-            'created_at' => now()
+            'created_at' => now(),
         ]);
 
         $metric = DB::table('database_health_metrics')
@@ -355,7 +356,7 @@ class PluginIntegrationTest extends TestCase
         $this->assertEquals('healthy', $metric->status);
     }
 
-    private function testSeedingHealthIntegration(): void
+    private function test_seeding_health_integration(): void
     {
         // Create seeder and monitor its health impact
         $seederId = DB::table('data_seeders')->insertGetId([
@@ -365,7 +366,7 @@ class PluginIntegrationTest extends TestCase
             'configuration' => json_encode(['record_count' => 10]),
             'is_active' => true,
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ]);
 
         DB::table('seeder_execution_logs')->insert([
@@ -373,7 +374,7 @@ class PluginIntegrationTest extends TestCase
             'records_created' => 10,
             'execution_time' => 0.1,
             'status' => 'completed',
-            'executed_at' => now()
+            'executed_at' => now(),
         ]);
 
         $this->assertEquals(1, DB::table('seeder_execution_logs')->where('seeder_id', $seederId)->count());
@@ -383,6 +384,7 @@ class PluginIntegrationTest extends TestCase
     {
         try {
             $tables = DB::connection()->getDoctrineSchemaManager()->listTableNames();
+
             return ['success' => true, 'table_count' => count($tables)];
         } catch (\Exception $e) {
             return ['success' => false, 'error' => $e->getMessage()];
@@ -398,8 +400,9 @@ class PluginIntegrationTest extends TestCase
                 'executed_at' => now(),
                 'status' => 'completed',
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
+
             return ['success' => true];
         } catch (\Exception $e) {
             return ['success' => false, 'error' => $e->getMessage()];
@@ -415,8 +418,9 @@ class PluginIntegrationTest extends TestCase
                 'threshold' => 100,
                 'status' => 'healthy',
                 'measured_at' => now(),
-                'created_at' => now()
+                'created_at' => now(),
             ]);
+
             return ['success' => true];
         } catch (\Exception $e) {
             return ['success' => false, 'error' => $e->getMessage()];
@@ -433,8 +437,9 @@ class PluginIntegrationTest extends TestCase
                 'configuration' => json_encode(['record_count' => 5]),
                 'is_active' => true,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
+
             return ['success' => true, 'seeder_id' => $seederId];
         } catch (\Exception $e) {
             return ['success' => false, 'error' => $e->getMessage()];
@@ -449,7 +454,7 @@ class PluginIntegrationTest extends TestCase
             'executed_at' => now(),
             'status' => 'completed',
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ]);
     }
 
@@ -462,7 +467,7 @@ class PluginIntegrationTest extends TestCase
             'configuration' => json_encode(['record_count' => 10]),
             'is_active' => true,
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
         ]);
     }
 
@@ -474,11 +479,11 @@ class PluginIntegrationTest extends TestCase
             'threshold' => 100,
             'status' => 'healthy',
             'measured_at' => now(),
-            'created_at' => now()
+            'created_at' => now(),
         ]);
     }
 
-    private function testInvalidMigrationHandling(): array
+    private function test_invalid_migration_handling(): array
     {
         try {
             DB::table('migration_histories')->insert([
@@ -488,15 +493,16 @@ class PluginIntegrationTest extends TestCase
                 'status' => 'failed',
                 'error_message' => 'Simulated migration error',
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
+
             return ['error_handled' => true];
         } catch (\Exception $e) {
             return ['error_handled' => false, 'error' => $e->getMessage()];
         }
     }
 
-    private function testFailedSeedingHandling(): array
+    private function test_failed_seeding_handling(): array
     {
         try {
             DB::table('seeder_execution_logs')->insert([
@@ -505,15 +511,16 @@ class PluginIntegrationTest extends TestCase
                 'execution_time' => 0.1,
                 'status' => 'failed',
                 'error_message' => 'Simulated seeding error',
-                'executed_at' => now()
+                'executed_at' => now(),
             ]);
+
             return ['error_handled' => true];
         } catch (\Exception $e) {
             return ['error_handled' => false, 'error' => $e->getMessage()];
         }
     }
 
-    private function testHealthThresholdHandling(): array
+    private function test_health_threshold_handling(): array
     {
         try {
             DB::table('database_health_metrics')->insert([
@@ -522,8 +529,9 @@ class PluginIntegrationTest extends TestCase
                 'threshold' => 100,
                 'status' => 'critical',
                 'measured_at' => now(),
-                'created_at' => now()
+                'created_at' => now(),
             ]);
+
             return ['error_handled' => true];
         } catch (\Exception $e) {
             return ['error_handled' => false, 'error' => $e->getMessage()];
@@ -542,7 +550,7 @@ class PluginIntegrationTest extends TestCase
                 'executed_at' => now(),
                 'status' => 'completed',
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
 
@@ -555,7 +563,7 @@ class PluginIntegrationTest extends TestCase
                 'configuration' => json_encode(['record_count' => 10]),
                 'is_active' => true,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
 
@@ -567,7 +575,7 @@ class PluginIntegrationTest extends TestCase
                 'threshold' => 80,
                 'status' => 'healthy',
                 'measured_at' => now(),
-                'created_at' => now()
+                'created_at' => now(),
             ]);
         }
 

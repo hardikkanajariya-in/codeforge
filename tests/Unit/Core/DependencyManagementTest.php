@@ -2,9 +2,17 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Unit\Core;
 
-use HkDevs\CodeForgeStudio\Tests\TestCase;
+use Doctrine\DBAL\Connection;
+use Filament\Contracts\Plugin;
+use Filament\Panel;
 use HkDevs\CodeForgeStudio\CodeForgeStudioServiceProvider;
+use HkDevs\CodeForgeStudio\Tests\TestCase;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\ServiceProvider;
+use PHPUnit\Framework\Attributes\Test;
+use Spatie\LaravelPackageTools\Package;
 
 /**
  * Test Case: TC-ENV-006 - Dependency Management & Composer Integration
@@ -12,7 +20,7 @@ use Illuminate\Support\Facades\Artisan;
  */
 class DependencyManagementTest extends TestCase
 {
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_service_provider_auto_discovery()
     {
         $providers = $this->app->getLoadedProviders();
@@ -24,34 +32,34 @@ class DependencyManagementTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_required_dependencies_available()
     {
         // Test Filament dependencies
         $this->assertTrue(
-            class_exists(\Filament\Panel::class),
+            class_exists(Panel::class),
             'Filament Panel class should be available'
         );
 
         $this->assertTrue(
-            interface_exists(\Filament\Contracts\Plugin::class),
+            interface_exists(Plugin::class),
             'Filament Plugin interface should be available'
         );
 
         // Test Doctrine DBAL
         $this->assertTrue(
-            class_exists(\Doctrine\DBAL\Connection::class),
+            class_exists(Connection::class),
             'Doctrine DBAL Connection class should be available'
         );
 
         // Test Spatie Package Tools
         $this->assertTrue(
-            class_exists(\Spatie\LaravelPackageTools\Package::class),
+            class_exists(Package::class),
             'Spatie Package Tools should be available'
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_laravel_framework_compatibility()
     {
         // Test Laravel version compatibility
@@ -65,38 +73,38 @@ class DependencyManagementTest extends TestCase
         );
 
         // Test core Laravel classes
-        $this->assertTrue(class_exists(\Illuminate\Foundation\Application::class));
-        $this->assertTrue(class_exists(\Illuminate\Database\Eloquent\Model::class));
-        $this->assertTrue(class_exists(\Illuminate\Support\ServiceProvider::class));
+        $this->assertTrue(class_exists(Application::class));
+        $this->assertTrue(class_exists(Model::class));
+        $this->assertTrue(class_exists(ServiceProvider::class));
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_package_configuration_publishing()
     {
         // Test configuration publishing works
         $this->artisan('vendor:publish', [
             '--provider' => CodeForgeStudioServiceProvider::class,
-            '--tag' => 'codeforge-database-studio-config'
+            '--tag' => 'codeforge-database-studio-config',
         ])->assertExitCode(0);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_package_migration_publishing()
     {
         // Test migration publishing works
         $this->artisan('vendor:publish', [
             '--provider' => CodeForgeStudioServiceProvider::class,
-            '--tag' => 'codeforge-database-studio-migrations'
+            '--tag' => 'codeforge-database-studio-migrations',
         ])->assertExitCode(0);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_package_commands_registration()
     {
         $commands = Artisan::all();
 
         $expectedCommands = [
-            'codeforge:install'
+            'codeforge:install',
         ];
 
         foreach ($expectedCommands as $command) {
@@ -108,7 +116,7 @@ class DependencyManagementTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_no_dependency_conflicts()
     {
         // Test that there are no class conflicts
@@ -116,11 +124,11 @@ class DependencyManagementTest extends TestCase
             $reflection = new \ReflectionClass(CodeForgeStudioServiceProvider::class);
             $this->assertTrue(true, 'No class loading conflicts detected');
         } catch (\ReflectionException $e) {
-            $this->fail('Class loading conflict detected: ' . $e->getMessage());
+            $this->fail('Class loading conflict detected: '.$e->getMessage());
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_package_namespace_isolation()
     {
         // Test that package namespace is properly isolated
@@ -136,7 +144,7 @@ class DependencyManagementTest extends TestCase
         );
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_autoloader_functionality()
     {
         // Test that autoloader can find package classes
@@ -153,10 +161,10 @@ class DependencyManagementTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_composer_json_structure()
     {
-        $composerPath = __DIR__ . '/../../../composer.json';
+        $composerPath = __DIR__.'/../../../composer.json';
 
         if (file_exists($composerPath)) {
             $composer = json_decode(file_get_contents($composerPath), true);
@@ -177,10 +185,10 @@ class DependencyManagementTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_version_constraints()
     {
-        $composerPath = __DIR__ . '/../../../composer.json';
+        $composerPath = __DIR__.'/../../../composer.json';
 
         if (file_exists($composerPath)) {
             $composer = json_decode(file_get_contents($composerPath), true);
@@ -202,10 +210,10 @@ class DependencyManagementTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_development_dependencies()
     {
-        $composerPath = __DIR__ . '/../../../composer.json';
+        $composerPath = __DIR__.'/../../../composer.json';
 
         if (file_exists($composerPath)) {
             $composer = json_decode(file_get_contents($composerPath), true);
@@ -229,10 +237,10 @@ class DependencyManagementTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_package_discovery_configuration()
     {
-        $composerPath = __DIR__ . '/../../../composer.json';
+        $composerPath = __DIR__.'/../../../composer.json';
 
         if (file_exists($composerPath)) {
             $composer = json_decode(file_get_contents($composerPath), true);
@@ -251,10 +259,10 @@ class DependencyManagementTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_package_stability_preference()
     {
-        $composerPath = __DIR__ . '/../../../composer.json';
+        $composerPath = __DIR__.'/../../../composer.json';
 
         if (file_exists($composerPath)) {
             $composer = json_decode(file_get_contents($composerPath), true);

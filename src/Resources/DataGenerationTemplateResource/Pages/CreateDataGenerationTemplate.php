@@ -2,9 +2,9 @@
 
 namespace HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource\Pages;
 
-use HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource;
 use Filament\Resources\Pages\CreateRecord;
 use HkDevs\CodeForgeStudio\Models\DataGenerationTemplate;
+use HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource;
 
 class CreateDataGenerationTemplate extends CreateRecord
 {

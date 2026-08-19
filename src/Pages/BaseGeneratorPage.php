@@ -9,16 +9,16 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Support\Enums\ActionSize;
-use HkDevs\CodeForgeStudio\Services\StubTemplateService;
 use HkDevs\CodeForgeStudio\Services\LaravelTypesService;
+use HkDevs\CodeForgeStudio\Services\StubTemplateService;
 use Illuminate\Support\Str;
 
 /**
  * BaseGeneratorPage
- * 
+ *
  * Abstract base class for all CodeForge Database Studio code generator pages
  * providing common functionality, UI state management, and generation workflows.
- * 
+ *
  * Key Features:
  * - Standardized generator UI state management with step tracking
  * - Common generation workflow with preview and validation
@@ -27,7 +27,7 @@ use Illuminate\Support\Str;
  * - Multi-step generation process with progress tracking
  * - Template service integration for code generation
  * - Validation framework for generator inputs
- * 
+ *
  * UI State Management:
  * - isGenerating: Generation process status tracking
  * - generationResults: Results storage and display
@@ -36,30 +36,31 @@ use Illuminate\Support\Str;
  * - showPreview: Preview mode toggle functionality
  * - previewData: Generated code preview storage
  * - generationConfig: Common configuration management
- * 
+ *
  * Common Services:
  * - StubTemplateService: Template management and processing
  * - LaravelTypesService: Laravel-specific type handling
  * - Form interaction capabilities with validation
  * - Notification system for user feedback
- * 
+ *
  * Generator Workflow:
  * - Configuration: Input collection and validation
  * - Preview: Generated code preview and review
  * - Generation: Actual file creation and processing
  * - Results: Success/failure reporting and file listings
- * 
+ *
  * Abstract Methods:
  * - Child classes must implement specific generator logic
  * - Template configuration and processing workflows
  * - Form schema definition for generator inputs
  * - Validation rules for generator-specific requirements
- * 
- * @package HkDevs\CodeForgeStudio\Pages
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * class CustomGeneratorPage extends BaseGeneratorPage
  * {
@@ -71,21 +72,26 @@ use Illuminate\Support\Str;
  */
 abstract class BaseGeneratorPage extends Page implements HasActions
 {
-    use InteractsWithForms;
     use InteractsWithActions;
+    use InteractsWithForms;
 
     // Common UI State
     public bool $isGenerating = false;
+
     public ?array $generationResults = null;
+
     public ?array $validationErrors = null;
+
     public string $currentStep = 'configuration';
+
     public bool $showPreview = false;
+
     public ?array $previewData = null;
 
     // Common configuration
     public ?array $generationConfig = [];
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Code Generators';
+    protected static string|\UnitEnum|null $navigationGroup = 'Code Generators';
 
     protected function getStubTemplateService(): StubTemplateService
     {
@@ -122,7 +128,7 @@ abstract class BaseGeneratorPage extends Page implements HasActions
             ->modalHeading('Configuration Errors Found')
             ->modalDescription('Please fix the following errors before proceeding:')
             ->modalContent(view('codeforge-studio::components.validation-errors-modal', [
-                'errors' => $this->validationErrors ?? []
+                'errors' => $this->validationErrors ?? [],
             ]))
             ->modalSubmitAction(false)
             ->modalCancelActionLabel('Close')
@@ -130,7 +136,9 @@ abstract class BaseGeneratorPage extends Page implements HasActions
     }
 
     abstract protected function initializeConfiguration(): void;
+
     abstract protected function getGeneratorService();
+
     abstract protected function validateConfiguration(): array;
 
     /**
@@ -147,9 +155,11 @@ abstract class BaseGeneratorPage extends Page implements HasActions
     protected function wouldOverwriteFile(string $filePath, string $fileType = 'file'): ?string
     {
         if (file_exists($filePath)) {
-            $relativePath = str_replace(base_path() . DIRECTORY_SEPARATOR, '', $filePath);
+            $relativePath = str_replace(base_path().DIRECTORY_SEPARATOR, '', $filePath);
+
             return "This {$fileType} already exists at: {$relativePath}. Please choose a different name or delete the existing file first.";
         }
+
         return null;
     }
 
@@ -160,7 +170,7 @@ abstract class BaseGeneratorPage extends Page implements HasActions
     {
         $directory = dirname($filePath);
 
-        if (!is_dir($directory)) {
+        if (! is_dir($directory)) {
             return null;
         }
 
@@ -176,7 +186,8 @@ abstract class BaseGeneratorPage extends Page implements HasActions
 
             // Check for case-insensitive match that's not exact match
             if (strtolower($existingFileName) === strtolower($targetFileName) && $existingFileName !== $targetFileName) {
-                $relativePath = str_replace(base_path() . DIRECTORY_SEPARATOR, '', $directory . DIRECTORY_SEPARATOR . $file);
+                $relativePath = str_replace(base_path().DIRECTORY_SEPARATOR, '', $directory.DIRECTORY_SEPARATOR.$file);
+
                 return "A {$fileType} with similar name already exists: {$relativePath}. Consider using a different name to avoid confusion.";
             }
         }
@@ -212,7 +223,7 @@ abstract class BaseGeneratorPage extends Page implements HasActions
                 'Handler',
                 'Trait',
                 'Interface',
-                'Abstract'
+                'Abstract',
             ],
             'table' => [
                 'users',
@@ -223,8 +234,8 @@ abstract class BaseGeneratorPage extends Page implements HasActions
                 'model_has_roles',
                 'role_has_permissions',
                 'permissions',
-                'roles'
-            ]
+                'roles',
+            ],
         ];
 
         $reserved = $reservedNames[$type] ?? [];
@@ -249,7 +260,7 @@ abstract class BaseGeneratorPage extends Page implements HasActions
             // Validate configuration
             $validationErrors = $this->validateConfiguration();
 
-            if (!empty($validationErrors)) {
+            if (! empty($validationErrors)) {
                 $this->validationErrors = $validationErrors;
 
                 // Trigger the validation errors modal
@@ -281,7 +292,7 @@ abstract class BaseGeneratorPage extends Page implements HasActions
 
             Notification::make()
                 ->title('Preview Failed')
-                ->body('Error: ' . $e->getMessage())
+                ->body('Error: '.$e->getMessage())
                 ->danger()
                 ->send();
         }
@@ -299,7 +310,7 @@ abstract class BaseGeneratorPage extends Page implements HasActions
 
             $validationErrors = $this->validateConfiguration();
 
-            if (!empty($validationErrors)) {
+            if (! empty($validationErrors)) {
                 $this->validationErrors = $validationErrors;
                 $this->mountAction('validationErrors');
                 throw new \Exception('Configuration validation failed. Please fix the errors and try again.');
@@ -320,12 +331,12 @@ abstract class BaseGeneratorPage extends Page implements HasActions
 
                 $this->currentStep = 'results';
             } else {
-                throw new \Exception('Generation failed: ' . implode(', ', $this->generationResults['errors'] ?? []));
+                throw new \Exception('Generation failed: '.implode(', ', $this->generationResults['errors'] ?? []));
             }
         } catch (\Exception $e) {
             Notification::make()
                 ->title('Generation Failed')
-                ->body('Error: ' . $e->getMessage())
+                ->body('Error: '.$e->getMessage())
                 ->danger()
                 ->persistent()
                 ->send();
@@ -363,9 +374,10 @@ abstract class BaseGeneratorPage extends Page implements HasActions
             // Validate configuration first
             $validationErrors = $this->validateConfiguration();
 
-            if (!empty($validationErrors)) {
+            if (! empty($validationErrors)) {
                 $this->validationErrors = $validationErrors;
                 $this->mountAction('validationErrors');
+
                 return;
             }
 
@@ -373,7 +385,7 @@ abstract class BaseGeneratorPage extends Page implements HasActions
                 $this->generationConfig
             );
 
-            if (!empty($this->previewData)) {
+            if (! empty($this->previewData)) {
                 $this->currentStep = 'preview';
             } else {
                 $this->validationErrors = ['No preview data generated. Please check your configuration.'];
@@ -413,21 +425,21 @@ abstract class BaseGeneratorPage extends Page implements HasActions
                 ->icon('heroicon-o-eye')
                 ->color('info')
                 ->action('generatePreview')
-                ->visible(fn() => $this->currentStep === 'configuration'),
+                ->visible(fn () => $this->currentStep === 'configuration'),
 
             Action::make('generate')
                 ->label('Generate Files')
                 ->icon('heroicon-o-code-bracket-square')
                 ->color('success')
                 ->action('generateFiles')
-                ->visible(fn() => $this->currentStep === 'preview'),
+                ->visible(fn () => $this->currentStep === 'preview'),
 
             Action::make('back')
                 ->label('Back to Configuration')
                 ->icon('heroicon-o-arrow-left')
                 ->color('gray')
-                ->action(fn() => $this->currentStep = 'configuration')
-                ->visible(fn() => $this->currentStep === 'preview'),
+                ->action(fn () => $this->currentStep = 'configuration')
+                ->visible(fn () => $this->currentStep === 'preview'),
 
             Action::make('reset')
                 ->label('Reset')

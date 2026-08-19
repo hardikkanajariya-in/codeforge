@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use HkDevs\CodeForgeStudio\Http\Controllers\DocumentationDownloadController;
 use HkDevs\CodeForgeStudio\Services\AssetService;
+use Illuminate\Support\Facades\Route;
 
 // Asset serving route with fallback to package directory
 Route::middleware('web')->get('/codeforge/assets/{path}', function ($path) {
@@ -11,9 +11,9 @@ Route::middleware('web')->get('/codeforge/assets/{path}', function ($path) {
 
 // Schema Export Download Route
 Route::middleware('web')->get('/schema/download/{file}', function ($file) {
-    $filePath = storage_path('app/temp/' . $file);
+    $filePath = storage_path('app/temp/'.$file);
 
-    if (!file_exists($filePath)) {
+    if (! file_exists($filePath)) {
         abort(404, 'File not found');
     }
 

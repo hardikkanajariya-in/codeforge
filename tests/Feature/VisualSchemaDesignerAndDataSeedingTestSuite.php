@@ -2,24 +2,28 @@
 
 namespace HkDevs\CodeForgeStudio\Tests\Feature;
 
+use HkDevs\CodeForgeStudio\Models\DataGenerationTemplate;
+use HkDevs\CodeForgeStudio\Pages\SchemaDesigner;
+use HkDevs\CodeForgeStudio\Pages\SmartDataSeeder;
+use HkDevs\CodeForgeStudio\Services\DataGenerationService;
+use HkDevs\CodeForgeStudio\Services\SchemaAnalyzerService;
 use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Config;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Visual Schema Designer & Intelligent Data Seeding Test Suite Runner
- * 
+ *
  * This test class serves as a comprehensive runner for both Visual Schema Designer
  * and Intelligent Data Seeding test suites, ensuring all test scenarios from the
  * Comprehensive Test Cases Documentation are properly executed and validated.
- * 
+ *
  * Test Coverage:
  * - TC-SCHEMA-001 to TC-SCHEMA-005: Visual Schema Designer Tests
  * - TC-SEED-001 to TC-SEED-005: Intelligent Data Seeding Tests
- * 
- * @package HkDevs\CodeForgeStudio\Tests\Feature
+ *
  * @author HkDevs (hardikkanajariya.in)
+ *
  * @version 1.0.0
  */
 class VisualSchemaDesignerAndDataSeedingTestSuite extends TestCase
@@ -29,7 +33,7 @@ class VisualSchemaDesignerAndDataSeedingTestSuite extends TestCase
     /**
      * Test suite integration and comprehensive validation
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_complete_test_suite_coverage()
     {
         // Verify that all required test files exist and are properly structured
@@ -45,7 +49,7 @@ class VisualSchemaDesignerAndDataSeedingTestSuite extends TestCase
     /**
      * Test Visual Schema Designer functionality overview
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_visual_schema_designer_overview()
     {
         $testResults = [
@@ -61,14 +65,14 @@ class VisualSchemaDesignerAndDataSeedingTestSuite extends TestCase
         }
 
         // Verify schema designer components are available
-        $this->assertTrue(class_exists(\HkDevs\CodeForgeStudio\Pages\SchemaDesigner::class));
-        $this->assertTrue(class_exists(\HkDevs\CodeForgeStudio\Services\SchemaAnalyzerService::class));
+        $this->assertTrue(class_exists(SchemaDesigner::class));
+        $this->assertTrue(class_exists(SchemaAnalyzerService::class));
     }
 
     /**
      * Test Intelligent Data Seeding functionality overview
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_intelligent_data_seeding_overview()
     {
         $testResults = [
@@ -84,15 +88,15 @@ class VisualSchemaDesignerAndDataSeedingTestSuite extends TestCase
         }
 
         // Verify data seeding components are available
-        $this->assertTrue(class_exists(\HkDevs\CodeForgeStudio\Pages\SmartDataSeeder::class));
-        $this->assertTrue(class_exists(\HkDevs\CodeForgeStudio\Services\DataGenerationService::class));
-        $this->assertTrue(class_exists(\HkDevs\CodeForgeStudio\Models\DataGenerationTemplate::class));
+        $this->assertTrue(class_exists(SmartDataSeeder::class));
+        $this->assertTrue(class_exists(DataGenerationService::class));
+        $this->assertTrue(class_exists(DataGenerationTemplate::class));
     }
 
     /**
      * Test integration between Schema Designer and Data Seeding
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_schema_designer_data_seeding_integration()
     {
         // Test that schema analysis can inform data generation
@@ -108,7 +112,7 @@ class VisualSchemaDesignerAndDataSeedingTestSuite extends TestCase
     /**
      * Test performance and scalability across both modules
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_performance_and_scalability()
     {
         $performanceMetrics = [
@@ -126,7 +130,7 @@ class VisualSchemaDesignerAndDataSeedingTestSuite extends TestCase
     /**
      * Test error handling and edge cases
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_error_handling_and_edge_cases()
     {
         $errorScenarios = [
@@ -144,7 +148,7 @@ class VisualSchemaDesignerAndDataSeedingTestSuite extends TestCase
     /**
      * Test documentation and help features
      */
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_documentation_and_help_features()
     {
         $documentationFeatures = [
@@ -172,7 +176,7 @@ class VisualSchemaDesignerAndDataSeedingTestSuite extends TestCase
         ];
 
         foreach ($expectedTestFiles as $testFile) {
-            $fullPath = base_path('packages/codeforge-database-studio/' . $testFile);
+            $fullPath = base_path('packages/codeforge-database-studio/'.$testFile);
             $this->assertFileExists($fullPath, "Test file {$testFile} should exist");
         }
     }

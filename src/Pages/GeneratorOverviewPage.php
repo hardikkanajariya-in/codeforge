@@ -7,10 +7,10 @@ use Filament\Pages\Page;
 
 /**
  * GeneratorOverviewPage
- * 
+ *
  * Central hub page providing overview and quick access to all CodeForge
  * Database Studio code generation tools and capabilities.
- * 
+ *
  * Key Features:
  * - Comprehensive overview of all available generators
  * - Quick access navigation to specific generator tools
@@ -18,7 +18,7 @@ use Filament\Pages\Page;
  * - Recent generation history and activity tracking
  * - Performance metrics and usage analytics
  * - Template management and customization options
- * 
+ *
  * Generator Categories:
  * - Model Generator: Laravel Eloquent model creation
  * - Migration Generator: Database migration file generation
@@ -26,39 +26,45 @@ use Filament\Pages\Page;
  * - Seeder Generator: Database seeder generation and management
  * - Filament Resource Generator: Complete admin resource creation
  * - Documentation Generator: Database documentation automation
- * 
+ *
  * Dashboard Features:
  * - Generator availability status indicators
  * - Recent activity timeline and history
  * - Quick action buttons for common tasks
  * - Performance metrics and generation statistics
  * - Configuration management and settings access
- * 
+ *
  * Navigation Hub:
  * - Direct links to all generator pages
  * - Context-aware generator recommendations
  * - Workflow guidance for complex generation tasks
  * - Help and documentation integration
- * 
+ *
  * Page Layout:
  * - Full-width layout for comprehensive dashboard
  * - Card-based interface for generator organization
  * - Responsive design for optimal usability
  * - Interactive elements for enhanced user experience
- * 
- * @package HkDevs\CodeForgeStudio\Pages
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class GeneratorOverviewPage extends Page
 {
     protected string $view = 'codeforge-studio::pages.generator-overview';
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-command-line';
+
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-command-line';
+
     protected static ?string $title = 'Code Generator Overview';
+
     protected static ?string $navigationLabel = 'Code Generators';
+
     protected static ?int $navigationSort = 0;
-    protected static string | \UnitEnum | null $navigationGroup = 'Code Generators';
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Code Generators';
 
     protected function getHeaderActions(): array
     {

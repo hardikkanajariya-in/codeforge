@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * MigrationTrackingService
- * 
+ *
  * Comprehensive migration tracking and monitoring service for CodeForge Database Studio.
  * Provides detailed migration execution logging, history management, and performance analysis.
- * 
+ *
  * Features:
  * - Detailed migration execution logging with comprehensive metrics
  * - User attribution tracking for multi-developer environments
@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Log;
  * - Cross-system migration synchronization and consistency checking
  * - Historical analysis with migration pattern recognition
  * - Automated cleanup and maintenance of migration history data
- * 
+ *
  * Tracking Capabilities:
  * - Execution Logging: Detailed logging of all migration operations with timestamps
  * - Performance Metrics: Execution time tracking and performance benchmarking
@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\Log;
  * - Batch Tracking: Migration batch identification for rollback operations
  * - Status Monitoring: Real-time migration status with success/failure tracking
  * - Environment Tracking: Environment-specific migration execution logging
- * 
+ *
  * History Management:
  * - Complete Migration History: Persistent storage of all migration operations
  * - Rollback Point Management: Identification and management of rollback points
@@ -40,7 +40,7 @@ use Illuminate\Support\Facades\Log;
  * - Data Integrity Validation: Continuous validation of migration history consistency
  * - Archive Management: Automated archiving of old migration history data
  * - Backup Integration: Integration with backup systems for history preservation
- * 
+ *
  * Performance Analysis:
  * - Execution Time Tracking: Detailed analysis of migration execution performance
  * - Performance Benchmarking: Comparison of migration performance across environments
@@ -49,7 +49,7 @@ use Illuminate\Support\Facades\Log;
  * - Resource Usage Monitoring: Track CPU, memory, and I/O usage during migrations
  * - Trend Analysis: Historical performance trends and pattern recognition
  * - Alert Generation: Automated alerts for performance anomalies and issues
- * 
+ *
  * Error Management:
  * - Comprehensive Error Logging: Detailed error information with stack traces
  * - Error Pattern Analysis: Recognition of common error patterns and causes
@@ -58,7 +58,7 @@ use Illuminate\Support\Facades\Log;
  * - Diagnostic Information: Collection of system state and configuration data
  * - Recovery Tracking: Monitoring of error recovery and resolution processes
  * - Prevention Strategies: Proactive error prevention based on historical data
- * 
+ *
  * Integration Features:
  * - Laravel Integration: Seamless integration with Laravel's migration system
  * - Authentication Integration: User tracking with Laravel's authentication system
@@ -67,7 +67,7 @@ use Illuminate\Support\Facades\Log;
  * - Event Integration: Laravel event system integration for migration workflows
  * - API Integration: REST endpoints for external migration monitoring tools
  * - Webhook Support: Real-time notifications for external systems and tools
- * 
+ *
  * Monitoring and Alerting:
  * - Real-time Monitoring: Live tracking of migration execution and status
  * - Threshold Alerts: Configurable alerts for execution time and error thresholds
@@ -76,7 +76,7 @@ use Illuminate\Support\Facades\Log;
  * - Notification Systems: Integration with email, Slack, and other notification services
  * - Health Checks: Continuous health monitoring of migration tracking system
  * - Compliance Reporting: Automated compliance reports for audit requirements
- * 
+ *
  * Data Management:
  * - Efficient Storage: Optimized storage strategies for migration history data
  * - Data Retention: Configurable retention policies with automated cleanup
@@ -85,12 +85,13 @@ use Illuminate\Support\Facades\Log;
  * - Backup Integration: Automated backup of migration history for disaster recovery
  * - Archive Management: Long-term archiving strategies for historical data
  * - Performance Optimization: Database optimization for efficient history queries
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $service = app(MigrationTrackingService::class);
  * $service->logMigrationExecution('create_users_table', 'up', 1.25, 'success');
@@ -108,7 +109,7 @@ class MigrationTrackingService
     ): void {
         try {
             // Check if migration_histories table exists before logging
-            if (!DB::getSchemaBuilder()->hasTable('migration_histories')) {
+            if (! DB::getSchemaBuilder()->hasTable('migration_histories')) {
                 // Silently skip logging if the table doesn't exist yet
                 return;
             }
@@ -129,7 +130,7 @@ class MigrationTrackingService
         } catch (\Exception $e) {
             Log::warning('Failed to log migration history', [
                 'migration' => $migrationName,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
         }
     }
@@ -137,7 +138,7 @@ class MigrationTrackingService
     private function getBatchForMigration(string $migrationName, string $action): ?int
     {
         try {
-            if (!DB::getSchemaBuilder()->hasTable('migrations')) {
+            if (! DB::getSchemaBuilder()->hasTable('migrations')) {
                 return null;
             }
 
@@ -152,7 +153,8 @@ class MigrationTrackingService
             // but we can store it in our tracking if needed
             return null;
         } catch (\Exception $e) {
-            Log::warning('Failed to get batch for migration: ' . $e->getMessage());
+            Log::warning('Failed to get batch for migration: '.$e->getMessage());
+
             return null;
         }
     }
@@ -180,7 +182,8 @@ class MigrationTrackingService
 
             return $deleted;
         } catch (\Exception $e) {
-            Log::warning('Failed to cleanup orphaned migration history entries: ' . $e->getMessage());
+            Log::warning('Failed to cleanup orphaned migration history entries: '.$e->getMessage());
+
             return 0;
         }
     }
@@ -188,7 +191,7 @@ class MigrationTrackingService
     public function syncMigrationHistory(): void
     {
         try {
-            if (!DB::getSchemaBuilder()->hasTable('migrations')) {
+            if (! DB::getSchemaBuilder()->hasTable('migrations')) {
                 return;
             }
 
@@ -201,7 +204,7 @@ class MigrationTrackingService
                     ->where('action', 'migrate')
                     ->exists();
 
-                if (!$exists) {
+                if (! $exists) {
                     // Add missing migration history
                     MigrationHistory::create([
                         'migration' => $migration->migration,
@@ -215,7 +218,7 @@ class MigrationTrackingService
                 }
             }
         } catch (\Exception $e) {
-            Log::warning('Failed to sync migration history: ' . $e->getMessage());
+            Log::warning('Failed to sync migration history: '.$e->getMessage());
         }
     }
 }

@@ -7,10 +7,10 @@ use Illuminate\Support\Str;
 
 /**
  * SeederGeneratorService
- * 
+ *
  * Advanced Laravel database seeder generation service for CodeForge Database Studio.
  * Creates intelligent, data-aware seeders with realistic data generation and relationship handling.
- * 
+ *
  * Features:
  * - Intelligent seeder generation with automatic data discovery and relationship awareness
  * - Template-based seeder creation with customizable patterns and structures
@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
  * - Conditional seeding with environment and configuration-based logic
  * - Data validation and integrity checking within generated seeders
  * - Performance optimization with efficient seeding strategies
- * 
+ *
  * Seeder Generation Intelligence:
  * - Model Analysis: Automatic analysis of Eloquent models for seeder generation
  * - Relationship Detection: Intelligent detection of model relationships for data integrity
@@ -29,7 +29,7 @@ use Illuminate\Support\Str;
  * - Data Pattern Recognition: Recognition of common data patterns for realistic generation
  * - Dependency Resolution: Automatic resolution of seeder dependencies and execution order
  * - Business Logic Integration: Integration of business rules and validation logic
- * 
+ *
  * Template System:
  * - Customizable Templates: User-defined seeder templates with flexible configuration
  * - Pattern Library: Pre-built seeder patterns for common use cases and scenarios
@@ -38,7 +38,7 @@ use Illuminate\Support\Str;
  * - Version Control: Template versioning with change tracking and rollback support
  * - Team Sharing: Collaborative template development and sharing across teams
  * - Import/Export: Template portability across projects and environments
- * 
+ *
  * Data Generation Integration:
  * - Faker Integration: Advanced Faker library integration with locale-specific data
  * - Custom Providers: Integration with custom data providers and generation sources
@@ -47,7 +47,7 @@ use Illuminate\Support\Str;
  * - Business Data: Generation that reflects real-world business scenarios and patterns
  * - Localization Support: Multi-language and region-specific data generation
  * - Data Validation: Generated data validation with constraint compliance checking
- * 
+ *
  * Performance Features:
  * - Batch Processing: Optimized batch insertion with configurable batch sizes
  * - Memory Management: Efficient memory usage for large dataset generation
@@ -56,7 +56,7 @@ use Illuminate\Support\Str;
  * - Resource Monitoring: Real-time monitoring of resource usage and optimization
  * - Parallel Processing: Support for parallel seeder execution where appropriate
  * - Caching Integration: Intelligent caching of generated data and templates
- * 
+ *
  * Quality Assurance:
  * - Code Validation: Generated seeder code validation and syntax checking
  * - PSR Compliance: Code generation following PSR standards and best practices
@@ -65,7 +65,7 @@ use Illuminate\Support\Str;
  * - Error Handling: Comprehensive error handling with detailed diagnostic information
  * - Performance Testing: Automated performance testing and optimization recommendations
  * - Data Quality: Validation of generated data quality and consistency
- * 
+ *
  * Integration Features:
  * - Laravel Integration: Seamless integration with Laravel's seeding system
  * - Model Integration: Automatic integration with Eloquent models and relationships
@@ -74,7 +74,7 @@ use Illuminate\Support\Str;
  * - Testing Framework: Integration with PHPUnit and Laravel testing utilities
  * - CI/CD Support: Automated seeder generation for testing and deployment
  * - External APIs: Integration with external data sources and APIs
- * 
+ *
  * Customization Options:
  * - Custom Field Mappings: User-defined field generation strategies and patterns
  * - Generation Rules: Custom validation and generation rule configuration
@@ -83,7 +83,7 @@ use Illuminate\Support\Str;
  * - File Organization: Customizable file naming and directory structure
  * - Code Style: Integration with code style standards and formatting tools
  * - Extension Points: Plugin architecture for custom seeder generation logic
- * 
+ *
  * Advanced Features:
  * - Conditional Seeding: Environment and configuration-based seeding logic
  * - Data Relationships: Complex relationship handling with referential integrity
@@ -92,12 +92,13 @@ use Illuminate\Support\Str;
  * - Multi-Environment: Environment-specific seeder generation and configuration
  * - Rollback Support: Generation of rollback-capable seeders with cleanup logic
  * - Audit Integration: Audit trail integration for compliance and tracking
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $service = app(SeederGeneratorService::class);
  * $result = $service->generateFiles([
@@ -127,8 +128,8 @@ class SeederGeneratorService
 
         try {
             $className = $config['class_name'];
-            $fileName = $className . '.php';
-            $filePath = database_path('seeders/' . $fileName);
+            $fileName = $className.'.php';
+            $filePath = database_path('seeders/'.$fileName);
 
             // Ensure directory exists
             File::ensureDirectoryExists(dirname($filePath));
@@ -155,8 +156,8 @@ class SeederGeneratorService
         return [
             'seeder' => [
                 'content' => $this->generateSeederContent($config),
-                'file_name' => $config['class_name'] . '.php',
-                'file_path' => 'database/seeders/' . $config['class_name'] . '.php',
+                'file_name' => $config['class_name'].'.php',
+                'file_path' => 'database/seeders/'.$config['class_name'].'.php',
             ],
         ];
     }
@@ -202,34 +203,34 @@ class SeederGeneratorService
         // Transaction wrapper
         if ($config['run_in_transaction'] ?? true) {
             $content .= "        DB::transaction(function () {\n";
-            $indentation = "            ";
+            $indentation = '            ';
         } else {
-            $indentation = "        ";
+            $indentation = '        ';
         }
 
         // Custom before code
-        if (!empty($config['custom_before_code'])) {
-            $content .= $indentation . "// Custom code before seeding\n";
-            $content .= $indentation . $config['custom_before_code'] . "\n\n";
+        if (! empty($config['custom_before_code'])) {
+            $content .= $indentation."// Custom code before seeding\n";
+            $content .= $indentation.$config['custom_before_code']."\n\n";
         }
 
         // Disable foreign keys
         if ($config['disable_foreign_keys'] ?? false) {
-            $content .= $indentation . "Schema::disableForeignKeyConstraints();\n\n";
+            $content .= $indentation."Schema::disableForeignKeyConstraints();\n\n";
         }
 
         // Truncate table
         if ($config['truncate_table'] ?? false) {
             $tableName = Str::snake(Str::plural($modelName));
-            $content .= $indentation . "DB::table('{$tableName}')->truncate();\n\n";
+            $content .= $indentation."DB::table('{$tableName}')->truncate();\n\n";
         }
 
         // Call other seeders
         foreach ($config['call_other_seeders'] ?? [] as $seeder) {
-            $content .= $indentation . "\$this->call({$seeder}::class);\n";
+            $content .= $indentation."\$this->call({$seeder}::class);\n";
         }
 
-        if (!empty($config['call_other_seeders'])) {
+        if (! empty($config['call_other_seeders'])) {
             $content .= "\n";
         }
 
@@ -242,13 +243,13 @@ class SeederGeneratorService
 
         // Enable foreign keys
         if ($config['disable_foreign_keys'] ?? false) {
-            $content .= "\n" . $indentation . "Schema::enableForeignKeyConstraints();\n";
+            $content .= "\n".$indentation."Schema::enableForeignKeyConstraints();\n";
         }
 
         // Custom after code
-        if (!empty($config['custom_after_code'])) {
-            $content .= "\n" . $indentation . "// Custom code after seeding\n";
-            $content .= $indentation . $config['custom_after_code'] . "\n";
+        if (! empty($config['custom_after_code'])) {
+            $content .= "\n".$indentation."// Custom code after seeding\n";
+            $content .= $indentation.$config['custom_after_code']."\n";
         }
 
         // Close transaction
@@ -265,7 +266,7 @@ class SeederGeneratorService
     protected function generateEnvironmentCheck(array $config): string
     {
         $environments = $config['allowed_environments'] ?? ['local', 'testing'];
-        $envList = "'" . implode("', '", $environments) . "'";
+        $envList = "'".implode("', '", $environments)."'";
 
         $content = "        if (!in_array(app()->environment(), [{$envList}])) {\n";
         $content .= "            return;\n";
@@ -280,17 +281,17 @@ class SeederGeneratorService
         $count = $config['count'] ?? 10;
         $chunkSize = $config['chunk_size'] ?? 1000;
 
-        $content = "";
+        $content = '';
 
         if ($count > $chunkSize) {
             // Generate in chunks
-            $content .= $indentation . "// Generate {$count} records in chunks of {$chunkSize}\n";
-            $content .= $indentation . "\$totalRecords = {$count};\n";
-            $content .= $indentation . "\$chunkSize = {$chunkSize};\n";
-            $content .= $indentation . "\$chunks = ceil(\$totalRecords / \$chunkSize);\n\n";
-            $content .= $indentation . "for (\$i = 0; \$i < \$chunks; \$i++) {\n";
-            $content .= $indentation . "    \$recordsToCreate = min(\$chunkSize, \$totalRecords - (\$i * \$chunkSize));\n";
-            $content .= $indentation . "    {$modelName}::factory()";
+            $content .= $indentation."// Generate {$count} records in chunks of {$chunkSize}\n";
+            $content .= $indentation."\$totalRecords = {$count};\n";
+            $content .= $indentation."\$chunkSize = {$chunkSize};\n";
+            $content .= $indentation."\$chunks = ceil(\$totalRecords / \$chunkSize);\n\n";
+            $content .= $indentation."for (\$i = 0; \$i < \$chunks; \$i++) {\n";
+            $content .= $indentation."    \$recordsToCreate = min(\$chunkSize, \$totalRecords - (\$i * \$chunkSize));\n";
+            $content .= $indentation."    {$modelName}::factory()";
 
             // Add states
             foreach ($config['factory_states'] ?? [] as $state) {
@@ -298,10 +299,10 @@ class SeederGeneratorService
             }
 
             $content .= "->count(\$recordsToCreate)->create();\n";
-            $content .= $indentation . "}\n";
+            $content .= $indentation."}\n";
         } else {
             // Generate all at once
-            $content .= $indentation . "{$modelName}::factory()";
+            $content .= $indentation."{$modelName}::factory()";
 
             // Add states
             foreach ($config['factory_states'] ?? [] as $state) {
@@ -317,10 +318,10 @@ class SeederGeneratorService
     protected function generateManualSeeding(array $config, string $indentation): string
     {
         $modelName = $config['model'];
-        $content = "";
+        $content = '';
 
         foreach ($config['manual_data'] ?? [] as $index => $record) {
-            $content .= $indentation . "{$modelName}::create(" . $record['data'] . ");\n";
+            $content .= $indentation."{$modelName}::create(".$record['data'].");\n";
         }
 
         return $content;

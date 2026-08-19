@@ -8,14 +8,15 @@ use Illuminate\Console\Command;
 
 /**
  * FixSeederPathsCommand
- * 
+ *
  * Command to fix incorrect seeder file paths and cleanup invalid entries
  * in the data_seeders table. Useful when seeders were registered with
  * incorrect paths or when the Laravel project structure changes.
- * 
- * @package HkDevs\CodeForgeStudio\Commands
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class FixSeederPathsCommand extends Command
@@ -41,6 +42,7 @@ class FixSeederPathsCommand extends Command
 
             if ($currentSeeders->isEmpty()) {
                 $this->info('ℹ️  No seeders to process');
+
                 return 0;
             }
 
@@ -64,11 +66,11 @@ class FixSeederPathsCommand extends Command
                 if ($discovered) {
                     // Check if path needs updating
                     if ($seeder->file_path !== $discovered['file_path']) {
-                        $this->warn("   📝 Path needs updating:");
+                        $this->warn('   📝 Path needs updating:');
                         $this->line("      Old: {$seeder->file_path}");
                         $this->line("      New: {$discovered['file_path']}");
 
-                        if (!$dryRun) {
+                        if (! $dryRun) {
                             $seeder->update([
                                 'file_path' => $discovered['file_path'],
                                 'type' => $discovered['type'],
@@ -76,20 +78,20 @@ class FixSeederPathsCommand extends Command
                         }
                         $fixed++;
                     } else {
-                        $this->info("   ✅ Path is correct");
+                        $this->info('   ✅ Path is correct');
                     }
                 } else {
                     // Seeder not found in discovery
-                    $this->error("   ❌ Seeder not found in filesystem");
+                    $this->error('   ❌ Seeder not found in filesystem');
 
                     if ($cleanup) {
-                        $this->warn("   🗑️  Will be removed");
-                        if (!$dryRun) {
+                        $this->warn('   🗑️  Will be removed');
+                        if (! $dryRun) {
                             $seeder->delete();
                         }
                         $removed++;
                     } else {
-                        $this->line("   ℹ️  Use --cleanup flag to remove invalid seeders");
+                        $this->line('   ℹ️  Use --cleanup flag to remove invalid seeders');
                     }
                 }
             }
@@ -98,10 +100,10 @@ class FixSeederPathsCommand extends Command
             foreach ($discoveredSeeders as $discovered) {
                 $exists = $currentSeeders->firstWhere('class_name', $discovered['class_name']);
 
-                if (!$exists) {
+                if (! $exists) {
                     $this->info("🆕 New seeder found: {$discovered['name']}");
 
-                    if (!$dryRun) {
+                    if (! $dryRun) {
                         DataSeeder::create($discovered);
                     }
                     $created++;
@@ -129,11 +131,11 @@ class FixSeederPathsCommand extends Command
                 }
             }
 
-            if (!$dryRun && ($fixed > 0 || $created > 0 || $removed > 0)) {
+            if (! $dryRun && ($fixed > 0 || $created > 0 || $removed > 0)) {
                 $this->newLine();
                 $this->info('✅ Seeder paths have been fixed!');
                 $this->line('💡 You can now run: php artisan codeforge:diagnose-seeders --auto');
-            } else if ($dryRun) {
+            } elseif ($dryRun) {
                 $this->newLine();
                 $this->info('💡 Run without --dry-run to apply changes');
             } else {
@@ -143,7 +145,8 @@ class FixSeederPathsCommand extends Command
 
             return 0;
         } catch (\Exception $e) {
-            $this->error('❌ Error: ' . $e->getMessage());
+            $this->error('❌ Error: '.$e->getMessage());
+
             return 1;
         }
     }

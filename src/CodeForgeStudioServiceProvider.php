@@ -27,8 +27,8 @@ use HkDevs\CodeForgeStudio\Listeners\QueryPerformanceListener;
 use HkDevs\CodeForgeStudio\Services\AdvancedCodeGenerationService;
 use HkDevs\CodeForgeStudio\Services\AssetService;
 use HkDevs\CodeForgeStudio\Services\CodeGenerationService;
-use HkDevs\CodeForgeStudio\Services\DataGenerationService;
 use HkDevs\CodeForgeStudio\Services\DatabaseHealthService;
+use HkDevs\CodeForgeStudio\Services\DataGenerationService;
 use HkDevs\CodeForgeStudio\Services\FactoryGeneratorService;
 use HkDevs\CodeForgeStudio\Services\FilamentResourceGeneratorService;
 use HkDevs\CodeForgeStudio\Services\LaravelTypesService;
@@ -84,8 +84,8 @@ class CodeForgeStudioServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
-        $this->loadRoutesFrom(__DIR__ . '/../routes/docs.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/docs.php');
 
         $this->registerPublishableAssets();
         $this->registerFilamentAssets();
@@ -154,26 +154,26 @@ class CodeForgeStudioServiceProvider extends PackageServiceProvider
     protected function registerPublishableAssets(): void
     {
         $this->publishes([
-            __DIR__ . '/../resources/css' => public_path('vendor/codeforge/css'),
-            __DIR__ . '/../resources/js' => public_path('vendor/codeforge/js'),
+            __DIR__.'/../resources/css' => public_path('vendor/codeforge/css'),
+            __DIR__.'/../resources/js' => public_path('vendor/codeforge/js'),
         ], 'codeforge-database-studio-assets');
 
         // Legacy publish tag aliases
         $this->publishes([
-            __DIR__ . '/../config/codeforge-database-studio.php' => config_path('codeforge-database-studio.php'),
+            __DIR__.'/../config/codeforge-database-studio.php' => config_path('codeforge-database-studio.php'),
         ], 'codeforge-studio-config');
 
         $this->publishes([
-            __DIR__ . '/../database/migrations' => database_path('migrations'),
+            __DIR__.'/../database/migrations' => database_path('migrations'),
         ], 'codeforge-studio-migrations');
 
         $this->publishes([
-            __DIR__ . '/../resources/views' => resource_path('views/vendor/codeforge'),
+            __DIR__.'/../resources/views' => resource_path('views/vendor/codeforge'),
         ], 'codeforge-studio-views');
 
         $this->publishes([
-            __DIR__ . '/../resources/css' => public_path('vendor/codeforge/css'),
-            __DIR__ . '/../resources/js' => public_path('vendor/codeforge/js'),
+            __DIR__.'/../resources/css' => public_path('vendor/codeforge/css'),
+            __DIR__.'/../resources/js' => public_path('vendor/codeforge/js'),
         ], 'codeforge-studio-assets');
     }
 
@@ -185,9 +185,9 @@ class CodeForgeStudioServiceProvider extends PackageServiceProvider
 
         FilamentAsset::register(
             [
-                Css::make('codeforge-schema-designer-v2', __DIR__ . '/../resources/css/schema-designer-v2.css'),
-                Js::make('codeforge-schema-designer', __DIR__ . '/../resources/js/schema-designer.js'),
-                Js::make('codeforge-schema-designer-v2', __DIR__ . '/../resources/js/schema-designer-v2.js'),
+                Css::make('codeforge-schema-designer-v2', __DIR__.'/../resources/css/schema-designer-v2.css'),
+                Js::make('codeforge-schema-designer', __DIR__.'/../resources/js/schema-designer.js'),
+                Js::make('codeforge-schema-designer-v2', __DIR__.'/../resources/js/schema-designer-v2.js'),
             ],
             package: 'hkdevs/codeforge-database-studio'
         );

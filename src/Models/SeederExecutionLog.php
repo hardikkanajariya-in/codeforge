@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * SeederExecutionLog
- * 
+ *
  * Eloquent model for tracking detailed seeder execution logs with
  * comprehensive metrics, status monitoring, and audit trail capabilities.
- * 
+ *
  * Key Features:
  * - Detailed seeder execution tracking with timing and record counts
  * - Comprehensive status monitoring (running, completed, failed)
@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * - Output capture for debugging and audit purposes
  * - User attribution and execution context tracking
  * - Integration with DataSeeder model for relationship management
- * 
+ *
  * Database Fields:
  * - seeder_name: Seeder identifier for tracking and reference
  * - seeder_class: PHP class name for technical identification
@@ -34,15 +34,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * - executed_by: User or system identifier for attribution
  * - started_at: Execution start timestamp
  * - completed_at: Execution completion timestamp
- * 
+ *
  * Relationships:
  * - seeder(): BelongsTo relationship with DataSeeder model
  * - Execution history tracking for performance analysis
  * - Status reporting for seeder health monitoring
- * 
- * @package HkDevs\CodeForgeStudio\Models
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class SeederExecutionLog extends Model
@@ -102,10 +103,10 @@ class SeederExecutionLog extends Model
         }
 
         if ($this->execution_time < 1) {
-            return round($this->execution_time * 1000) . 'ms';
+            return round($this->execution_time * 1000).'ms';
         }
 
-        return round($this->execution_time, 2) . 's';
+        return round($this->execution_time, 2).'s';
     }
 
     public function getTotalRecordsAttribute(): int
@@ -116,6 +117,7 @@ class SeederExecutionLog extends Model
     public function getSuccessRateAttribute(): float
     {
         $total = $this->total_records + $this->records_failed;
+
         return $total > 0 ? ($this->total_records / $total) * 100 : 0;
     }
 

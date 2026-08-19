@@ -5,10 +5,11 @@ namespace HkDevs\CodeForgeStudio\Tests\Unit;
 use HkDevs\CodeForgeStudio\Services\IntelligentSuggestionService;
 use HkDevs\CodeForgeStudio\Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * IntelligentSuggestionServiceTest
- * 
+ *
  * Tests for the intelligent suggestion engine that replaces static suggestions
  * with dynamic database-driven analysis for model generation.
  */
@@ -19,10 +20,10 @@ class IntelligentSuggestionServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service = new IntelligentSuggestionService();
+        $this->service = new IntelligentSuggestionService;
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_fallback_suggestions_when_table_does_not_exist()
     {
         $suggestions = $this->service->getModelSuggestions('NonExistentModel');
@@ -37,7 +38,7 @@ class IntelligentSuggestionServiceTest extends TestCase
         $this->assertEmpty($suggestions['relations']);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_user_model_suggestions()
     {
         // Create a users table for testing
@@ -69,7 +70,7 @@ class IntelligentSuggestionServiceTest extends TestCase
         Schema::dropIfExists('test_users');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_product_model_with_relationships()
     {
         // Create categories table first
@@ -122,7 +123,7 @@ class IntelligentSuggestionServiceTest extends TestCase
         Schema::dropIfExists('test_categories');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_casting_suggestions_intelligence()
     {
         Schema::create('test_smart_casts', function ($table) {
@@ -151,7 +152,7 @@ class IntelligentSuggestionServiceTest extends TestCase
         Schema::dropIfExists('test_smart_casts');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_pattern_based_suggestions()
     {
         $suggestions = $this->service->getModelSuggestions('BlogPost');
@@ -163,7 +164,7 @@ class IntelligentSuggestionServiceTest extends TestCase
         $this->assertContains('name', $suggestions['fillable']);
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_hidden_field_detection()
     {
         Schema::create('test_security', function ($table) {
@@ -187,7 +188,7 @@ class IntelligentSuggestionServiceTest extends TestCase
         Schema::dropIfExists('test_security');
     }
 
-    #[\PHPUnit\Framework\Attributes\Test]
+    #[Test]
     public function test_trait_suggestions_based_on_table_structure()
     {
         Schema::create('test_traits', function ($table) {

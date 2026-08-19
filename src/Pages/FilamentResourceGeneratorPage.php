@@ -2,22 +2,20 @@
 
 namespace HkDevs\CodeForgeStudio\Pages;
 
-use Filament\Forms;
-use HkDevs\CodeForgeStudio\Support\Section;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use HkDevs\CodeForgeStudio\Services\FilamentResourceGeneratorService;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 /**
  * FilamentResourceGeneratorPage
- * 
+ *
  * Comprehensive Filament resource generator with advanced field type configurations
  * and real-time code preview. Supports all Filament form components and table columns
  * with type-specific configuration panels and professional code generation.
- * 
+ *
  * Core Features:
  * - Model-only generation (no migration complexity)
  * - Real-time code preview with tabbed interface
@@ -25,7 +23,7 @@ use Illuminate\Support\Facades\Log;
  * - Single-page workflow for better UX
  * - Always-visible designer sections
  * - Comprehensive relationship support
- * 
+ *
  * Form Field Types Supported:
  * - Text Input (min/max length, validation)
  * - Email Input (built-in validation)
@@ -43,7 +41,7 @@ use Illuminate\Support\Facades\Log;
  * - Color Picker (format support, palettes)
  * - Hidden Fields (session data, tracking)
  * - Relationship Fields (all types: belongsTo, hasMany, belongsToMany, hasOne)
- * 
+ *
  * Table Column Types Supported:
  * - Text Columns (basic display, formatting)
  * - Badge Columns (color/icon mapping, dynamic styling)
@@ -53,7 +51,7 @@ use Illuminate\Support\Facades\Log;
  * - Color Columns (size options, copy functionality)
  * - Money Columns (currency formatting)
  * - Relationship Columns (related data display, nested access)
- * 
+ *
  * Advanced Configuration Features:
  * - Dynamic configuration panels (show/hide based on field type)
  * - Type-specific properties (relevant options only)
@@ -63,7 +61,7 @@ use Illuminate\Support\Facades\Log;
  * - Comprehensive relationship handling
  * - File upload management with security controls
  * - Visual component configuration (colors, icons, shapes)
- * 
+ *
  * Technical Implementation:
  * - Livewire-powered reactive interface
  * - Component-based architecture
@@ -71,60 +69,73 @@ use Illuminate\Support\Facades\Log;
  * - Error handling and validation
  * - Performance optimized with intelligent caching
  * - Laravel best practices integration
- * 
- * @package HkDevs\CodeForgeStudio\Pages
+ *
  * @author hardikkanajariya.in
+ *
  * @version 2.0.0
+ *
  * @since 1.0.0 Basic resource generation
  * @since 2.0.0 Comprehensive field type configurations and relationship support
  */
 class FilamentResourceGeneratorPage extends Page
 {
     protected string $view = 'codeforge-studio::pages.filament-resource-generator';
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-squares-2x2';
+
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-squares-2x2';
+
     protected static ?string $title = 'Filament Resource Generator';
+
     protected static ?string $navigationLabel = 'Filament Resource';
+
     protected static ?int $navigationSort = 5;
 
     /**
      * Core Properties
-     * 
-     * @var string|null $selectedModel Currently selected Laravel model class
-     * @var array $previewData Generated code preview data with file contents
-     * @var bool $isGenerating Loading state during file generation process
-     * @var int $activePreviewTab Currently active tab in preview interface
+     *
+     * @var string|null Currently selected Laravel model class
+     * @var array Generated code preview data with file contents
+     * @var bool Loading state during file generation process
+     * @var int Currently active tab in preview interface
      */
     // Core properties
     public ?string $selectedModel = null;
+
     public array $previewData = [];
+
     public bool $isGenerating = false;
+
     public int $activePreviewTab = 0;
 
     /**
      * Designer Toggle States (Legacy - kept for compatibility)
      * Note: Designer sections are now always visible by default
-     * 
-     * @var bool $showFormDesigner Form designer visibility toggle
-     * @var bool $showTableDesigner Table designer visibility toggle  
-     * @var bool $showFilterDesigner Filter designer visibility toggle
+     *
+     * @var bool Form designer visibility toggle
+     * @var bool Table designer visibility toggle
+     * @var bool Filter designer visibility toggle
      */
     // Designer toggles
     public bool $showFormDesigner = false;
+
     public bool $showTableDesigner = false;
+
     public bool $showFilterDesigner = false;
 
     /**
      * Configuration Arrays
-     * 
-     * @var array $formFields Form field configurations with type-specific properties
-     * @var array $tableColumns Table column configurations with display options
-     * @var array $filters Filter configurations for table searching/filtering
-     * @var array $resourceSettings Global resource settings (navigation, icons, etc.)
+     *
+     * @var array Form field configurations with type-specific properties
+     * @var array Table column configurations with display options
+     * @var array Filter configurations for table searching/filtering
+     * @var array Global resource settings (navigation, icons, etc.)
      */
     // Configuration arrays
     public array $formFields = [];
+
     public array $tableColumns = [];
+
     public array $filters = [];
+
     public array $resourceSettings = [
         'navigation_icon' => 'heroicon-o-rectangle-stack',
         'navigation_group' => '',
@@ -133,6 +144,7 @@ class FilamentResourceGeneratorPage extends Page
         'enable_global_search' => true,
         'generate_policy' => false,
     ];
+
     public function mount(): void
     {
         $this->resetToDefaults();
@@ -156,15 +168,15 @@ class FilamentResourceGeneratorPage extends Page
         $models = [];
         $modelPath = app_path('Models');
 
-        if (!is_dir($modelPath)) {
+        if (! is_dir($modelPath)) {
             return $models;
         }
 
-        $files = glob($modelPath . '/*.php');
+        $files = glob($modelPath.'/*.php');
 
         foreach ($files as $file) {
             $fileName = basename($file, '.php');
-            $className = 'App\\Models\\' . $fileName;
+            $className = 'App\\Models\\'.$fileName;
 
             if (class_exists($className)) {
                 $models[] = [
@@ -195,8 +207,9 @@ class FilamentResourceGeneratorPage extends Page
 
     public function updatedSelectedModel($value): void
     {
-        if (!$value) {
+        if (! $value) {
             $this->resetToDefaults();
+
             return;
         }
 
@@ -206,7 +219,7 @@ class FilamentResourceGeneratorPage extends Page
 
     /**
      * Analyze selected Laravel model and generate intelligent field suggestions
-     * 
+     *
      * Performs comprehensive analysis of the selected model to automatically
      * suggest appropriate form fields, table columns, and filters based on:
      * - Database column types and constraints
@@ -214,7 +227,7 @@ class FilamentResourceGeneratorPage extends Page
      * - Fillable attributes
      * - Validation rules (if defined)
      * - Naming conventions and patterns
-     * 
+     *
      * Intelligent Suggestions:
      * - email columns → email input fields
      * - password columns → password fields with security options
@@ -223,9 +236,8 @@ class FilamentResourceGeneratorPage extends Page
      * - text columns → text inputs with appropriate length limits
      * - timestamp columns → datetime pickers
      * - enum columns → select dropdowns with options
-     * 
-     * @param string $modelClass Fully qualified model class name
-     * @return void
+     *
+     * @param  string  $modelClass  Fully qualified model class name
      */
     protected function analyzeModel(string $modelClass): void
     {
@@ -242,8 +254,8 @@ class FilamentResourceGeneratorPage extends Page
             $modelName = class_basename($modelClass);
             $this->resourceSettings['navigation_label'] = Str::title(Str::plural($modelName));
         } catch (\Exception $e) {
-            Log::error('Model analysis failed: ' . $e->getMessage());
-            $this->addError('model', 'Failed to analyze model: ' . $e->getMessage());
+            Log::error('Model analysis failed: '.$e->getMessage());
+            $this->addError('model', 'Failed to analyze model: '.$e->getMessage());
         }
     }
 
@@ -259,6 +271,7 @@ class FilamentResourceGeneratorPage extends Page
                 'enabled' => true,
             ];
         }
+
         return $converted;
     }
 
@@ -275,6 +288,7 @@ class FilamentResourceGeneratorPage extends Page
                 'enabled' => true,
             ];
         }
+
         return $converted;
     }
 
@@ -289,23 +303,24 @@ class FilamentResourceGeneratorPage extends Page
                 'enabled' => false, // Start with filters disabled by default
             ];
         }
+
         return $converted;
     }
 
     /**
      * Generate real-time code preview for all configured components
-     * 
+     *
      * Creates a complete preview of all files that will be generated based on
      * current configuration. This includes the main resource file and all
      * associated page files (Create, Edit, List, View if enabled).
-     * 
+     *
      * Preview Features:
      * - Real-time updates as configuration changes
      * - Tabbed interface for multiple files
      * - Syntax-highlighted code display
      * - Copy-to-clipboard functionality
      * - Error handling and validation feedback
-     * 
+     *
      * Generated Files:
      * - Main Resource file with form schema, table configuration, filters
      * - Create page (if applicable)
@@ -313,13 +328,12 @@ class FilamentResourceGeneratorPage extends Page
      * - List page (always included)
      * - View page (if enabled)
      * - Policy file (if enabled)
-     * 
-     * @return void
      */
     public function generatePreview(): void
     {
-        if (!$this->selectedModel) {
+        if (! $this->selectedModel) {
             $this->previewData = [];
+
             return;
         }
 
@@ -332,11 +346,11 @@ class FilamentResourceGeneratorPage extends Page
 
             Log::info('Preview generated successfully', [
                 'model' => $this->selectedModel,
-                'files_count' => count($this->previewData)
+                'files_count' => count($this->previewData),
             ]);
         } catch (\Exception $e) {
-            Log::error('Preview generation failed: ' . $e->getMessage());
-            $this->addError('preview', 'Failed to generate preview: ' . $e->getMessage());
+            Log::error('Preview generation failed: '.$e->getMessage());
+            $this->addError('preview', 'Failed to generate preview: '.$e->getMessage());
             $this->previewData = [];
         }
     }
@@ -348,7 +362,7 @@ class FilamentResourceGeneratorPage extends Page
         return [
             'enabled' => true,
             'model' => $this->selectedModel,
-            'class_name' => $modelName . 'Resource',
+            'class_name' => $modelName.'Resource',
             'namespace' => 'App\\Filament\\Resources',
             'navigation_icon' => $this->resourceSettings['navigation_icon'],
             'navigation_label' => $this->resourceSettings['navigation_label'] ?? Str::title(Str::plural($modelName)),
@@ -357,9 +371,9 @@ class FilamentResourceGeneratorPage extends Page
             'enable_view_page' => $this->resourceSettings['enable_view_page'],
             'enable_global_search' => $this->resourceSettings['enable_global_search'],
             'generate_policy' => $this->resourceSettings['generate_policy'],
-            'form_fields' => array_filter($this->formFields, fn($field) => $field['enabled'] ?? true),
-            'table_columns' => array_filter($this->tableColumns, fn($column) => $column['enabled'] ?? true),
-            'filters' => array_filter($this->filters, fn($filter) => $filter['enabled'] ?? false),
+            'form_fields' => array_filter($this->formFields, fn ($field) => $field['enabled'] ?? true),
+            'table_columns' => array_filter($this->tableColumns, fn ($column) => $column['enabled'] ?? true),
+            'filters' => array_filter($this->filters, fn ($filter) => $filter['enabled'] ?? false),
             'pages' => $this->getEnabledPages(),
         ];
     }
@@ -377,36 +391,35 @@ class FilamentResourceGeneratorPage extends Page
 
     /**
      * Generate and save all resource files to the filesystem
-     * 
+     *
      * Creates all configured resource files and saves them to appropriate
      * locations within the Laravel application structure. Handles file
      * creation, directory management, and success/error reporting.
-     * 
+     *
      * File Generation Process:
      * 1. Validate configuration and selected model
      * 2. Build complete generation configuration
      * 3. Generate all resource and page files
      * 4. Save files to appropriate directories
      * 5. Report success/failure with detailed feedback
-     * 
+     *
      * Generated File Locations:
      * - Resource: app/Filament/Resources/{Model}Resource.php
      * - Pages: app/Filament/Resources/{Model}Resource/Pages/
      * - Policy: app/Policies/{Model}Policy.php (if enabled)
-     * 
+     *
      * Features:
      * - Automatic directory creation
      * - File conflict detection
      * - Progress indication with loading state
      * - Success notifications with file count
      * - Detailed error reporting and logging
-     * 
-     * @return void
      */
     public function generateFiles(): void
     {
-        if (!$this->selectedModel) {
+        if (! $this->selectedModel) {
             $this->addError('generation', 'Please select a model first.');
+
             return;
         }
 
@@ -423,18 +436,18 @@ class FilamentResourceGeneratorPage extends Page
             // Show success notification using Filament notification
             Notification::make()
                 ->title('Resource Generated Successfully!')
-                ->body(count($results) . ' files have been created.')
+                ->body(count($results).' files have been created.')
                 ->success()
                 ->send();
 
             Log::info('Resource files generated successfully', [
                 'model' => $this->selectedModel,
-                'files' => $results
+                'files' => $results,
             ]);
         } catch (\Exception $e) {
             $this->isGenerating = false;
-            $this->addError('generation', 'Failed to generate files: ' . $e->getMessage());
-            Log::error('Resource generation failed: ' . $e->getMessage());
+            $this->addError('generation', 'Failed to generate files: '.$e->getMessage());
+            Log::error('Resource generation failed: '.$e->getMessage());
         }
     }
 
@@ -446,7 +459,7 @@ class FilamentResourceGeneratorPage extends Page
     public function toggleFormField(int $index): void
     {
         if (isset($this->formFields[$index])) {
-            $this->formFields[$index]['enabled'] = !($this->formFields[$index]['enabled'] ?? true);
+            $this->formFields[$index]['enabled'] = ! ($this->formFields[$index]['enabled'] ?? true);
             $this->generatePreview();
         }
     }
@@ -454,7 +467,7 @@ class FilamentResourceGeneratorPage extends Page
     public function toggleTableColumn(int $index): void
     {
         if (isset($this->tableColumns[$index])) {
-            $this->tableColumns[$index]['enabled'] = !($this->tableColumns[$index]['enabled'] ?? true);
+            $this->tableColumns[$index]['enabled'] = ! ($this->tableColumns[$index]['enabled'] ?? true);
             $this->generatePreview();
         }
     }
@@ -462,7 +475,7 @@ class FilamentResourceGeneratorPage extends Page
     public function toggleFilter(int $index): void
     {
         if (isset($this->filters[$index])) {
-            $this->filters[$index]['enabled'] = !($this->filters[$index]['enabled'] ?? false);
+            $this->filters[$index]['enabled'] = ! ($this->filters[$index]['enabled'] ?? false);
             $this->generatePreview();
         }
     }
@@ -474,11 +487,11 @@ class FilamentResourceGeneratorPage extends Page
 
     /**
      * Add a new form field with comprehensive default configuration
-     * 
+     *
      * Creates a new form field with all possible configuration options initialized
      * to sensible defaults. Each field type has specific properties that become
      * relevant when the field type is selected in the UI.
-     * 
+     *
      * Supported Field Types & Their Configurations:
      * - text: min_length, max_length, placeholder, validation
      * - email: built-in email validation, placeholder
@@ -491,8 +504,6 @@ class FilamentResourceGeneratorPage extends Page
      * - toggle/checkbox: default_state, inline, accepted
      * - rich_editor/markdown: toolbar_buttons, disable_features
      * - relationship: relationship_type, related_model, title_attribute
-     * 
-     * @return void
      */
     // Form Designer Methods
     public function addFormField(): void
@@ -590,11 +601,11 @@ class FilamentResourceGeneratorPage extends Page
 
     /**
      * Add a new table column with comprehensive default configuration
-     * 
+     *
      * Creates a new table column with all possible configuration options initialized
      * to sensible defaults. Each column type has specific properties for display
      * and interaction customization.
-     * 
+     *
      * Supported Column Types & Their Configurations:
      * - text: basic text display, formatting, suffix
      * - badge: colors (JSON), icons (JSON), dynamic styling
@@ -603,10 +614,8 @@ class FilamentResourceGeneratorPage extends Page
      * - date/datetime: date_format, timezone, since (relative time)
      * - color: size, copy_message, copy_message_text
      * - relationship: relationship_type, related_model, title_attribute
-     * 
+     *
      * All columns support: sortable, searchable, toggleable, enabled state
-     * 
-     * @return void
      */
     // Table Designer Methods
     public function addTableColumn(): void
@@ -728,26 +737,26 @@ class FilamentResourceGeneratorPage extends Page
 
     public function toggleFormDesigner(): void
     {
-        $this->showFormDesigner = !$this->showFormDesigner;
+        $this->showFormDesigner = ! $this->showFormDesigner;
     }
 
     public function toggleTableDesigner(): void
     {
-        $this->showTableDesigner = !$this->showTableDesigner;
+        $this->showTableDesigner = ! $this->showTableDesigner;
     }
 
     public function toggleFilterDesigner(): void
     {
-        $this->showFilterDesigner = !$this->showFilterDesigner;
+        $this->showFilterDesigner = ! $this->showFilterDesigner;
     }
 
     /**
      * Get available form field types with comprehensive support
-     * 
+     *
      * Returns all supported Filament form field types with their display names.
      * Each type triggers different configuration panels in the UI with relevant
      * options for that specific field type.
-     * 
+     *
      * Field Categories:
      * - Text Inputs: text, email, password, number, textarea
      * - Selection: select, radio, checkbox, toggle
@@ -755,7 +764,7 @@ class FilamentResourceGeneratorPage extends Page
      * - File Handling: file, image
      * - Rich Content: rich_editor, markdown, color
      * - Special: hidden, relationship
-     * 
+     *
      * @return array<string, string> Field type => Display name mapping
      */
     // Available field types for dropdowns
@@ -786,16 +795,16 @@ class FilamentResourceGeneratorPage extends Page
 
     /**
      * Get available table column types with comprehensive support
-     * 
+     *
      * Returns all supported Filament table column types with their display names.
      * Each type provides different visualization and interaction capabilities.
-     * 
+     *
      * Column Categories:
      * - Text Display: text, badge, select, url, email, phone
      * - Visual: boolean (icons), color, image
      * - Data Types: date, datetime, money, number
      * - Relationships: relationship (with nested attribute access)
-     * 
+     *
      * @return array<string, string> Column type => Display name mapping
      */
     public function getAvailableTableColumnTypes(): array
@@ -834,11 +843,9 @@ class FilamentResourceGeneratorPage extends Page
 
     /**
      * Handle form field configuration updates
-     * 
+     *
      * Triggered when any form field property is modified in the UI.
      * Automatically regenerates the code preview to reflect changes.
-     * 
-     * @return void
      */
     public function updateFormField(): void
     {
@@ -847,11 +854,9 @@ class FilamentResourceGeneratorPage extends Page
 
     /**
      * Handle table column configuration updates
-     * 
+     *
      * Triggered when any table column property is modified in the UI.
      * Automatically regenerates the code preview to reflect changes.
-     * 
-     * @return void
      */
     public function updateTableColumn(): void
     {
@@ -860,11 +865,9 @@ class FilamentResourceGeneratorPage extends Page
 
     /**
      * Handle filter configuration updates
-     * 
+     *
      * Triggered when any filter property is modified in the UI.
      * Automatically regenerates the code preview to reflect changes.
-     * 
-     * @return void
      */
     public function updateFilter(): void
     {
@@ -876,15 +879,15 @@ class FilamentResourceGeneratorPage extends Page
         $models = [];
         $modelPath = app_path('Models');
 
-        if (!is_dir($modelPath)) {
+        if (! is_dir($modelPath)) {
             return $models;
         }
 
-        $files = glob($modelPath . '/*.php');
+        $files = glob($modelPath.'/*.php');
 
         foreach ($files as $file) {
             $fileName = basename($file, '.php');
-            $className = 'App\\Models\\' . $fileName;
+            $className = 'App\\Models\\'.$fileName;
 
             if (class_exists($className)) {
                 $models[$className] = $fileName;
@@ -896,21 +899,21 @@ class FilamentResourceGeneratorPage extends Page
 
     /**
      * Get available relationship types for form fields and table columns
-     * 
+     *
      * Returns all Eloquent relationship types supported by the generator
      * with descriptive labels explaining their purpose and cardinality.
-     * 
+     *
      * Relationship Types:
      * - belongsTo: Many-to-One (e.g., Post belongs to User)
      * - hasMany: One-to-Many (e.g., User has many Posts)
      * - belongsToMany: Many-to-Many (e.g., User belongs to many Roles)
      * - hasOne: One-to-One (e.g., User has one Profile)
-     * 
+     *
      * Each relationship type generates appropriate form components:
      * - belongsTo/hasOne: Select dropdown with relationship() method
      * - belongsToMany: CheckboxList for multiple selections
      * - hasMany: Read-only display in tables, managed via separate resources
-     * 
+     *
      * @return array<string, string> Relationship type => Description mapping
      */
     public function getRelationshipTypes(): array

@@ -1,21 +1,21 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Pages;
-use Filament\Schemas\Schema;
-use HkDevs\CodeForgeStudio\Support\Grid;
-use HkDevs\CodeForgeStudio\Support\Section;
 
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use HkDevs\CodeForgeStudio\Services\MigrationGeneratorService;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 use Illuminate\Support\Facades\Schema as DbSchema;
 
 /**
  * MigrationGeneratorPage
- * 
+ *
  * Comprehensive migration generator providing table creation, modification,
  * and database schema management with intelligent field type detection.
- * 
+ *
  * Key Features:
  * - Complete migration generation for table operations
  * - Intelligent field type detection and validation
@@ -23,51 +23,56 @@ use Illuminate\Support\Facades\Schema as DbSchema;
  * - Foreign key relationship setup and management
  * - Migration rollback method generation
  * - Batch migration support for complex schema changes
- * 
+ *
  * Migration Types:
  * - Create Table: New table creation with complete structure
  * - Modify Table: Column additions, modifications, and deletions
  * - Drop Table: Safe table removal with rollback support
  * - Index Management: Index creation, modification, and optimization
  * - Constraint Management: Foreign keys, unique constraints, checks
- * 
+ *
  * Field Configuration:
  * - Laravel migration field types with proper syntax
  * - Nullable, default value, and constraint configuration
  * - Index creation for performance optimization
  * - Foreign key relationship setup with cascading options
  * - Custom field types and modifiers
- * 
+ *
  * Advanced Features:
  * - Schema analysis for existing table modifications
  * - Relationship detection and foreign key generation
  * - Migration dependency management and ordering
  * - Rollback method generation for safe reversibility
  * - Preview functionality with generated code display
- * 
+ *
  * Validation:
  * - Field name and type validation
  * - Constraint compatibility checking
  * - Migration syntax validation
  * - Dependency conflict detection
- * 
+ *
  * Integration:
  * - Extends BaseGeneratorPage for workflow management
  * - MigrationGeneratorService for generation logic
  * - Schema analyzer integration for existing table analysis
  * - Template service for migration code generation
- * 
- * @package HkDevs\CodeForgeStudio\Pages
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class MigrationGeneratorPage extends BaseGeneratorPage
 {
     protected string $view = 'codeforge-studio::pages.migration-generator';
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-table-cells';
+
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-table-cells';
+
     protected static ?string $title = 'Migration Generator';
+
     protected static ?string $navigationLabel = 'Migration Generator';
+
     protected static ?int $navigationSort = 1;
 
     protected function initializeConfiguration(): void
@@ -127,101 +132,103 @@ class MigrationGeneratorPage extends BaseGeneratorPage
     public function form(Schema $schema): Schema
     {
         return $schema->components([
-                Grid::make(2)
-                    ->schema([
-                        Forms\Components\Select::make('type')
-                            ->label('Migration Type')
-                            ->options([
-                                'create' => 'Create Table',
-                                'update' => 'Update Table',
-                                'drop' => 'Drop Table',
-                                'rename' => 'Rename Table',
-                            ])
-                            ->default('create')
-                            ->required(),
+            Grid::make(2)
+                ->schema([
+                    Forms\Components\Select::make('type')
+                        ->label('Migration Type')
+                        ->options([
+                            'create' => 'Create Table',
+                            'update' => 'Update Table',
+                            'drop' => 'Drop Table',
+                            'rename' => 'Rename Table',
+                        ])
+                        ->default('create')
+                        ->required(),
 
-                        Forms\Components\TextInput::make('table_name')
-                            ->label('Table Name')
-                            ->placeholder('e.g., users, products, orders')
-                            ->required()
-                            ->live(debounce: 300)
-                            ->afterStateUpdated(function ($state) {
-                                if ($state && $this->generationConfig['type'] === 'create') {
-                                    $this->autoSuggestFromTableName($state);
-                                }
-                            })
-                            ->rule(function ($get) {
-                                return function (string $attribute, $value, \Closure $fail) use ($get) {
-                                    if ($value && $get('type') === 'create' && preg_match('/^[a-z_][a-z0-9_]*$/', $value)) {
-                                        // Check for existing migration
-                                        $existingMigration = $this->findExistingCreateTableMigration($value);
-                                        if ($existingMigration) {
-                                            $fail("A migration for creating table '{$value}' already exists: {$existingMigration}");
+                    Forms\Components\TextInput::make('table_name')
+                        ->label('Table Name')
+                        ->placeholder('e.g., users, products, orders')
+                        ->required()
+                        ->live(debounce: 300)
+                        ->afterStateUpdated(function ($state) {
+                            if ($state && $this->generationConfig['type'] === 'create') {
+                                $this->autoSuggestFromTableName($state);
+                            }
+                        })
+                        ->rule(function ($get) {
+                            return function (string $attribute, $value, \Closure $fail) use ($get) {
+                                if ($value && $get('type') === 'create' && preg_match('/^[a-z_][a-z0-9_]*$/', $value)) {
+                                    // Check for existing migration
+                                    $existingMigration = $this->findExistingCreateTableMigration($value);
+                                    if ($existingMigration) {
+                                        $fail("A migration for creating table '{$value}' already exists: {$existingMigration}");
+
+                                        return;
+                                    }
+
+                                    // Check if table exists in database
+                                    try {
+                                        if (DbSchema::hasTable($value)) {
+                                            $fail("Table '{$value}' already exists in the database");
+
                                             return;
                                         }
-
-                                        // Check if table exists in database
-                                        try {
-                                            if (DbSchema::hasTable($value)) {
-                                                $fail("Table '{$value}' already exists in the database");
-                                                return;
-                                            }
-                                        } catch (\Exception $e) {
-                                            // Database check failed, skip
-                                        }
-
-                                        // Check for reserved names
-                                        $reservedError = $this->isReservedName($value, 'table');
-                                        if ($reservedError) {
-                                            $fail($reservedError);
-                                        }
+                                    } catch (\Exception $e) {
+                                        // Database check failed, skip
                                     }
-                                };
-                            }),
-                    ]),
 
-                Grid::make(3)
-                    ->schema([
-                        Forms\Components\Toggle::make('timestamps')
-                            ->label('Include Timestamps')
-                            ->default(true),
+                                    // Check for reserved names
+                                    $reservedError = $this->isReservedName($value, 'table');
+                                    if ($reservedError) {
+                                        $fail($reservedError);
+                                    }
+                                }
+                            };
+                        }),
+                ]),
 
-                        Forms\Components\Toggle::make('soft_deletes')
-                            ->label('Include Soft Deletes'),
+            Grid::make(3)
+                ->schema([
+                    Forms\Components\Toggle::make('timestamps')
+                        ->label('Include Timestamps')
+                        ->default(true),
 
-                        Forms\Components\Toggle::make('uuid_primary')
-                            ->label('Use UUID Primary Key'),
-                    ]),
+                    Forms\Components\Toggle::make('soft_deletes')
+                        ->label('Include Soft Deletes'),
 
-                Section::make('Columns')
-                    ->schema([
-                        Forms\Components\Repeater::make('columns')
-                            ->label('Table Columns')
-                            ->schema($this->getColumnSchema())
-                            ->columnSpanFull()
-                            ->addActionLabel('Add Column')
-                            ->defaultItems(0)
-                            ->collapsible(),
-                    ]),
+                    Forms\Components\Toggle::make('uuid_primary')
+                        ->label('Use UUID Primary Key'),
+                ]),
 
-                Section::make('Indexes & Constraints')
-                    ->columns(2)
-                    ->schema([
-                        Forms\Components\Repeater::make('indexes')
-                            ->label('Indexes')
-                            ->schema($this->getIndexSchema())
-                            ->addActionLabel('Add Index')
-                            ->defaultItems(0)
-                            ->collapsible(),
+            Section::make('Columns')
+                ->schema([
+                    Forms\Components\Repeater::make('columns')
+                        ->label('Table Columns')
+                        ->schema($this->getColumnSchema())
+                        ->columnSpanFull()
+                        ->addActionLabel('Add Column')
+                        ->defaultItems(0)
+                        ->collapsible(),
+                ]),
 
-                        Forms\Components\Repeater::make('foreign_keys')
-                            ->label('Foreign Keys')
-                            ->schema($this->getForeignKeySchema())
-                            ->addActionLabel('Add Foreign Key')
-                            ->defaultItems(0)
-                            ->collapsible(),
-                    ]),
-            ])
+            Section::make('Indexes & Constraints')
+                ->columns(2)
+                ->schema([
+                    Forms\Components\Repeater::make('indexes')
+                        ->label('Indexes')
+                        ->schema($this->getIndexSchema())
+                        ->addActionLabel('Add Index')
+                        ->defaultItems(0)
+                        ->collapsible(),
+
+                    Forms\Components\Repeater::make('foreign_keys')
+                        ->label('Foreign Keys')
+                        ->schema($this->getForeignKeySchema())
+                        ->addActionLabel('Add Foreign Key')
+                        ->defaultItems(0)
+                        ->collapsible(),
+                ]),
+        ])
             ->statePath('generationConfig');
     }
 
@@ -391,13 +398,13 @@ class MigrationGeneratorPage extends BaseGeneratorPage
         $errors = [];
 
         // Ensure configuration is an array
-        if (!is_array($this->generationConfig)) {
+        if (! is_array($this->generationConfig)) {
             $this->generationConfig = [];
         }
 
         if (empty($this->generationConfig['table_name'] ?? '')) {
             $errors[] = 'Table name is required.';
-        } elseif (!preg_match('/^[a-z_][a-z0-9_]*$/', $this->generationConfig['table_name'])) {
+        } elseif (! preg_match('/^[a-z_][a-z0-9_]*$/', $this->generationConfig['table_name'])) {
             $errors[] = 'Table name must contain only lowercase letters, numbers and underscores.';
         } else {
             // Check for duplicate migration files only for 'create' type
@@ -437,21 +444,21 @@ class MigrationGeneratorPage extends BaseGeneratorPage
         $columns = $this->generationConfig['columns'] ?? [];
         if (is_array($columns)) {
             foreach ($columns as $index => $column) {
-                if (!is_array($column)) {
+                if (! is_array($column)) {
                     continue;
                 }
 
                 if (empty($column['name'] ?? '')) {
-                    $errors[] = "Column #" . ($index + 1) . ": Name is required.";
+                    $errors[] = 'Column #'.($index + 1).': Name is required.';
                 }
 
                 if (empty($column['type'] ?? '')) {
-                    $errors[] = "Column #" . ($index + 1) . ": Data type is required.";
+                    $errors[] = 'Column #'.($index + 1).': Data type is required.';
                 }
 
                 // Validate column name format
-                if (!empty($column['name']) && !preg_match('/^[a-z_][a-z0-9_]*$/', $column['name'])) {
-                    $errors[] = "Column #" . ($index + 1) . ": Column name '{$column['name']}' must contain only lowercase letters, numbers and underscores.";
+                if (! empty($column['name']) && ! preg_match('/^[a-z_][a-z0-9_]*$/', $column['name'])) {
+                    $errors[] = 'Column #'.($index + 1).": Column name '{$column['name']}' must contain only lowercase letters, numbers and underscores.";
                 }
             }
         }
@@ -460,45 +467,45 @@ class MigrationGeneratorPage extends BaseGeneratorPage
         $foreignKeys = $this->generationConfig['foreign_keys'] ?? [];
         if (is_array($foreignKeys)) {
             foreach ($foreignKeys as $index => $foreignKey) {
-                if (!is_array($foreignKey)) {
+                if (! is_array($foreignKey)) {
                     continue;
                 }
 
                 $fkNumber = $index + 1;
 
                 if (empty($foreignKey['column'] ?? '')) {
-                    $errors[] = "Foreign Key #" . $fkNumber . ": Local column is required.";
+                    $errors[] = 'Foreign Key #'.$fkNumber.': Local column is required.';
                 }
 
                 if (empty($foreignKey['referenced_table'] ?? '')) {
-                    $errors[] = "Foreign Key #" . $fkNumber . ": Referenced table is required.";
+                    $errors[] = 'Foreign Key #'.$fkNumber.': Referenced table is required.';
                 }
 
                 if (empty($foreignKey['referenced_column'] ?? '')) {
-                    $errors[] = "Foreign Key #" . $fkNumber . ": Referenced column is required.";
+                    $errors[] = 'Foreign Key #'.$fkNumber.': Referenced column is required.';
                 }
 
                 // Validate column names format
-                if (!empty($foreignKey['column']) && !preg_match('/^[a-z_][a-z0-9_]*$/', $foreignKey['column'])) {
-                    $errors[] = "Foreign Key #" . $fkNumber . ": Local column name must contain only lowercase letters, numbers and underscores.";
+                if (! empty($foreignKey['column']) && ! preg_match('/^[a-z_][a-z0-9_]*$/', $foreignKey['column'])) {
+                    $errors[] = 'Foreign Key #'.$fkNumber.': Local column name must contain only lowercase letters, numbers and underscores.';
                 }
 
-                if (!empty($foreignKey['referenced_table']) && !preg_match('/^[a-z_][a-z0-9_]*$/', $foreignKey['referenced_table'])) {
-                    $errors[] = "Foreign Key #" . $fkNumber . ": Referenced table name must contain only lowercase letters, numbers and underscores.";
+                if (! empty($foreignKey['referenced_table']) && ! preg_match('/^[a-z_][a-z0-9_]*$/', $foreignKey['referenced_table'])) {
+                    $errors[] = 'Foreign Key #'.$fkNumber.': Referenced table name must contain only lowercase letters, numbers and underscores.';
                 }
 
-                if (!empty($foreignKey['referenced_column']) && !preg_match('/^[a-z_][a-z0-9_]*$/', $foreignKey['referenced_column'])) {
-                    $errors[] = "Foreign Key #" . $fkNumber . ": Referenced column name must contain only lowercase letters, numbers and underscores.";
+                if (! empty($foreignKey['referenced_column']) && ! preg_match('/^[a-z_][a-z0-9_]*$/', $foreignKey['referenced_column'])) {
+                    $errors[] = 'Foreign Key #'.$fkNumber.': Referenced column name must contain only lowercase letters, numbers and underscores.';
                 }
 
                 // Validate on delete/update actions
                 $validActions = ['CASCADE', 'SET NULL', 'RESTRICT', 'NO ACTION'];
-                if (!empty($foreignKey['on_delete'] ?? '') && !in_array($foreignKey['on_delete'], $validActions)) {
-                    $errors[] = "Foreign Key #" . $fkNumber . ": Invalid 'On Delete' action. Must be one of: " . implode(', ', $validActions);
+                if (! empty($foreignKey['on_delete'] ?? '') && ! in_array($foreignKey['on_delete'], $validActions)) {
+                    $errors[] = 'Foreign Key #'.$fkNumber.": Invalid 'On Delete' action. Must be one of: ".implode(', ', $validActions);
                 }
 
-                if (!empty($foreignKey['on_update'] ?? '') && !in_array($foreignKey['on_update'], $validActions)) {
-                    $errors[] = "Foreign Key #" . $fkNumber . ": Invalid 'On Update' action. Must be one of: " . implode(', ', $validActions);
+                if (! empty($foreignKey['on_update'] ?? '') && ! in_array($foreignKey['on_update'], $validActions)) {
+                    $errors[] = 'Foreign Key #'.$fkNumber.": Invalid 'On Update' action. Must be one of: ".implode(', ', $validActions);
                 }
             }
         }
@@ -507,7 +514,7 @@ class MigrationGeneratorPage extends BaseGeneratorPage
         $indexes = $this->generationConfig['indexes'] ?? [];
         if (is_array($indexes)) {
             foreach ($indexes as $index => $indexData) {
-                if (!is_array($indexData)) {
+                if (! is_array($indexData)) {
                     continue;
                 }
 
@@ -515,12 +522,12 @@ class MigrationGeneratorPage extends BaseGeneratorPage
 
                 $columns = $indexData['columns'] ?? [];
                 if (empty($columns) || (is_array($columns) && count($columns) === 0)) {
-                    $errors[] = "Index #" . $indexNumber . ": At least one column is required.";
+                    $errors[] = 'Index #'.$indexNumber.': At least one column is required.';
                 }
 
                 $validIndexTypes = ['index', 'unique', 'primary', 'fulltext', 'spatial'];
-                if (!empty($indexData['type'] ?? '') && !in_array($indexData['type'], $validIndexTypes)) {
-                    $errors[] = "Index #" . $indexNumber . ": Invalid index type. Must be one of: " . implode(', ', $validIndexTypes);
+                if (! empty($indexData['type'] ?? '') && ! in_array($indexData['type'], $validIndexTypes)) {
+                    $errors[] = 'Index #'.$indexNumber.': Invalid index type. Must be one of: '.implode(', ', $validIndexTypes);
                 }
             }
         }
@@ -535,13 +542,13 @@ class MigrationGeneratorPage extends BaseGeneratorPage
     {
         $migrationPath = database_path('migrations');
 
-        if (!is_dir($migrationPath)) {
+        if (! is_dir($migrationPath)) {
             return null;
         }
 
-        $files = glob($migrationPath . '/*_create_' . $tableName . '_table.php');
+        $files = glob($migrationPath.'/*_create_'.$tableName.'_table.php');
 
-        if (!empty($files)) {
+        if (! empty($files)) {
             return basename($files[0]);
         }
 
@@ -627,7 +634,7 @@ class MigrationGeneratorPage extends BaseGeneratorPage
                 'unsigned' => false,
                 'auto_increment' => false,
                 'primary' => false,
-            ]
+            ],
         ];
 
         // Add specific columns based on table name patterns

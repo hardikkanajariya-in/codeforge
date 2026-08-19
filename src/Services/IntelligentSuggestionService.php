@@ -2,17 +2,16 @@
 
 namespace HkDevs\CodeForgeStudio\Services;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 /**
  * IntelligentSuggestionService
- * 
+ *
  * Advanced AI-powered suggestion engine for model generation in CodeForge Database Studio.
  * Provides intelligent, context-aware suggestions based on real database analysis, naming patterns,
  * and industry best practices for Laravel Eloquent models.
- * 
+ *
  * Key Features:
  * - Dynamic schema analysis for intelligent field suggestions
  * - Pattern recognition from existing database structures
@@ -20,7 +19,7 @@ use Illuminate\Support\Str;
  * - Relationship inference from foreign keys and naming patterns
  * - Context-aware attribute casting suggestions
  * - Performance-optimized suggestion algorithms
- * 
+ *
  * Intelligence Capabilities:
  * - Real-time database schema introspection
  * - Pattern matching against existing table structures
@@ -28,7 +27,7 @@ use Illuminate\Support\Str;
  * - Cross-table relationship pattern detection
  * - Historical usage pattern analysis
  * - Industry best practice integration
- * 
+ *
  * Suggestion Categories:
  * - Fillable field suggestions based on table columns
  * - Relationship suggestions from foreign key analysis
@@ -36,15 +35,17 @@ use Illuminate\Support\Str;
  * - Index-aware performance suggestions
  * - Security-aware field handling (hidden fields)
  * - Validation rule suggestions from constraints
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
  */
 class IntelligentSuggestionService
 {
     protected string $connectionName;
+
     protected SchemaAnalyzerService $schemaAnalyzer;
 
     public function __construct(?string $connectionName = null)
@@ -60,7 +61,7 @@ class IntelligentSuggestionService
     {
         $tableName = $tableName ?: $this->inferTableName($modelName);
 
-        if (!$this->tableExists($tableName)) {
+        if (! $this->tableExists($tableName)) {
             return $this->getFallbackFillableFields($modelName);
         }
 
@@ -95,7 +96,7 @@ class IntelligentSuggestionService
     {
         $tableName = $tableName ?: $this->inferTableName($modelName);
 
-        if (!$this->tableExists($tableName)) {
+        if (! $this->tableExists($tableName)) {
             return [];
         }
 
@@ -120,7 +121,7 @@ class IntelligentSuggestionService
     {
         $tableName = $tableName ?: $this->inferTableName($modelName);
 
-        if (!$this->tableExists($tableName)) {
+        if (! $this->tableExists($tableName)) {
             return [];
         }
 
@@ -133,7 +134,7 @@ class IntelligentSuggestionService
             if ($cast) {
                 $suggestions[] = [
                     'attribute' => $column['name'],
-                    'cast' => $cast
+                    'cast' => $cast,
                 ];
             }
         }
@@ -148,7 +149,7 @@ class IntelligentSuggestionService
     {
         $tableName = $tableName ?: $this->inferTableName($modelName);
 
-        if (!$this->tableExists($tableName)) {
+        if (! $this->tableExists($tableName)) {
             return $this->getCommonHiddenFields($modelName);
         }
 
@@ -172,7 +173,7 @@ class IntelligentSuggestionService
     {
         $tableName = $tableName ?: $this->inferTableName($modelName);
 
-        if (!$this->tableExists($tableName)) {
+        if (! $this->tableExists($tableName)) {
             return [];
         }
 
@@ -242,7 +243,7 @@ class IntelligentSuggestionService
         // Include most other fields unless they're sensitive
         $sensitiveFields = ['password', 'api_token', 'remember_token', 'email_verified_at'];
 
-        return !in_array($columnName, $sensitiveFields);
+        return ! in_array($columnName, $sensitiveFields);
     }
 
     /**
@@ -255,10 +256,10 @@ class IntelligentSuggestionService
         $suggestions = [];
 
         // Analyze existing column patterns to infer model purpose
-        $hasUserReference = collect($existingColumnNames)->contains(fn($col) => str_contains($col, 'user_id'));
+        $hasUserReference = collect($existingColumnNames)->contains(fn ($col) => str_contains($col, 'user_id'));
         $hasTimestamps = collect($existingColumnNames)->contains('created_at');
-        $hasStatus = collect($existingColumnNames)->contains(fn($col) => str_contains($col, 'status'));
-        $hasActive = collect($existingColumnNames)->contains(fn($col) => str_contains($col, 'active'));
+        $hasStatus = collect($existingColumnNames)->contains(fn ($col) => str_contains($col, 'status'));
+        $hasActive = collect($existingColumnNames)->contains(fn ($col) => str_contains($col, 'active'));
 
         // Context-based suggestions with pattern recognition
         $contextSuggestions = [
@@ -281,7 +282,7 @@ class IntelligentSuggestionService
         foreach ($contextSuggestions as $context => $fields) {
             if (str_contains($modelLower, $context)) {
                 foreach ($fields as $field) {
-                    if (!in_array($field, $existingColumnNames)) {
+                    if (! in_array($field, $existingColumnNames)) {
                         $suggestions[] = $field;
                     }
                 }
@@ -290,15 +291,15 @@ class IntelligentSuggestionService
         }
 
         // Pattern-based suggestions
-        if ($hasUserReference && !in_array('user_id', $existingColumnNames)) {
+        if ($hasUserReference && ! in_array('user_id', $existingColumnNames)) {
             $suggestions[] = 'user_id';
         }
 
-        if ($hasTimestamps && !$hasStatus && $this->modelSeemsToNeedStatus($modelLower)) {
+        if ($hasTimestamps && ! $hasStatus && $this->modelSeemsToNeedStatus($modelLower)) {
             $suggestions[] = 'status';
         }
 
-        if (!$hasActive && $this->modelSeemsToNeedActiveFlag($modelLower)) {
+        if (! $hasActive && $this->modelSeemsToNeedActiveFlag($modelLower)) {
             $suggestions[] = 'is_active';
         }
 
@@ -306,8 +307,8 @@ class IntelligentSuggestionService
         $universalFields = ['description', 'notes', 'meta_data'];
         foreach ($universalFields as $field) {
             if (
-                !in_array($field, $existingColumnNames) &&
-                !in_array($field, $suggestions) &&
+                ! in_array($field, $existingColumnNames) &&
+                ! in_array($field, $suggestions) &&
                 $this->shouldSuggestUniversalField($field, $modelLower, $existingColumnNames)
             ) {
                 $suggestions[] = $field;
@@ -519,7 +520,7 @@ class IntelligentSuggestionService
         }
 
         // Integer fields
-        if (str_contains($type, 'int') && !str_contains($type, 'tinyint(1)')) {
+        if (str_contains($type, 'int') && ! str_contains($type, 'tinyint(1)')) {
             return 'integer';
         }
 
@@ -532,16 +533,16 @@ class IntelligentSuggestionService
             return 'datetime';
         }
 
-        if (str_contains($type, 'date') && !str_contains($type, 'datetime')) {
+        if (str_contains($type, 'date') && ! str_contains($type, 'datetime')) {
             return 'date';
         }
 
-        if (str_contains($type, 'time') && !str_contains($type, 'datetime') && !str_contains($type, 'timestamp')) {
+        if (str_contains($type, 'time') && ! str_contains($type, 'datetime') && ! str_contains($type, 'timestamp')) {
             return 'time';
         }
 
         // Name-based date/time detection
-        if (str_ends_with($name, '_at') && !in_array($name, ['created_at', 'updated_at', 'deleted_at'])) {
+        if (str_ends_with($name, '_at') && ! in_array($name, ['created_at', 'updated_at', 'deleted_at'])) {
             return 'datetime';
         }
 
@@ -582,7 +583,7 @@ class IntelligentSuggestionService
             'secret',
             'private_key',
             'salt',
-            'hash'
+            'hash',
         ];
 
         foreach ($hiddenFields as $hiddenField) {
@@ -605,7 +606,7 @@ class IntelligentSuggestionService
         // Type-based detection
         if (str_contains($type, 'date') || str_contains($type, 'time')) {
             // Exclude Laravel timestamps as they're handled automatically
-            if (!in_array($name, ['created_at', 'updated_at', 'deleted_at'])) {
+            if (! in_array($name, ['created_at', 'updated_at', 'deleted_at'])) {
                 return true;
             }
         }
@@ -650,7 +651,7 @@ class IntelligentSuggestionService
         $tableName = $tableName ?: $this->inferTableName($modelName);
         $suggestions = ['HasFactory']; // Always suggest HasFactory
 
-        if (!$this->tableExists($tableName)) {
+        if (! $this->tableExists($tableName)) {
             return $this->getFallbackTraitSuggestions($modelName);
         }
 
@@ -664,7 +665,7 @@ class IntelligentSuggestionService
         }
 
         // UUID primary key
-        $hasUuidId = collect($columns)->first(fn($col) => $col['name'] === 'id' && str_contains(strtolower($col['type']), 'char'));
+        $hasUuidId = collect($columns)->first(fn ($col) => $col['name'] === 'id' && str_contains(strtolower($col['type']), 'char'));
         if ($hasUuidId) {
             $suggestions[] = 'HasUuids';
         }
@@ -684,7 +685,7 @@ class IntelligentSuggestionService
         }
 
         // Timestamp management
-        if (!in_array('created_at', $columnNames) || !in_array('updated_at', $columnNames)) {
+        if (! in_array('created_at', $columnNames) || ! in_array('updated_at', $columnNames)) {
             // Model doesn't use timestamps, might suggest disabling them
         }
 

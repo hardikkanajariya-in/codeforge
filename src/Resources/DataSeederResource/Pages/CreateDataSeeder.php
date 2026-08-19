@@ -2,9 +2,9 @@
 
 namespace HkDevs\CodeForgeStudio\Resources\DataSeederResource\Pages;
 
-use HkDevs\CodeForgeStudio\Resources\DataSeederResource;
 use Filament\Resources\Pages\CreateRecord;
 use HkDevs\CodeForgeStudio\Models\DataSeeder;
+use HkDevs\CodeForgeStudio\Resources\DataSeederResource;
 
 class CreateDataSeeder extends CreateRecord
 {

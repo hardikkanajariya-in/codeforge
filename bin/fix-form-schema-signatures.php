@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 $root = dirname(__DIR__);
 $iterator = new RecursiveIteratorIterator(
-    new RecursiveDirectoryIterator($root . '/src', RecursiveDirectoryIterator::SKIP_DOTS)
+    new RecursiveDirectoryIterator($root.'/src', RecursiveDirectoryIterator::SKIP_DOTS)
 );
 
 foreach ($iterator as $file) {
@@ -27,8 +27,8 @@ foreach ($iterator as $file) {
 
     if (! str_contains($content, 'use Filament\Schemas\Schema;')) {
         $content = preg_replace(
-            '/(namespace ' . preg_quote($namespace, '/') . ';\R)/',
-            '$1use Filament\Schemas\Schema;' . "\n",
+            '/(namespace '.preg_quote($namespace, '/').';\R)/',
+            '$1use Filament\Schemas\Schema;'."\n",
             $content,
             1
         );
@@ -52,7 +52,7 @@ foreach ($iterator as $file) {
         $content
     );
 
-  // Remove FilamentSchema use if unused
+    // Remove FilamentSchema use if unused
     if (! str_contains($content, 'FilamentSchema::')) {
         $content = preg_replace('/^use HkDevs\\\\CodeForgeStudio\\\\Support\\\\FilamentSchema;\R/m', '', $content);
     }

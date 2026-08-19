@@ -2,8 +2,9 @@
 
 namespace HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource\Pages;
 
-use HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource;
 
 class ListDataGenerationTemplates extends ListRecords
 {
@@ -12,7 +13,7 @@ class ListDataGenerationTemplates extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            \Filament\Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

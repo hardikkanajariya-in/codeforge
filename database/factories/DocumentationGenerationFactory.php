@@ -33,7 +33,7 @@ class DocumentationGenerationFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'status' => 'completed',
-                'file_path' => 'documentation/' . $this->faker->uuid() . '.' . $attributes['format'],
+                'file_path' => 'documentation/'.$this->faker->uuid().'.'.$attributes['format'],
                 'generated_at' => now(),
                 'file_size' => $this->faker->numberBetween(1024, 1048576),
             ];
@@ -71,7 +71,7 @@ class DocumentationGenerationFactory extends Factory
             return [
                 'format' => 'markdown',
                 'file_path' => $attributes['status'] === 'completed'
-                    ? 'documentation/' . $this->faker->uuid() . '.md'
+                    ? 'documentation/'.$this->faker->uuid().'.md'
                     : null,
             ];
         });
@@ -83,7 +83,7 @@ class DocumentationGenerationFactory extends Factory
             return [
                 'format' => 'html',
                 'file_path' => $attributes['status'] === 'completed'
-                    ? 'documentation/' . $this->faker->uuid() . '.html'
+                    ? 'documentation/'.$this->faker->uuid().'.html'
                     : null,
             ];
         });
@@ -95,7 +95,7 @@ class DocumentationGenerationFactory extends Factory
             return [
                 'format' => 'pdf',
                 'file_path' => $attributes['status'] === 'completed'
-                    ? 'documentation/' . $this->faker->uuid() . '.pdf'
+                    ? 'documentation/'.$this->faker->uuid().'.pdf'
                     : null,
             ];
         });
@@ -107,7 +107,7 @@ class DocumentationGenerationFactory extends Factory
             return [
                 'format' => 'json',
                 'file_path' => $attributes['status'] === 'completed'
-                    ? 'documentation/' . $this->faker->uuid() . '.json'
+                    ? 'documentation/'.$this->faker->uuid().'.json'
                     : null,
             ];
         });

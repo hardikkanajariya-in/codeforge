@@ -3,40 +3,41 @@
 namespace HkDevs\CodeForgeStudio\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 
 /**
  * BatchMigrateCommand
- * 
+ *
  * Execute each migration file in its own separate batch for granular control.
  * Each migration gets its own batch number in the migrations table, allowing
  * for precise rollback control and better migration management.
- * 
+ *
  * Features:
  * - Each migration file runs in its own batch (separate batch number)
  * - Sequential execution with proper timestamp ordering
  * - Dry-run mode for safe preview
  * - Progress tracking and error handling
  * - Production safety checks
- * 
- * @package HkDevs\CodeForgeStudio\Commands
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * # Execute all pending migrations (each in separate batch)
  * php artisan codeforge:batch-migrate
- * 
+ *
  * # Preview migrations without executing
  * php artisan codeforge:batch-migrate --dry-run
- * 
+ *
  * # Force execution in production
  * php artisan codeforge:batch-migrate --force
- * 
+ *
  * # Fresh migration with each migration in separate batch
  * php artisan codeforge:batch-migrate --fresh
  */
@@ -51,7 +52,9 @@ class BatchMigrateCommand extends Command
     protected $description = 'Run each migration file in its own separate batch';
 
     private array $pendingMigrations = [];
+
     private int $executedCount = 0;
+
     private array $errors = [];
 
     public function handle(): int
@@ -74,8 +77,9 @@ class BatchMigrateCommand extends Command
         // Get migration path
         $migrationPath = $this->option('path') ?: database_path('migrations');
 
-        if (!File::exists($migrationPath)) {
+        if (! File::exists($migrationPath)) {
             $this->error("Migration path does not exist: {$migrationPath}");
+
             return self::FAILURE;
         }
 
@@ -85,6 +89,7 @@ class BatchMigrateCommand extends Command
 
         if ($totalPending === 0) {
             $this->info('✅ All migrations are up to date!');
+
             return self::SUCCESS;
         }
 
@@ -96,13 +101,15 @@ class BatchMigrateCommand extends Command
         // Dry run mode
         if ($this->option('dry-run')) {
             $this->warn('🔍 DRY RUN MODE - No migrations will be executed');
+
             return self::SUCCESS;
         }
 
         // Production safety check
-        if (app()->environment('production') && !$this->option('force')) {
-            if (!$this->confirm('You are in PRODUCTION environment. Are you sure you want to run migrations?')) {
+        if (app()->environment('production') && ! $this->option('force')) {
+            if (! $this->confirm('You are in PRODUCTION environment. Are you sure you want to run migrations?')) {
                 $this->info('Migration cancelled.');
+
                 return self::SUCCESS;
             }
         }
@@ -118,8 +125,9 @@ class BatchMigrateCommand extends Command
         // Get migration path
         $migrationPath = $this->option('path') ?: database_path('migrations');
 
-        if (!File::exists($migrationPath)) {
+        if (! File::exists($migrationPath)) {
             $this->error("Migration path does not exist: {$migrationPath}");
+
             return self::FAILURE;
         }
 
@@ -129,6 +137,7 @@ class BatchMigrateCommand extends Command
 
         if ($totalMigrations === 0) {
             $this->warn('No migration files found.');
+
             return self::SUCCESS;
         }
 
@@ -140,20 +149,23 @@ class BatchMigrateCommand extends Command
         // Dry run mode
         if ($this->option('dry-run')) {
             $this->warn('🔍 DRY RUN MODE - No fresh migration will be executed');
+
             return self::SUCCESS;
         }
 
         // Production safety check
-        if (app()->environment('production') && !$this->option('force')) {
-            if (!$this->confirm('You are in PRODUCTION environment. This will DROP ALL TABLES! Are you sure?')) {
+        if (app()->environment('production') && ! $this->option('force')) {
+            if (! $this->confirm('You are in PRODUCTION environment. This will DROP ALL TABLES! Are you sure?')) {
                 $this->info('Fresh migration cancelled.');
+
                 return self::SUCCESS;
             }
         }
 
         // Additional confirmation for destructive operation
-        if (!$this->confirm('This will DROP ALL TABLES and re-run all migrations. Continue?')) {
+        if (! $this->confirm('This will DROP ALL TABLES and re-run all migrations. Continue?')) {
             $this->info('Fresh migration cancelled.');
+
             return self::SUCCESS;
         }
 
@@ -164,7 +176,7 @@ class BatchMigrateCommand extends Command
     private function getPendingMigrations(string $migrationPath): array
     {
         // Get all migration files
-        $allFiles = File::glob($migrationPath . '/*.php');
+        $allFiles = File::glob($migrationPath.'/*.php');
 
         // Sort files by name (timestamp based)
         usort($allFiles, function ($a, $b) {
@@ -187,11 +199,11 @@ class BatchMigrateCommand extends Command
         $pendingMigrations = [];
         foreach ($allFiles as $file) {
             $migrationName = pathinfo(basename($file), PATHINFO_FILENAME);
-            if (!in_array($migrationName, $executedMigrations)) {
+            if (! in_array($migrationName, $executedMigrations)) {
                 $pendingMigrations[] = [
                     'file' => $file,
                     'name' => $migrationName,
-                    'basename' => basename($file)
+                    'basename' => basename($file),
                 ];
             }
         }
@@ -202,7 +214,7 @@ class BatchMigrateCommand extends Command
     private function getAllMigrations(string $migrationPath): array
     {
         // Get all migration files
-        $allFiles = File::glob($migrationPath . '/*.php');
+        $allFiles = File::glob($migrationPath.'/*.php');
 
         // Sort files by name (timestamp based)
         usort($allFiles, function ($a, $b) {
@@ -216,7 +228,7 @@ class BatchMigrateCommand extends Command
             $allMigrations[] = [
                 'file' => $file,
                 'name' => $migrationName,
-                'basename' => basename($file)
+                'basename' => basename($file),
             ];
         }
 
@@ -246,11 +258,12 @@ class BatchMigrateCommand extends Command
         try {
             // Drop all tables using Laravel's fresh command but without migrations
             Artisan::call('db:wipe', [
-                '--force' => $this->option('force') ?: false
+                '--force' => $this->option('force') ?: false,
             ]);
             $this->info('✅ All tables dropped successfully');
         } catch (\Exception $e) {
             $this->error("Failed to drop tables: {$e->getMessage()}");
+
             return self::FAILURE;
         }
 
@@ -278,10 +291,10 @@ class BatchMigrateCommand extends Command
 
                 $this->errors[] = [
                     'migration' => $migration['basename'],
-                    'error' => $e->getMessage()
+                    'error' => $e->getMessage(),
                 ];
 
-                if (!$this->confirm('Continue with remaining migrations?')) {
+                if (! $this->confirm('Continue with remaining migrations?')) {
                     return $this->showFreshResults(self::FAILURE);
                 }
             }
@@ -298,11 +311,11 @@ class BatchMigrateCommand extends Command
         $this->line('');
         $this->info('📊 Fresh Batch Migration Results:');
         $this->line('==================================');
-        $this->info("Total migrations found: " . count($this->pendingMigrations));
+        $this->info('Total migrations found: '.count($this->pendingMigrations));
         $this->info("Migrations executed: {$this->executedCount}");
 
-        if (!empty($this->errors)) {
-            $this->error("Migrations with errors: " . count($this->errors));
+        if (! empty($this->errors)) {
+            $this->error('Migrations with errors: '.count($this->errors));
 
             $this->line('');
             $this->error('❌ Errors encountered:');
@@ -341,7 +354,7 @@ class BatchMigrateCommand extends Command
 
     private function getNextBatchNumber(): int
     {
-        if (!Schema::hasTable('migrations')) {
+        if (! Schema::hasTable('migrations')) {
             return 1;
         }
 
@@ -374,10 +387,10 @@ class BatchMigrateCommand extends Command
 
                 $this->errors[] = [
                     'migration' => $migration['basename'],
-                    'error' => $e->getMessage()
+                    'error' => $e->getMessage(),
                 ];
 
-                if (!$this->confirm('Continue with remaining migrations?')) {
+                if (! $this->confirm('Continue with remaining migrations?')) {
                     return $this->showResults(self::FAILURE);
                 }
             }
@@ -392,12 +405,12 @@ class BatchMigrateCommand extends Command
     private function executeSingleMigrationInBatch(array $migration): void
     {
         $migrationFile = $migration['file'];
-        $relativePath = 'database/migrations/' . $migration['basename'];
+        $relativePath = 'database/migrations/'.$migration['basename'];
 
         // Execute the migration in its own batch using Laravel's migrate command
         Artisan::call('migrate', [
             '--path' => $relativePath,
-            '--force' => $this->option('force') ?: false
+            '--force' => $this->option('force') ?: false,
         ]);
 
         $output = Artisan::output();
@@ -413,8 +426,8 @@ class BatchMigrateCommand extends Command
             ->where('migration', $migrationName)
             ->exists();
 
-        if (!$wasExecuted) {
-            throw new \Exception("Migration was not recorded in migrations table");
+        if (! $wasExecuted) {
+            throw new \Exception('Migration was not recorded in migrations table');
         }
 
         $this->line("  ✅ Executed: {$migration['basename']}");
@@ -425,11 +438,11 @@ class BatchMigrateCommand extends Command
         $this->line('');
         $this->info('📊 Batch Migration Results:');
         $this->line('============================');
-        $this->info("Total pending migrations: " . count($this->pendingMigrations));
+        $this->info('Total pending migrations: '.count($this->pendingMigrations));
         $this->info("Migrations executed: {$this->executedCount}");
 
-        if (!empty($this->errors)) {
-            $this->error("Migrations with errors: " . count($this->errors));
+        if (! empty($this->errors)) {
+            $this->error('Migrations with errors: '.count($this->errors));
 
             $this->line('');
             $this->error('❌ Errors encountered:');
