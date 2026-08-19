@@ -328,29 +328,14 @@ Aim for minimum code coverage targets:
 - **Memory Usage**: < 512MB for full suite
 - **Error Rate**: < 1% false positives
 
-## 📞 Support
+## Support
 
-### Professional Support
+- **GitHub Issues:** https://github.com/hardikkanajariya-in/codeforge/issues
+- **Documentation:** README and in-app docs at `/codeforge/docs` when enabled
 
-For commercial support and advanced configurations:
-
-- **Email**: contact@hardikkanajariya.in
-- **Website**: https://codeforge.hardikkanajariya.in
-- **Documentation**: https://codeforge.hardikkanajariya.in/codeforge-database-studio
-
-### Community Support
-
-- **GitHub Issues**: Report bugs and feature requests
-- **Discussions**: Community discussions and Q&A
-- **Wiki**: Community-maintained documentation
-
----
-
-## 📄 License
+## License
 
 This test suite is part of CodeForge Database Studio, released under the MIT License.
-
-For licensing inquiries: contact@hardikkanajariya.in
 
 ---
 

@@ -37,8 +37,7 @@
                 </div>
                 <div>
                     <h1 class="text-4xl font-bold text-gray-900 mb-2">Architecture Overview</h1>
-                    <p class="text-xl text-gray-600">Comprehensive overview of CodeForge Database Studio's modular
-                        architecture and design patterns</p>
+                    <p class="text-xl text-gray-600">Modular architecture, services, and how the plugin fits into a Laravel app</p>
                 </div>
             </div>
         </div>
@@ -47,9 +46,8 @@
         <div class="bg-gradient-to-r from-indigo-50 to-purple-50 p-8 rounded-xl mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Plugin Overview</h2>
             <p class="text-gray-600 mb-6">
-                CodeForge Database Studio is a comprehensive Laravel/Filament plugin that provides advanced database
-                management capabilities. Built with a modular architecture, it offers feature toggles, service-based design,
-                and seamless integration with existing Laravel applications.
+                CodeForge Database Studio is a Laravel/Filament plugin for database workflows. It uses a modular layout:
+                feature toggles on the plugin class, service classes for business logic, and Filament pages/resources for the UI.
             </p>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -247,7 +245,7 @@
                         </svg>
                     </div>
                     <h3 class="font-semibold text-gray-900">Security First</h3>
-                    <p class="text-sm text-gray-600">Enterprise-grade security with comprehensive validation</p>
+                    <p class="text-sm text-gray-600">Input validation and configurable operation restrictions</p>
                 </div>
                 <div class="text-center">
                     <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-3">

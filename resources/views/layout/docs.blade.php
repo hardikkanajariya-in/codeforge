@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'CodeForge Database Studio Documentation')</title>
     <meta name="description"
-        content="@yield('description', 'Comprehensive documentation for CodeForge Database Studio - Advanced Laravel database management and code generation suite.')">
+        content="@yield('description', 'Documentation for CodeForge Database Studio — open source database tools for Laravel and Filament.')">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>

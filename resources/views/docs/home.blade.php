@@ -1,7 +1,7 @@
 @extends('codeforge-studio::layout.docs')
 
 @section('title', 'CodeForge Database Studio Documentation')
-@section('description', 'Comprehensive documentation for CodeForge Database Studio - Advanced Laravel database management and code generation suite.')
+@section('description', 'Documentation for CodeForge Database Studio — open source database tools for Laravel and Filament.')
 
 @section('breadcrumbs')
     <li class="text-primary-600 font-medium">Documentation</li>
@@ -138,8 +138,8 @@
                 CodeForge Database Studio
             </h1>
             <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-                A comprehensive database management and code generation suite for Laravel applications using FilamentPHP.
-                Build, manage, and optimize your database with advanced tools and intelligent automation.
+                Open source database management and code generation for Laravel and Filament.
+                Schema design, migrations, health monitoring, seeding, docs export, and generators.
             </p>
 
             <!-- Version Badge -->
@@ -192,7 +192,7 @@
                     <span class="text-3xl">💖</span>
                 </div>
                 <h3 class="text-xl font-bold text-gray-900 mb-3">Database Overview</h3>
-                <p class="text-gray-600 mb-4">Centralized dashboard with database connection status, table overview, and comprehensive system monitoring.</p>
+                <p class="text-gray-600 mb-4">Dashboard with connection status, table counts, and health summaries.</p>
                 <a href="{{ route('codeforge.docs.features.database-health') }}"
                     class="text-primary-600 hover:text-primary-700 font-medium inline-flex items-center">
                     Learn more
@@ -272,7 +272,7 @@
                     <span class="text-3xl">📚</span>
                 </div>
                 <h3 class="text-xl font-bold text-gray-900 mb-3">Database Health</h3>
-                <p class="text-gray-600 mb-4">Real-time performance monitoring with health metrics, query analysis, and comprehensive connection tracking dashboard.</p>
+                <p class="text-gray-600 mb-4">Performance monitoring with health metrics, slow-query views, and connection status.</p>
                 <a href="{{ route('codeforge.docs.features.database-health') }}"
                     class="text-primary-600 hover:text-primary-700 font-medium inline-flex items-center">
                     Learn more
@@ -308,8 +308,7 @@
             <div class="text-center">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Ready to Get Started?</h2>
                 <p class="text-xl text-gray-600 mb-8">
-                    Follow our comprehensive installation guide and start enhancing your Laravel development workflow in
-                    minutes.
+                    See the installation guide to add the plugin to your Filament panel.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <a href="{{ route('codeforge.docs.installation') }}"
@@ -359,7 +358,7 @@
             <div class="text-center">
                 <h2 class="text-2xl font-bold text-gray-900 mb-4">Need Help or Have Questions?</h2>
                 <p class="text-gray-600 mb-6">
-                    Our comprehensive documentation and professional support are here to help you succeed.
+                    Documentation and community support on GitHub.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <a href="{{ route('codeforge.docs.troubleshooting') }}"

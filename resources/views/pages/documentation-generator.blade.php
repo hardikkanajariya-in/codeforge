@@ -28,7 +28,7 @@
                 
                 <div style="background: rgba(255, 255, 255, 0.15); border-radius: 1rem; padding: 1.5rem; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2);">
                     <p style="font-size: 1rem; color: rgba(255, 255, 255, 0.95); margin: 0; line-height: 1.6;">
-                        Generate comprehensive documentation for your database schema, including tables, relationships, models, and validation rules. Choose from multiple formats and customize the scope of your documentation to create professional-grade documentation that your team will love.
+                        Generate documentation for your database schema—tables, relationships, models, and validation rules—in Markdown, HTML, or PDF.
                     </p>
                 </div>
             </div>

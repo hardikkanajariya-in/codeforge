@@ -431,8 +431,7 @@
             <div class="text-center">
                 <h2 class="text-2xl font-bold text-gray-900 mb-4">Need Help Getting Started?</h2>
                 <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
-                    Our comprehensive documentation and support resources are here to help you get the most out of CodeForge
-                    Database Studio.
+                    See the docs, FAQ, and GitHub Issues if you need help.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <a href="{{ route('codeforge.docs.troubleshooting') }}"

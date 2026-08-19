@@ -36,8 +36,7 @@
                 </div>
                 <div>
                     <h1 class="text-4xl font-bold text-gray-900 mb-2">Code Generation Suite</h1>
-                    <p class="text-xl text-gray-600">Comprehensive Laravel component generation with intelligent analysis
-                        and template systems</p>
+                    <p class="text-xl text-gray-600">Filament pages for models, migrations, factories, seeders, and resources</p>
                 </div>
             </div>
         </div>
@@ -46,10 +45,8 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Overview</h2>
             <p class="text-gray-600 mb-6">
-                The Code Generation Suite provides a comprehensive set of generators for Laravel components including
-                models,
-                migrations, factories, seeders, and Filament resources. Each generator includes intelligent analysis and
-                suggestion systems to create optimized, production-ready code.
+                Generator pages create models, migrations, factories, seeders, and Filament resources from your schema.
+                Output paths follow Laravel conventions and can be customized before saving.
             </p>
         </div>
 
@@ -162,9 +159,8 @@
 
         <!-- Intelligent Features -->
         <div class="bg-gray-50 p-8 rounded-xl mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Intelligent Analysis Features</h2>
-            <p class="text-gray-600 mb-6">Each generator includes intelligent analysis powered by database introspection:
-            </p>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Database introspection</h2>
+            <p class="text-gray-600 mb-6">Generators read table structure and relationships from the database.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-white p-4 rounded-lg border">
@@ -178,12 +174,12 @@
                 </div>
 
                 <div class="bg-white p-4 rounded-lg border">
-                    <h4 class="font-semibold text-gray-900 mb-2">Smart Code Generation</h4>
+                    <h4 class="font-semibold text-gray-900 mb-2">Code output</h4>
                     <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• Follows Laravel best practices and conventions</li>
-                        <li>• Generates production-ready code with proper formatting</li>
-                        <li>• Includes comprehensive docblocks and comments</li>
-                        <li>• Handles edge cases and validation requirements</li>
+                        <li>• Follows Laravel conventions</li>
+                        <li>• Pint-compatible formatting when enabled</li>
+                        <li>• Docblocks on generated classes</li>
+                        <li>• Validation rules where applicable</li>
                     </ul>
                 </div>
             </div>
@@ -192,7 +188,7 @@
         <!-- Generator Services -->
         <div class="bg-blue-50 p-8 rounded-xl mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Generator Services</h2>
-            <p class="text-gray-600 mb-6">Each generator is powered by dedicated service classes:</p>
+            <p class="text-gray-600 mb-6">Service classes used by the generator pages:</p>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="bg-white p-3 rounded border">
@@ -201,7 +197,7 @@
                 </div>
                 <div class="bg-white p-3 rounded border">
                     <code class="text-sm text-blue-600">IntelligentSuggestionService</code>
-                    <p class="text-xs text-gray-500 mt-1">Provides intelligent analysis and suggestions</p>
+                    <p class="text-xs text-gray-500 mt-1">Column and relationship suggestions from schema analysis</p>
                 </div>
                 <div class="bg-white p-3 rounded border">
                     <code class="text-sm text-blue-600">DataGenerationService</code>

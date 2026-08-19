@@ -147,9 +147,8 @@
                             </path>
                         </svg>
                     </div>
-                    <h3 class="text-lg font-semibold text-blue-900 mb-2">Visualize Complex Schemas</h3>
-                    <p class="text-blue-700">Transform complex database relationships into clear, understandable visual
-                        diagrams</p>
+                    <h3 class="text-lg font-semibold text-blue-900 mb-2">Visualize schemas</h3>
+                    <p class="text-blue-700">Database relationships in an ERD-style layout.</p>
                 </div>
                 <div class="text-center">
                     <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">

@@ -1,6 +1,6 @@
-# Filament Plugin Store Listing
+# Filament plugin directory notes
 
-Use this checklist when submitting at [filamentphp.com/author](https://filamentphp.com/author).
+Reference for maintainers when updating the listing on [filamentphp.com/plugins](https://filamentphp.com/plugins).
 
 ## Package metadata
 
@@ -10,30 +10,30 @@ Use this checklist when submitting at [filamentphp.com/author](https://filamentp
 | **Slug** | `hkdevs-codeforge-database-studio` |
 | **Composer** | `hkdevs/codeforge-database-studio` |
 | **Repository** | https://github.com/hardikkanajariya-in/codeforge |
-| **License** | MIT (free & open source) |
+| **License** | MIT |
 | **Filament** | v4.x, v5.x |
 | **Laravel** | 12.x, 13.x |
 | **PHP** | 8.3+ |
 
-## Suggested categories
+## Categories
 
-Pick valid categories from the Filament plugin directory (e.g. **Panel**, **Developer tools**, **Database**).
+Examples: **Panel**, **Developer tools**, **Database** (use values from the directory form).
 
-## Short description (store)
+## Short description
 
 > Open source Filament panel plugin for database overview, visual schema design, migration tracking, health monitoring, smart seeding, documentation export (Markdown, HTML, PDF), and code generation for models, migrations, factories, seeders, and Filament resources.
 
-## Long description highlights
+## Feature summary
 
 - Visual schema designer with relationship mapping
-- Migration history and enhanced migrate/rollback tooling
-- Query performance and database health dashboards
-- Relationship-aware smart seeding and templates
-- Schema documentation export (Markdown, HTML, PDF, JSON)
+- Migration history and migrate/rollback tooling
+- Query performance and database health views
+- Relationship-aware seeding and templates
+- Schema documentation export (Markdown, HTML, PDF)
 - Generators for migrations, models, factories, seeders, and Filament resources
 - Feature toggles per panel via `CodeForgeStudioPlugin::make()`
 
-## Installation snippet (for listing)
+## Installation snippet
 
 ```bash
 composer require hkdevs/codeforge-database-studio
@@ -43,8 +43,6 @@ php artisan vendor:publish --tag=codeforge-database-studio-migrations
 php artisan migrate
 php artisan codeforge:install
 ```
-
-Register in your panel provider:
 
 ```php
 use HkDevs\CodeForgeStudio\CodeForgeStudioPlugin;
@@ -56,62 +54,29 @@ use HkDevs\CodeForgeStudio\CodeForgeStudioPlugin;
 
 ## Custom theme (Filament v4/v5)
 
-If you use a custom Filament theme, add to your theme CSS:
-
 ```css
 @source '../../../../vendor/hkdevs/codeforge-database-studio/resources/**/*.blade.php';
 ```
 
-## Required media assets
-
-Create and upload these before submitting:
-
-### Plugin banner (required)
+## Banner image
 
 - **Aspect ratio:** 16:9
 - **Minimum size:** 2560×1440 px
-- **Format:** JPEG preferred
-- **Content:** Highlight core features (not a full admin screenshot). Crop sidebar/header.
+- **Format:** JPEG
+- **Path:** `resources/images/filament-store/banner.jpg`
 - **Tool:** [Beyond Code banner generator](https://banners.beyondco.de)
 
-Save as: `resources/images/filament-store/banner.jpg`
+Focus on product functionality rather than a full admin panel screenshot.
 
-### README screenshot (optional, for GitHub)
+## Author profile
 
-- Use absolute URLs in README if images should embed on filamentphp.com
-- Add class `filament-hidden` to images that should not duplicate on the plugin page
+- **Avatar:** 1:1, minimum 1000×1000 px, JPEG
+- **Link:** https://hardikkanajariya.in
+- **Bio:** Hardik Kanajariya maintains CodeForge Database Studio and other open source Laravel/Filament tools.
 
-### Author avatar
+## Directory guidelines
 
-- **Aspect ratio:** 1:1
-- **Minimum size:** 1000×1000 px
-- **Format:** JPEG preferred
-- Link: https://hardikkanajariya.in
-
-### Author bio (short)
-
-Hardik Kanajariya is an indie Laravel and Filament developer. Maintainer of CodeForge Database Studio and other open source tools for database workflows and developer productivity.
-
-## Documentation requirements
-
-- [x] README with installation, configuration, and usage
-- [x] MIT LICENSE
-- [x] CONTRIBUTING.md and SECURITY.md
-- [x] Clear feature list with screenshots (add to README when available)
-- [x] In-app docs at `/codeforge/docs` when routes are enabled
-
-## Review guidelines (common rejections)
-
-- Use **Filament** / **FilamentPHP** capitalization in docs
-- Plugin image must focus on functionality, not full panel chrome
-- README images must use **absolute URLs** for website embedding
-- Choose **valid plugin categories** only
-- Enable **“Allow edits by maintainers”** on any GitHub PRs
-
-## Post-submission
-
-1. Request author access at [filamentphp.com/author](https://filamentphp.com/author)
-2. Submit plugin with banner, categories, and repository URL
-3. Ensure package is on Packagist: `hkdevs/codeforge-database-studio`
-4. Enable Packagist auto-update (GitHub hook) so new tags publish automatically — see [RELEASING.md](RELEASING.md)
-5. Monitor GitHub Issues for community support
+- Use **Filament** / **FilamentPHP** capitalization in copy
+- README images on the plugin page need **absolute URLs**
+- Package must be on Packagist with auto-update from GitHub tags
+- Community support via [GitHub Issues](https://github.com/hardikkanajariya-in/codeforge/issues)

@@ -97,10 +97,6 @@ CodeForgeStudioPlugin::make()
 
 Config `features.*` only controls Database Overview quick-action cards. Query logging uses `enable_query_logging` and `query_logging.*`.
 
-## Filament plugin store
-
-Ready for submission to the [Filament plugin directory](https://filamentphp.com/plugins). See [FILAMENT_STORE.md](FILAMENT_STORE.md) for listing metadata, banner specs, and checklist.
-
 ## Testing
 
 ```bash
