@@ -85,7 +85,7 @@ abstract class BaseGeneratorPage extends Page implements HasActions
     // Common configuration
     public ?array $generationConfig = [];
 
-    protected static ?string $navigationGroup = 'Code Generators';
+    protected static string | \UnitEnum | null $navigationGroup = 'Code Generators';
 
     protected function getStubTemplateService(): StubTemplateService
     {

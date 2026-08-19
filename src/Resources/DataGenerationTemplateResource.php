@@ -1,6 +1,9 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 use HkDevs\CodeForgeStudio\Models\DataGenerationTemplate;
 use HkDevs\CodeForgeStudio\Resources\DataGenerationTemplateResource\Pages;
@@ -69,17 +72,16 @@ use Filament\Notifications\Notification;
 class DataGenerationTemplateResource extends Resource
 {
     protected static ?string $model = DataGenerationTemplate::class;
-    protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-duplicate';
     protected static ?string $navigationLabel = 'Data Templates';
     protected static ?string $modelLabel = 'Data Generation Template';
     protected static ?string $pluralModelLabel = 'Data Generation Templates';
     protected static ?int $navigationSort = 7;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make('Basic Information')
+        return $schema->components([
+                Section::make('Basic Information')
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->required()
@@ -107,7 +109,7 @@ class DataGenerationTemplateResource extends Resource
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Field Mappings')
+                Section::make('Field Mappings')
                     ->description('Configure how each field should be generated')
                     ->schema([
                         Forms\Components\Repeater::make('field_mappings_repeater')
@@ -163,7 +165,7 @@ class DataGenerationTemplateResource extends Resource
                         Forms\Components\Hidden::make('field_mappings'),
                     ]),
 
-                Forms\Components\Section::make('Relationships')
+                Section::make('Relationships')
                     ->description('Define relationships with other tables')
                     ->schema([
                         Forms\Components\Repeater::make('relationships')
@@ -190,7 +192,7 @@ class DataGenerationTemplateResource extends Resource
                             ->collapsible(),
                     ]),
 
-                Forms\Components\Section::make('Constraints')
+                Section::make('Constraints')
                     ->description('Define business rules and constraints')
                     ->schema([
                         Forms\Components\Repeater::make('constraints')

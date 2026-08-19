@@ -1,9 +1,11 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Pages;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 use Filament\Forms;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use HkDevs\CodeForgeStudio\Services\SeederGeneratorService;
 
@@ -68,8 +70,8 @@ use HkDevs\CodeForgeStudio\Services\SeederGeneratorService;
  */
 class SeederGeneratorPage extends BaseGeneratorPage
 {
-    protected static string $view = 'codeforge-studio::pages.seeder-generator';
-    protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
+    protected string $view = 'codeforge-studio::pages.seeder-generator';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-circle-stack';
     protected static ?string $title = 'Seeder Generator';
     protected static ?string $navigationLabel = 'Seeder Generator';
     protected static ?int $navigationSort = 4;
@@ -100,11 +102,10 @@ class SeederGeneratorPage extends BaseGeneratorPage
         return app(SeederGeneratorService::class);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Grid::make(2)
+        return $schema->components([
+                Grid::make(2)
                     ->schema([
                         Forms\Components\TextInput::make('class_name')
                             ->label('Seeder Class Name')
@@ -146,7 +147,7 @@ class SeederGeneratorPage extends BaseGeneratorPage
                             ->minValue(1),
                     ]),
 
-                Forms\Components\Grid::make(3)
+                Grid::make(3)
                     ->schema([
                         Forms\Components\Toggle::make('use_factory')
                             ->label('Use Factory')

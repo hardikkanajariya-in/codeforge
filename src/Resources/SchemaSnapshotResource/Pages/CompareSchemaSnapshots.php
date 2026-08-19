@@ -1,6 +1,9 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources\SchemaSnapshotResource\Pages;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 use Filament\Resources\Pages\Page;
 use HkDevs\CodeForgeStudio\Resources\SchemaSnapshotResource;
@@ -9,7 +12,6 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 
@@ -44,7 +46,7 @@ class CompareSchemaSnapshots extends Page implements HasForms
 
     protected static string $resource = SchemaSnapshotResource::class;
 
-    protected static string $view = 'codeforge-studio::pages.compare-schema-snapshots';
+    protected string $view = 'codeforge-studio::pages.compare-schema-snapshots';
 
     public SchemaSnapshot $record;
     public ?SchemaSnapshot $compareWith = null;
@@ -56,10 +58,9 @@ class CompareSchemaSnapshots extends Page implements HasForms
         $this->record = $record;
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema->components([
                 Section::make('Compare Snapshots')
                     ->description('Select another snapshot to compare with the current one')
                     ->schema([

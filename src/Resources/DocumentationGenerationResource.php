@@ -1,6 +1,9 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -78,19 +81,18 @@ class DocumentationGenerationResource extends Resource
 {
     protected static ?string $model = DocumentationGeneration::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
 
     protected static ?string $navigationLabel = 'Documentation Jobs';
 
-    protected static ?string $navigationGroup = 'DB Docs Generation';
+    protected static string | \UnitEnum | null $navigationGroup = 'DB Docs Generation';
 
     protected static ?int $navigationSort = 7;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make('Basic Information')
+        return $schema->components([
+                Section::make('Basic Information')
                     ->schema([
                         Forms\Components\TextInput::make('title')
                             ->required()
@@ -107,7 +109,7 @@ class DocumentationGenerationResource extends Resource
                             ->maxLength(20),
                     ])->columns(1),
 
-                Forms\Components\Section::make('Generation Settings')
+                Section::make('Generation Settings')
                     ->schema([
                         Forms\Components\Select::make('format')
                             ->required()
@@ -143,7 +145,7 @@ class DocumentationGenerationResource extends Resource
                             ->helperText('Select which tables to include in the documentation'),
                     ])->columns(1),
 
-                Forms\Components\Section::make('Advanced Options')
+                Section::make('Advanced Options')
                     ->schema([
                         Forms\Components\KeyValue::make('options')
                             ->addActionLabel('Add Option')

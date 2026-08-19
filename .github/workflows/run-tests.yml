@@ -1,0 +1,41 @@
+name: Run tests
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        laravel: ['10', '11', '12']
+        filament: ['3', '4']
+        exclude:
+          - laravel: '10'
+            filament: '4'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, intl, gd, exif, iconv
+          coverage: none
+
+      - name: Install dependencies (Filament ${{ matrix.filament }} / Laravel ${{ matrix.laravel }})
+        run: |
+          composer require \
+            "filament/filament:^${{ matrix.filament }}.0" \
+            "laravel/framework:^${{ matrix.laravel }}.0" \
+            "orchestra/testbench:^$([ "${{ matrix.laravel }}" = "10" ] && echo "8" || ([ "${{ matrix.laravel }}" = "11" ] && echo "9" || echo "10"))" \
+            --no-interaction --no-update
+          composer update --prefer-stable --prefer-dist --no-interaction
+
+      - name: Run tests
+        run: vendor/bin/phpunit

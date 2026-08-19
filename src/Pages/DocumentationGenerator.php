@@ -1,12 +1,14 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Pages;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 use Filament\Pages\Page;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
@@ -68,15 +70,15 @@ class DocumentationGenerator extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
 
     protected static ?string $navigationLabel = 'Documentation Generator';
 
-    protected static ?string $navigationGroup = 'DB Docs Generation';
+    protected static string | \UnitEnum | null $navigationGroup = 'DB Docs Generation';
 
     protected static ?int $navigationSort = 6;
 
-    protected static string $view = 'codeforge-studio::pages.documentation-generator';
+    protected string $view = 'codeforge-studio::pages.documentation-generator';
 
     public ?array $data = [];
     public bool $quickGenerate = false;
@@ -90,10 +92,9 @@ class DocumentationGenerator extends Page implements HasForms
         ]);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema->components([
                 Section::make('Quick Documentation Generator')
                     ->description('Generate documentation quickly with predefined settings')
                     ->schema([

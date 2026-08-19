@@ -1,6 +1,9 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Pages;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 use HkDevs\CodeForgeStudio\Services\DataGenerationService;
 use HkDevs\CodeForgeStudio\Models\DataGenerationTemplate;
@@ -72,8 +75,8 @@ use Illuminate\Support\Facades\Log;
  */
 class SmartDataSeeder extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-cpu-chip';
-    protected static string $view = 'codeforge-studio::pages.smart-data-seeder';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-cpu-chip';
+    protected string $view = 'codeforge-studio::pages.smart-data-seeder';
     protected static ?string $title = 'Smart Data Seeder';
     protected static ?string $navigationLabel = 'Smart Seeder';
     protected static ?int $navigationSort = 4;
@@ -88,11 +91,10 @@ class SmartDataSeeder extends Page
         $this->form->fill();
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make('Table Selection')
+        return $schema->components([
+                Section::make('Table Selection')
                     ->description('Select a table to generate data for')
                     ->schema([
                         Forms\Components\Select::make('table_name')
@@ -118,7 +120,7 @@ class SmartDataSeeder extends Page
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Template Selection')
+                Section::make('Template Selection')
                     ->description('Choose how to generate data')
                     ->schema([
                         Forms\Components\Radio::make('generation_mode')
@@ -146,7 +148,7 @@ class SmartDataSeeder extends Page
                             ->visible(fn(Forms\Get $get) => $get('generation_mode') === 'existing'),
                     ]),
 
-                Forms\Components\Section::make('Preview')
+                Section::make('Preview')
                     ->description('Preview generated data before insertion')
                     ->schema([
                         Forms\Components\Placeholder::make('preview_table')
@@ -198,7 +200,7 @@ class SmartDataSeeder extends Page
                     ])
                     ->visible(fn() => !empty($this->previewData)),
 
-                Forms\Components\Section::make('Actions')
+                Section::make('Actions')
                     ->schema([
                         Forms\Components\Actions::make([
                             Forms\Components\Actions\Action::make('preview')

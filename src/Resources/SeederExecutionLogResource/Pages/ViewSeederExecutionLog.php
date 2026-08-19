@@ -1,19 +1,21 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources\SeederExecutionLogResource\Pages;
+use HkDevs\CodeForgeStudio\Support\Section;
+use Filament\Schemas\Schema;
 
 use HkDevs\CodeForgeStudio\Resources\SeederExecutionLogResource;
 use Filament\Resources\Pages\ViewRecord;
-use Filament\Infolists\Infolist;
+
 use Filament\Infolists\Components;
 
 class ViewSeederExecutionLog extends ViewRecord
 {
     protected static string $resource = SeederExecutionLogResource::class;
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist
+        return $schema
             ->schema([
                 Components\Section::make('Execution Details')
                     ->schema([

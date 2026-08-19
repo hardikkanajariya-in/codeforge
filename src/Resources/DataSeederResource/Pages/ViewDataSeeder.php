@@ -1,13 +1,15 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources\DataSeederResource\Pages;
+use HkDevs\CodeForgeStudio\Support\Section;
+use Filament\Schemas\Schema;
 
 use HkDevs\CodeForgeStudio\Resources\DataSeederResource;
 use HkDevs\CodeForgeStudio\Services\SeederExecutionService;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Notifications\Notification;
-use Filament\Infolists\Infolist;
+
 use Filament\Infolists\Components;
 
 class ViewDataSeeder extends ViewRecord
@@ -55,9 +57,9 @@ class ViewDataSeeder extends ViewRecord
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist
+        return $schema
             ->schema([
                 Components\Section::make('Basic Information')
                     ->schema([

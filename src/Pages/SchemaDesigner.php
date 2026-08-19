@@ -12,8 +12,8 @@ use HkDevs\CodeForgeStudio\Models\SchemaVersion;
 
 class SchemaDesigner extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
-    protected static string $view = 'codeforge-studio::pages.schema-designer';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-squares-2x2';
+    protected string $view = 'codeforge-studio::pages.schema-designer';
     protected static ?string $navigationLabel = 'Schema Designer';
     protected static ?string $title = 'Database Schema Designer';
     protected static ?int $navigationSort = 3;

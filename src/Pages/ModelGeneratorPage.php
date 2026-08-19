@@ -1,9 +1,11 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Pages;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 use Filament\Forms;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use HkDevs\CodeForgeStudio\Services\ModelGeneratorService;
 use HkDevs\CodeForgeStudio\Services\IntelligentSuggestionService;
@@ -71,8 +73,8 @@ use HkDevs\CodeForgeStudio\Services\IntelligentSuggestionService;
  */
 class ModelGeneratorPage extends BaseGeneratorPage
 {
-    protected static string $view = 'codeforge-studio::pages.model-generator';
-    protected static ?string $navigationIcon = 'heroicon-o-cube';
+    protected string $view = 'codeforge-studio::pages.model-generator';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-cube';
     protected static ?string $title = 'Model Generator';
     protected static ?string $navigationLabel = 'Model Generator';
     protected static ?int $navigationSort = 2;
@@ -116,11 +118,10 @@ class ModelGeneratorPage extends BaseGeneratorPage
         return app(ModelGeneratorService::class);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Grid::make(2)
+        return $schema->components([
+                Grid::make(2)
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->label('Model Name')
@@ -164,7 +165,7 @@ class ModelGeneratorPage extends BaseGeneratorPage
                             ->required(),
                     ]),
 
-                Forms\Components\Grid::make(3)
+                Grid::make(3)
                     ->schema([
                         Forms\Components\Toggle::make('timestamps')
                             ->label('Use Timestamps')
@@ -395,7 +396,7 @@ class ModelGeneratorPage extends BaseGeneratorPage
     protected function getRelationSchema(): array
     {
         return [
-            Forms\Components\Grid::make(3)
+            Grid::make(3)
                 ->schema([
                     Forms\Components\TextInput::make('name')
                         ->label('Relation Name')
@@ -429,7 +430,7 @@ class ModelGeneratorPage extends BaseGeneratorPage
                         ->required(),
                 ]),
 
-            Forms\Components\Grid::make(3)
+            Grid::make(3)
                 ->schema([
                     Forms\Components\TextInput::make('foreign_key')
                         ->label('Foreign Key')

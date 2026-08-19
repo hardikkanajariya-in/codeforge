@@ -55,11 +55,11 @@ use Filament\Actions\Action;
  */
 class DatabaseHealthDashboard extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-heart';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-heart';
     protected static ?string $navigationLabel = 'Health Monitor';
-    protected static ?string $navigationGroup = 'Database Health';
+    protected static string | \UnitEnum | null $navigationGroup = 'Database Health';
     protected static ?int $navigationSort = 1;
-    protected static string $view = 'codeforge-studio::pages.database-health-dashboard';
+    protected string $view = 'codeforge-studio::pages.database-health-dashboard';
 
     protected function getHealthService(): DatabaseHealthService
     {

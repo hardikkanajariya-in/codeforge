@@ -1,6 +1,9 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 use HkDevs\CodeForgeStudio\Models\DataSeeder;
 use HkDevs\CodeForgeStudio\Resources\DataSeederResource\Pages;
@@ -80,17 +83,16 @@ use Filament\Notifications\Notification;
 class DataSeederResource extends Resource
 {
     protected static ?string $model = DataSeeder::class;
-    protected static ?string $navigationIcon = 'heroicon-o-play';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-play';
     protected static ?string $navigationLabel = 'Data Seeders';
     protected static ?string $modelLabel = 'Data Seeder';
     protected static ?string $pluralModelLabel = 'Data Seeders';
     protected static ?int $navigationSort = 5;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make('Basic Information')
+        return $schema->components([
+                Section::make('Basic Information')
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->required()
@@ -137,7 +139,7 @@ class DataSeederResource extends Resource
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Configuration')
+                Section::make('Configuration')
                     ->schema([
                         Forms\Components\Select::make('type')
                             ->options([
@@ -168,7 +170,7 @@ class DataSeederResource extends Resource
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Advanced Configuration')
+                Section::make('Advanced Configuration')
                     ->schema([
                         Forms\Components\KeyValue::make('configuration')
                             ->addActionLabel('Add Configuration')

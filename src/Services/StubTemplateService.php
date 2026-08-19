@@ -1,6 +1,9 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Services;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
+use HkDevs\CodeForgeStudio\Support\FilamentSchema;
 
 use Illuminate\Support\Facades\File;
 
@@ -544,11 +547,11 @@ class {{ CLASS_NAME }} extends Resource
 {
     protected static ?string $model = {{ MODEL_CLASS }}::class;
 
-    protected static ?string $navigationIcon = '{{ NAVIGATION_ICON }}';
+    protected static string | \BackedEnum | null $navigationIcon = '{{ NAVIGATION_ICON }}';
 
     protected static ?string $navigationLabel = '{{ NAVIGATION_LABEL }}';
 
-    protected static ?string $navigationGroup = {{ NAVIGATION_GROUP }};
+    protected static string | \UnitEnum | null $navigationGroup = {{ NAVIGATION_GROUP }};
 
     protected static ?string $slug = '{{ SLUG }}';
 

@@ -1,6 +1,9 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -82,19 +85,18 @@ class SchemaSnapshotResource extends Resource
 {
     protected static ?string $model = SchemaSnapshot::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-camera';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-camera';
 
     protected static ?string $navigationLabel = 'Schema Snapshots';
 
-    protected static ?string $navigationGroup = 'Database Tools';
+    protected static string | \UnitEnum | null $navigationGroup = 'Database Tools';
 
     protected static ?int $navigationSort = 65;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make('Snapshot Information')
+        return $schema->components([
+                Section::make('Snapshot Information')
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->required()
@@ -127,7 +129,7 @@ class SchemaSnapshotResource extends Resource
                             ->helperText('Baseline snapshots are used as reference points for comparisons'),
                     ])->columns(1),
 
-                Forms\Components\Section::make('Snapshot Data')
+                Section::make('Snapshot Data')
                     ->schema([
                         Forms\Components\Placeholder::make('schema_data_info')
                             ->label('Schema Data')

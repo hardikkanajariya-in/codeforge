@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 
 class RecentMigrationsWidget extends Widget
 {
-    protected static string $view = 'codeforge-studio::widgets.recent-migrations';
+    protected string $view = 'codeforge-studio::widgets.recent-migrations';
 
     public function getViewData(): array
     {

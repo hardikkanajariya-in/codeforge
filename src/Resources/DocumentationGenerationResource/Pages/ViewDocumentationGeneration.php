@@ -1,12 +1,14 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources\DocumentationGenerationResource\Pages;
+use HkDevs\CodeForgeStudio\Support\Section;
+use Filament\Schemas\Schema;
 
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use HkDevs\CodeForgeStudio\Resources\DocumentationGenerationResource;
-use Filament\Infolists\Infolist;
-use Filament\Infolists\Components\Section;
+
+
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\KeyValueEntry;
 use HkDevs\CodeForgeStudio\Services\DocumentationGenerationService;
@@ -72,9 +74,9 @@ class ViewDocumentationGeneration extends ViewRecord
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist
+        return $schema
             ->schema([
                 Section::make('Basic Information')
                     ->schema([

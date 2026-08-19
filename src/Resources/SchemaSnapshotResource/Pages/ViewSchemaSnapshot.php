@@ -3,15 +3,14 @@
 namespace HkDevs\CodeForgeStudio\Resources\SchemaSnapshotResource\Pages;
 
 use Filament\Actions;
-use Filament\Resources\Pages\ViewRecord;
-use HkDevs\CodeForgeStudio\Resources\SchemaSnapshotResource;
-use Filament\Infolists\Infolist;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Grid;
-use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Resources\Pages\ViewRecord;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Resources\SchemaSnapshotResource;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 class ViewSchemaSnapshot extends ViewRecord
 {
@@ -31,7 +30,7 @@ class ViewSchemaSnapshot extends ViewRecord
             'table_relationships',
             'model_mappings',
             'validation_rules',
-            'policy_information'
+            'policy_information',
         ]));
     }
 
@@ -44,33 +43,26 @@ class ViewSchemaSnapshot extends ViewRecord
                 ->label('Create Documentation')
                 ->icon('heroicon-o-document-text')
                 ->color('success')
-                ->url(fn() => route('filament.admin.resources.documentation-generations.create', [
-                    'snapshot_id' => $this->record->id
+                ->url(fn () => route('filament.admin.resources.documentation-generations.create', [
+                    'snapshot_id' => $this->record->id,
                 ])),
 
             Actions\Action::make('mark_baseline')
                 ->label('Mark as Baseline')
                 ->icon('heroicon-o-star')
                 ->color('warning')
-                ->visible(fn() => !$this->record->is_baseline)
+                ->visible(fn () => ! $this->record->is_baseline)
                 ->action(function () {
                     $this->record->markAsBaseline();
-                    // Refresh the record to update the view
                     $this->record->refresh();
                 }),
         ];
     }
 
-    public function form(Form $form): Form
+    public function infolist(Schema $schema): Schema
     {
-        // Return empty form to prevent any form processing in view mode
-        return $form->schema([]);
-    }
-
-    public function infolist(Infolist $infolist): Infolist
-    {
-        return $infolist
-            ->schema([
+        return $schema
+            ->components([
                 Section::make('Snapshot Information')
                     ->schema([
                         TextEntry::make('name')
@@ -130,14 +122,15 @@ class ViewSchemaSnapshot extends ViewRecord
                                                 if (is_null($state) || empty($state)) {
                                                     return 'No model';
                                                 }
-                                                // Extract just the class name from full namespace
+
                                                 if (is_string($state) && str_contains($state, '\\')) {
                                                     return class_basename($state);
                                                 }
+
                                                 return is_string($state) ? $state : 'Unknown';
                                             }),
-                                    ])
-                            ])
+                                    ]),
+                            ]),
                     ])
                     ->collapsible(),
 
@@ -146,7 +139,7 @@ class ViewSchemaSnapshot extends ViewRecord
                         TextEntry::make('captured_at')
                             ->dateTime(),
                         TextEntry::make('captured_by'),
-                        TextEntry::make('created_at')   
+                        TextEntry::make('created_at')
                             ->dateTime(),
                         TextEntry::make('updated_at')
                             ->dateTime(),

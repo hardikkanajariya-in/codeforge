@@ -4,7 +4,6 @@ namespace HkDevs\CodeForgeStudio\Pages;
 
 use Filament\Actions\Action;
 use Filament\Pages\Page;
-use Filament\Support\Enums\MaxWidth;
 
 /**
  * GeneratorOverviewPage
@@ -54,17 +53,12 @@ use Filament\Support\Enums\MaxWidth;
  */
 class GeneratorOverviewPage extends Page
 {
-    protected static string $view = 'codeforge-studio::pages.generator-overview';
-    protected static ?string $navigationIcon = 'heroicon-o-command-line';
+    protected string $view = 'codeforge-studio::pages.generator-overview';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-command-line';
     protected static ?string $title = 'Code Generator Overview';
     protected static ?string $navigationLabel = 'Code Generators';
     protected static ?int $navigationSort = 0;
-    protected static ?string $navigationGroup = 'Code Generators';
-
-    public function getMaxContentWidth(): MaxWidth
-    {
-        return MaxWidth::Full;
-    }
+    protected static string | \UnitEnum | null $navigationGroup = 'Code Generators';
 
     protected function getHeaderActions(): array
     {

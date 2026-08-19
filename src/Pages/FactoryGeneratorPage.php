@@ -1,9 +1,11 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Pages;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 use Filament\Forms;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use HkDevs\CodeForgeStudio\Services\FactoryGeneratorService;
 
@@ -55,8 +57,8 @@ use HkDevs\CodeForgeStudio\Services\FactoryGeneratorService;
  */
 class FactoryGeneratorPage extends BaseGeneratorPage
 {
-    protected static string $view = 'codeforge-studio::pages.factory-generator';
-    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected string $view = 'codeforge-studio::pages.factory-generator';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-cog-6-tooth';
     protected static ?string $title = 'Factory Generator';
     protected static ?string $navigationLabel = 'Factory Generator';
     protected static ?int $navigationSort = 3;
@@ -86,11 +88,10 @@ class FactoryGeneratorPage extends BaseGeneratorPage
         return app(FactoryGeneratorService::class);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Grid::make(2)
+        return $schema->components([
+                Grid::make(2)
                     ->schema([
                         Forms\Components\TextInput::make('class_name')
                             ->label('Factory Class Name')
@@ -143,7 +144,7 @@ class FactoryGeneratorPage extends BaseGeneratorPage
                             ->searchable(),
                     ]),
 
-                Forms\Components\Grid::make(2)
+                Grid::make(2)
                     ->schema([
                         Forms\Components\Toggle::make('use_relationships')
                             ->label('Generate Related Data')
@@ -238,7 +239,7 @@ class FactoryGeneratorPage extends BaseGeneratorPage
     protected function getFakeDataSchema(): array
     {
         return [
-            Forms\Components\Grid::make(3)
+            Grid::make(3)
                 ->schema([
                     Forms\Components\TextInput::make('field')
                         ->label('Field Name')
@@ -255,7 +256,7 @@ class FactoryGeneratorPage extends BaseGeneratorPage
                         ->placeholder('e.g., 1, 100 or "prefix"'),
                 ]),
 
-            Forms\Components\Grid::make(2)
+            Grid::make(2)
                 ->schema([
                     Forms\Components\Toggle::make('nullable')
                         ->label('Can be Null (20% chance)'),

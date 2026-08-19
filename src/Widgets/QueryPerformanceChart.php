@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 
 class QueryPerformanceChart extends ChartWidget
 {
-    protected static ?string $heading = 'Query Performance (24 Hours)';
+    protected ?string $heading = 'Query Performance (24 Hours)';
     protected int | string | array $columnSpan = 'full';
 
     protected function getData(): array

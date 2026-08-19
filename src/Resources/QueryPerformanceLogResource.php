@@ -1,13 +1,16 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 use HkDevs\CodeForgeStudio\Models\QueryPerformanceLog;
 use HkDevs\CodeForgeStudio\Resources\QueryPerformanceLogResource\Pages;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists;
-use Filament\Infolists\Infolist;
+
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -78,15 +81,14 @@ class QueryPerformanceLogResource extends Resource
 {
     protected static ?string $model = QueryPerformanceLog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-chart-bar';
     protected static ?string $navigationLabel = 'Query Performance';
-    protected static ?string $navigationGroup = 'Database Health';
+    protected static string | \UnitEnum | null $navigationGroup = 'Database Health';
     protected static ?int $navigationSort = 2;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema->components([
                 Forms\Components\TextInput::make('connection')
                     ->required()
                     ->maxLength(100),
@@ -121,13 +123,13 @@ class QueryPerformanceLogResource extends Resource
             ]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist
+        return $schema
             ->schema([
-                Infolists\Components\Section::make('Performance Summary')
+                Section::make('Performance Summary')
                     ->schema([
-                        Infolists\Components\Grid::make(4)
+                        Grid::make(4)
                             ->schema([
                                 Infolists\Components\TextEntry::make('type')
                                     ->badge()
@@ -177,9 +179,9 @@ class QueryPerformanceLogResource extends Resource
                     ->compact()
                     ->icon('heroicon-o-chart-bar'),
 
-                Infolists\Components\Section::make('Query Information')
+                Section::make('Query Information')
                     ->schema([
-                        Infolists\Components\Grid::make(2)
+                        Grid::make(2)
                             ->schema([
                                 Infolists\Components\TextEntry::make('connection')
                                     ->badge()
@@ -194,7 +196,7 @@ class QueryPerformanceLogResource extends Resource
                                         default => 'gray',
                                     }),
                             ]),
-                        Infolists\Components\Grid::make(2)
+                        Grid::make(2)
                             ->schema([
                                 Infolists\Components\TextEntry::make('execution_time')
                                     ->label('Execution Time')
@@ -221,7 +223,7 @@ class QueryPerformanceLogResource extends Resource
                     ->collapsible()
                     ->collapsed(),
 
-                Infolists\Components\Section::make('Query Details')
+                Section::make('Query Details')
                     ->schema([
                         Infolists\Components\TextEntry::make('complete_query')
                             ->label('Complete SQL Query (with bindings)')
@@ -266,7 +268,7 @@ class QueryPerformanceLogResource extends Resource
                     ->persistCollapsed()
                     ->icon('heroicon-o-code-bracket'),
 
-                Infolists\Components\Section::make('Bindings & Metadata')
+                Section::make('Bindings & Metadata')
                     ->schema([
                         Infolists\Components\TextEntry::make('bindings')
                             ->label('Query Bindings')
@@ -287,7 +289,7 @@ class QueryPerformanceLogResource extends Resource
                             ])
                             ->columnSpanFull(),
 
-                        Infolists\Components\Grid::make(2)
+                        Grid::make(2)
                             ->schema([
                                 Infolists\Components\TextEntry::make('user_id')
                                     ->label('Executed By')
@@ -308,7 +310,7 @@ class QueryPerformanceLogResource extends Resource
                     ->persistCollapsed()
                     ->icon('heroicon-o-cog-6-tooth'),
 
-                Infolists\Components\Section::make('Error Details')
+                Section::make('Error Details')
                     ->schema([
                         Infolists\Components\TextEntry::make('error_message')
                             ->label('Error Message')

@@ -1,13 +1,16 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 use HkDevs\CodeForgeStudio\Models\DatabaseHealthMetric;
 use HkDevs\CodeForgeStudio\Resources\DatabaseHealthMetricResource\Pages;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists;
-use Filament\Infolists\Infolist;
+
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -62,15 +65,14 @@ class DatabaseHealthMetricResource extends Resource
 {
     protected static ?string $model = DatabaseHealthMetric::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-heart';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-heart';
     protected static ?string $navigationLabel = 'Health Metrics';
-    protected static ?string $navigationGroup = 'Database Health';
+    protected static string | \UnitEnum | null $navigationGroup = 'Database Health';
     protected static ?int $navigationSort = 3;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema->components([
                 Forms\Components\TextInput::make('connection')
                     ->required()
                     ->maxLength(100),
@@ -97,13 +99,13 @@ class DatabaseHealthMetricResource extends Resource
             ]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist
+        return $schema
             ->schema([
-                Infolists\Components\Section::make('Health Metric Overview')
+                Section::make('Health Metric Overview')
                     ->schema([
-                        Infolists\Components\Grid::make(4)
+                        Grid::make(4)
                             ->schema([
                                 Infolists\Components\TextEntry::make('status')
                                     ->badge()
@@ -143,9 +145,9 @@ class DatabaseHealthMetricResource extends Resource
                     ->compact()
                     ->icon('heroicon-o-heart'),
 
-                Infolists\Components\Section::make('Metric Details')
+                Section::make('Metric Details')
                     ->schema([
-                        Infolists\Components\Grid::make(2)
+                        Grid::make(2)
                             ->schema([
                                 Infolists\Components\TextEntry::make('metric_name')
                                     ->label('Metric Name')
@@ -165,7 +167,7 @@ class DatabaseHealthMetricResource extends Resource
                                     }),
                             ]),
 
-                        Infolists\Components\Grid::make(3)
+                        Grid::make(3)
                             ->schema([
                                 Infolists\Components\TextEntry::make('value')
                                     ->label('Raw Value')
@@ -194,7 +196,7 @@ class DatabaseHealthMetricResource extends Resource
                     ->collapsible()
                     ->icon('heroicon-o-chart-bar-square'),
 
-                Infolists\Components\Section::make('Metadata & Context')
+                Section::make('Metadata & Context')
                     ->schema([
                         Infolists\Components\TextEntry::make('metadata')
                             ->label('Additional Metadata')
@@ -215,7 +217,7 @@ class DatabaseHealthMetricResource extends Resource
                             ])
                             ->columnSpanFull(),
 
-                        Infolists\Components\Grid::make(2)
+                        Grid::make(2)
                             ->schema([
                                 Infolists\Components\TextEntry::make('recorded_at')
                                     ->label('Recorded At')
@@ -235,7 +237,7 @@ class DatabaseHealthMetricResource extends Resource
                     ->persistCollapsed()
                     ->icon('heroicon-o-cog-6-tooth'),
 
-                Infolists\Components\Section::make('Health Status Analysis')
+                Section::make('Health Status Analysis')
                     ->schema([
                         Infolists\Components\TextEntry::make('status')
                             ->label('Current Status')

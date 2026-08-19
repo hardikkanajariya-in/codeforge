@@ -1,6 +1,9 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 use HkDevs\CodeForgeStudio\Models\SeederExecutionLog;
 use HkDevs\CodeForgeStudio\Resources\SeederExecutionLogResource\Pages;
@@ -80,17 +83,16 @@ use Illuminate\Database\Eloquent\Builder;
 class SeederExecutionLogResource extends Resource
 {
     protected static ?string $model = SeederExecutionLog::class;
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
     protected static ?string $navigationLabel = 'Execution Logs';
     protected static ?string $modelLabel = 'Execution Log';
     protected static ?string $pluralModelLabel = 'Execution Logs';
     protected static ?int $navigationSort = 6;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make('Basic Information')
+        return $schema->components([
+                Section::make('Basic Information')
                     ->schema([
                         Forms\Components\TextInput::make('seeder_name')
                             ->required()
@@ -113,7 +115,7 @@ class SeederExecutionLogResource extends Resource
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Statistics')
+                Section::make('Statistics')
                     ->schema([
                         Forms\Components\TextInput::make('records_created')
                             ->numeric()
@@ -134,7 +136,7 @@ class SeederExecutionLogResource extends Resource
                     ])
                     ->columns(2),
 
-                Forms\Components\Section::make('Output & Errors')
+                Section::make('Output & Errors')
                     ->schema([
                         Forms\Components\Textarea::make('output')
                             ->rows(10)
@@ -145,7 +147,7 @@ class SeederExecutionLogResource extends Resource
                             ->disabled(),
                     ]),
 
-                Forms\Components\Section::make('Metadata')
+                Section::make('Metadata')
                     ->schema([
                         Forms\Components\KeyValue::make('metadata')
                             ->disabled(),

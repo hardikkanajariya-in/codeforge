@@ -1,11 +1,13 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 use HkDevs\CodeForgeStudio\Models\MigrationHistory;
 use HkDevs\CodeForgeStudio\Resources\MigrationHistoryResource\Pages;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -73,18 +75,17 @@ use Illuminate\Database\Eloquent\Builder;
 class MigrationHistoryResource extends Resource
 {
     protected static ?string $model = MigrationHistory::class;
-    protected static ?string $navigationIcon = 'heroicon-o-clock';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-clock';
     protected static ?string $navigationLabel = 'Migration History';
     protected static ?int $navigationSort = 3;
-    protected static ?string $navigationGroup = 'Database Tools';
+    protected static string | \UnitEnum | null $navigationGroup = 'Database Tools';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make('Migration Details')
+        return $schema->components([
+                Section::make('Migration Details')
                     ->schema([
-                        Forms\Components\Grid::make(2)
+                        Grid::make(2)
                             ->schema([
                                 Forms\Components\TextInput::make('migration')
                                     ->label('Migration File')
@@ -94,7 +95,7 @@ class MigrationHistoryResource extends Resource
                                     ->label('Batch Number')
                                     ->disabled(),
                             ]),
-                        Forms\Components\Grid::make(3)
+                        Grid::make(3)
                             ->schema([
                                 Forms\Components\TextInput::make('action')
                                     ->label('Action')
@@ -110,9 +111,9 @@ class MigrationHistoryResource extends Resource
                             ]),
                     ]),
 
-                Forms\Components\Section::make('Execution Information')
+                Section::make('Execution Information')
                     ->schema([
-                        Forms\Components\Grid::make(2)
+                        Grid::make(2)
                             ->schema([
                                 Forms\Components\TextInput::make('executed_by')
                                     ->label('Executed By')
@@ -126,7 +127,7 @@ class MigrationHistoryResource extends Resource
                             ]),
                     ]),
 
-                Forms\Components\Section::make('Error Details')
+                Section::make('Error Details')
                     ->schema([
                         Forms\Components\Textarea::make('error_message')
                             ->label('Error Message')

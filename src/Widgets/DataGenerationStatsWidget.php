@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
  */
 class DataGenerationStatsWidget extends Widget
 {
-    protected static string $view = 'codeforge-studio::components.data-generation-stats';
+    protected string $view = 'codeforge-studio::components.data-generation-stats';
 
     protected int | string | array $columnSpan = 'full';
 

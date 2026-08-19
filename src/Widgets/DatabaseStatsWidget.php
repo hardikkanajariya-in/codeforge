@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Schema;
 
 class DatabaseStatsWidget extends BaseWidget
 {
-    protected static string $view = 'filament-widgets::stats-overview-widget';
-
     protected function getStats(): array
     {
         return [

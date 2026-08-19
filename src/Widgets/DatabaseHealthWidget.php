@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class DatabaseHealthWidget extends Widget
 {
-    protected static string $view = 'codeforge-studio::widgets.database-health';
+    protected string $view = 'codeforge-studio::widgets.database-health';
     protected int | string | array $columnSpan = 'full';
 
     protected function getHealthService(): DatabaseHealthService

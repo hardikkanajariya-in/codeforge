@@ -3,7 +3,7 @@
 namespace HkDevs\CodeForgeStudio\Pages;
 
 use Filament\Forms;
-use Filament\Forms\Components\Section;
+use HkDevs\CodeForgeStudio\Support\Section;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -80,8 +80,8 @@ use Illuminate\Support\Facades\Log;
  */
 class FilamentResourceGeneratorPage extends Page
 {
-    protected static string $view = 'codeforge-studio::pages.filament-resource-generator';
-    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
+    protected string $view = 'codeforge-studio::pages.filament-resource-generator';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-squares-2x2';
     protected static ?string $title = 'Filament Resource Generator';
     protected static ?string $navigationLabel = 'Filament Resource';
     protected static ?int $navigationSort = 5;

@@ -1,13 +1,16 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Resources\MigrationHistoryResource\Pages;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
+use Filament\Schemas\Schema;
 
 use HkDevs\CodeForgeStudio\Resources\MigrationHistoryResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Enums\FontWeight;
 use Filament\Infolists;
-use Filament\Infolists\Infolist;
+
 use Filament\Notifications\Notification;
 
 class ViewMigrationHistory extends ViewRecord
@@ -25,13 +28,13 @@ class ViewMigrationHistory extends ViewRecord
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
-        return $infolist
+        return $schema
             ->schema([
-                Infolists\Components\Section::make('Migration Overview')
+                Section::make('Migration Overview')
                     ->schema([
-                        Infolists\Components\Grid::make(2)
+                        Grid::make(2)
                             ->schema([
                                 Infolists\Components\TextEntry::make('migration')
                                     ->label('Migration File')
@@ -48,9 +51,9 @@ class ViewMigrationHistory extends ViewRecord
                             ]),
                     ]),
 
-                Infolists\Components\Section::make('Execution Details')
+                Section::make('Execution Details')
                     ->schema([
-                        Infolists\Components\Grid::make(3)
+                        Grid::make(3)
                             ->schema([
                                 Infolists\Components\TextEntry::make('action')
                                     ->label('Action')
@@ -85,9 +88,9 @@ class ViewMigrationHistory extends ViewRecord
                             ]),
                     ]),
 
-                Infolists\Components\Section::make('Execution Information')
+                Section::make('Execution Information')
                     ->schema([
-                        Infolists\Components\Grid::make(2)
+                        Grid::make(2)
                             ->schema([
                                 Infolists\Components\TextEntry::make('executed_by')
                                     ->label('Executed By')
@@ -101,7 +104,7 @@ class ViewMigrationHistory extends ViewRecord
                             ]),
                     ]),
 
-                Infolists\Components\Section::make('Error Details')
+                Section::make('Error Details')
                     ->schema([
                         Infolists\Components\TextEntry::make('error_message')
                             ->label('Error Message')

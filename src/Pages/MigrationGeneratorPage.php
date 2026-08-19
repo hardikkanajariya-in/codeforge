@@ -1,12 +1,14 @@
 <?php
 
 namespace HkDevs\CodeForgeStudio\Pages;
+use Filament\Schemas\Schema;
+use HkDevs\CodeForgeStudio\Support\Grid;
+use HkDevs\CodeForgeStudio\Support\Section;
 
 use Filament\Forms;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use HkDevs\CodeForgeStudio\Services\MigrationGeneratorService;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Schema as DbSchema;
 
 /**
  * MigrationGeneratorPage
@@ -62,8 +64,8 @@ use Illuminate\Support\Facades\Schema;
  */
 class MigrationGeneratorPage extends BaseGeneratorPage
 {
-    protected static string $view = 'codeforge-studio::pages.migration-generator';
-    protected static ?string $navigationIcon = 'heroicon-o-table-cells';
+    protected string $view = 'codeforge-studio::pages.migration-generator';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-table-cells';
     protected static ?string $title = 'Migration Generator';
     protected static ?string $navigationLabel = 'Migration Generator';
     protected static ?int $navigationSort = 1;
@@ -122,11 +124,10 @@ class MigrationGeneratorPage extends BaseGeneratorPage
         ]);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Grid::make(2)
+        return $schema->components([
+                Grid::make(2)
                     ->schema([
                         Forms\Components\Select::make('type')
                             ->label('Migration Type')
@@ -161,7 +162,7 @@ class MigrationGeneratorPage extends BaseGeneratorPage
 
                                         // Check if table exists in database
                                         try {
-                                            if (Schema::hasTable($value)) {
+                                            if (DbSchema::hasTable($value)) {
                                                 $fail("Table '{$value}' already exists in the database");
                                                 return;
                                             }
@@ -179,7 +180,7 @@ class MigrationGeneratorPage extends BaseGeneratorPage
                             }),
                     ]),
 
-                Forms\Components\Grid::make(3)
+                Grid::make(3)
                     ->schema([
                         Forms\Components\Toggle::make('timestamps')
                             ->label('Include Timestamps')
@@ -227,7 +228,7 @@ class MigrationGeneratorPage extends BaseGeneratorPage
     protected function getColumnSchema(): array
     {
         return [
-            Forms\Components\Grid::make(4)
+            Grid::make(4)
                 ->schema([
                     Forms\Components\TextInput::make('name')
                         ->label('Column Name')
@@ -281,7 +282,7 @@ class MigrationGeneratorPage extends BaseGeneratorPage
                         ->label('Default Value'),
                 ]),
 
-            Forms\Components\Grid::make(6)
+            Grid::make(6)
                 ->schema([
                     Forms\Components\Toggle::make('nullable')
                         ->label('Nullable'),
@@ -302,7 +303,7 @@ class MigrationGeneratorPage extends BaseGeneratorPage
                         ->label('Primary Key'),
                 ]),
 
-            Forms\Components\Grid::make(2)
+            Grid::make(2)
                 ->schema([
                     Forms\Components\TextInput::make('comment')
                         ->label('Comment'),
@@ -340,7 +341,7 @@ class MigrationGeneratorPage extends BaseGeneratorPage
     protected function getForeignKeySchema(): array
     {
         return [
-            Forms\Components\Grid::make(2)
+            Grid::make(2)
                 ->schema([
                     Forms\Components\TextInput::make('column')
                         ->label('Local Column')
@@ -352,7 +353,7 @@ class MigrationGeneratorPage extends BaseGeneratorPage
                         ->required(),
                 ]),
 
-            Forms\Components\Grid::make(2)
+            Grid::make(2)
                 ->schema([
                     Forms\Components\TextInput::make('referenced_table')
                         ->label('Referenced Table')
@@ -362,7 +363,7 @@ class MigrationGeneratorPage extends BaseGeneratorPage
                         ->label('Constraint Name (Optional)'),
                 ]),
 
-            Forms\Components\Grid::make(2)
+            Grid::make(2)
                 ->schema([
                     Forms\Components\Select::make('on_delete')
                         ->label('On Delete')
@@ -411,7 +412,7 @@ class MigrationGeneratorPage extends BaseGeneratorPage
 
                 // Check if table already exists in database
                 try {
-                    if (Schema::hasTable($tableName)) {
+                    if (DbSchema::hasTable($tableName)) {
                         $errors[] = "Table '{$tableName}' already exists in the database. You cannot create a migration for an existing table.";
                     }
                 } catch (\Exception $e) {

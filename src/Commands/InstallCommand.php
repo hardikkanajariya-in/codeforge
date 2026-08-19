@@ -115,7 +115,7 @@ class InstallCommand extends Command
         $this->info('Publishing configuration...');
 
         $this->call('vendor:publish', [
-            '--tag' => 'codeforge-studio-config',
+            '--tag' => 'codeforge-database-studio-config',
             '--force' => $this->option('force'),
         ]);
     }
@@ -126,13 +126,13 @@ class InstallCommand extends Command
 
         // Publish CSS and JS assets
         $this->call('vendor:publish', [
-            '--tag' => 'codeforge-studio-assets',
+            '--tag' => 'codeforge-database-studio-assets',
             '--force' => $this->option('force'),
         ]);
 
         // Publish views
         $this->call('vendor:publish', [
-            '--tag' => 'codeforge-studio-views',
+            '--tag' => 'codeforge-database-studio-views',
             '--force' => $this->option('force'),
         ]);
 

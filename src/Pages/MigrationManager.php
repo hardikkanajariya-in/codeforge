@@ -51,8 +51,8 @@ use HkDevs\CodeForgeStudio\Models\Migration;
  */
 class MigrationManager extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-arrow-path';
-    protected static string $view = 'codeforge-studio::pages.migration-manager';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-arrow-path';
+    protected string $view = 'codeforge-studio::pages.migration-manager';
     protected static ?string $navigationLabel = 'Migration Manager';
     protected static ?int $navigationSort = 2;
 

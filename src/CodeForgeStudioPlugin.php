@@ -121,6 +121,11 @@ class CodeForgeStudioPlugin implements Plugin
         return app(static::class);
     }
 
+    public static function get(): static
+    {
+        return app(static::class);
+    }
+
     public function enableSchemaDesigner(bool $enable = true): static
     {
         $this->enableSchemaDesigner = $enable;
