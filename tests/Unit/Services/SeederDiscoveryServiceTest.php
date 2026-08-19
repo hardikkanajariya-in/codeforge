@@ -21,7 +21,7 @@ class SeederDiscoveryServiceTest extends TestCase
         $this->service = new SeederDiscoveryService;
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_discover_seeders()
     {
         $seeders = $this->service->discoverSeeders();
@@ -41,7 +41,7 @@ class SeederDiscoveryServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_get_seeder_options_for_filament()
     {
         $options = $this->service->getSeederOptions();
@@ -55,7 +55,7 @@ class SeederDiscoveryServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_can_get_seeder_file_path_by_class_name()
     {
         $seeders = $this->service->discoverSeeders();
@@ -71,7 +71,7 @@ class SeederDiscoveryServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_returns_null_for_non_existent_seeder_class()
     {
         $filePath = $this->service->getSeederFilePath('NonExistentSeeder');
@@ -79,7 +79,7 @@ class SeederDiscoveryServiceTest extends TestCase
         $this->assertNull($filePath);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_validates_seeder_file_patterns()
     {
         $seederContent = '<?php
@@ -103,7 +103,7 @@ class TestSeeder extends Seeder
         $this->assertTrue($result);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_extracts_class_name_correctly()
     {
         $content = '<?php
@@ -127,7 +127,7 @@ class UserSeeder extends Seeder
         $this->assertEquals('UserSeeder', $className);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_extracts_namespace_correctly()
     {
         $content = '<?php
@@ -151,7 +151,7 @@ class UserSeeder extends Seeder
         $this->assertEquals('Database\Seeders', $namespace);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_handles_files_without_namespace()
     {
         $content = '<?php
@@ -174,7 +174,7 @@ class SimpleSeeder extends Seeder
         $this->assertNull($namespace);
     }
 
-    /** @test */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function it_deduplicates_seeders_correctly()
     {
         $seeders = [
