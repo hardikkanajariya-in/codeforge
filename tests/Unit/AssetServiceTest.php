@@ -60,8 +60,9 @@ class AssetServiceTest extends TestCase
      */
     public function test_package_asset_existence(): void
     {
-        $packageCssPath = __DIR__.'/../../../resources/css/schema-designer-v2.css';
-        $packageJsPath = __DIR__.'/../../../resources/js/schema-designer-v2.js';
+        $packageRoot = dirname(__DIR__, 2);
+        $packageCssPath = $packageRoot.'/resources/css/schema-designer-v2.css';
+        $packageJsPath = $packageRoot.'/resources/js/schema-designer-v2.js';
 
         $this->assertTrue(File::exists($packageCssPath), 'Package CSS file should exist');
         $this->assertTrue(File::exists($packageJsPath), 'Package JS file should exist');

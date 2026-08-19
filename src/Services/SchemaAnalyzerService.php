@@ -2,16 +2,16 @@
 
 namespace HkDevs\CodeForgeStudio\Services;
 
+use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Builder;
 
 /**
  * SchemaAnalyzerService
- * 
+ *
  * Comprehensive database schema analysis and introspection service for CodeForge Database Studio.
  * Provides deep schema analysis, relationship discovery, and performance optimization recommendations.
- * 
+ *
  * Features:
  * - Complete database schema introspection with multi-database support
  * - Intelligent relationship discovery with foreign key analysis
@@ -21,7 +21,7 @@ use Illuminate\Database\Schema\Builder;
  * - Schema statistics and metrics collection
  * - Database-specific optimization recommendations
  * - Change impact analysis for schema modifications
- * 
+ *
  * Schema Analysis Capabilities:
  * - Table Structure Analysis: Complete table structure with columns, types, and constraints
  * - Relationship Discovery: Automatic detection of foreign key relationships and dependencies
@@ -30,7 +30,7 @@ use Illuminate\Database\Schema\Builder;
  * - Data Type Analysis: Column data type analysis with storage optimization recommendations
  * - Schema Statistics: Database size, table row counts, and storage utilization metrics
  * - Dependency Mapping: Complete dependency analysis for tables and schema objects
- * 
+ *
  * Performance Analysis:
  * - Index Utilization: Analysis of index usage patterns and optimization opportunities
  * - Query Performance: Schema-based query performance analysis and recommendations
@@ -39,7 +39,7 @@ use Illuminate\Database\Schema\Builder;
  * - Cardinality Analysis: Column cardinality analysis for index optimization
  * - Partition Analysis: Table partitioning recommendations for large datasets
  * - Resource Usage: Database resource utilization analysis and optimization
- * 
+ *
  * Relationship Discovery:
  * - Foreign Key Detection: Automatic discovery of foreign key relationships
  * - Implicit Relationships: Detection of implicit relationships through naming patterns
@@ -48,7 +48,7 @@ use Illuminate\Database\Schema\Builder;
  * - Cascade Analysis: Analysis of cascade operations and their impact
  * - Orphaned Record Detection: Identification of orphaned records and data integrity issues
  * - Relationship Optimization: Optimization recommendations for relationship performance
- * 
+ *
  * Database Compatibility:
  * - Multi-Database Support: Support for MySQL, PostgreSQL, SQLite, SQL Server
  * - Driver-Specific Analysis: Database-specific analysis and optimization features
@@ -57,7 +57,7 @@ use Illuminate\Database\Schema\Builder;
  * - Feature Detection: Detection of database-specific features and capabilities
  * - Version Compatibility: Analysis of database version compatibility and features
  * - Optimization Strategies: Database-specific optimization recommendations
- * 
+ *
  * Schema Comparison:
  * - Schema Diffing: Detailed comparison between schema versions
  * - Change Detection: Automatic detection of schema changes and modifications
@@ -66,7 +66,7 @@ use Illuminate\Database\Schema\Builder;
  * - Rollback Analysis: Analysis of rollback requirements and strategies
  * - Compatibility Checking: Validation of schema changes for backward compatibility
  * - Documentation Generation: Automatic documentation of schema changes
- * 
+ *
  * Data Integrity:
  * - Constraint Validation: Comprehensive validation of database constraints
  * - Referential Integrity: Validation of foreign key relationships and data consistency
@@ -75,7 +75,7 @@ use Illuminate\Database\Schema\Builder;
  * - Null Value Analysis: Analysis of null value patterns and data completeness
  * - Data Distribution: Statistical analysis of data distribution and patterns
  * - Anomaly Detection: Detection of data anomalies and inconsistencies
- * 
+ *
  * Integration Features:
  * - Laravel Integration: Seamless integration with Laravel's Schema Builder
  * - Model Integration: Integration with Eloquent models for relationship analysis
@@ -84,7 +84,7 @@ use Illuminate\Database\Schema\Builder;
  * - API Integration: REST endpoints for external schema analysis tools
  * - Export Capabilities: Export schema analysis results in multiple formats
  * - Monitoring Integration: Integration with database monitoring and alerting systems
- * 
+ *
  * Performance Optimization:
  * - Efficient Introspection: Optimized database queries for schema analysis
  * - Caching Strategies: Intelligent caching of schema analysis results
@@ -92,12 +92,13 @@ use Illuminate\Database\Schema\Builder;
  * - Memory Management: Efficient memory usage for complex schema operations
  * - Parallel Analysis: Multi-threaded analysis for improved performance
  * - Resource Optimization: CPU and I/O optimization for schema operations
- * 
- * @package HkDevs\CodeForgeStudio\Services
+ *
  * @author hardikkanajariya.in
+ *
  * @version 1.0.0
+ *
  * @since 1.0.0
- * 
+ *
  * @example
  * $service = new SchemaAnalyzerService('mysql');
  * $tables = $service->getAllTables();
@@ -107,6 +108,7 @@ use Illuminate\Database\Schema\Builder;
 class SchemaAnalyzerService
 {
     protected string $connectionName;
+
     protected Builder $schema;
 
     public function __construct(?string $connectionName = null)
@@ -264,7 +266,7 @@ class SchemaAnalyzerService
         }
 
         // Try plural form
-        $pluralName = $baseName . 's';
+        $pluralName = $baseName.'s';
         if (in_array($pluralName, $tableNames)) {
             return $pluralName;
         }
@@ -323,7 +325,7 @@ class SchemaAnalyzerService
         $debug['explicit_foreign_keys'] = [];
         foreach ($tableNames as $tableName) {
             $foreignKeys = $this->getTableForeignKeys($tableName);
-            if (!empty($foreignKeys)) {
+            if (! empty($foreignKeys)) {
                 $debug['explicit_foreign_keys'][$tableName] = $foreignKeys;
             }
         }
@@ -528,9 +530,11 @@ class SchemaAnalyzerService
             switch ($driver) {
                 case 'mysql':
                     $result = $connection->select("SHOW COLUMNS FROM `$tableName` WHERE Field = ?", [$columnName]);
+
                     return isset($result[0]) && $result[0]->Null === 'YES';
                 case 'pgsql':
-                    $result = $connection->select("SELECT is_nullable FROM information_schema.columns WHERE table_name = ? AND column_name = ?", [$tableName, $columnName]);
+                    $result = $connection->select('SELECT is_nullable FROM information_schema.columns WHERE table_name = ? AND column_name = ?', [$tableName, $columnName]);
+
                     return isset($result[0]) && $result[0]->is_nullable === 'YES';
                 default:
                     return false;
@@ -549,9 +553,11 @@ class SchemaAnalyzerService
             switch ($driver) {
                 case 'mysql':
                     $result = $connection->select("SHOW COLUMNS FROM `$tableName` WHERE Field = ?", [$columnName]);
+
                     return $result[0]->Default ?? null;
                 case 'pgsql':
-                    $result = $connection->select("SELECT column_default FROM information_schema.columns WHERE table_name = ? AND column_name = ?", [$tableName, $columnName]);
+                    $result = $connection->select('SELECT column_default FROM information_schema.columns WHERE table_name = ? AND column_name = ?', [$tableName, $columnName]);
+
                     return $result[0]->column_default ?? null;
                 default:
                     return null;
@@ -570,9 +576,11 @@ class SchemaAnalyzerService
             switch ($driver) {
                 case 'mysql':
                     $result = $connection->select("SHOW COLUMNS FROM `$tableName` WHERE Field = ?", [$columnName]);
+
                     return isset($result[0]) && strpos($result[0]->Extra, 'auto_increment') !== false;
                 case 'pgsql':
-                    $result = $connection->select("SELECT column_default FROM information_schema.columns WHERE table_name = ? AND column_name = ?", [$tableName, $columnName]);
+                    $result = $connection->select('SELECT column_default FROM information_schema.columns WHERE table_name = ? AND column_name = ?', [$tableName, $columnName]);
+
                     return isset($result[0]) && strpos($result[0]->column_default, 'nextval') !== false;
                 default:
                     return false;
@@ -591,6 +599,7 @@ class SchemaAnalyzerService
             switch ($driver) {
                 case 'mysql':
                     $result = $connection->select("SHOW COLUMNS FROM `$tableName` WHERE Field = ?", [$columnName]);
+
                     return isset($result[0]) && $result[0]->Key === 'PRI';
                 case 'pgsql':
                     $result = $connection->select("
@@ -600,7 +609,8 @@ class SchemaAnalyzerService
                         ON tc.constraint_name = kcu.constraint_name 
                         WHERE tc.table_name = ? AND tc.constraint_type = 'PRIMARY KEY' AND kcu.column_name = ?
                     ", [$tableName, $columnName]);
-                    return !empty($result);
+
+                    return ! empty($result);
                 default:
                     return false;
             }
@@ -618,6 +628,7 @@ class SchemaAnalyzerService
             switch ($driver) {
                 case 'mysql':
                     $result = $connection->select("SHOW COLUMNS FROM `$tableName` WHERE Field = ?", [$columnName]);
+
                     return isset($result[0]) && in_array($result[0]->Key, ['UNI', 'PRI']);
                 case 'pgsql':
                     $result = $connection->select("
@@ -627,7 +638,8 @@ class SchemaAnalyzerService
                         ON tc.constraint_name = kcu.constraint_name 
                         WHERE tc.table_name = ? AND tc.constraint_type = 'UNIQUE' AND kcu.column_name = ?
                     ", [$tableName, $columnName]);
-                    return !empty($result);
+
+                    return ! empty($result);
                 default:
                     return false;
             }
@@ -660,7 +672,7 @@ class SchemaAnalyzerService
         $connection = DB::connection($this->connectionName);
         $database = $connection->getDatabaseName();
 
-        $foreignKeys = $connection->select("
+        $foreignKeys = $connection->select('
             SELECT 
                 kcu.COLUMN_NAME as column_name,
                 kcu.REFERENCED_TABLE_NAME as foreign_table,
@@ -676,7 +688,7 @@ class SchemaAnalyzerService
                 AND kcu.REFERENCED_TABLE_NAME IS NOT NULL
                 AND kcu.REFERENCED_TABLE_SCHEMA IS NOT NULL
             ORDER BY kcu.ORDINAL_POSITION
-        ", [$database, $tableName]);
+        ', [$database, $tableName]);
 
         $result = [];
         foreach ($foreignKeys as $fk) {
@@ -698,12 +710,12 @@ class SchemaAnalyzerService
         $connection = DB::connection($this->connectionName);
         $database = $connection->getDatabaseName();
 
-        $result = $connection->select("
+        $result = $connection->select('
             SELECT 
                 ROUND(((data_length + index_length) / 1024 / 1024), 2) AS size_mb
             FROM information_schema.TABLES 
             WHERE table_schema = ? AND table_name = ?
-        ", [$database, $tableName]);
+        ', [$database, $tableName]);
 
         return $result[0]->size_mb ?? null;
     }
@@ -713,11 +725,11 @@ class SchemaAnalyzerService
         $connection = DB::connection($this->connectionName);
         $database = $connection->getDatabaseName();
 
-        $result = $connection->select("
+        $result = $connection->select('
             SELECT CREATE_TIME 
             FROM information_schema.TABLES 
             WHERE table_schema = ? AND table_name = ?
-        ", [$database, $tableName]);
+        ', [$database, $tableName]);
 
         return $result[0]->CREATE_TIME ?? null;
     }
@@ -804,9 +816,9 @@ class SchemaAnalyzerService
     {
         $connection = DB::connection($this->connectionName);
 
-        $result = $connection->select("
+        $result = $connection->select('
             SELECT pg_size_pretty(pg_total_relation_size(?::regclass)) as size
-        ", [$tableName]);
+        ', [$tableName]);
 
         return $result[0]->size ?? null;
     }
