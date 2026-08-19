@@ -189,12 +189,13 @@ class DependencyManagementTest extends TestCase
 
             // Test PHP version constraint
             if (isset($requirements['php'])) {
-                $this->assertStringContainsString('^8.1', $requirements['php']);
+                $this->assertStringContainsString('^8.3', $requirements['php']);
             }
 
             // Test Filament version constraint
             if (isset($requirements['filament/filament'])) {
-                $this->assertStringContainsString('^3.0', $requirements['filament/filament']);
+                $this->assertStringContainsString('^4.0', $requirements['filament/filament']);
+                $this->assertStringContainsString('^5.0', $requirements['filament/filament']);
             }
         } else {
             $this->markTestSkipped('composer.json not found in test environment');

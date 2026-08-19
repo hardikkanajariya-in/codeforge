@@ -35,6 +35,7 @@ use HkDevs\CodeForgeStudio\Services\LaravelTypesService;
 use HkDevs\CodeForgeStudio\Services\MigrationGeneratorService;
 use HkDevs\CodeForgeStudio\Services\MigrationTrackingService;
 use HkDevs\CodeForgeStudio\Services\ModelGeneratorService;
+use HkDevs\CodeForgeStudio\Services\SchemaAnalyzerService;
 use HkDevs\CodeForgeStudio\Services\SchemaDocumentationService;
 use HkDevs\CodeForgeStudio\Services\SeederDiscoveryService;
 use HkDevs\CodeForgeStudio\Services\SeederExecutionService;
@@ -70,7 +71,8 @@ class CodeForgeStudioServiceProvider extends PackageServiceProvider
             ->name(static::$name)
             ->hasConfigFile()
             ->hasViews(static::$viewNamespace)
-            ->hasMigrations()
+            ->discoversMigrations()
+            ->runsMigrations()
             ->hasCommands($this->getPackageCommands());
     }
 
@@ -122,6 +124,7 @@ class CodeForgeStudioServiceProvider extends PackageServiceProvider
     {
         $this->app->singleton(SeederExecutionService::class);
         $this->app->singleton(DataGenerationService::class);
+        $this->app->singleton(SchemaAnalyzerService::class);
         $this->app->singleton(SchemaDocumentationService::class);
         $this->app->singleton(MigrationGeneratorService::class);
         $this->app->singleton(ModelGeneratorService::class);

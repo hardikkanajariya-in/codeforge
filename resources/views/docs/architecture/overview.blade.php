@@ -95,7 +95,7 @@
                         </div>
                         <h3 class="font-semibold text-gray-900">Filament Integration</h3>
                     </div>
-                    <p class="text-sm text-gray-600">Native Filament v3 integration with pages, resources, and widgets</p>
+                    <p class="text-sm text-gray-600">Native Filament v4/v5 integration with pages, resources, and widgets</p>
                 </div>
             </div>
         </div>

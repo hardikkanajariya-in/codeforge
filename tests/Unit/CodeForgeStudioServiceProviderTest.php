@@ -52,6 +52,7 @@ class CodeForgeStudioServiceProviderTest extends TestCase
     {
         parent::setUp();
         $this->serviceProvider = new CodeForgeStudioServiceProvider($this->app);
+        $this->serviceProvider->register();
     }
 
     #[\PHPUnit\Framework\Attributes\Test]

@@ -2,8 +2,8 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/hkdevs/codeforge-database-studio.svg?style=flat-square)](https://packagist.org/packages/hkdevs/codeforge-database-studio)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Laravel](https://img.shields.io/badge/Laravel-10+-red.svg)](https://laravel.com)
-[![Filament](https://img.shields.io/badge/Filament-3%20|%204%20|%205-yellow.svg)](https://filamentphp.com)
+[![Laravel](https://img.shields.io/badge/Laravel-12%20|%2013-red.svg)](https://laravel.com)
+[![Filament](https://img.shields.io/badge/Filament-4%20|%205-yellow.svg)](https://filamentphp.com)
 
 Open source Filament panel plugin for database management, schema design, migration tracking, health monitoring, smart seeding, documentation export, and code generation.
 
@@ -23,9 +23,9 @@ Open source Filament panel plugin for database management, schema design, migrat
 
 | Dependency | Version |
 |------------|---------|
-| PHP | 8.2+ |
-| Laravel | 10.45+, 11.x, 12.x |
-| Filament | 3.2+, 4.x, 5.x |
+| PHP | 8.3+ |
+| Laravel | 12.x, 13.x |
+| Filament | 4.x, 5.x |
 
 ## Installation
 

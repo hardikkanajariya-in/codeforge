@@ -12,11 +12,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        laravel: ['10', '11', '12']
-        filament: ['3', '4']
-        exclude:
-          - laravel: '10'
-            filament: '4'
+        laravel: ['12', '13']
+        filament: ['4', '5']
 
     steps:
       - uses: actions/checkout@v4
@@ -33,7 +30,7 @@ jobs:
           composer require \
             "filament/filament:^${{ matrix.filament }}.0" \
             "laravel/framework:^${{ matrix.laravel }}.0" \
-            "orchestra/testbench:^$([ "${{ matrix.laravel }}" = "10" ] && echo "8" || ([ "${{ matrix.laravel }}" = "11" ] && echo "9" || echo "10"))" \
+            "orchestra/testbench:^$([ "${{ matrix.laravel }}" = "12" ] && echo "10" || echo "11")" \
             --no-interaction --no-update
           composer update --prefer-stable --prefer-dist --no-interaction
 

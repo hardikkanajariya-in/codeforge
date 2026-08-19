@@ -116,7 +116,7 @@ class IntelligentSuggestionServiceTest extends TestCase
         $categoryRelation = collect($relations)->firstWhere('name', 'category');
         $this->assertNotNull($categoryRelation);
         $this->assertEquals('belongsTo', $categoryRelation['type']);
-        $this->assertEquals('Category', $categoryRelation['related_model']);
+        $this->assertEquals('TestCategory', $categoryRelation['related_model']);
 
         Schema::dropIfExists('test_products');
         Schema::dropIfExists('test_categories');

@@ -442,7 +442,8 @@ class WidgetFunctionalityTest extends TestCase
      */
     protected function getTablesCount(): int
     {
-        $tables = Schema::getAllTables();
+        $tables = DB::select("SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'");
+
         return count($tables);
     }
 

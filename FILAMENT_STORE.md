@@ -11,9 +11,9 @@ Use this checklist when submitting at [filamentphp.com/author](https://filamentp
 | **Composer** | `hkdevs/codeforge-database-studio` |
 | **Repository** | https://github.com/hardikkanajariya-in/codeforge |
 | **License** | MIT (free & open source) |
-| **Filament** | v3.2+, v4.x, v5.x |
-| **Laravel** | 10.45+, 11.x, 12.x |
-| **PHP** | 8.2+ |
+| **Filament** | v4.x, v5.x |
+| **Laravel** | 12.x, 13.x |
+| **PHP** | 8.3+ |
 
 ## Suggested categories
 

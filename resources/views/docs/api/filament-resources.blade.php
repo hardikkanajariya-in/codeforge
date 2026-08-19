@@ -34,7 +34,7 @@
         <!-- Resources Overview -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Resource Architecture</h2>
-            <p class="text-gray-600 mb-6">All resources follow Filament v3 conventions with organized navigation groups,
+            <p class="text-gray-600 mb-6">All resources follow Filament v4/v5 Schema conventions with organized navigation groups,
                 comprehensive CRUD operations, and advanced features like bulk actions and data export.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

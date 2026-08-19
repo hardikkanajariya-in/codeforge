@@ -413,7 +413,7 @@
                         <span class="text-green-600 font-medium">✓ Optimized</span>
                     </div>
                     <div class="flex items-center justify-between py-2 border-b border-gray-100">
-                        <span class="text-gray-700">Filament v3</span>
+                        <span class="text-gray-700">Filament v4 / v5</span>
                         <span class="text-green-600 font-medium">✓ Native</span>
                     </div>
                     <div class="flex items-center justify-between py-2 border-b border-gray-100">
