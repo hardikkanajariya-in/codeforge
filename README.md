@@ -100,6 +100,10 @@ Ready for submission to the [Filament plugin directory](https://filamentphp.com/
 composer test
 ```
 
+## Releasing
+
+Push a semver tag (e.g. `v1.0.1`) to trigger the [Release workflow](.github/workflows/release.yml). See [RELEASING.md](RELEASING.md) for the full checklist.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Security reports: [SECURITY.md](SECURITY.md).

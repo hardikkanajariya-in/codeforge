@@ -1,0 +1,107 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test before release
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        laravel: ['12', '13']
+        filament: ['4', '5']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, intl, gd, exif, iconv
+          coverage: none
+
+      - name: Install dependencies (Filament ${{ matrix.filament }} / Laravel ${{ matrix.laravel }})
+        run: |
+          composer require \
+            "filament/filament:^${{ matrix.filament }}.0" \
+            "laravel/framework:^${{ matrix.laravel }}.0" \
+            "orchestra/testbench:^$([ "${{ matrix.laravel }}" = "12" ] && echo "10" || echo "11")" \
+            --no-interaction --no-update
+          composer update --prefer-stable --prefer-dist --no-interaction --no-progress
+
+      - name: Run Pint
+        run: vendor/bin/pint --test
+
+      - name: Run tests
+        run: vendor/bin/phpunit --no-coverage
+
+  release:
+    name: Publish GitHub release
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate tag format
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          if ! echo "$TAG" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?$'; then
+            echo "Tag must match vMAJOR.MINOR.PATCH (optional pre-release suffix), got: $TAG"
+            exit 1
+          fi
+
+      - name: Extract changelog notes
+        id: changelog
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          NOTES_FILE="${RUNNER_TEMP}/release-notes.md"
+
+          if grep -q "^## \\[${VERSION}\\]" CHANGELOG.md; then
+            awk "/^## \\[${VERSION}\\]/,/^## \\[/" CHANGELOG.md | sed '$d' > "$NOTES_FILE"
+          else
+            {
+              echo "## ${TAG}"
+              echo ""
+              echo "See [CHANGELOG.md](https://github.com/${GITHUB_REPOSITORY}/blob/${TAG}/CHANGELOG.md) for details."
+            } > "$NOTES_FILE"
+          fi
+
+          {
+            echo ""
+            echo "---"
+            echo ""
+            echo "**Install:** \`composer require hkdevs/codeforge-database-studio:${VERSION}\`"
+            echo ""
+            echo "**Requirements:** PHP 8.3+, Laravel 12/13, Filament 4/5"
+          } >> "$NOTES_FILE"
+
+          echo "notes_file=${NOTES_FILE}" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body_path: ${{ steps.changelog.outputs.notes_file }}
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          generate_release_notes: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

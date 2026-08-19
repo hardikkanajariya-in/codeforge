@@ -113,4 +113,5 @@ Hardik Kanajariya is an indie Laravel and Filament developer. Maintainer of Code
 1. Request author access at [filamentphp.com/author](https://filamentphp.com/author)
 2. Submit plugin with banner, categories, and repository URL
 3. Ensure package is on Packagist: `hkdevs/codeforge-database-studio`
-4. Monitor GitHub Issues for community support
+4. Enable Packagist auto-update (GitHub hook) so new tags publish automatically — see [RELEASING.md](RELEASING.md)
+5. Monitor GitHub Issues for community support
