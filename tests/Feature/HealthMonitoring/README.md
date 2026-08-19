@@ -137,8 +137,8 @@ This directory contains comprehensive PHPUnit test cases for the Database Health
 ## 🚀 Running the Tests
 
 ### Prerequisites
-- PHP 8.1+ with PHPUnit
-- Laravel 10.x or 11.x
+- PHP 8.3+ with PHPUnit
+- Laravel 12.x or 13.x
 - CodeForge Database Studio plugin installed
 - Test database configured
 

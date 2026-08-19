@@ -105,8 +105,8 @@ class ManageAssetsCommand extends Command
         'migrations' => 'database/migrations',
         'views' => 'resources/views/vendor/codeforge-studio',
         'assets' => [
-            'public/vendor/codeforge-studio/css',
-            'public/vendor/codeforge-studio/js',
+            'public/vendor/codeforge/css',
+            'public/vendor/codeforge/js',
         ],
     ];
 

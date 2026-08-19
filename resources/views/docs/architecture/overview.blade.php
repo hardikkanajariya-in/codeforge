@@ -364,9 +364,9 @@
                 <div>
                     <h4 class="font-semibold text-gray-900 mb-3">Framework</h4>
                     <ul class="space-y-2 text-sm text-gray-700">
-                        <li>� Laravel ^10.0</li>
-                        <li>� Filament ^3.0</li>
-                        <li>� PHP ^8.1</li>
+                        <li>• Laravel ^12.0|^13.0</li>
+                        <li>• Filament ^4.0|^5.0</li>
+                        <li>• PHP ^8.3</li>
                     </ul>
                 </div>
                 <div>

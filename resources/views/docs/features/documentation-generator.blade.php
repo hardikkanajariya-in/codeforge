@@ -67,7 +67,7 @@
                         </div>
                         <h3 class="font-semibold text-gray-900">Multi-Format</h3>
                     </div>
-                    <p class="text-sm text-gray-600">Generate documentation in HTML, PDF, Markdown, and JSON formats</p>
+                    <p class="text-sm text-gray-600">Generate documentation in Markdown, HTML, and PDF formats</p>
                 </div>
 
                 <div class="bg-white p-4 rounded-lg border border-emerald-200">
@@ -113,7 +113,7 @@
                         <li>• HTML documentation with interactive navigation</li>
                         <li>• PDF export for offline reading and sharing</li>
                         <li>• Markdown format for version control and GitHub</li>
-                        <li>• JSON output for programmatic access and integration</li>
+                        <li>• Markdown, HTML, and PDF export from the Filament UI and <code>codeforge:generate-docs</code></li>
                     </ul>
                 </div>
 
@@ -197,12 +197,12 @@
                 </div>
 
                 <div class="bg-white p-4 rounded-lg border">
-                    <h4 class="font-semibold text-gray-900 mb-2">JSON Output</h4>
+                    <h4 class="font-semibold text-gray-900 mb-2">PDF Format</h4>
                     <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• Programmatic access to documentation data</li>
-                        <li>• Integration with external tools</li>
-                        <li>• Structured data for processing</li>
-                        <li>• API documentation automation</li>
+                        <li>• Printable documentation for stakeholders</li>
+                        <li>• Professional layout for sharing</li>
+                        <li>• Generated from the same schema analysis pipeline</li>
+                        <li>• Suitable for offline reference</li>
                     </ul>
                 </div>
             </div>
@@ -226,7 +226,7 @@
             <ul>
                 <li><strong>Complete Table Documentation:</strong> Detailed table structure with columns, indexes, and
                     constraints</li>
-                <li><strong>Multi-Format Export:</strong> Generate documentation in HTML, PDF, Markdown, and JSON formats
+                <li><strong>Multi-Format Export:</strong> Generate documentation in Markdown, HTML, and PDF formats
                 </li>
                 <li><strong>Generation Tracking:</strong> Track documentation generation history with metadata and
                     statistics</li>

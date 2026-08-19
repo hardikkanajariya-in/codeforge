@@ -409,7 +409,7 @@
                 </h3>
                 <div class="space-y-3">
                     <div class="flex items-center justify-between py-2 border-b border-gray-100">
-                        <span class="text-gray-700">Laravel 10+</span>
+                        <span class="text-gray-700">Laravel 12 / 13</span>
                         <span class="text-green-600 font-medium">✓ Optimized</span>
                     </div>
                     <div class="flex items-center justify-between py-2 border-b border-gray-100">

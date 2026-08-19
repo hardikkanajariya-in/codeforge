@@ -200,8 +200,9 @@
             <div class="badges">
                 <span class="badge open">Open Source</span>
                 <span class="badge mit">MIT License</span>
-                <span class="badge">Laravel 10+</span>
-                <span class="badge">Filament 3.x</span>
+                <span class="badge">Laravel 12 / 13</span>
+                <span class="badge">Filament 4 / 5</span>
+                <span class="badge">PHP 8.3+</span>
             </div>
             <h1>Database management &amp; code generation for Filament</h1>
             <p>
@@ -236,7 +237,7 @@
                 </div>
                 <div class="feature-card">
                     <h3>Documentation Generator</h3>
-                    <p>Export schema documentation as Markdown, HTML, PDF, or JSON with schema snapshots.</p>
+                    <p>Export schema documentation as Markdown, HTML, or PDF with schema snapshots.</p>
                 </div>
                 <div class="feature-card">
                     <h3>Code Generation</h3>
@@ -251,9 +252,10 @@
             <div class="install-box">
                 <pre>composer require hkdevs/codeforge-database-studio
 
-php artisan vendor:publish --tag="codeforge-database-studio-config"
-php artisan vendor:publish --tag="codeforge-database-studio-migrations"
-php artisan migrate</pre>
+php artisan vendor:publish --tag=codeforge-database-studio-config
+php artisan vendor:publish --tag=codeforge-database-studio-migrations
+php artisan migrate
+php artisan codeforge:install</pre>
                 <p style="margin-top: 1rem; color: var(--muted); font-size: 0.9rem;">
                     Register the plugin in your Filament panel provider. See the
                     <a href="https://github.com/hardikkanajariya-in/codeforge#installation">README</a>

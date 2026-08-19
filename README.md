@@ -16,7 +16,7 @@ Open source Filament panel plugin for database management, schema design, migrat
 - **Migration management** — history, batch migrate, rollback safety
 - **Health monitoring** — slow queries, metrics, performance charts
 - **Smart seeding** — templates, relationship-aware bulk data
-- **Documentation generator** — Markdown, HTML, PDF, JSON, snapshots
+- **Documentation generator** — Markdown, HTML, PDF, and schema snapshots
 - **Code generation** — migrations, models, factories, seeders, Filament resources
 
 ## Requirements
@@ -82,13 +82,20 @@ Add to your panel theme CSS:
 
 ## Configuration
 
-Published to `config/codeforge-database-studio.php`. Toggle features:
+Published to `config/codeforge-database-studio.php`. Enable Filament pages via the plugin (not `features.*` in config):
 
 ```php
 CodeForgeStudioPlugin::make()
-    ->enableSchemaDesigner(false)
-    ->enableCodeGeneration(true);
+    ->enableSchemaDesigner()
+    ->enableMigrationManager()
+    ->enableHealthMonitoring()
+    ->enableSmartSeeding()
+    ->enableDocumentationGenerator()
+    ->enableCodeGeneration()
+    ->enableDevDocs(); // optional in-app docs at /codeforge/docs
 ```
+
+Config `features.*` only controls Database Overview quick-action cards. Query logging uses `enable_query_logging` and `query_logging.*`.
 
 ## Filament plugin store
 

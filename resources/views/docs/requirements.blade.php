@@ -56,7 +56,7 @@
                         <ul class="space-y-2 text-gray-700">
                             <li class="flex items-center">
                                 <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
-                                PHP ^8.1 or higher
+                                PHP ^8.3 or higher
                             </li>
                             <li class="flex items-center">
                                 <span class="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
@@ -85,7 +85,7 @@
                         <ul class="space-y-2 text-gray-700">
                             <li class="flex items-center">
                                 <span class="w-2 h-2 bg-red-600 rounded-full mr-3"></span>
-                                Laravel ^10.0
+                                Laravel ^12.0 or ^13.0
                             </li>
                             <li class="flex items-center">
                                 <span class="w-2 h-2 bg-red-600 rounded-full mr-3"></span>
@@ -123,7 +123,7 @@
                                 <p class="text-sm text-gray-600">Admin panel framework</p>
                             </div>
                         </div>
-                        <span class="text-sm font-mono text-gray-500">^3.0</span>
+                        <span class="text-sm font-mono text-gray-500">^4.0|^5.0</span>
                     </div>
 
                     <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
@@ -140,7 +140,7 @@
                                 <p class="text-sm text-gray-600">Database abstraction layer</p>
                             </div>
                         </div>
-                        <span class="text-sm font-mono text-gray-500">^3.6</span>
+                        <span class="text-sm font-mono text-gray-500">^3.8|^4.0</span>
                     </div>
 
                     <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">

@@ -106,7 +106,7 @@ class InstallCommand extends Command
         $this->line('Next steps:');
         $this->line('1. Add the plugin to your Filament panel');
         $this->line('2. Configure settings in config/codeforge-database-studio.php');
-        $this->line('3. Assets published to public/vendor/codeforge-database-studio/');
+        $this->line('3. Assets published to public/vendor/codeforge/');
         $this->line('');
 
         return self::SUCCESS;
@@ -138,7 +138,7 @@ class InstallCommand extends Command
             '--force' => $this->option('force'),
         ]);
 
-        $this->info('✅ Assets published successfully to public/vendor/codeforge-database-studio/');
+        $this->info('✅ Assets published successfully to public/vendor/codeforge/');
     }
 
     private function publishMigrations(): void

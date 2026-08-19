@@ -123,20 +123,19 @@
             </div>
             <div class="p-6">
                 <div class="space-y-6">
-                    <!-- Auto Registration -->
-                    <div>
-                        <h4 class="font-semibold text-gray-900 mb-2">Auto Registration</h4>
-                        <div class="bg-gray-900 rounded-lg p-4 mb-2">
-                            <pre class="text-sm"><code class="text-gray-300"><span class="text-blue-400">'auto_register'</span> => <span class="text-green-400">true</span>,
-    <span class="text-blue-400">'register_on_panels'</span> => [<span class="text-yellow-400">'admin'</span>],</code></pre>
-                        </div>
-                        <p class="text-gray-600 text-sm">Automatically register the plugin on specified panels without
-                            manual configuration.</p>
+                    <!-- Plugin registration (primary) -->
+                    <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
+                        <p class="text-amber-900 text-sm">
+                            <strong>Important:</strong> Filament pages and resources are enabled via
+                            <code class="bg-amber-100 px-1 rounded">CodeForgeStudioPlugin::make()->enable*()</code>
+                            in your panel provider. Config <code class="bg-amber-100 px-1 rounded">features.*</code>
+                            only controls quick-action cards on the Database Overview page—not plugin registration.
+                        </p>
                     </div>
 
-                    <!-- Features Configuration -->
+                    <!-- Features (overview UI) -->
                     <div>
-                        <h4 class="font-semibold text-gray-900 mb-2">Features Toggle</h4>
+                        <h4 class="font-semibold text-gray-900 mb-2">Features (Database Overview)</h4>
                         <div class="bg-gray-900 rounded-lg p-4 mb-2">
                             <pre class="text-sm"><code class="text-gray-300"><span class="text-blue-400">'features'</span> => [
         <span class="text-blue-400">'schema_designer'</span> => <span class="text-green-400">true</span>,
@@ -145,51 +144,33 @@
         <span class="text-blue-400">'smart_seeding'</span> => <span class="text-green-400">true</span>,
         <span class="text-blue-400">'documentation_generator'</span> => <span class="text-green-400">true</span>,
         <span class="text-blue-400">'code_generation'</span> => <span class="text-green-400">true</span>,
-        <span class="text-blue-400">'dev_docs'</span> => <span class="text-red-400">false</span>, <span class="text-gray-500">// Security: disabled by default</span>
+        <span class="text-blue-400">'dev_docs'</span> => <span class="text-red-400">false</span>,
     ],</code></pre>
                         </div>
-                        <p class="text-gray-600 text-sm">Enable or disable specific plugin features. Plugin method
-                            configuration takes priority over these settings.</p>
+                        <p class="text-gray-600 text-sm">Show or hide quick links on the Database Overview dashboard. Use
+                            <code class="bg-gray-100 px-1 rounded">enableDevDocs()</code> on the plugin to expose the in-app docs link.</p>
                     </div>
 
-                    <!-- Database Configuration -->
+                    <!-- Navigation sort -->
                     <div>
-                        <h4 class="font-semibold text-gray-900 mb-2">Database Connections</h4>
+                        <h4 class="font-semibold text-gray-900 mb-2">Navigation Sort</h4>
                         <div class="bg-gray-900 rounded-lg p-4 mb-2">
-                            <pre class="text-sm"><code class="text-gray-300"><span class="text-blue-400">'connections'</span> => [
-        <span class="text-blue-400">'default'</span> => <span class="text-yellow-400">env('DB_CONNECTION', 'mysql')</span>,
-        <span class="text-blue-400">'allowed'</span> => [<span class="text-yellow-400">'mysql'</span>, <span class="text-yellow-400">'pgsql'</span>, <span class="text-yellow-400">'sqlite'</span>, <span class="text-yellow-400">'sqlsrv'</span>],
+                            <pre class="text-sm"><code class="text-gray-300"><span class="text-blue-400">'navigation'</span> => [
+        <span class="text-blue-400">'sort'</span> => <span class="text-yellow-400">1</span>,
     ],</code></pre>
                         </div>
-                        <p class="text-gray-600 text-sm">Configure which database connections are supported and managed by
-                            the plugin.</p>
+                        <p class="text-gray-600 text-sm">Used as a base sort offset for some Filament resources. Navigation groups are defined per page/resource in code.</p>
                     </div>
 
-                    <!-- Migration Settings -->
+                    <!-- Planned / not wired yet -->
                     <div>
-                        <h4 class="font-semibold text-gray-900 mb-2">Migration Management</h4>
-                        <div class="bg-gray-900 rounded-lg p-4 mb-2">
-                            <pre class="text-sm"><code class="text-gray-300"><span class="text-blue-400">'migrations'</span> => [
-        <span class="text-blue-400">'track_history'</span> => <span class="text-green-400">true</span>,
-        <span class="text-blue-400">'backup_before_rollback'</span> => <span class="text-green-400">true</span>,
-        <span class="text-blue-400">'max_history_records'</span> => <span class="text-yellow-400">1000</span>,
-    ],</code></pre>
-                        </div>
-                        <p class="text-gray-600 text-sm">Configure migration tracking behavior and safety features.</p>
-                    </div>
-
-                    <!-- Health Monitoring -->
-                    <div>
-                        <h4 class="font-semibold text-gray-900 mb-2">Health Monitoring</h4>
-                        <div class="bg-gray-900 rounded-lg p-4 mb-2">
-                            <pre class="text-sm"><code class="text-gray-300"><span class="text-blue-400">'health_monitoring'</span> => [
-        <span class="text-blue-400">'enabled'</span> => <span class="text-green-400">true</span>,
-        <span class="text-blue-400">'check_interval'</span> => <span class="text-yellow-400">300</span>, <span class="text-gray-500">// 5 minutes</span>
-        <span class="text-blue-400">'slow_query_threshold'</span> => <span class="text-yellow-400">1000</span>, <span class="text-gray-500">// milliseconds</span>
-        <span class="text-blue-400">'connection_timeout'</span> => <span class="text-yellow-400">5</span>, <span class="text-gray-500">// seconds</span>
-    ],</code></pre>
-                        </div>
-                        <p class="text-gray-600 text-sm">Configure database health monitoring thresholds and intervals.</p>
+                        <h4 class="font-semibold text-gray-900 mb-2">Reserved settings (not active yet)</h4>
+                        <p class="text-gray-600 text-sm mb-2">These keys exist in the config file for future use but are <strong>not read</strong> by the plugin at runtime today:</p>
+                        <ul class="text-sm text-gray-600 list-disc pl-5 space-y-1">
+                            <li><code>auto_register</code>, <code>register_on_panels</code></li>
+                            <li><code>migrations.*</code>, <code>health_monitoring.*</code> (except query logging below)</li>
+                            <li><code>schema_designer.*</code>, <code>code_generation.*</code>, <code>security.*</code></li>
+                        </ul>
                     </div>
 
                     <!-- Query Logging -->
@@ -211,7 +192,7 @@
         ],
     ],</code></pre>
                         </div>
-                        <p class="text-gray-600 text-sm">Configure automatic query performance logging and monitoring.</p>
+                        <p class="text-gray-600 text-sm">Read by <code>QueryPerformanceListener</code>. Toggle at runtime with <code>php artisan codeforge:toggle-query-logging</code>.</p>
                     </div>
 
                     <!-- Code Generation -->
@@ -236,8 +217,7 @@
         <span class="text-blue-400">'backup_existing'</span> => <span class="text-green-400">true</span>,
     ],</code></pre>
                         </div>
-                        <p class="text-gray-600 text-sm">Configure where generated code files are saved and their
-                            namespaces.</p>
+                        <p class="text-gray-600 text-sm">Reserved for future generator path customization. Generator pages use built-in defaults today.</p>
                     </div>
 
                     <!-- Security Settings -->
@@ -259,8 +239,7 @@
         ],
     ],</code></pre>
                         </div>
-                        <p class="text-gray-600 text-sm">Configure security settings and confirmation requirements for
-                            destructive operations.</p>
+                        <p class="text-gray-600 text-sm">Reserved for future UI safety prompts. Not enforced by the plugin yet.</p>
                     </div>
                 </div>
             </div>
@@ -358,7 +337,7 @@
                         <h4 class="font-semibold text-gray-900 mb-3">Health & Monitoring</h4>
                         <div class="space-y-3">
                             <div class="bg-gray-50 rounded-lg p-3">
-                                <code class="text-sm text-gray-800">php artisan codeforge:collect-health-metrics</code>
+                                <code class="text-sm text-gray-800">php artisan codeforge:collect-metrics</code>
                                 <p class="text-xs text-gray-600 mt-1">Collect database health metrics</p>
                             </div>
                             <div class="bg-gray-50 rounded-lg p-3">
@@ -388,11 +367,11 @@
                         <h4 class="font-semibold text-gray-900 mb-3">Documentation</h4>
                         <div class="space-y-3">
                             <div class="bg-gray-50 rounded-lg p-3">
-                                <code class="text-sm text-gray-800">php artisan codeforge:generate-documentation</code>
+                                <code class="text-sm text-gray-800">php artisan codeforge:generate-docs</code>
                                 <p class="text-xs text-gray-600 mt-1">Generate database documentation</p>
                             </div>
                             <div class="bg-gray-50 rounded-lg p-3">
-                                <code class="text-sm text-gray-800">php artisan codeforge:create-schema-snapshot</code>
+                                <code class="text-sm text-gray-800">php artisan codeforge:create-snapshot</code>
                                 <p class="text-xs text-gray-600 mt-1">Create database schema snapshot</p>
                             </div>
                         </div>
@@ -407,7 +386,7 @@
                                 <p class="text-xs text-gray-600 mt-1">Clean up old log entries</p>
                             </div>
                             <div class="bg-gray-50 rounded-lg p-3">
-                                <code class="text-sm text-gray-800">php artisan codeforge:cleanup-documentation</code>
+                                <code class="text-sm text-gray-800">php artisan codeforge:cleanup-docs</code>
                                 <p class="text-xs text-gray-600 mt-1">Clean up old documentation files</p>
                             </div>
                         </div>
@@ -418,8 +397,8 @@
                         <h4 class="font-semibold text-gray-900 mb-3">Asset Management</h4>
                         <div class="space-y-3">
                             <div class="bg-gray-50 rounded-lg p-3">
-                                <code class="text-sm text-gray-800">php artisan codeforge:manage-assets</code>
-                                <p class="text-xs text-gray-600 mt-1">Manage plugin assets and resources</p>
+                                <code class="text-sm text-gray-800">php artisan codeforge:assets publish</code>
+                                <p class="text-xs text-gray-600 mt-1">Publish or refresh plugin CSS/JS (also: remove, refresh)</p>
                             </div>
                         </div>
                     </div>

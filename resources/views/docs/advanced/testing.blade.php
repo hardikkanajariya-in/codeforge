@@ -499,44 +499,34 @@
             // 1. Install CodeForge
             $this->artisan('codeforge:install')->assertExitCode(0);
 
-            // 2. Generate model with relationships
-            $this->artisan('codeforge:generate:model', [
-                'name' => 'Post',
-                '--table' => 'posts',
-                '--fields' => 'title:string,content:text,user_id:foreignId',
-                '--relationships' => 'belongsTo:User',
+            // 2. Create a schema snapshot (CLI workflow)
+            $this->artisan('codeforge:create-snapshot', [
+                '--name' => 'test-snapshot',
             ])->assertExitCode(0);
 
-            // 3. Verify files were created
-            $this->assertFileExists(app_path('Models/Post.php'));
-            $this->assertFileExists(database_path('migrations/create_posts_table.php'));
+            // 3. Generate documentation from the current schema
+            $this->artisan('codeforge:generate-docs', [
+                '--format' => 'markdown',
+            ])->assertExitCode(0);
 
-            // 4. Check health monitoring captured the operation
-            $healthService = app(\HkDevs\CodeForgeStudio\Services\DatabaseHealthService::class);
-            $metrics = $healthService->getPerformanceMetrics();
-
-            $this->assertArrayHasKey('code_generation', $metrics);
-            $this->assertGreaterThan(0, $metrics['code_generation']['models_generated']);
+            // Model/migration/factory generation is performed via Filament generator pages,
+            // not separate codeforge:generate:* Artisan commands.
         }
 
         public function test_complete_seeding_workflow()
         {
-            // 1. Generate seeder
-            $this->artisan('codeforge:generate:seeder', [
-                'model' => 'User',
-                '--count' => 50,
-                '--relationships' => true,
+            // 1. Run discovered seeders via CLI
+            $this->artisan('codeforge:run-seeders', [
+                '--class' => 'DatabaseSeeder',
             ])->assertExitCode(0);
 
-            // 2. Execute seeder
-            $this->artisan('codeforge:seed:execute', [
-                'seeder' => 'UserSeeder',
+            // 2. Diagnose seeder discovery when troubleshooting
+            $this->artisan('codeforge:diagnose-seeders')->assertExitCode(0);
+
+            // 3. Smart data generation (when templates are configured)
+            $this->artisan('codeforge:generate-data', [
+                '--count' => 10,
             ])->assertExitCode(0);
-
-            // 3. Verify data was created
-            $this->assertDatabaseCount('users', 50);
-
-            // 4. Check execution was logged
             $this->assertDatabaseHas('seeder_execution_logs', [
                 'seeder_class' => 'UserSeeder',
                 'status' => 'completed',
@@ -695,8 +685,8 @@
         runs-on: ubuntu-latest
         strategy:
           matrix:
-            php: [8.1, 8.2, 8.3]
-            laravel: [10.x, 11.x]
+            php: [8.3]
+            laravel: [12.x, 13.x]
 
         steps:
         - uses: actions/checkout@v3

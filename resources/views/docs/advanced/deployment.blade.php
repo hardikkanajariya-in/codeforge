@@ -130,8 +130,9 @@ Gate::define('manage-database', fn ($user) => $user->hasRole('admin'));
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <h4 class="font-semibold text-gray-900 mb-2">Server Requirements</h4>
                             <ul class="text-sm text-gray-600 space-y-1">
-                                <li>• PHP 8.1+ with required extensions</li>
-                                <li>• Laravel 10.x or 11.x</li>
+                                <li>• PHP 8.3+ with required extensions</li>
+                                <li>• Laravel 12.x or 13.x</li>
+                                <li>• Filament 4.x or 5.x</li>
                                 <li>• MySQL 8.0+ / PostgreSQL 13+ / SQLite 3.35+</li>
                                 <li>• Redis for caching (recommended)</li>
                                 <li>• Minimum 512MB RAM for monitoring</li>

@@ -1,33 +1,38 @@
 <?php
 
+/*
+|--------------------------------------------------------------------------
+| CodeForge Database Studio configuration
+|--------------------------------------------------------------------------
+|
+| Keys marked [ACTIVE] are read at runtime by the package.
+| Keys marked [RESERVED] are published for future use; changing them today
+| has no effect on plugin registration or feature toggles.
+|
+| Register Filament pages/resources via CodeForgeStudioPlugin::make()->enable*()
+| in your panel provider—not via this config file.
+|
+*/
+
 return [
     /*
     |--------------------------------------------------------------------------
-    | Auto Registration
+    | Auto Registration [RESERVED]
     |--------------------------------------------------------------------------
-    |
-    | Automatically register the plugin on specified panels.
-    |
     */
     'auto_register' => true,
 
     /*
     |--------------------------------------------------------------------------
-    | Panels
+    | Panels [RESERVED]
     |--------------------------------------------------------------------------
-    |
-    | The panels where this plugin should be registered.
-    |
     */
     'register_on_panels' => ['admin'],
 
     /*
     |--------------------------------------------------------------------------
-    | Navigation
+    | Navigation [ACTIVE: sort offset for some resources]
     |--------------------------------------------------------------------------
-    |
-    | Configure the navigation settings for the plugin.
-    |
     */
     'navigation' => [
         'group' => 'Database Studio',
@@ -37,11 +42,12 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Features
+    | Features [ACTIVE: Database Overview quick-action cards only]
     |--------------------------------------------------------------------------
     |
-    | Enable or disable specific features of the plugin.
-    | Navigation groups are automatically organized by individual pages/resources.
+    | Does not register or unregister Filament pages. Use enable*() on the plugin.
+    | dev_docs here only affects the overview blade fallback when enableDevDocs()
+    | is not set on the plugin (plugin default: disabled).
     |
     */
     'features' => [
@@ -51,16 +57,13 @@ return [
         'smart_seeding' => true,
         'documentation_generator' => true,
         'code_generation' => true,
-        'dev_docs' => true,
+        'dev_docs' => false,
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Database Connections
+    | Database Connections [RESERVED]
     |--------------------------------------------------------------------------
-    |
-    | Specify which database connections should be managed.
-    |
     */
     'connections' => [
         'default' => env('DB_CONNECTION', 'mysql'),
@@ -69,11 +72,8 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Migration Settings
+    | Migration Settings [RESERVED]
     |--------------------------------------------------------------------------
-    |
-    | Configure migration management settings.
-    |
     */
     'migrations' => [
         'track_history' => true,
@@ -83,11 +83,8 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Health Monitoring
+    | Health Monitoring [RESERVED]
     |--------------------------------------------------------------------------
-    |
-    | Configure database health monitoring settings.
-    |
     */
     'health_monitoring' => [
         'enabled' => true,
@@ -98,10 +95,11 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Query Performance Logging
+    | Query Performance Logging [ACTIVE]
     |--------------------------------------------------------------------------
     |
-    | Configure automatic query performance logging.
+    | Read by QueryPerformanceListener. Toggle at runtime with
+    | php artisan codeforge:toggle-query-logging
     |
     */
     'enable_query_logging' => true,
@@ -121,11 +119,8 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Schema Designer
+    | Schema Designer [RESERVED]
     |--------------------------------------------------------------------------
-    |
-    | Configure the visual schema designer.
-    |
     */
     'schema_designer' => [
         'auto_save' => true,
@@ -135,11 +130,8 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Code Generation
+    | Code Generation [RESERVED]
     |--------------------------------------------------------------------------
-    |
-    | Configure the code generation features.
-    |
     */
     'code_generation' => [
         'output_path' => [
@@ -161,11 +153,8 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Security
+    | Security [RESERVED]
     |--------------------------------------------------------------------------
-    |
-    | Configure security settings.
-    |
     */
     'security' => [
         'require_confirmation' => [

@@ -21,7 +21,7 @@ Pick valid categories from the Filament plugin directory (e.g. **Panel**, **Deve
 
 ## Short description (store)
 
-> Open source Filament panel plugin for database overview, schema design, migration tracking, health monitoring, smart seeding, documentation export, and code generation (models, migrations, factories, seeders, Filament resources).
+> Open source Filament panel plugin for database overview, visual schema design, migration tracking, health monitoring, smart seeding, documentation export (Markdown, HTML, PDF), and code generation for models, migrations, factories, seeders, and Filament resources.
 
 ## Long description highlights
 

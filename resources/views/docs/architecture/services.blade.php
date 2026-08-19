@@ -171,8 +171,8 @@
                                     <code
                                         class="text-blue-600 bg-blue-50 px-2 py-1 rounded text-xs">SchemaDocumentationService</code>
                                 </div>
-                                <p class="text-gray-600 text-sm">Multi-format documentation generation (HTML, PDF, Markdown,
-                                    JSON) with automated schema analysis.</p>
+                                <p class="text-gray-600 text-sm">Multi-format documentation generation (Markdown, HTML, PDF)
+                                    with automated schema analysis.</p>
                             </div>
                         </div>
                     </div>

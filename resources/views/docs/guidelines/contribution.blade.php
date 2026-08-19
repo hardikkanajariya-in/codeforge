@@ -51,7 +51,7 @@
                         <h3 class="text-lg font-semibold text-blue-900 mb-4">Prerequisites</h3>
                         <ul class="space-y-2 text-blue-800">
                             <li><strong>Valid License:</strong> Must have an active CodeForge Database Studio license</li>
-                            <li><strong>Development Environment:</strong> PHP 8.1+, Laravel 10+, Filament 3+</li>
+                            <li><strong>Development Environment:</strong> PHP 8.3+, Laravel 12/13, Filament 4/5</li>
                             <li><strong>Testing Setup:</strong> PHPUnit 10+ with comprehensive test coverage</li>
                             <li><strong>Code Standards:</strong> Follow PSR-12 coding standards</li>
                             <li><strong>Git Knowledge:</strong> Familiarity with Git and GitHub workflows</li>

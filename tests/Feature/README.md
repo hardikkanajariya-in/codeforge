@@ -28,8 +28,9 @@ This comprehensive test suite implements all test cases from the **Comprehensive
 
 ### Prerequisites
 
-- PHP 8.1+ with required extensions
-- Laravel 10.x or 11.x
+- PHP 8.3+ with required extensions
+- Laravel 12.x or 13.x
+- Filament 4.x or 5.x
 - FilamentPHP 3.x
 - PHPUnit configured for testing
 - Database connection configured for testing
