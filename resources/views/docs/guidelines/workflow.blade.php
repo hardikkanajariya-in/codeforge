@@ -160,7 +160,7 @@
                                     <li><strong>Release Preparation:</strong> Version bumping and changelog updates</li>
                                     <li><strong>Package Building:</strong> Build distribution packages</li>
                                     <li><strong>Quality Gates:</strong> Final quality checks and validation</li>
-                                    <li><strong>Release Distribution:</strong> Distribute through Anystack.sh</li>
+                                    <li><strong>Release Distribution:</strong> Tag releases on GitHub and publish to Packagist</li>
                                     <li><strong>Post-Release Monitoring:</strong> Monitor for issues and feedback</li>
                                 </ul>
                             </div>
@@ -326,7 +326,7 @@
                             <p><strong>Release:</strong></p>
                             <ul class="ml-4 space-y-1">
                                 <li>✓ Tag and build release package</li>
-                                <li>✓ Upload to Anystack.sh</li>
+                                <li>✓ Publish release on GitHub</li>
                                 <li>✓ Update documentation site</li>
                                 <li>✓ Notify customers</li>
                                 <li>✓ Monitor for issues</li>

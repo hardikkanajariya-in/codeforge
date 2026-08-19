@@ -47,7 +47,7 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-6">Deployment Architecture</h2>
             <p class="text-gray-600 mb-6">CodeForge Database Studio requires careful consideration for production deployment
-                including license validation, security configuration, performance optimization, and monitoring setup.</p>
+                including security configuration, performance optimization, and monitoring setup.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
@@ -61,7 +61,7 @@
                         </div>
                         <h3 class="font-semibold text-gray-900">Security First</h3>
                     </div>
-                    <p class="text-sm text-gray-600">License validation, secure configurations, and production-ready
+                    <p class="text-sm text-gray-600">Secure configurations, access control, and production-ready
                         security settings with confirmation requirements.</p>
                 </div>
 
@@ -101,24 +101,24 @@
             <h2 class="text-2xl font-bold text-gray-900 mb-6">Production Prerequisites</h2>
 
             <div class="space-y-6">
-                <!-- License Requirements -->
+                <!-- Authorization -->
                 <div class="border-l-4 border-blue-500 pl-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">License Requirements</h3>
-                    <p class="text-gray-600 mb-3">Valid commercial license required for production deployment:</p>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Authorization Requirements</h3>
+                    <p class="text-gray-600 mb-3">Restrict database management features to trusted admin users in production:</p>
                     <div class="bg-gray-50 p-4 rounded-lg">
-                        <pre class="text-sm text-gray-700 overflow-x-auto"><code># Environment variables for license
-    CODEFORGE_LICENSE_KEY=your_license_key_here
-    CODEFORGE_LICENSE_VALIDATION=true
-    CODEFORGE_LICENSE_CACHE_DURATION=3600
+                        <pre class="text-sm text-gray-700 overflow-x-auto"><code># Use Laravel policies and Filament authorization
+Gate::define('manage-database', fn ($user) => $user->hasRole('admin'));
 
-    # License validation settings
-    'license_validation' => [
-        'enabled' => env('CODEFORGE_LICENSE_VALIDATION', true),
-        'cache_duration' => 3600, // 1 hour cache
-        'grace_period' => 7, // Days after expiry
-        'validate_on_startup' => true,
-        'anystack_api_url' => 'https://api.anystack.sh',
-    ],</code></pre>
+# Review destructive operation settings in config
+'security' => [
+    'require_confirmation' => [
+        'drop_table' => true,
+        'rollback_migration' => true,
+    ],
+    'allowed_operations' => [
+        'drop_table' => false,
+    ],
+],</code></pre>
                     </div>
                 </div>
 
@@ -188,7 +188,7 @@
     php artisan vendor:publish --tag=codeforge-config
 
     # 3. Configure environment variables
-    # Add license key and production settings to .env
+    # Add production settings to .env
 
     # 4. Run installation command
     php artisan codeforge:install --env=production
@@ -212,13 +212,6 @@
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code># config/codeforge-database-studio.php - Production settings
     return [
-        'license_key' => env('CODEFORGE_LICENSE_KEY'),
-        'license_validation' => [
-            'enabled' => true,
-            'cache_duration' => 3600,
-            'grace_period' => 7,
-        ],
-
         // Enable only necessary features
         'features' => [
             'schema_designer' => false, // Disable in production for security
@@ -271,10 +264,6 @@
     APP_ENV=production
     APP_DEBUG=false
 
-    # CodeForge License
-    CODEFORGE_LICENSE_KEY=your_license_key
-    CODEFORGE_LICENSE_VALIDATION=true
-
     # Security settings
     CODEFORGE_ALLOW_SCHEMA_CHANGES=false
     CODEFORGE_ALLOW_DATA_GENERATION=false
@@ -306,10 +295,6 @@
                         <pre class="text-sm overflow-x-auto"><code># .env - Staging configuration (for testing deployments)
     APP_ENV=staging
     APP_DEBUG=true
-
-    # CodeForge License (same as production)
-    CODEFORGE_LICENSE_KEY=your_license_key
-    CODEFORGE_LICENSE_VALIDATION=true
 
     # Security settings (slightly relaxed for testing)
     CODEFORGE_ALLOW_SCHEMA_CHANGES=true
@@ -435,7 +420,6 @@
             'schema_changes',
             'data_modifications',
             'configuration_changes',
-            'license_issues',
         ],
     ],</code></pre>
                     </div>
@@ -463,10 +447,7 @@
     php artisan codeforge:metrics:collect --connections=mysql,redis
 
     # Generate health report
-    php artisan codeforge:health:report --email=admin@yourapp.com
-
-    # Check license status
-    php artisan codeforge:license:verify</code></pre>
+    php artisan codeforge:health:report --email=admin@yourapp.com</code></pre>
                     </div>
                 </div>
 
@@ -479,7 +460,7 @@
                                 <div><code>codeforge:cleanup:old-logs</code> - Clean old logs</div>
                                 <div><code>codeforge:health:report</code> - Generate health report</div>
                                 <div><code>codeforge:metrics:aggregate</code> - Aggregate metrics</div>
-                                <div><code>codeforge:license:verify</code> - Verify license</div>
+                                <div><code>codeforge:health:check</code> - Run health check</div>
                             </div>
                         </div>
                         <div class="bg-gray-50 p-4 rounded-lg">
@@ -563,11 +544,6 @@
         - name: Install dependencies
           run: composer install --no-dev --optimize-autoloader
 
-        - name: Verify CodeForge license
-          run: php artisan codeforge:license:verify
-          env:
-            CODEFORGE_LICENSE_KEY: $CODEFORGE_LICENSE_KEY_SECRET
-
         - name: Run CodeForge tests
           run: php artisan test --testsuite=CodeForge
 
@@ -640,12 +616,12 @@
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Common Issues & Solutions</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-red-50 p-4 rounded-lg border border-red-200">
-                            <h4 class="font-semibold text-gray-900 mb-2">License Issues</h4>
+                            <h4 class="font-semibold text-gray-900 mb-2">Configuration Issues</h4>
                             <ul class="text-sm text-gray-600 space-y-1">
-                                <li>• <strong>Invalid License:</strong> Verify CODEFORGE_LICENSE_KEY</li>
-                                <li>• <strong>Expired License:</strong> Renew license or check grace period</li>
-                                <li>• <strong>API Issues:</strong> Check network connectivity to anystack.sh</li>
-                                <li>• <strong>Cache Issues:</strong> Clear license cache</li>
+                                <li>• <strong>Missing config:</strong> Run <code>php artisan vendor:publish --tag=codeforge-database-studio-config</code></li>
+                                <li>• <strong>Stale cache:</strong> Run <code>php artisan config:clear</code></li>
+                                <li>• <strong>Migration errors:</strong> Check <code>php artisan migrate:status</code></li>
+                                <li>• <strong>Permission errors:</strong> Verify Filament admin access policies</li>
                             </ul>
                         </div>
                         <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
@@ -665,9 +641,6 @@
                     <div class="bg-gray-800 text-white p-4 rounded-lg">
                         <pre class="text-sm overflow-x-auto"><code># Comprehensive system check
     php artisan codeforge:diagnose --verbose
-
-    # Check license status
-    php artisan codeforge:license:status
 
     # Test database connections
     php artisan codeforge:test:connections --all
@@ -699,7 +672,6 @@
                     <ul class="space-y-2 text-gray-700 text-sm">
                         <li>• <strong>Restrict Features:</strong> Disable dangerous operations in production</li>
                         <li>• <strong>Access Control:</strong> Implement role-based access control</li>
-                        <li>• <strong>License Security:</strong> Protect license key and validate regularly</li>
                         <li>• <strong>Audit Logging:</strong> Enable comprehensive audit trails</li>
                         <li>• <strong>Network Security:</strong> Use IP whitelisting if required</li>
                     </ul>
@@ -719,7 +691,6 @@
             <div class="mt-6 p-4 bg-white rounded-lg border border-indigo-200">
                 <h4 class="font-semibold text-gray-900 mb-2">🚀 Production Checklist</h4>
                 <ul class="text-sm text-gray-700 space-y-1">
-                    <li>☐ Valid license key configured and verified</li>
                     <li>☐ Production security settings enabled</li>
                     <li>☐ Dangerous features disabled</li>
                     <li>☐ Monitoring and alerting configured</li>

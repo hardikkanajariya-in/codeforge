@@ -27,16 +27,16 @@
         <!-- Page Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 mb-4">Security Architecture</h1>
-            <p class="text-lg text-gray-600">CodeForge Database Studio implements enterprise-grade security features
-                including commercial license validation, data protection, and comprehensive access controls to ensure safe
+            <p class="text-lg text-gray-600">CodeForge Database Studio implements security features
+                including data protection, access controls, and audit logging to ensure safe
                 database operations.</p>
         </div>
 
         <!-- Security Overview -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Security Framework</h2>
-            <p class="text-gray-600 mb-6">Multi-layered security approach combining commercial license validation, data
-                encryption, access controls, and audit logging for comprehensive protection.</p>
+            <p class="text-gray-600 mb-6">Multi-layered security approach combining access control, data
+                encryption, audit logging, and configurable operation restrictions for comprehensive protection.</p>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-red-50 p-4 rounded-lg border border-red-200">
@@ -48,10 +48,10 @@
                                 </path>
                             </svg>
                         </div>
-                        <h3 class="font-semibold text-gray-900">License Validation</h3>
+                        <h3 class="font-semibold text-gray-900">Access Control</h3>
                     </div>
-                    <p class="text-sm text-gray-600">Commercial license verification with Anystack API integration,
-                        fingerprinting, and anti-tampering protection.</p>
+                    <p class="text-sm text-gray-600">Filament authorization, Laravel policies, and configurable
+                        restrictions for destructive database operations.</p>
                 </div>
 
                 <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
@@ -86,96 +86,40 @@
             </div>
         </div>
 
-        <!-- License Validation System -->
+        <!-- Access Control -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Commercial License Validation</h2>
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Access Control & Authorization</h2>
 
             <div class="space-y-6">
-                <!-- License Service Architecture -->
                 <div class="border-l-4 border-red-500 pl-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">LicenseValidationService</h3>
-                    <p class="text-gray-600 mb-3">Enterprise-grade license validation with Anystack API integration:</p>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Filament Authorization</h3>
+                    <p class="text-gray-600 mb-3">Restrict plugin pages and resources to authorized admin users:</p>
                     <div class="bg-gray-50 p-4 rounded-lg">
-                        <pre class="text-sm text-gray-700 overflow-x-auto"><code>class LicenseValidationService
-    {
-        protected string $baseUrl = 'https://api.anystack.sh';
-        protected int $cacheMinutes = 60;  // 1 hour cache TTL
+                        <pre class="text-sm text-gray-700 overflow-x-auto"><code>Gate::define('manage-database', function ($user) {
+    return $user->hasRole('admin');
+});
 
-        public function validateLicense(string $licenseKey): LicenseValidationResult
-        {
-            // Check cache first for performance
-            $cacheKey = "license_validation_{$licenseKey}";
-
-            return Cache::remember($cacheKey, $this->cacheMinutes, function () use ($licenseKey) {
-                return $this->validateWithAnystack($licenseKey);
-            });
-        }
-
-        protected function validateWithAnystack(string $licenseKey): LicenseValidationResult
-        {
-            $response = Http::timeout(10)
-                ->withHeaders(['User-Agent' => $this->getUserAgent()])
-                ->post("{$this->baseUrl}/v1/licenses/validate", [
-                    'license_key' => $licenseKey,
-                    'product_id' => config('codeforge-studio.product_id'),
-                    'fingerprint' => $this->generateFingerprint(),
-                ]);
-
-            return LicenseValidationResult::fromResponse($response);
-        }
-    }</code></pre>
+// In your Filament panel provider
+->authMiddleware([
+    Authenticate::class,
+])</code></pre>
                     </div>
                 </div>
 
-                <!-- Fingerprinting System -->
                 <div class="border-l-4 border-blue-500 pl-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Device Fingerprinting</h3>
-                    <p class="text-gray-600 mb-3">Unique device identification for license enforcement:</p>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Operation Restrictions</h3>
+                    <p class="text-gray-600 mb-3">Configure which database operations are allowed in each environment:</p>
                     <div class="bg-gray-50 p-4 rounded-lg">
-                        <pre class="text-sm text-gray-700 overflow-x-auto"><code>protected function generateFingerprint(): string
-    {
-        $components = [
-            PHP_OS,                          // Operating system
-            php_uname('n'),                  // Hostname
-            $_SERVER['SERVER_NAME'] ?? '',   // Server name
-            $_SERVER['HTTP_HOST'] ?? '',     // HTTP host
-            base_path(),                     // Application path
-        ];
-
-        // Filter out empty components
-        $components = array_filter($components);
-
-        // Generate secure hash
-        return hash('sha256', implode('|', $components));
-    }</code></pre>
-                    </div>
-                </div>
-
-                <!-- License Types -->
-                <div class="border-l-4 border-green-500 pl-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">License Tiers</h3>
-                    <p class="text-gray-600 mb-3">Commercial licensing with two-tier structure:</p>
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-white p-4 rounded border">
-                                <h4 class="font-semibold text-gray-900 mb-2">Regular License - $99</h4>
-                                <ul class="text-sm text-gray-600 space-y-1">
-                                    <li>• Single commercial project</li>
-                                    <li>• Full feature access</li>
-                                    <li>• Email support</li>
-                                    <li>• 6 months updates</li>
-                                </ul>
-                            </div>
-                            <div class="bg-white p-4 rounded border">
-                                <h4 class="font-semibold text-gray-900 mb-2">Extended License - $349</h4>
-                                <ul class="text-sm text-gray-600 space-y-1">
-                                    <li>• Unlimited commercial projects</li>
-                                    <li>• Priority support</li>
-                                    <li>• Custom development</li>
-                                    <li>• Lifetime updates</li>
-                                </ul>
-                            </div>
-                        </div>
+                        <pre class="text-sm text-gray-700 overflow-x-auto"><code>'security' => [
+    'require_confirmation' => [
+        'drop_table' => true,
+        'rollback_migration' => true,
+    ],
+    'allowed_operations' => [
+        'drop_table' => false,
+        'rollback_migration' => true,
+    ],
+],</code></pre>
                     </div>
                 </div>
             </div>
@@ -352,8 +296,6 @@
         'license_key' => env('CODEFORGE_LICENSE_KEY'),
         'product_id' => env('CODEFORGE_PRODUCT_ID'),
         'security' => [
-            'require_license' => true,
-            'cache_validation' => true,
             'log_violations' => true,
             'rate_limit' => 100, // per hour
         ],
@@ -371,7 +313,7 @@
                 <div>
                     <h4 class="font-semibold text-gray-900 mb-3">Deployment Security</h4>
                     <ul class="space-y-2 text-gray-700 text-sm">
-                        <li>• <strong>Secure License Storage:</strong> Store license keys in environment variables</li>
+                        <li>• <strong>Environment Secrets:</strong> Store credentials in environment variables</li>
                         <li>• <strong>HTTPS Only:</strong> Never use the plugin over insecure connections</li>
                         <li>• <strong>Database Backups:</strong> Regular encrypted backups of sensitive data</li>
                         <li>• <strong>Access Restrictions:</strong> Limit admin panel access to trusted IPs</li>

@@ -5,10 +5,16 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "HkDevs",
-            "email": "support@example.com"
+            "name": "Hardik Kanajariya",
+            "email": "contact@hardikkanajariya.in",
+            "homepage": "https://hardikkanajariya.in"
         }
     ],
+    "homepage": "https://hardikkanajariya-in.github.io/codeforge/",
+    "support": {
+        "issues": "https://github.com/hardikkanajariya-in/codeforge/issues",
+        "source": "https://github.com/hardikkanajariya-in/codeforge"
+    },
     "require": {
         "php": "^8.1",
         "filament/filament": "^3.0",

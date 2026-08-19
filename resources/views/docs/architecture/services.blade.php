@@ -198,12 +198,9 @@
                             <div class="space-y-2">
                                 <div class="flex flex-wrap gap-1">
                                     <code
-                                        class="text-blue-600 bg-blue-50 px-2 py-1 rounded text-xs">LicenseValidationService</code>
-                                    <code
                                         class="text-blue-600 bg-blue-50 px-2 py-1 rounded text-xs">IntelligentSuggestionService</code>
                                 </div>
-                                <p class="text-gray-600 text-sm">Commercial license validation, smart code suggestions, and
-                                    intelligent analysis capabilities.</p>
+                                <p class="text-gray-600 text-sm">Smart code suggestions and intelligent analysis capabilities.</p>
                             </div>
                         </div>
 

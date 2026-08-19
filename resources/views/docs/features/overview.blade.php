@@ -235,12 +235,14 @@
 
         <!-- Support -->
         <div class="bg-yellow-50 border-l-4 border-yellow-400 p-6">
-            <h3 class="text-lg font-semibold text-yellow-900 mb-2">Professional Support</h3>
+            <h3 class="text-lg font-semibold text-yellow-900 mb-2">Community Support</h3>
             <p class="text-yellow-800">
-                CodeForge Database Studio includes professional support with your commercial license.
-                Contact us at <a href="mailto:contact@hardikkanajariya.in"
+                CodeForge Database Studio is a community-managed open source project.
+                Open a <a href="https://github.com/hardikkanajariya-in/codeforge/issues"
+                    class="text-yellow-600 hover:text-yellow-700 font-medium">GitHub issue</a>
+                or email <a href="mailto:contact@hardikkanajariya.in"
                     class="text-yellow-600 hover:text-yellow-700 font-medium">contact@hardikkanajariya.in</a>
-                for assistance with implementation, customization, or troubleshooting.
+                for help with implementation or troubleshooting.
             </p>
         </div>
     </div>

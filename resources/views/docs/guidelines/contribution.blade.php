@@ -13,27 +13,29 @@
             <div class="mb-8">
                 <h1 class="text-3xl font-bold text-gray-900 mb-4">Contribution Guidelines</h1>
                 <p class="text-lg text-gray-600">
-                    CodeForge Database Studio is a commercial plugin developed by HkDevs. While the source code is
-                    proprietary, we welcome contributions from our licensed users.
+                    CodeForge Database Studio is free and open source under the MIT License.
+                    We welcome contributions from the community on
+                    <a href="https://github.com/hardikkanajariya-in/codeforge" class="text-primary-600 hover:text-primary-700">GitHub</a>.
                 </p>
             </div>
 
-            <!-- Commercial License Notice -->
+            <!-- Open Source Notice -->
             <div class="mb-12">
-                <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-200">
+                <div class="bg-green-50 p-6 rounded-lg border border-green-200">
                     <div class="flex items-start">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-yellow-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="h-5 w-5 text-green-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
-                                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                     clip-rule="evenodd"></path>
                             </svg>
                         </div>
                         <div class="ml-3">
-                            <h3 class="text-sm font-medium text-yellow-800">Commercial License Required</h3>
-                            <p class="mt-1 text-sm text-yellow-700">
-                                This is a commercial plugin. Contributions require a valid license and signed contributor
-                                agreement.
+                            <h3 class="text-sm font-medium text-green-800">Open Source Contributions</h3>
+                            <p class="mt-1 text-sm text-green-700">
+                                Read <a href="https://github.com/hardikkanajariya-in/codeforge/blob/master/CONTRIBUTING.md" class="underline font-medium">CONTRIBUTING.md</a>
+                                before opening a pull request. Maintainer:
+                                <a href="https://hardikkanajariya.in" class="underline font-medium">Hardik Kanajariya</a>.
                             </p>
                         </div>
                     </div>
@@ -264,20 +266,18 @@
                 </div>
             </div>
 
-            <!-- License Agreement -->
+            <!-- License -->
             <div class="mb-12">
-                <div class="bg-red-50 p-6 rounded-lg border border-red-200">
-                    <h3 class="text-lg font-semibold text-red-900 mb-4">Contributor License Agreement</h3>
-                    <p class="text-red-800 mb-4">
+                <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                    <h3 class="text-lg font-semibold text-blue-900 mb-4">Contributor License</h3>
+                    <p class="text-blue-800 mb-4">
                         By contributing to CodeForge Database Studio, you agree that your contributions will be licensed
-                        under the same commercial license as the project.
+                        under the MIT License.
                     </p>
-                    <ul class="space-y-2 text-red-800 text-sm">
-                        <li><strong>Intellectual Property:</strong> Contributors retain copyright but grant usage rights to
-                            HkDevs</li>
-                        <li><strong>Commercial Use:</strong> Contributions may be used in commercial versions</li>
-                        <li><strong>Attribution:</strong> Contributors will be credited in the project</li>
-                        <li><strong>License Terms:</strong> Must comply with existing license terms</li>
+                    <ul class="space-y-2 text-blue-800 text-sm">
+                        <li><strong>Copyright:</strong> You retain copyright on your contributions</li>
+                        <li><strong>License:</strong> Contributions are licensed under the MIT License</li>
+                        <li><strong>Attribution:</strong> Contributors are credited in release notes when applicable</li>
                     </ul>
                 </div>
             </div>

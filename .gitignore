@@ -1,3 +1,5 @@
 /.phpunit.cache
 /.vscode
 /vendor
+/tests/reports
+/.codegraph

@@ -114,32 +114,6 @@
                     </div>
                 </div>
 
-                <!-- License Validation Service -->
-                <div class="border-l-4 border-red-500 pl-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">LicenseValidationService</h3>
-                    <p class="text-gray-600 mb-3">Handles commercial license validation with Anystack API integration and
-                        caching.</p>
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <pre class="text-sm text-gray-700 overflow-x-auto"><code>class LicenseValidationService
-    {
-        // Validate license key with caching
-        public function validateLicense(string $licenseKey): LicenseValidationResult
-
-        // Generate device fingerprint for license binding
-        protected function generateFingerprint(): string
-
-        // Check if license is currently valid and active
-        public function isLicenseValid(): bool
-
-        // Get license details and restrictions
-        public function getLicenseInfo(): array
-
-        // Clear license validation cache
-        public function clearCache(): void
-    }</code></pre>
-                    </div>
-                </div>
-
                 <!-- Migration Tracking Service -->
                 <div class="border-l-4 border-green-500 pl-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-2">MigrationTrackingService</h3>

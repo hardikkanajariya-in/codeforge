@@ -347,11 +347,7 @@ For commercial support and advanced configurations:
 
 ## 📄 License
 
-This test suite is part of the HkDevs CodeForge Database Studio plugin.
-
-**Commercial License**: Available in two tiers
-- Regular License: $99.00
-- Extended License: $349.00
+This test suite is part of CodeForge Database Studio, released under the MIT License.
 
 For licensing inquiries: contact@hardikkanajariya.in
 

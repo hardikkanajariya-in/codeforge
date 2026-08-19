@@ -326,7 +326,7 @@ For questions about these test cases:
 
 ## 📄 License
 
-These test cases are part of the HkDevs CodeForge Database Studio plugin and are subject to the same commercial license terms.
+These test cases are part of CodeForge Database Studio, released under the MIT License.
 
 ---
 

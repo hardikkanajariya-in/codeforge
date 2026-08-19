@@ -58,86 +58,52 @@
             </div>
         </div>
 
-        <!-- Step 1: Manual Package Installation -->
+        <!-- Step 1: Composer Installation -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8">
             <div class="p-6 border-b border-gray-200">
                 <div class="flex items-center">
                     <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
                         <span class="text-blue-600 font-bold text-sm">1</span>
                     </div>
-                    <h2 class="text-2xl font-bold text-gray-900">Manual Package Installation</h2>
+                    <h2 class="text-2xl font-bold text-gray-900">Install via Composer</h2>
                 </div>
-                <p class="text-gray-600 mt-2 ml-12">Install the package manually in your Laravel project</p>
+                <p class="text-gray-600 mt-2 ml-12">Add the open source package to your Laravel project</p>
             </div>
             <div class="p-6">
-                <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
-                    <div class="flex items-start">
-                        <div class="flex-shrink-0 w-6 h-6 bg-amber-100 rounded-lg flex items-center justify-center mr-3">
-                            <svg class="w-3 h-3 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="text-amber-800 text-sm">
-                                <strong>Current Installation Method:</strong> The package is not yet available via Composer.
-                                We are working hard to publish it to Packagist for convenient installation. For now, please
-                                follow the manual installation steps below.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="space-y-4">
-                    <h4 class="font-semibold text-gray-900">Manual Installation Steps:</h4>
-
-                    <!-- Step 1a: Extract Package -->
                     <div class="border-l-4 border-blue-500 pl-4">
-                        <h5 class="font-medium text-gray-900 mb-2">1. Extract Package Files</h5>
-                        <p class="text-gray-700 mb-2">Extract the purchased package ZIP file to your Laravel project:</p>
+                        <h5 class="font-medium text-gray-900 mb-2">Composer require</h5>
                         <div class="bg-gray-900 rounded-lg p-3 mb-2">
-                            <code class="text-green-400 text-sm">packages/codeforge/</code>
+                            <code class="text-green-400 text-sm">composer require hkdevs/codeforge-database-studio</code>
                         </div>
-                        <p class="text-sm text-gray-600">Place the entire <code
-                                class="bg-gray-100 px-1 rounded">codeforge</code> directory inside a <code
-                                class="bg-gray-100 px-1 rounded">packages</code> folder in your project root.</p>
+                        <p class="text-sm text-gray-600">Install from Packagist or clone from
+                            <a href="https://github.com/hardikkanajariya-in/codeforge" class="text-primary-600 hover:text-primary-700">GitHub</a>
+                            and use a path repository for local development.</p>
                     </div>
 
-                    <!-- Step 1b: Update Composer -->
                     <div class="border-l-4 border-blue-500 pl-4">
-                        <h5 class="font-medium text-gray-900 mb-2">2. Update Composer Configuration</h5>
-                        <p class="text-gray-700 mb-2">Add the package to your project's <code
-                                class="bg-gray-100 px-1 rounded">composer.json</code>:</p>
+                        <h5 class="font-medium text-gray-900 mb-2">Local development (path repository)</h5>
                         <div class="bg-gray-900 rounded-lg p-3 mb-2 overflow-x-auto">
                             <pre class="text-sm"><code class="text-gray-300">{
-        "repositories": [
-            {
-                "type": "path",
-                "url": "./packages/codeforge"
-            }
-        ],
-        "require": {
-            <span class="text-green-400">"hkdevs/codeforge-database-studio": "@dev"</span>
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../codeforge"
         }
-    }</code></pre>
+    ],
+    "require": {
+        <span class="text-green-400">"hkdevs/codeforge-database-studio": "@dev"</span>
+    }
+}</code></pre>
                         </div>
-                    </div>
-
-                    <!-- Step 1c: Install Dependencies -->
-                    <div class="border-l-4 border-blue-500 pl-4">
-                        <h5 class="font-medium text-gray-900 mb-2">3. Install Package Dependencies</h5>
-                        <div class="bg-gray-900 rounded-lg p-3 mb-2">
-                            <code class="text-green-400 text-sm">composer update</code>
-                        </div>
-                        <p class="text-sm text-gray-600">This will install the package and its dependencies from your local
-                            path.</p>
                     </div>
                 </div>
 
                 <div class="bg-blue-50 rounded-lg p-4 mt-4">
                     <p class="text-blue-800 text-sm">
-                        <strong>Note:</strong> This package is commercially licensed. The manual installation method is
-                        temporary while we prepare the Composer package for convenient installation.
+                        <strong>Note:</strong> This project is free and open source under the MIT License.
+                        See <a href="https://github.com/hardikkanajariya-in/codeforge/blob/master/LICENSE" class="underline font-medium">LICENSE</a>
+                        for details.
                     </p>
                 </div>
             </div>

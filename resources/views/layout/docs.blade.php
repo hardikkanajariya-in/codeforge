@@ -259,9 +259,9 @@
                         <span class="px-2 py-1 bg-primary-100 text-primary-800 rounded-full">v1.0</span>
                     </div>
                     <div class="space-y-1">
-                        <p>&copy; {{ date('Y') }} <a href="https://codeforge.hardikkanajariya.in"
-                                class="text-primary-600 hover:text-primary-700">HkDevs</a></p>
-                        <p>Commercial License</p>
+                        <p>&copy; {{ date('Y') }} <a href="https://hardikkanajariya.in"
+                                class="text-primary-600 hover:text-primary-700">Hardik Kanajariya</a></p>
+                        <p><a href="https://github.com/hardikkanajariya-in/codeforge" class="text-primary-600 hover:text-primary-700">GitHub</a> · MIT License</p>
                     </div>
                 </div>
             </div>
@@ -301,9 +301,9 @@
                     </div>
 
                     <!-- External Links -->
-                    <a href="https://codeforge.hardikkanajariya.in" target="_blank"
+                    <a href="https://github.com/hardikkanajariya-in/codeforge" target="_blank"
                         class="text-sm text-gray-500 hover:text-primary-600 flex items-center space-x-1">
-                        <span>Visit HkDevs</span>
+                        <span>GitHub</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>

@@ -10,7 +10,7 @@
  * @package   HkDevs\CodeForgeStudio
  * @author    Hardik Kanajariya <contact@hardikkanajariya.in>
  * @copyright 2024 HkDevs (hardikkanajariya.in)
- * @license   Commercial License
+ * @license   MIT License
  * @version   1.0.0
  */
 
